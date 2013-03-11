@@ -1,6 +1,6 @@
 package be.artesis.timelog.view;
 
-public class Opdrachtgever {
+public class Opdrachtgever implements Cloneable{
 
     private String naam;
     private String voornaam;
@@ -98,5 +98,11 @@ public class Opdrachtgever {
     @Override
     public String toString() {
         return getVoornaam() + " " + getNaam() + " [" + getBedrijfsnaam() + "]";
+    }
+    
+    @Override
+    public Object clone(){
+        Opdrachtgever o = new Opdrachtgever(this.naam, this.voornaam, this.bedrijfsnaam, this.email, this.telefoonnummer, this.id);
+        return o;
     }
 }

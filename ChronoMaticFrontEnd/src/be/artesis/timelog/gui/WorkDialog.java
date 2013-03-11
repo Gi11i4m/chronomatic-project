@@ -9,11 +9,14 @@ import be.artesis.timelog.view.Taak;
 import be.artesis.timelog.view.Tijdspanne;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Point;
+import java.awt.Toolkit;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
 import javax.swing.ImageIcon;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.SwingConstants;
 
@@ -32,7 +35,8 @@ public class WorkDialog extends javax.swing.JDialog {
     ImageIcon minIcon, maxIcon;
     ArrayList<Tijdspanne> pause;
     Validator validator;
-
+    JLabel minimizedTimerJLabel;
+    Point location, minLocation;
 
     public WorkDialog(java.awt.Frame parent, boolean modal, Validator validator) {
         super(parent, modal);
@@ -43,19 +47,41 @@ public class WorkDialog extends javax.swing.JDialog {
     }
 
     private void initMyComponents() {
+        minimizedTimerJLabel = new JLabel();
+        minimizedTimerJLabel.setBackground(new java.awt.Color(255, 255, 255));
+        minimizedTimerJLabel.setFont(new java.awt.Font("Tahoma", 0, 18));
+        minimizedTimerJLabel.setForeground(new java.awt.Color(0, 255, 255));
+        minimizedTimerJLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        minimizedTimerJLabel.setText("00 : 00 : 00");
+        minimizedTimerJLabel.setToolTipText("Click to start/pauze");
+        minimizedTimerJLabel.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        minimizedTimerJLabel.setSize(new java.awt.Dimension(150, 37));
+        minimizedTimerJLabel.setLocation(minimizeJButton.getWidth() + 30, 10);
+        minimizedTimerJLabel.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                startPauseJButtonMouseClicked(evt);
+            }
+        });;
+        minimizedTimerJLabel.setVisible(false);
+        this.getContentPane().add(minimizedTimerJLabel);
         getContentPane().setBackground(Color.darkGray);
+
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        double width = screenSize.getWidth();
+        minLocation = new Point((int) width / 2 - 50, 10);
+
         clock = new Clock();
         timer = new Timer("Clock updater");
         firstRun = true;
         minimized = false;
         pause = new ArrayList<Tijdspanne>();
-        timerSize = timerJLabel.getSize();
+        timerSize = minimizedTimerJLabel.getSize();
         frameSize = this.getSize();
 
-        minIcon = new ImageIcon(java.awt.Toolkit.getDefaultToolkit().getImage(getClass().getResource("/be/artesis/timelog/gui/icons/MinimizeIcon.png")).getScaledInstance(minimizeJButton.getWidth()-5, minimizeJButton.getHeight()-5, java.awt.Image.SCALE_DEFAULT));
-        maxIcon = new ImageIcon(java.awt.Toolkit.getDefaultToolkit().getImage(getClass().getResource("/be/artesis/timelog/gui/icons/MaximizeIcon.png")).getScaledInstance(minimizeJButton.getWidth()-5, minimizeJButton.getHeight()-5, java.awt.Image.SCALE_DEFAULT));
+        minIcon = new ImageIcon(Toolkit.getDefaultToolkit().getImage(getClass().getResource("/be/artesis/timelog/gui/icons/MinimizeIcon.png")).getScaledInstance(minimizeJButton.getWidth() - 5, minimizeJButton.getHeight() - 5, java.awt.Image.SCALE_DEFAULT));
+        maxIcon = new ImageIcon(Toolkit.getDefaultToolkit().getImage(getClass().getResource("/be/artesis/timelog/gui/icons/MaximizeIcon.png")).getScaledInstance(minimizeJButton.getWidth() - 5, minimizeJButton.getHeight() - 5, java.awt.Image.SCALE_DEFAULT));
         minimizeJButton.setIcon(minIcon);
-        minimizeJButton.setFocusPainted( false );
+        minimizeJButton.setFocusPainted(false);
         minimizeJButton.setVerticalAlignment(SwingConstants.CENTER);
         minimizeJButton.setHorizontalAlignment(SwingConstants.CENTER);
 
@@ -63,7 +89,9 @@ public class WorkDialog extends javax.swing.JDialog {
 
         try {
             for (Taak task : UserControl.getCurrentProject().getTaken()) {
-                tasksJComboBox.addItem(task);
+                if (!task.overTijd()) {
+                    tasksJComboBox.addItem(task);
+                }
             }
         } catch (GUIException ex) {
             JOptionPane.showMessageDialog(this, ex.getMessage());
@@ -84,6 +112,7 @@ public class WorkDialog extends javax.swing.JDialog {
         timerJLabel.setText("00 : 00 : 00");
         startPauseJButton.setText("Start");
         this.setTitle(null);
+        getContentPane().setBackground(Color.DARK_GRAY);
         tasksJComboBox.setEnabled(true);
         resetUpdater();
         totalPause = 0;
@@ -92,7 +121,7 @@ public class WorkDialog extends javax.swing.JDialog {
     private void saveTimeSpan(long start, long stop, boolean isPause) {
         try {
             Tijdspanne t = new Tijdspanne(start, stop);
-            
+
             if (isPause) {
                 totalPause += (stop - start);
                 t.setPauze(true);
@@ -101,7 +130,6 @@ public class WorkDialog extends javax.swing.JDialog {
                 currentTask.addGewerkteTijd(t);
                 currentTask.getPauze().addAll(pause);
             }
-
             Inserter.inputTijdSpanne(validator.getSessionKey(), t, currentTask.getID());
         } catch (IOException | WebserviceException | DataInputException ex) {
             JOptionPane.showMessageDialog(this, ex.getMessage());
@@ -146,11 +174,6 @@ public class WorkDialog extends javax.swing.JDialog {
         timerJLabel.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         timerJLabel.setMinimumSize(new java.awt.Dimension(0, 0));
         timerJLabel.setName(""); // NOI18N
-        timerJLabel.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                timerJLabelMouseClicked(evt);
-            }
-        });
 
         currentProjectJLabel.setBackground(new java.awt.Color(255, 255, 255));
         currentProjectJLabel.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
@@ -181,9 +204,12 @@ public class WorkDialog extends javax.swing.JDialog {
 
         tasksJComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { }));
 
+        minimizeJButton.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        minimizeJButton.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         minimizeJButton.setMaximumSize(new java.awt.Dimension(33, 33));
         minimizeJButton.setMinimumSize(new java.awt.Dimension(33, 33));
         minimizeJButton.setPreferredSize(new java.awt.Dimension(33, 33));
+        minimizeJButton.setVerticalAlignment(javax.swing.SwingConstants.TOP);
         minimizeJButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 minimizeJButtonActionPerformed(evt);
@@ -204,9 +230,9 @@ public class WorkDialog extends javax.swing.JDialog {
                     .addComponent(currentProjectJLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(tasksJComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(timerJLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 224, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(minimizeJButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(minimizeJButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                        .addComponent(timerJLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -214,7 +240,7 @@ public class WorkDialog extends javax.swing.JDialog {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(timerJLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(timerJLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 55, Short.MAX_VALUE)
                     .addComponent(minimizeJButton, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(currentProjectJLabel)
@@ -240,10 +266,19 @@ public class WorkDialog extends javax.swing.JDialog {
     }//GEN-LAST:event_workDialogShown
 
     private void updateClockAction() {
-        if (!clock.isPaused()) {
-            timerJLabel.setText(Clock.longTimeToHMS(clock.getRuntime() - totalPause));
+        if (minimized) {
+            if (!clock.isPaused()) {
+                minimizedTimerJLabel.setText(Clock.longTimeToHMS(clock.getRuntime() - totalPause));
+            } else {
+                minimizedTimerJLabel.setText(Clock.longTimeToHMS(Clock.generateUnixTimestamp() - pauseStart + totalPause));
+            }
         } else {
-            timerJLabel.setText(Clock.longTimeToHMS(Clock.generateUnixTimestamp() - pauseStart + totalPause));
+            // !! zorgen dat indien tijd nog niet geset is juist waarde weergeeft
+            if (!clock.isPaused()) {
+                timerJLabel.setText(Clock.longTimeToHMS(clock.getRuntime() - totalPause));
+            } else {
+                timerJLabel.setText(Clock.longTimeToHMS(Clock.generateUnixTimestamp() - pauseStart + totalPause));
+            }
         }
     }
 
@@ -251,8 +286,12 @@ public class WorkDialog extends javax.swing.JDialog {
         stopTimerAction();
     }//GEN-LAST:event_stopJButtonActionPerformed
 
-    private void stopTimerAction(){
+    private void stopTimerAction() {
         try {
+            if (clock.isPaused()) {
+                pauseStop = clock.pauseToggle();
+                saveTimeSpan(pauseStart, pauseStop, true);
+            }
             stopTime = clock.stop();
             updater.cancel();
             firstRun = true;
@@ -266,25 +305,28 @@ public class WorkDialog extends javax.swing.JDialog {
 
     private void minimizeJButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_minimizeJButtonActionPerformed
         boolean value;
-        String tooltip;
         Dimension frameDim;
         ImageIcon icon;
 
         if (!minimized) {
             value = false;
-            tooltip = "Click to start/pauze";
-            frameDim = new Dimension((int)timerSize.getWidth() + 75, (int)timerSize.getHeight() + 50);
+            frameDim = new Dimension((int) minimizedTimerJLabel.getWidth() + 85, (int) minimizedTimerJLabel.getHeight() + 50);
             icon = maxIcon;
+            location = this.getLocation();
+            this.setLocation(minLocation);
         } else {
             value = true;
-            tooltip = "";
             frameDim = frameSize;
             icon = minIcon;
+            minLocation = this.getLocation();
+            this.setLocation(location);
         }
+
         minimized = !value;
 
+        minimizedTimerJLabel.setVisible(minimized);
+        timerJLabel.setVisible(!minimized);
         minimizeJButton.setIcon(icon);
-        timerJLabel.setToolTipText(tooltip);
         startPauseJButton.setVisible(value);
         stopJButton.setVisible(value);
         tasksJComboBox.setVisible(value);
@@ -292,6 +334,7 @@ public class WorkDialog extends javax.swing.JDialog {
 
         this.setAlwaysOnTop(!value);
         this.setSize(frameDim);
+        updateClockAction();  
     }//GEN-LAST:event_minimizeJButtonActionPerformed
 
     private void startPauseJButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_startPauseJButtonMouseClicked
@@ -335,35 +378,27 @@ public class WorkDialog extends javax.swing.JDialog {
         }
     }//GEN-LAST:event_startPauseJButtonMouseClicked
 
-    private void timerJLabelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_timerJLabelMouseClicked
-        if (minimized) {
-            startPauseJButtonMouseClicked(evt);
-        }
-    }//GEN-LAST:event_timerJLabelMouseClicked
-
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
         if (clock.isRunning()) {
             int result = JOptionPane.showConfirmDialog(tasksJComboBox, "Do you want to save?");
             if (result == JOptionPane.YES_OPTION) {
                 if (clock.isPaused()) {
                     try {
-                    pauseStop = clock.pauseToggle();
-                    saveTimeSpan(pauseStart, pauseStop, true);
+                        pauseStop = clock.pauseToggle();
+                        saveTimeSpan(pauseStart, pauseStop, true);
                     } catch (ClockException e) {
                     }
                 }
                 stopTimerAction();
                 this.dispose();
-            }else if(result == JOptionPane.NO_OPTION){
+            } else if (result == JOptionPane.NO_OPTION) {
                 this.dispose();
             }
-        }
-        else{
+        } else {
             this.dispose();
         }
 
     }//GEN-LAST:event_formWindowClosing
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel currentProjectJLabel;
     private javax.swing.JButton minimizeJButton;

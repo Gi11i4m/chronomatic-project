@@ -13,8 +13,10 @@ import be.artesis.timelog.view.Tijdspanne;
 import java.awt.Color;
 import java.awt.Component;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Iterator;
 import javax.swing.DefaultListModel;
+import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
@@ -26,6 +28,7 @@ public class GUIForm extends javax.swing.JFrame {
 
     LoginDialog login;
     Validator validator;
+    ArrayList<JList> tasklists;
 
     public GUIForm() {
         validator = Validator.getInstance();
@@ -46,6 +49,12 @@ public class GUIForm extends javax.swing.JFrame {
         homeJPanel = new javax.swing.JPanel();
         homeJLabel = new javax.swing.JLabel();
         workJButton = new javax.swing.JButton();
+        jScrollPane7 = new javax.swing.JScrollPane();
+        homeProjectsJList = new javax.swing.JList();
+        HomeProjectsJLabel = new javax.swing.JLabel();
+        jScrollPane8 = new javax.swing.JScrollPane();
+        homeTasksJList = new javax.swing.JList();
+        TasksJLabel = new javax.swing.JLabel();
         projectsJPanel = new javax.swing.JPanel();
         projectsJLabel = new javax.swing.JLabel();
         addProjectJButton = new javax.swing.JButton();
@@ -157,6 +166,25 @@ public class GUIForm extends javax.swing.JFrame {
             }
         });
 
+        homeProjectsJList.setToolTipText("Press enter to set the current project");
+        homeProjectsJList.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
+            public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
+                homeProjectsJListValueChanged(evt);
+            }
+        });
+        homeProjectsJList.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                homeProjectsJListKeyReleased(evt);
+            }
+        });
+        jScrollPane7.setViewportView(homeProjectsJList);
+
+        HomeProjectsJLabel.setText("Projects");
+
+        jScrollPane8.setViewportView(homeTasksJList);
+
+        TasksJLabel.setText("Tasks");
+
         javax.swing.GroupLayout homeJPanelLayout = new javax.swing.GroupLayout(homeJPanel);
         homeJPanel.setLayout(homeJPanelLayout);
         homeJPanelLayout.setHorizontalGroup(
@@ -167,8 +195,18 @@ public class GUIForm extends javax.swing.JFrame {
                     .addGroup(homeJPanelLayout.createSequentialGroup()
                         .addComponent(homeJLabel)
                         .addGap(0, 0, Short.MAX_VALUE))
-                    .addComponent(workJButton, javax.swing.GroupLayout.DEFAULT_SIZE, 647, Short.MAX_VALUE))
+                    .addComponent(workJButton, javax.swing.GroupLayout.DEFAULT_SIZE, 662, Short.MAX_VALUE))
                 .addContainerGap())
+            .addGroup(homeJPanelLayout.createSequentialGroup()
+                .addGap(50, 50, 50)
+                .addGroup(homeJPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane7, javax.swing.GroupLayout.PREFERRED_SIZE, 157, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(HomeProjectsJLabel))
+                .addGap(73, 73, 73)
+                .addGroup(homeJPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(TasksJLabel)
+                    .addComponent(jScrollPane8, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         homeJPanelLayout.setVerticalGroup(
             homeJPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -177,7 +215,15 @@ public class GUIForm extends javax.swing.JFrame {
                 .addComponent(homeJLabel)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(workJButton, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(307, Short.MAX_VALUE))
+                .addGap(28, 28, 28)
+                .addGroup(homeJPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(HomeProjectsJLabel)
+                    .addComponent(TasksJLabel))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(homeJPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jScrollPane8, javax.swing.GroupLayout.DEFAULT_SIZE, 203, Short.MAX_VALUE)
+                    .addComponent(jScrollPane7))
+                .addContainerGap(56, Short.MAX_VALUE))
         );
 
         JTabbedPane.addTab("", new javax.swing.ImageIcon(getClass().getResource("/be/artesis/timelog/gui/icons/HomeNeonIcon.png")), homeJPanel, "Home"); // NOI18N
@@ -371,7 +417,7 @@ public class GUIForm extends javax.swing.JFrame {
                             .addComponent(clientcompJLabel1))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(projectsJPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(percentageCompletecompJLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 25, Short.MAX_VALUE)
+                            .addComponent(percentageCompletecompJLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 28, Short.MAX_VALUE)
                             .addComponent(percentageCompleteJProgressBar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(saveProjectJButton))
@@ -535,7 +581,7 @@ public class GUIForm extends javax.swing.JFrame {
                             .addComponent(saveTaskJButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(taskTotalTimeCompJLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(taskTotalPauseCompJLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jScrollPane6, javax.swing.GroupLayout.DEFAULT_SIZE, 288, Short.MAX_VALUE))))
+                            .addComponent(jScrollPane6, javax.swing.GroupLayout.DEFAULT_SIZE, 303, Short.MAX_VALUE))))
                 .addContainerGap())
         );
         tasksJPanelLayout.setVerticalGroup(
@@ -570,7 +616,7 @@ public class GUIForm extends javax.swing.JFrame {
                                     .addComponent(taskCompletedJLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 21, javax.swing.GroupLayout.PREFERRED_SIZE))))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(tasksJPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 93, Short.MAX_VALUE)
+                            .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 96, Short.MAX_VALUE)
                             .addGroup(tasksJPanelLayout.createSequentialGroup()
                                 .addComponent(taskCommentCompJLabel)
                                 .addGap(0, 0, Short.MAX_VALUE)))
@@ -727,7 +773,7 @@ public class GUIForm extends javax.swing.JFrame {
                             .addComponent(clientEmailJTextField, javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(clientPhoneNumberJTextField)
                             .addComponent(clientNameJTextField)
-                            .addComponent(saveClientJButton, javax.swing.GroupLayout.DEFAULT_SIZE, 353, Short.MAX_VALUE)))
+                            .addComponent(saveClientJButton, javax.swing.GroupLayout.DEFAULT_SIZE, 368, Short.MAX_VALUE)))
                     .addGroup(clientsJPanelLayout.createSequentialGroup()
                         .addComponent(clientsJLabel)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -764,7 +810,7 @@ public class GUIForm extends javax.swing.JFrame {
                             .addComponent(clientPhoneNumberJTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(phoneNumberJLabel))
                         .addGap(0, 167, Short.MAX_VALUE))
-                    .addComponent(jScrollPane5, javax.swing.GroupLayout.DEFAULT_SIZE, 313, Short.MAX_VALUE))
+                    .addComponent(jScrollPane5, javax.swing.GroupLayout.DEFAULT_SIZE, 316, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(clientsJPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(saveClientJButton)
@@ -787,7 +833,7 @@ public class GUIForm extends javax.swing.JFrame {
             .addGroup(optionsJPanelLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(settingsJLabel)
-                .addContainerGap(612, Short.MAX_VALUE))
+                .addContainerGap(614, Short.MAX_VALUE))
         );
         optionsJPanelLayout.setVerticalGroup(
             optionsJPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -881,8 +927,8 @@ public class GUIForm extends javax.swing.JFrame {
             if (p.getTaken().isEmpty()) {
                 throw new GUIException("Current project contains no tasks");
             }
-             boolean taskAvailable = false;
-            for (Taak  t : p.getTaken()) {
+            boolean taskAvailable = false;
+            for (Taak t : p.getTaken()) {
                 if (!t.overTijd()) {
                     taskAvailable = true;
                     break;
@@ -895,7 +941,7 @@ public class GUIForm extends javax.swing.JFrame {
             WorkDialog work = new WorkDialog(this, true, validator);
             work.setVisible(true);
             setVisible(true);
-            refreshTasksList();
+            loadTaskInfo(tasksJList.getSelectedIndex());
             toggleButtonStates();
         } catch (GUIException ex) {
             JOptionPane.showMessageDialog(this, ex.getMessage());
@@ -929,14 +975,8 @@ public class GUIForm extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(this, ex.getMessage());
             }
 
-            DefaultListModel listmodel = new DefaultListModel();
-
-            for (Iterator<Taak> it = p.getTaken().iterator(); it.hasNext();) {
-                Taak t = it.next();
-                listmodel.addElement(t);
-            }
-            percentageCompleteJProgressBar.setValue((int)(((Project)projectsJList.getSelectedValue()).getPercentageComplete() * 100));
-            projectTasksJList.setModel(listmodel);
+            refreshTasksList(p, projectTasksJList);
+            percentageCompleteJProgressBar.setValue((int) (((Project) projectsJList.getSelectedValue()).getPercentageComplete() * 100));
         }
     }
 
@@ -973,29 +1013,35 @@ public class GUIForm extends javax.swing.JFrame {
         }
     }
 
-    private void refreshProjectsList() {
+    private void refreshProjectsList(JList... lists) {
         DefaultListModel listmodel = new DefaultListModel();
 
         for (Iterator<Project> it = UserControl.getUser().getProjects().iterator(); it.hasNext();) {
             Project p = it.next();
             listmodel.addElement(p);
         }
-        projectsJList.setModel(listmodel);
-        projectsJList.setCellRenderer(new ProjectCellRenderer());
-        projectsJList.setSelectedIndex(-1);
+
+        for (JList list : lists) {
+            list.setModel(listmodel);
+            list.setCellRenderer(new ProjectCellRenderer());
+            //!! is dit nodig?
+            list.setSelectedIndex(-1);
+
+        }
     }
 
-    private void refreshTasksList() throws GUIException {
-        if (UserControl.getCurrentProjectIndex() != -1) {
+    private void refreshTasksList(Project p, JList... lists) {
+        for (JList list : lists) {
             DefaultListModel listmodel = new DefaultListModel();
 
-            for (Iterator<Taak> it = UserControl.getCurrentProject().getTaken().iterator(); it.hasNext();) {
+            for (Iterator<Taak> it = p.getTaken().iterator(); it.hasNext();) {
                 Taak t = it.next();
                 listmodel.addElement(t);
             }
-            tasksJList.setModel(listmodel);
-            tasksJList.setCellRenderer(new TaskCellRenderer());
-            tasksJList.setSelectedIndex(-1);
+
+            list.setModel(listmodel);
+            list.setCellRenderer(new TaskCellRenderer());
+            list.setSelectedIndex(-1);
         }
     }
 
@@ -1017,7 +1063,7 @@ public class GUIForm extends javax.swing.JFrame {
                 ((JTextField) c).setText(null);
             }
         }
-        if(panel.equals(projectsJPanel)) {
+        if (panel.equals(projectsJPanel)) {
             projectTasksJList.setModel(new DefaultListModel());
             clientJLabel.setText(null);
         } else if (panel.equals(tasksJPanel)) {
@@ -1042,7 +1088,7 @@ public class GUIForm extends javax.swing.JFrame {
 
     private void guiOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_guiOpened
         ingelogdJLabel.setText(UserControl.getUser().getGebruikersnaam());
-        refreshProjectsList();
+        refreshProjectsList(projectsJList, homeProjectsJList);
         refreshClientsList();
     }//GEN-LAST:event_guiOpened
 
@@ -1065,15 +1111,16 @@ public class GUIForm extends javax.swing.JFrame {
 
     private void saveClientJButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveClientJButtonActionPerformed
         try {
-            Opdrachtgever client = UserControl.getUser().getOpdrachtgevers().get(clientsJList.getSelectedIndex());
-            client.setNaam(clientNameJTextField.getText());
-            client.setVoornaam(clientFirstNameJTextField.getText());
-            client.setBedrijfsnaam(clientCompanyJTextField.getText());
-            client.setEmail(clientEmailJTextField.getText());
-            client.setTelefoonnummer(clientPhoneNumberJTextField.getText());
+            Opdrachtgever c = (Opdrachtgever) UserControl.getUser().getOpdrachtgevers().get(clientsJList.getSelectedIndex()).clone();
+            c.setNaam(clientNameJTextField.getText());
+            c.setVoornaam(clientFirstNameJTextField.getText());
+            c.setBedrijfsnaam(clientCompanyJTextField.getText());
+            c.setEmail(clientEmailJTextField.getText());
+            c.setTelefoonnummer(clientPhoneNumberJTextField.getText());
             // Past opdrachtgeverwaarden aan in database
-            Updater.updateOpdrachtgever(validator.getSessionKey(), client);
+            Updater.updateOpdrachtgever(validator.getSessionKey(), c);
             JOptionPane.showMessageDialog(this, "Client edited!");
+            UserControl.getUser().getOpdrachtgevers().set(clientsJList.getSelectedIndex(), c);
         } catch (DataInputException | IOException | WebserviceException ex) {
             JOptionPane.showMessageDialog(this, ex.getMessage());
         } finally {
@@ -1085,17 +1132,18 @@ public class GUIForm extends javax.swing.JFrame {
 
     private void saveProjectJButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveProjectJButtonActionPerformed
         try {
-            Project p = UserControl.getUser().getProjects().get(projectsJList.getSelectedIndex());
+            Project p = (Project) UserControl.getUser().getProjects().get(projectsJList.getSelectedIndex()).clone();
             p.setNaam(nameJTextField.getText());
             p.setBegindatum(Clock.StringToTimestamp(startdateJTextField.getText()));
             p.setEinddatum(Clock.StringToTimestamp(enddateJTextField.getText()));
             // Past projectwaarden aan in database
             Updater.updateProject(validator.getSessionKey(), p);
             JOptionPane.showMessageDialog(this, "Project edited!");
+            UserControl.getUser().getProjects().set(projectsJList.getSelectedIndex(), p);
         } catch (DataInputException | IOException | WebserviceException ex) {
             JOptionPane.showMessageDialog(this, ex.getMessage());
         } finally {
-            refreshProjectsList();
+            refreshProjectsList(projectsJList, homeProjectsJList);
             clearFieldsOnPanel(projectsJPanel);
             toggleButtonStates();
         }
@@ -1103,20 +1151,20 @@ public class GUIForm extends javax.swing.JFrame {
 
     private void saveTaskJButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveTaskJButtonActionPerformed
         try {
-            Taak t = UserControl.getCurrentProject().getTaken().get(tasksJList.getSelectedIndex());
+            Taak t = (Taak) UserControl.getCurrentProject().getTaken().get(tasksJList.getSelectedIndex()).clone();
             t.setNaam(taskNameJTextField.getText());
             long startdate = Clock.StringToTimestamp(taskStartdateJTextField.getText());
             long enddate = Clock.StringToTimestamp(taskEnddateJTextField.getText());
-            if (UserControl.getCurrentProject().getBegindatum() <= startdate && UserControl.getCurrentProject().getEinddatum() >= enddate) {
-                t.setBegindatum(startdate);
-                t.setGeschatteEinddatum(enddate);
-            }
+            t.setBegindatum(startdate);
+            t.setGeschatteEinddatum(enddate);
+
             t.setCommentaar(taskCommentJTextArea.getText());
             t.setCompleted(taskCompletedJCheckBox.isSelected());
             // Taakwaarden worden aangepast in database
             Updater.updateTaak(validator.getSessionKey(), t);
             JOptionPane.showMessageDialog(this, "Task edited!");
-            refreshTasksList();
+            UserControl.getCurrentProject().getTaken().set(tasksJList.getSelectedIndex(), t);
+            refreshTasksList(UserControl.getCurrentProject(), tasksJList);
         } catch (GUIException | DataInputException | IOException | WebserviceException ex) {
             JOptionPane.showMessageDialog(this, ex.getMessage());
         } finally {
@@ -1129,14 +1177,14 @@ public class GUIForm extends javax.swing.JFrame {
 
     private void addTaskJButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addTaskJButtonActionPerformed
         try {
-            UserControl.getCurrentProject();
             NewTaskDialog addTaskDialog = new NewTaskDialog(this, true, validator);
             addTaskDialog.setVisible(true);
-            refreshTasksList();
+            refreshTasksList(UserControl.getCurrentProject(), tasksJList);
         } catch (GUIException ex) {
             JOptionPane.showMessageDialog(this, ex.getMessage());
         } finally {
-            refreshProjectsList();
+            //!! is dit nodig?
+            // refreshProjectsList(projectsJList, homeProjectsJList);
             clearFieldsOnPanel(tasksJPanel);
             loadProjectInfo(projectsJList.getSelectedIndex());
         }
@@ -1152,37 +1200,44 @@ public class GUIForm extends javax.swing.JFrame {
     }//GEN-LAST:event_tasksJListprojectListValueChanged
 
     private void removeProjectJButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_removeProjectJButtonActionPerformed
-        try {
-            Project p = UserControl.getUser().getProjects().get(projectsJList.getSelectedIndex());
-            Deleter.deleteProject(validator.getSessionKey(), p);
-            UserControl.getUser().removeProject((Project)projectsJList.getSelectedValue());
-            refreshProjectsList();
-            clearFieldsOnPanel(projectsJPanel);
-            toggleButtonStates();
-            JOptionPane.showMessageDialog(this, "Project removed!");
-        } catch (IOException | WebserviceException ex) {
-            JOptionPane.showMessageDialog(this, ex.getMessage());
+        int result = JOptionPane.showConfirmDialog(this, "Are you sure you want to delete this project?", null, JOptionPane.YES_NO_OPTION);
+        if (result == JOptionPane.YES_OPTION) {
+            try {
+                Project p = UserControl.getUser().getProjects().get(projectsJList.getSelectedIndex());
+                Deleter.deleteProject(validator.getSessionKey(), p);
+                UserControl.getUser().removeProject((Project) projectsJList.getSelectedValue());
+                refreshProjectsList(projectsJList, homeProjectsJList);
+                clearFieldsOnPanel(projectsJPanel);
+                toggleButtonStates();
+                JOptionPane.showMessageDialog(this, "Project removed!");
+            } catch (IOException | WebserviceException ex) {
+                JOptionPane.showMessageDialog(this, ex.getMessage());
+            }
         }
     }//GEN-LAST:event_removeProjectJButtonActionPerformed
 
     private void removeClientJButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_removeClientJButtonActionPerformed
-        try {
-            Opdrachtgever c = UserControl.getUser().getOpdrachtgever(((Opdrachtgever)clientsJList.getSelectedValue()).getID());
-            // Deze for-lus moet verwijderd worden en vervangen worden door een error van de server
-            for (Project p : UserControl.getUser().getProjects()) {
-                if (p.getOpdrachtgeverId() == c.getID()) {
-                    throw new GUIException("This client is associated with a project");
+        int result = JOptionPane.showConfirmDialog(this, "Are you sure you want to delete this client?", null, JOptionPane.YES_NO_OPTION);
+        if (result == JOptionPane.YES_OPTION) {
+            try {
+                Opdrachtgever c = UserControl.getUser().getOpdrachtgever(((Opdrachtgever) clientsJList.getSelectedValue()).getID());
+                //!! Deze for-lus moet verwijderd worden en vervangen worden door een error van de server
+                for (Project p : UserControl.getUser().getProjects()) {
+                    if (p.getOpdrachtgeverId() == c.getID()) {
+                        throw new GUIException("This client is associated with a project");
+                    }
                 }
+                Deleter.deleteOpdrachtgever(validator.getSessionKey(), c);
+                UserControl.getUser().getOpdrachtgevers().remove(c);
+                refreshClientsList();
+                clearFieldsOnPanel(clientsJPanel);
+                toggleButtonStates();
+                JOptionPane.showMessageDialog(this, "Client removed!");
+            } catch (GUIException | DataInputException | IOException | WebserviceException ex) {
+                JOptionPane.showMessageDialog(this, ex.getMessage());
             }
-            Deleter.deleteOpdrachtgever(validator.getSessionKey(), c);
-            UserControl.getUser().getOpdrachtgevers().remove(c);
-            refreshClientsList();
-            clearFieldsOnPanel(clientsJPanel);
-            toggleButtonStates();
-            JOptionPane.showMessageDialog(this, "Client removed!");
-        } catch (GUIException | DataInputException | IOException | WebserviceException ex) {
-            JOptionPane.showMessageDialog(this,  ex.getMessage());
         }
+
     }//GEN-LAST:event_removeClientJButtonActionPerformed
 
     private void setCurrentProjectJButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_setCurrentProjectJButtonActionPerformed
@@ -1190,29 +1245,57 @@ public class GUIForm extends javax.swing.JFrame {
             UserControl.setCurrentProjectIndex(projectsJList.getSelectedIndex());
             currentProjectJLabel.setText("Current project: " + UserControl.getCurrentProject().getNaam());
             addTaskJButton.setText("Add Task to " + UserControl.getCurrentProject().getNaam());
-            refreshProjectsList();
-            refreshTasksList();
+            refreshProjectsList(projectsJList, homeProjectsJList);
+            refreshTasksList(UserControl.getCurrentProject(), tasksJList);
             clearFieldsOnPanel(tasksJPanel);
         } catch (GUIException ex) {
             JOptionPane.showMessageDialog(this, ex.getMessage());
         }
     }//GEN-LAST:event_setCurrentProjectJButtonActionPerformed
 
-    private void removeTaskJButtonActionPerformed(java.awt.event.ActionEvent evt) {
-        try {
-            Taak t = UserControl.getCurrentProject().getTaken().get(tasksJList.getSelectedIndex());
-            Deleter.deleteTaak(validator.getSessionKey(), t);
-            UserControl.getCurrentProject().getTaken().remove(t);
-            refreshTasksList();
-            clearFieldsOnPanel(tasksJPanel);
-            toggleButtonStates();
-            JOptionPane.showMessageDialog(this, "Task removed!");
-        } catch (GUIException | IOException | WebserviceException ex) {
-            JOptionPane.showMessageDialog(this,  ex.getMessage());
+    private void homeProjectsJListValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_homeProjectsJListValueChanged
+        if (homeProjectsJList.getSelectedIndex() != -1) {
+            refreshTasksList(UserControl.getUser().getProject(homeProjectsJList.getSelectedIndex()), homeTasksJList);
+        } else {
+            try {
+                refreshTasksList(UserControl.getCurrentProject(), homeTasksJList);
+            } catch (GUIException ex) {
+            }
         }
+    }//GEN-LAST:event_homeProjectsJListValueChanged
+
+    private void homeProjectsJListKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_homeProjectsJListKeyReleased
+        if (evt.getKeyCode() == 10) {
+            UserControl.setCurrentProjectIndex(homeProjectsJList.getSelectedIndex());
+            refreshProjectsList(homeProjectsJList);
+            try {
+                refreshTasksList(UserControl.getCurrentProject(), tasksJList);
+            } catch (GUIException ex) {
+            }
+        }
+    }//GEN-LAST:event_homeProjectsJListKeyReleased
+
+    private void removeTaskJButtonActionPerformed(java.awt.event.ActionEvent evt) {
+        int result = JOptionPane.showConfirmDialog(this, "Are you sure you want to delete this task?", null, JOptionPane.YES_NO_OPTION);
+        if (result == JOptionPane.YES_OPTION) {
+            try {
+                Taak t = UserControl.getCurrentProject().getTaken().get(tasksJList.getSelectedIndex());
+                Deleter.deleteTaak(validator.getSessionKey(), t);
+                UserControl.getCurrentProject().getTaken().remove(t);
+                refreshTasksList(UserControl.getCurrentProject(), tasksJList);
+                clearFieldsOnPanel(tasksJPanel);
+                toggleButtonStates();
+                JOptionPane.showMessageDialog(this, "Task removed!");
+            } catch (GUIException | IOException | WebserviceException ex) {
+                JOptionPane.showMessageDialog(this, ex.getMessage());
+            }
+        }
+
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel HomeProjectsJLabel;
     private javax.swing.JTabbedPane JTabbedPane;
+    private javax.swing.JLabel TasksJLabel;
     private javax.swing.JButton addClientJButton;
     private javax.swing.JButton addProjectJButton;
     private javax.swing.JButton addTaskJButton;
@@ -1237,6 +1320,8 @@ public class GUIForm extends javax.swing.JFrame {
     private javax.swing.JPanel headerJPanel;
     private javax.swing.JLabel homeJLabel;
     private javax.swing.JPanel homeJPanel;
+    private javax.swing.JList homeProjectsJList;
+    private javax.swing.JList homeTasksJList;
     private javax.swing.JLabel ingelogdJLabel;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
@@ -1244,6 +1329,8 @@ public class GUIForm extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JScrollPane jScrollPane5;
     private javax.swing.JScrollPane jScrollPane6;
+    private javax.swing.JScrollPane jScrollPane7;
+    private javax.swing.JScrollPane jScrollPane8;
     private javax.swing.JLabel nameJLabel;
     private javax.swing.JTextField nameJTextField;
     private javax.swing.JLabel namecompJLabel;

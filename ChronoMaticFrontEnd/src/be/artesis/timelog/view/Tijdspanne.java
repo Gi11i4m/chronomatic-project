@@ -69,7 +69,7 @@ public class Tijdspanne {
     
     @Override
     public String toString(){
-        return Clock.timestampToString(beginTijd) + " - " + Clock.timestampToString(eindTijd);
+        return Clock.timestampToString(beginTijd) + "    →    " + Clock.timestampToString(eindTijd);
     }
     
     

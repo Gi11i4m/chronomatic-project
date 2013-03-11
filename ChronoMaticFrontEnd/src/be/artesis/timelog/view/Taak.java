@@ -4,7 +4,7 @@ import be.artesis.timelog.clock.Clock;
 import java.util.ArrayList;
 import java.util.Collections;
 
-public class Taak {
+public class Taak implements Cloneable {
 
     private String naam;
     private long begindatum;
@@ -219,5 +219,12 @@ public class Taak {
     @Override
     public String toString() {
         return naam;
+    }
+    
+    @Override
+    public Object clone(){
+        Taak t = new Taak(this.naam, this.begindatum, this.geschatteEinddatum, this.commentaar, this.id);
+        t.setCompleted(this.getCompleted());
+        return t;
     }
 }

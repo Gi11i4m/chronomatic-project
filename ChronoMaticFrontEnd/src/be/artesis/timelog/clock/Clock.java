@@ -3,7 +3,9 @@ package be.artesis.timelog.clock;
 import be.artesis.timelog.controle.DataControle;
 import java.sql.Timestamp;
 import java.text.DecimalFormat;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 
 //elke pauze apart bijhouden of gewoon totaal pauze in seconden?
 public class Clock {
@@ -76,7 +78,20 @@ public class Clock {
 
     //formaat yyyy/mm/dd hh:mm:ss
     public static String timestampToString(long unixTimeStamp) {
-        return new Timestamp(unixTimeStamp * 1000).toString();
+        Timestamp t = new Timestamp(unixTimeStamp * 1000);
+        Calendar c = GregorianCalendar.getInstance();
+        c.setTime(t);
+        
+        int day = c.get(Calendar.DAY_OF_MONTH);
+        int month = c.get(Calendar.MONTH) +1;
+        int hour = c.get(Calendar.HOUR_OF_DAY);
+        int min = c.get(Calendar.MINUTE);
+        
+        String date = String.format("%02d/%02d", day, month);
+        String time = String.format("%02d:%02d", hour, min);
+        
+        String s = date + " - " + time;
+        return s;
     }
 
     //formaat dd/mm/yyyy

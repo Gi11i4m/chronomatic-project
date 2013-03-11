@@ -4,7 +4,7 @@ import be.artesis.timelog.clock.Clock;
 import java.util.ArrayList;
 import java.util.Collections;
 
-public class Project {
+public class Project implements Cloneable{
 
     private String naam;
     private int opdrachtgeverId;
@@ -155,9 +155,11 @@ public class Project {
 
         return percent;
     }
+    
     public void setTaken(Taak[] taken) {
         Collections.addAll(this.taken, taken);
     }
+    
     public Taak getTaak(int index){
         return taken.get(index);
     }
@@ -165,5 +167,11 @@ public class Project {
     @Override
     public String toString() {
         return naam;
+    }
+    
+    @Override
+    public Object clone(){
+        Project p = new Project(this.naam, this.opdrachtgeverId, this.begindatum, this.einddatum, this.id);
+        return p;
     }
 }
