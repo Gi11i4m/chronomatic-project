@@ -7,6 +7,7 @@ import be.artesis.timelog.view.*;
 import java.awt.Component;
 import java.io.IOException;
 import java.net.MalformedURLException;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
@@ -272,7 +273,7 @@ public class NewProjectDialog extends javax.swing.JDialog {
                 addProject(projectnameJTextField.getText(), startdateJTextField.getText(), enddateJTextField.getText(), client.getID());
                 this.dispose();
             }
-        } catch (IOException | WebserviceException | JSONException | DataInputException ex) {
+        } catch (IOException | WebserviceException | JSONException | DataInputException | ParseException ex) {
             JOptionPane.showMessageDialog(this, ex.getMessage());
         }
     }//GEN-LAST:event_addProjectClicked
@@ -281,7 +282,7 @@ public class NewProjectDialog extends javax.swing.JDialog {
         hideClientForm();
     }//GEN-LAST:event_hideButtonClicked
 
-    private void addProject(String name, String startDate, String endDate, int opdrachtgeverID) throws MalformedURLException, IOException, WebserviceException, JSONException, DataInputException {
+    private void addProject(String name, String startDate, String endDate, int opdrachtgeverID) throws MalformedURLException, IOException, WebserviceException, JSONException, DataInputException, ParseException {
         Project p = new Project();
         p.setNaam(name);
         p.setBegindatum(startDate);

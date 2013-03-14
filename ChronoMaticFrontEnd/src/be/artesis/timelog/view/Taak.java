@@ -1,6 +1,7 @@
 package be.artesis.timelog.view;
 
 import be.artesis.timelog.clock.Clock;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Collections;
 
@@ -60,14 +61,13 @@ public class Taak implements Cloneable {
         return begindatum;
     }
 
-    public void setBegindatum(String datum) throws DataInputException {
+    public void setBegindatum(String datum) throws DataInputException, ParseException {
         if (DataControle.datumCorrect(datum)) {
             long tdatum = Clock.StringToTimestamp(datum);
             setBegindatum(tdatum);
         } else {
             throw new DataInputException("Date format not correct");
         }
-
     }
 
     public void setBegindatum(long datum) throws DataInputException {
@@ -87,7 +87,7 @@ public class Taak implements Cloneable {
         return geschatteEinddatum;
     }
 
-    public void setGeschatteEinddatum(String datum) throws DataInputException {
+    public void setGeschatteEinddatum(String datum) throws DataInputException, ParseException {
         if (DataControle.datumCorrect(datum)) {
             long tdatum = Clock.StringToTimestamp(datum);
             setGeschatteEinddatum(tdatum);

@@ -179,10 +179,14 @@ public class GUIForm extends javax.swing.JFrame {
         });
         jScrollPane7.setViewportView(homeProjectsJList);
 
+        HomeProjectsJLabel.setFont(new java.awt.Font("Tw Cen MT", 1, 14)); // NOI18N
+        HomeProjectsJLabel.setForeground(new java.awt.Color(0, 153, 153));
         HomeProjectsJLabel.setText("Projects");
 
         jScrollPane8.setViewportView(homeTasksJList);
 
+        TasksJLabel.setFont(new java.awt.Font("Tw Cen MT", 1, 14)); // NOI18N
+        TasksJLabel.setForeground(new java.awt.Color(0, 153, 153));
         TasksJLabel.setText("Tasks");
 
         javax.swing.GroupLayout homeJPanelLayout = new javax.swing.GroupLayout(homeJPanel);
@@ -192,21 +196,20 @@ public class GUIForm extends javax.swing.JFrame {
             .addGroup(homeJPanelLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(homeJPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(workJButton, javax.swing.GroupLayout.DEFAULT_SIZE, 662, Short.MAX_VALUE)
                     .addGroup(homeJPanelLayout.createSequentialGroup()
-                        .addComponent(homeJLabel)
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addComponent(workJButton, javax.swing.GroupLayout.DEFAULT_SIZE, 662, Short.MAX_VALUE))
+                        .addGroup(homeJPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(homeJLabel)
+                            .addGroup(homeJPanelLayout.createSequentialGroup()
+                                .addGroup(homeJPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jScrollPane7, javax.swing.GroupLayout.PREFERRED_SIZE, 157, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(HomeProjectsJLabel))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addGroup(homeJPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(TasksJLabel)
+                                    .addComponent(jScrollPane8, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
-            .addGroup(homeJPanelLayout.createSequentialGroup()
-                .addGap(50, 50, 50)
-                .addGroup(homeJPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane7, javax.swing.GroupLayout.PREFERRED_SIZE, 157, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(HomeProjectsJLabel))
-                .addGap(73, 73, 73)
-                .addGroup(homeJPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(TasksJLabel)
-                    .addComponent(jScrollPane8, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         homeJPanelLayout.setVerticalGroup(
             homeJPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -220,10 +223,10 @@ public class GUIForm extends javax.swing.JFrame {
                     .addComponent(HomeProjectsJLabel)
                     .addComponent(TasksJLabel))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(homeJPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jScrollPane8, javax.swing.GroupLayout.DEFAULT_SIZE, 203, Short.MAX_VALUE)
+                .addGroup(homeJPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane8, javax.swing.GroupLayout.DEFAULT_SIZE, 249, Short.MAX_VALUE)
                     .addComponent(jScrollPane7))
-                .addContainerGap(56, Short.MAX_VALUE))
+                .addContainerGap())
         );
 
         JTabbedPane.addTab("", new javax.swing.ImageIcon(getClass().getResource("/be/artesis/timelog/gui/icons/HomeNeonIcon.png")), homeJPanel, "Home"); // NOI18N
@@ -650,14 +653,14 @@ public class GUIForm extends javax.swing.JFrame {
             .addGroup(scheduleJPanelLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(scheduleJLabel)
-                .addContainerGap(606, Short.MAX_VALUE))
+                .addContainerGap(621, Short.MAX_VALUE))
         );
         scheduleJPanelLayout.setVerticalGroup(
             scheduleJPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(scheduleJPanelLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(scheduleJLabel)
-                .addContainerGap(366, Short.MAX_VALUE))
+                .addContainerGap(369, Short.MAX_VALUE))
         );
 
         JTabbedPane.addTab("", new javax.swing.ImageIcon(getClass().getResource("/be/artesis/timelog/gui/icons/CalendarNeonIcon.png")), scheduleJPanel, "Schedule"); // NOI18N
@@ -833,14 +836,14 @@ public class GUIForm extends javax.swing.JFrame {
             .addGroup(optionsJPanelLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(settingsJLabel)
-                .addContainerGap(614, Short.MAX_VALUE))
+                .addContainerGap(627, Short.MAX_VALUE))
         );
         optionsJPanelLayout.setVerticalGroup(
             optionsJPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(optionsJPanelLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(settingsJLabel)
-                .addContainerGap(366, Short.MAX_VALUE))
+                .addContainerGap(369, Short.MAX_VALUE))
         );
 
         JTabbedPane.addTab("", new javax.swing.ImageIcon(getClass().getResource("/be/artesis/timelog/gui/icons/SettingsNeonIcon.png")), optionsJPanel, "Settings"); // NOI18N
