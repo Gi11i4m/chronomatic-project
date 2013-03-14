@@ -10,9 +10,9 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
-import org.codehaus.jettison.json.JSONException;
-import org.codehaus.jettison.json.JSONObject;
 import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.json.ResultsetConverter;
 
 import chronomatic.database.Database;
