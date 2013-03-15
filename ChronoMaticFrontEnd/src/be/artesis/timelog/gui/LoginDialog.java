@@ -14,15 +14,41 @@ import java.io.IOException;
 import java.net.ConnectException;
 import javax.swing.JOptionPane;
 import org.json.JSONException;
+//
+import java.awt.Dimension;
+import java.awt.Point;
 
+import javafx.application.Platform;
+import javafx.embed.swing.JFXPanel;
+import javafx.scene.Group;
+import javafx.scene.Scene;
+import javafx.scene.web.WebEngine;
+import javafx.scene.web.WebView;
+import javax.swing.*;
+
+import javax.swing.JPanel;
+import java.awt.CardLayout;
+import java.awt.Container;
+import java.awt.event.ActionEvent;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 /**
- * @author Gilliam
+ * @author ChronoMatic
  */
 public class LoginDialog extends javax.swing.JDialog {
 
     private boolean result;
     public Validator validator;
     private java.awt.Frame parent;
+    
+    JPanel basisPanel = new JPanel();
+    
+    private CardLayout layout;
+    private JFXPanel browserPanel;
+    private WebEngine webEngine;
+    
+    private final String BASISPANEL = "basis";
+    private final String BROWSERPANEL  = "browser";
 
     public LoginDialog(java.awt.Frame parent, boolean modal, Validator validator) {
         super(parent, modal);
@@ -33,6 +59,32 @@ public class LoginDialog extends javax.swing.JDialog {
         setLocationRelativeTo(parent);
         getContentPane().setBackground(Color.LIGHT_GRAY);
         getRootPane().setDefaultButton(loginJButton);
+
+        //NIET VERWIJDEREN!
+        // Panels
+        //browserPanel = new JFXPanel();
+        //Container pane = getContentPane();
+        //layout = new CardLayout();
+        //pane.setLayout(layout);
+        
+        //pane.add(basisPanel, BASISPANEL);
+        //pane.add(browserPanel, BROWSERPANEL);
+        
+        //AbstractButton browserGoBackButton = null;
+		//browserGoBackButton.setText("Aanmelden met een andere account");
+        //browserPanel.add(browserGoBackButton);
+
+        //browserGoBackButton.setSize(new Dimension(250, 27));
+        //browserGoBackButton.setLocation(0,460);
+        //browserPanel.setSize(new Dimension(720, 520));
+        //fxPanel.setLocation(new Point(0, 27));
+        
+        //this.displayTab(BASISPANEL);
+    }
+    
+  //om de tabs in te stellen
+    private void displayTab(String name) {
+        layout.show(this.getContentPane(), name);
     }
 
     public boolean getResult() {
@@ -63,6 +115,14 @@ public class LoginDialog extends javax.swing.JDialog {
         passwordJPasswordField = new javax.swing.JPasswordField();
         registreerJLabel = new javax.swing.JLabel();
 
+        //NIET VERWIJDEREN!!
+        //basisPanel.add(usernameJLabel);
+        //basisPanel.add(passwordJLabel);
+        //basisPanel.add(usernameJTextField);
+        //basisPanel.add(loginJButton);
+        //basisPanel.add(passwordJPasswordField);
+        //basisPanel.add(registreerJLabel);
+        
         setTitle("Log in");
         setAlwaysOnTop(true);
         setBackground(new java.awt.Color(64, 64, 64));
