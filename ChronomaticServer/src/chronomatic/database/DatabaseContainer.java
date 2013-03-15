@@ -9,9 +9,9 @@ import java.sql.*;
  *
  */
 public class DatabaseContainer {
-	private static String host = "127.0.0.1";
-	private static String user = "root";
-	private static String password = "root";
+	private static String host = "127.7.94.129";
+	private static String user = "adminvFPczfs";
+	private static String password = "x-z7Vac2Szlg";
 	private static String db_name = "chrono_matic";
 	
 	public static Connection getConnection() {
