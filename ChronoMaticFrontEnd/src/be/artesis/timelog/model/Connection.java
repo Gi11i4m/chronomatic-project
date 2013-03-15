@@ -15,8 +15,9 @@ import org.json.JSONObject;
 
 public class Connection {
         
-        private static final String server = "http://localhost:8080/ChronomaticServer/";
-
+        private static final String server = "http://localhost:8082/ChronomaticServer/";
+		//private static final String server = "http://chronomatic.jelastic.dogado.eu/";
+	
         public static URL normalize(String commando) throws MalformedURLException {
             return new URL((server + commando).replaceAll(" ", "%20"));
         }
