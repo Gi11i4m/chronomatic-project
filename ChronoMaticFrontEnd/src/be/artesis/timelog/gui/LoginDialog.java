@@ -79,10 +79,10 @@ public class LoginDialog extends javax.swing.JDialog {
         //browserPanel.setSize(new Dimension(720, 520));
         //fxPanel.setLocation(new Point(0, 27));
         
-        //this.displayTab(BASISPANEL);
+        this.displayTab(BASISPANEL);
     }
     
-  //om de tabs in te stellen
+    //om de tabs in te stellen
     private void displayTab(String name) {
         layout.show(this.getContentPane(), name);
     }
@@ -114,14 +114,32 @@ public class LoginDialog extends javax.swing.JDialog {
         loginJButton = new javax.swing.JButton();
         passwordJPasswordField = new javax.swing.JPasswordField();
         registreerJLabel = new javax.swing.JLabel();
+        
+        /////
+        browserPanel = new JFXPanel();
+        Container pane = getContentPane();
+        layout = new CardLayout();
+        pane.setLayout(layout);
+        
+        pane.add(basisPanel, BASISPANEL);
+        pane.add(browserPanel, BROWSERPANEL);
+        
+        //AbstractButton browserGoBackButton = null;
+		//browserGoBackButton.setText("Aanmelden met een andere account");
+        //browserPanel.add(browserGoBackButton);
 
-        //NIET VERWIJDEREN!!
-        //basisPanel.add(usernameJLabel);
-        //basisPanel.add(passwordJLabel);
-        //basisPanel.add(usernameJTextField);
-        //basisPanel.add(loginJButton);
-        //basisPanel.add(passwordJPasswordField);
-        //basisPanel.add(registreerJLabel);
+        //browserGoBackButton.setSize(new Dimension(250, 27));
+        //browserGoBackButton.setLocation(0,460);
+        //browserPanel.setSize(new Dimension(720, 520));
+        //browserPanel.setLocation(new Point(0, 27));
+
+        basisPanel.add(usernameJLabel);
+        basisPanel.add(passwordJLabel);
+        basisPanel.add(usernameJTextField);
+        basisPanel.add(loginJButton);
+        basisPanel.add(passwordJPasswordField);
+        basisPanel.add(registreerJLabel);
+        ///////
         
         setTitle("Log in");
         setAlwaysOnTop(true);
@@ -160,47 +178,47 @@ public class LoginDialog extends javax.swing.JDialog {
             }
         });
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(10, 10, 10)
-                        .addComponent(registreerJLabel))
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addGroup(layout.createSequentialGroup()
-                            .addComponent(passwordJLabel)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                            .addComponent(passwordJPasswordField))
-                        .addGroup(layout.createSequentialGroup()
-                            .addComponent(usernameJLabel)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                            .addComponent(usernameJTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 121, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addComponent(loginJButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(usernameJLabel)
-                    .addComponent(usernameJTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(passwordJLabel)
-                    .addComponent(passwordJPasswordField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(loginJButton)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(registreerJLabel)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-
-        registreerJLabel.setBackground(Color.black);
+//        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+//        getContentPane().setLayout(layout);
+//        layout.setHorizontalGroup(
+//            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+//            .addGroup(layout.createSequentialGroup()
+//                .addContainerGap()
+//                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+//                    .addGroup(layout.createSequentialGroup()
+//                        .addGap(10, 10, 10)
+//                        .addComponent(registreerJLabel))
+//                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+//                        .addGroup(layout.createSequentialGroup()
+//                            .addComponent(passwordJLabel)
+//                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+//                            .addComponent(passwordJPasswordField))
+//                        .addGroup(layout.createSequentialGroup()
+//                            .addComponent(usernameJLabel)
+//                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+//                            .addComponent(usernameJTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 121, javax.swing.GroupLayout.PREFERRED_SIZE))
+//                        .addComponent(loginJButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+//                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+//        );
+//        layout.setVerticalGroup(
+//            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+//            .addGroup(layout.createSequentialGroup()
+//                .addContainerGap()
+//                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+//                    .addComponent(usernameJLabel)
+//                    .addComponent(usernameJTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+//                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+//                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+//                    .addComponent(passwordJLabel)
+//                    .addComponent(passwordJPasswordField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+//                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+//                .addComponent(loginJButton)
+//                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+//                .addComponent(registreerJLabel)
+//                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+//        );
+//
+//        registreerJLabel.setBackground(Color.black);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
