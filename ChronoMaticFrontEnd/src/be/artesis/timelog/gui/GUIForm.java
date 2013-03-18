@@ -1098,6 +1098,7 @@ public class GUIForm extends javax.swing.JFrame {
         saveNewClientJButton.setEnabled(clientSelected);
         removeClientJButton.setEnabled(clientSelected);        
     }
+    //testcomment gilliam is gay
 
     private void guiOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_guiOpened
         ingelogdJLabel.setText(UserControl.getUser().getGebruikersnaam());
