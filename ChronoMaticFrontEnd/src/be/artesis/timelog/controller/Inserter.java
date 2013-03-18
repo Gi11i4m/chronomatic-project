@@ -10,11 +10,11 @@ import org.json.*;
 public class Inserter {
 	
 	public static void CreateUser(String naam, String voornaam, String gebruikersnaam, String password, String email) throws MalformedURLException, IOException, WebserviceException {
-        Connection.execute("gebruiker/create/naam/voornaam/gebruikersnaam/passwoord/email");
+        Connection.execute("gebruiker/create/" + naam + "/" + voornaam + "/" + gebruikersnaam + "/" + password + "/" +  email);
 	}
 	
 	public static void CreateUserExtern(String naam, String voornaam, String gebruikersnaam, String email) throws MalformedURLException, IOException, WebserviceException {
-        Connection.execute("gebruiker/create/naam/voornaam/gebruikersnaam/email");
+        Connection.execute("gebruiker/createExtern/" + naam + "/" + voornaam + "/" + gebruikersnaam + "/" + email);
 	}
 
 	public static void inputTijdSpanne(String sessionKey, Tijdspanne tijdSpanne, int taakID) throws MalformedURLException, IOException, WebserviceException {

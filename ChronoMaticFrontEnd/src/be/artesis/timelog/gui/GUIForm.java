@@ -1124,9 +1124,10 @@ public class GUIForm extends javax.swing.JFrame {
 			UserControl.getUser().addOpdrachtgever(client);
 			client.setID(Inserter.inputOpdrachtgever(validator.getSessionKey(),
 					client)); // Make Client ++ Add ClientID returned from DB			
-		} catch (JSONException | IOException | WebserviceException
-				| DataInputException ex) {
+		} catch (JSONException | IOException | WebserviceException ex) {
 			UserControl.getUser().getOpdrachtgevers().remove(client);
+			JOptionPane.showMessageDialog(this, ex.getMessage());
+		} catch (DataInputException ex) {
 			JOptionPane.showMessageDialog(this, ex.getMessage());
 		}
     }
