@@ -120,7 +120,7 @@ public class Gebruiker {
 	}
 	
 	@GET
-	@Path("create/{naam}/{voornaam}/{gebruikersnaam}/{email}")
+	@Path("create/{naam}/{voornaam}/{gebruikersnaam}/{passwoord}/{email}")
 	@Produces(MediaType.APPLICATION_JSON)
 	public String create(@PathParam("naam") String naam,@PathParam("voornaam") String voornaam,@PathParam("gebruikersnaam") String gebruikersnaam,@PathParam("passwoord") String passwoord,@PathParam("email") String email) 
 	{

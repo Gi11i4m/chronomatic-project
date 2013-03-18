@@ -45,8 +45,8 @@ public class AuthBrowser {
 	private Group group;
 	private Scene scene;
 	private WebView webView;
-	private final int BROWSERWIDTH = 715;
-	private final int BROWSERHEIGHT = 487;
+	private final int BROWSERWIDTH = 720;
+	private final int BROWSERHEIGHT = 520;
 	
 	private final String urlGoogle = "https://accounts.google.com/o/oauth2/auth?scope=https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.email+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.profile&state=%2Fprofile&redirect_uri=urn:ietf:wg:oauth:2.0:oob&response_type=code&client_id=536253651406.apps.googleusercontent.com";
     private final String urlFacebook = "https://www.facebook.com/dialog/oauth?client_id=346106655506499&redirect_uri=https://www.facebook.com/connect/login_success.html&scope=email&response_type=token&type=user_agent";
@@ -55,17 +55,17 @@ public class AuthBrowser {
 		
 	}
 	
-	public void initBrowser(final JFXPanel browserPanel, final String provider) {
+	public void initBrowser(final LoginDialog loginDialog, final JFXPanel browserPanel, final String provider) {
         //this.pack();
         Platform.runLater(new Runnable() { // this will run initFX as JavaFX-Thread
             @Override
             public void run() {
-                startBrowser(browserPanel, provider);
+                startBrowser(loginDialog, browserPanel, provider);
             }
         });
     }
 	
-	private void startBrowser(final JFXPanel BrowserPanel, String provider) {
+	private void startBrowser(final LoginDialog loginDialog, final JFXPanel BrowserPanel, String provider) {
         group = new Group();
         scene = new Scene(group);
         BrowserPanel.setScene(scene);
@@ -89,10 +89,12 @@ public class AuthBrowser {
                     @Override 
                     public void run() {
                         String title = webEngine.getTitle();
-                        if(title != null && title.startsWith("https://accounts.google.com/o/oauth2/approval?")) {
+                        if(title != null && title.startsWith("Success state=/profile&code=")) {
                             authCode = title.substring(28);
                             System.out.println(authCode);
-                            result = true;
+                            //result = true;
+                            loginDialog.setResult(true);
+                            loginDialog.dispose();
                             exit();
                         }
                     }
@@ -129,6 +131,7 @@ public class AuthBrowser {
                     public void run() {
                         //System.err.println( "exit/invokeLater/run" );
                         //thisDialog.dispose();
+                    	
                     	
                     }
                 });
