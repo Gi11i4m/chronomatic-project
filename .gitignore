@@ -1,6 +1,6 @@
 # Project files / zorg zelf voor een classpath #
-.class
-.db
+*.class
+*.db
 
 # Package Files #
 *.db
