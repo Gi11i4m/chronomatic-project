@@ -2,6 +2,7 @@ package be.artesis.timelog.gui;
 
 import be.artesis.timelog.clock.Clock;
 import be.artesis.timelog.controller.Deleter;
+import be.artesis.timelog.controller.Inserter;
 import be.artesis.timelog.controller.Updater;
 import be.artesis.timelog.model.Validator;
 import be.artesis.timelog.model.WebserviceException;
@@ -13,6 +14,7 @@ import be.artesis.timelog.view.Tijdspanne;
 import java.awt.Color;
 import java.awt.Component;
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import javax.swing.DefaultListModel;
@@ -24,6 +26,10 @@ import javax.swing.JButton;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.GroupLayout;
 import javax.swing.LayoutStyle.ComponentPlacement;
+
+import org.json.JSONException;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 /**
  * @author Gilliam
@@ -110,7 +116,6 @@ public class GUIForm extends javax.swing.JFrame {
         clientsJLabel = new javax.swing.JLabel();
         jScrollPane5 = new javax.swing.JScrollPane();
         clientsJList = new javax.swing.JList();
-        addClientJButton = new javax.swing.JButton();
         clientNameJTextField = new javax.swing.JTextField();
         clientFirstNameJTextField = new javax.swing.JTextField();
         clientCompanyJTextField = new javax.swing.JTextField();
@@ -687,13 +692,6 @@ public class GUIForm extends javax.swing.JFrame {
         });
         jScrollPane5.setViewportView(clientsJList);
 
-        addClientJButton.setText("Add Client");
-        addClientJButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                addClientJButtonActionPerformed(evt);
-            }
-        });
-
         clientNameJTextField.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusGained(java.awt.event.FocusEvent evt) {
                 editFieldsFocused(evt);
@@ -756,6 +754,11 @@ public class GUIForm extends javax.swing.JFrame {
         });
         
         saveNewClientJButton = new JButton("Save as new client");
+        saveNewClientJButton.addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent evt) {
+        		saveNewClientJButtonActionPerformed(evt);
+        	}
+        });
         saveNewClientJButton.setEnabled(false);
 
         javax.swing.GroupLayout clientsJPanelLayout = new javax.swing.GroupLayout(clientsJPanel);
@@ -784,19 +787,14 @@ public class GUIForm extends javax.swing.JFrame {
         						.addComponent(clientNameJTextField, 368, 368, Short.MAX_VALUE)
         						.addComponent(saveClientJButton, GroupLayout.DEFAULT_SIZE, 368, Short.MAX_VALUE)
         						.addComponent(saveNewClientJButton, GroupLayout.DEFAULT_SIZE, 368, Short.MAX_VALUE)))
-        				.addGroup(clientsJPanelLayout.createSequentialGroup()
-        					.addComponent(clientsJLabel)
-        					.addPreferredGap(ComponentPlacement.RELATED, 543, Short.MAX_VALUE)
-        					.addComponent(addClientJButton)))
+        				.addComponent(clientsJLabel))
         			.addContainerGap())
         );
         clientsJPanelLayout.setVerticalGroup(
         	clientsJPanelLayout.createParallelGroup(Alignment.LEADING)
         		.addGroup(clientsJPanelLayout.createSequentialGroup()
         			.addContainerGap()
-        			.addGroup(clientsJPanelLayout.createParallelGroup(Alignment.BASELINE)
-        				.addComponent(clientsJLabel)
-        				.addComponent(addClientJButton))
+        			.addComponent(clientsJLabel)
         			.addPreferredGap(ComponentPlacement.RELATED)
         			.addGroup(clientsJPanelLayout.createParallelGroup(Alignment.LEADING)
         				.addGroup(clientsJPanelLayout.createSequentialGroup()
@@ -932,20 +930,7 @@ public class GUIForm extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
-    /* Tijdelijk     
-    private void addClient() throws JSONException, MalformedURLException, IOException, WebserviceException, DataInputException {
-        client = new Opdrachtgever();
-        client.setNaam(nameJTextField.getText());
-        client.setVoornaam(firstNameJTextField.getText());
-        client.setBedrijfsnaam(companyJTextField.getText());
-        client.setEmail(emailJTextField.getText());
-        client.setTelefoonnummer(telephoneJTextField.getText());
-        client.setID(Inserter.inputOpdrachtgever(validator.getSessionKey(), client)); // Make Client ++ Add ClientID returned from DB
-        UserControl.getUser().addOpdrachtgever(client);
-    }
-     */
-    
+        
     private void workClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_workClicked
         try {
             Project p = UserControl.getCurrentProject();
@@ -1128,14 +1113,24 @@ public class GUIForm extends javax.swing.JFrame {
         toggleButtonStates();
     }//GEN-LAST:event_clientsJListValueChanged
 
-    private void addClientJButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addClientJButtonActionPerformed
-        NewClientDialog newClient = new NewClientDialog(this, true, validator);
-        newClient.setVisible(true);
-        refreshClientsList();
-        clearFieldsOnPanel(clientsJPanel);
-        toggleButtonStates();
-    }//GEN-LAST:event_addClientJButtonActionPerformed
-
+    private void saveNewClientJButtonActionPerformed(java.awt.event.ActionEvent evt) {
+    	Opdrachtgever client = new Opdrachtgever();
+    	try {			
+			client.setNaam(clientNameJTextField.getText());
+			client.setVoornaam(clientFirstNameJTextField.getText());
+			client.setBedrijfsnaam(clientCompanyJTextField.getText());
+			client.setEmail(clientEmailJTextField.getText());
+			client.setTelefoonnummer(clientPhoneNumberJTextField.getText());
+			UserControl.getUser().addOpdrachtgever(client);
+			client.setID(Inserter.inputOpdrachtgever(validator.getSessionKey(),
+					client)); // Make Client ++ Add ClientID returned from DB			
+		} catch (JSONException | IOException | WebserviceException
+				| DataInputException ex) {
+			UserControl.getUser().getOpdrachtgevers().remove(client);
+			JOptionPane.showMessageDialog(this, ex.getMessage());
+		}
+    }
+    
     private void saveClientJButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveClientJButtonActionPerformed
         try {
             Opdrachtgever c = (Opdrachtgever) UserControl.getUser().getOpdrachtgevers().get(clientsJList.getSelectedIndex()).clone();
@@ -1323,7 +1318,6 @@ public class GUIForm extends javax.swing.JFrame {
     private javax.swing.JLabel HomeProjectsJLabel;
     private javax.swing.JTabbedPane JTabbedPane;
     private javax.swing.JLabel TasksJLabel;
-    private javax.swing.JButton addClientJButton;
     private javax.swing.JButton addProjectJButton;
     private javax.swing.JButton addTaskJButton;
     private javax.swing.JTextField clientCompanyJTextField;
