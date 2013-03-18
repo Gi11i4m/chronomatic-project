@@ -755,7 +755,7 @@ public class GUIForm extends javax.swing.JFrame {
             }
         });
         
-        JButton saveNewClientJButton = new JButton("Save as new client");
+        saveNewClientJButton = new JButton("Save as new client");
         saveNewClientJButton.setEnabled(false);
 
         javax.swing.GroupLayout clientsJPanelLayout = new javax.swing.GroupLayout(clientsJPanel);
@@ -933,6 +933,19 @@ public class GUIForm extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    /* Tijdelijk     
+    private void addClient() throws JSONException, MalformedURLException, IOException, WebserviceException, DataInputException {
+        client = new Opdrachtgever();
+        client.setNaam(nameJTextField.getText());
+        client.setVoornaam(firstNameJTextField.getText());
+        client.setBedrijfsnaam(companyJTextField.getText());
+        client.setEmail(emailJTextField.getText());
+        client.setTelefoonnummer(telephoneJTextField.getText());
+        client.setID(Inserter.inputOpdrachtgever(validator.getSessionKey(), client)); // Make Client ++ Add ClientID returned from DB
+        UserControl.getUser().addOpdrachtgever(client);
+    }
+     */
+    
     private void workClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_workClicked
         try {
             Project p = UserControl.getCurrentProject();
@@ -1362,6 +1375,7 @@ public class GUIForm extends javax.swing.JFrame {
     private javax.swing.JButton saveClientJButton;
     private javax.swing.JButton saveProjectJButton;
     private javax.swing.JButton saveTaskJButton;
+    private javax.swing.JButton saveNewClientJButton;
     private javax.swing.JLabel scheduleJLabel;
     private javax.swing.JPanel scheduleJPanel;
     private javax.swing.JButton setCurrentProjectJButton;
