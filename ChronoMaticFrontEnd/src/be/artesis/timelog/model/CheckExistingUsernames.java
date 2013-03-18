@@ -15,7 +15,7 @@ public class CheckExistingUsernames {
 			e.printStackTrace();
 		}
 		
-		return (jObject != null) ;
+		return (jObject == null) ;
 		
 	}
 }

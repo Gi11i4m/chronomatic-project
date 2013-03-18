@@ -120,8 +120,9 @@ public class LoginDialog extends javax.swing.JDialog {
 				authCode = RequestGoogleToken.request(authCode);
 			}
 			String email = GetUserInfo.retreive(authCode);
-			if(CheckExistingUsernames.check(email))
+			if(CheckExistingUsernames.check(email)) {
 			Inserter.CreateUserExtern("Naam", "Voornaam", email, "email@mail.com");
+			}
 			
 			loginExtern(email);
 			

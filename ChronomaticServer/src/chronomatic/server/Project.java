@@ -113,7 +113,7 @@ public class Project {
 		
 		int userID = Authentication.getUserId(sessionKey);
 		
-		String query = "DELETE FROM projecten WHERE ID = " + projectID + " AND gebruiker_ID = " + userID;
+		String query = "DELETE FROM projecten WHERE ID = " + projectID + " AND gebruikers_ID = " + userID;
 		
 		JSONObject error = new JSONObject();
 		JSONArray returnObject = new JSONArray();
