@@ -44,8 +44,7 @@ public class GUIForm extends javax.swing.JFrame {
         validator = Validator.getInstance();
         login = new LoginDialog(this, true, validator);
         login.setVisible(true);
-        initComponents();
-        getContentPane().setBackground(Color.darkGray);
+        initComponents();        
     }
 
     /**
@@ -139,6 +138,7 @@ public class GUIForm extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Time Management System");
         setBackground(new java.awt.Color(51, 51, 51));
+        this.getContentPane().setBackground(Color.darkGray);
         setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         setForeground(new java.awt.Color(51, 51, 51));
         setIconImages(null);

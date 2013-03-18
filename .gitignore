@@ -1,11 +1,12 @@
-# Project files / zorg zelf voor een classpath #
+# Project files #
 *.class
 *.db
 
 # Package Files #
-*.db
 *.war
 *.ear
+
+# Directories #
 /ChronoMaticFrontEnd/nbproject/private/
 /ChronoMaticFrontEnd/build/
 /Frontend classes/.settings/
