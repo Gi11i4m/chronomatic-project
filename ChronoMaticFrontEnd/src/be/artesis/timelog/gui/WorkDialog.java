@@ -28,7 +28,7 @@ public class WorkDialog extends javax.swing.JDialog {
     private Clock clock;
     private Timer timer;
     private TimerTask updater;
-    long startTime, stopTime, pauseStart, pauseStop, totalPause;
+    long startTime, stopTime, pauseStart, pauseStop, totalPause = 0;
     Taak currentTask;
     boolean firstRun, minimized;
     Dimension timerSize, frameSize;
