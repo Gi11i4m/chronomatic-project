@@ -20,6 +20,10 @@ import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import javax.swing.JButton;
+import javax.swing.GroupLayout.Alignment;
+import javax.swing.GroupLayout;
+import javax.swing.LayoutStyle.ComponentPlacement;
 
 /**
  * @author Gilliam
@@ -735,7 +739,7 @@ public class GUIForm extends javax.swing.JFrame {
         phoneNumberJLabel.setForeground(new java.awt.Color(255, 255, 255));
         phoneNumberJLabel.setText("Phone number");
 
-        saveClientJButton.setText("Save");
+        saveClientJButton.setText("Save changes");
         saveClientJButton.setEnabled(false);
         saveClientJButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -750,76 +754,81 @@ public class GUIForm extends javax.swing.JFrame {
                 removeClientJButtonActionPerformed(evt);
             }
         });
+        
+        JButton saveNewClientJButton = new JButton("Save as new client");
+        saveNewClientJButton.setEnabled(false);
 
         javax.swing.GroupLayout clientsJPanelLayout = new javax.swing.GroupLayout(clientsJPanel);
-        clientsJPanel.setLayout(clientsJPanelLayout);
         clientsJPanelLayout.setHorizontalGroup(
-            clientsJPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(clientsJPanelLayout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(clientsJPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(clientsJPanelLayout.createSequentialGroup()
-                        .addGroup(clientsJPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jScrollPane5, javax.swing.GroupLayout.DEFAULT_SIZE, 197, Short.MAX_VALUE)
-                            .addComponent(removeClientJButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addGap(18, 18, 18)
-                        .addGroup(clientsJPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(nameJLabel)
-                            .addComponent(firstNameJLabel)
-                            .addComponent(companyJLabel)
-                            .addComponent(emailJLabel)
-                            .addComponent(phoneNumberJLabel))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(clientsJPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(clientFirstNameJTextField, javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(clientCompanyJTextField, javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(clientEmailJTextField, javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(clientPhoneNumberJTextField)
-                            .addComponent(clientNameJTextField)
-                            .addComponent(saveClientJButton, javax.swing.GroupLayout.DEFAULT_SIZE, 368, Short.MAX_VALUE)))
-                    .addGroup(clientsJPanelLayout.createSequentialGroup()
-                        .addComponent(clientsJLabel)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(addClientJButton)))
-                .addContainerGap())
+        	clientsJPanelLayout.createParallelGroup(Alignment.LEADING)
+        		.addGroup(clientsJPanelLayout.createSequentialGroup()
+        			.addContainerGap()
+        			.addGroup(clientsJPanelLayout.createParallelGroup(Alignment.LEADING)
+        				.addGroup(clientsJPanelLayout.createSequentialGroup()
+        					.addGroup(clientsJPanelLayout.createParallelGroup(Alignment.LEADING, false)
+        						.addComponent(jScrollPane5, GroupLayout.DEFAULT_SIZE, 197, Short.MAX_VALUE)
+        						.addComponent(removeClientJButton, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        					.addGap(18)
+        					.addGroup(clientsJPanelLayout.createParallelGroup(Alignment.TRAILING)
+        						.addComponent(nameJLabel)
+        						.addComponent(firstNameJLabel)
+        						.addComponent(companyJLabel)
+        						.addComponent(emailJLabel)
+        						.addComponent(phoneNumberJLabel))
+        					.addPreferredGap(ComponentPlacement.UNRELATED)
+        					.addGroup(clientsJPanelLayout.createParallelGroup(Alignment.LEADING)
+        						.addComponent(clientFirstNameJTextField, 368, 368, Short.MAX_VALUE)
+        						.addComponent(clientCompanyJTextField, 368, 368, Short.MAX_VALUE)
+        						.addComponent(clientEmailJTextField, 368, 368, Short.MAX_VALUE)
+        						.addComponent(clientPhoneNumberJTextField, 368, 368, Short.MAX_VALUE)
+        						.addComponent(clientNameJTextField, 368, 368, Short.MAX_VALUE)
+        						.addComponent(saveClientJButton, GroupLayout.DEFAULT_SIZE, 368, Short.MAX_VALUE)
+        						.addComponent(saveNewClientJButton, GroupLayout.DEFAULT_SIZE, 368, Short.MAX_VALUE)))
+        				.addGroup(clientsJPanelLayout.createSequentialGroup()
+        					.addComponent(clientsJLabel)
+        					.addPreferredGap(ComponentPlacement.RELATED, 543, Short.MAX_VALUE)
+        					.addComponent(addClientJButton)))
+        			.addContainerGap())
         );
         clientsJPanelLayout.setVerticalGroup(
-            clientsJPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(clientsJPanelLayout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(clientsJPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(clientsJLabel)
-                    .addComponent(addClientJButton))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(clientsJPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(clientsJPanelLayout.createSequentialGroup()
-                        .addGroup(clientsJPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(clientNameJTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(nameJLabel))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(clientsJPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(clientFirstNameJTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(firstNameJLabel))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(clientsJPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(clientCompanyJTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(companyJLabel))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(clientsJPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(clientEmailJTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(emailJLabel))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(clientsJPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(clientPhoneNumberJTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(phoneNumberJLabel))
-                        .addGap(0, 167, Short.MAX_VALUE))
-                    .addComponent(jScrollPane5, javax.swing.GroupLayout.DEFAULT_SIZE, 316, Short.MAX_VALUE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(clientsJPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(saveClientJButton)
-                    .addComponent(removeClientJButton, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap())
+        	clientsJPanelLayout.createParallelGroup(Alignment.LEADING)
+        		.addGroup(clientsJPanelLayout.createSequentialGroup()
+        			.addContainerGap()
+        			.addGroup(clientsJPanelLayout.createParallelGroup(Alignment.BASELINE)
+        				.addComponent(clientsJLabel)
+        				.addComponent(addClientJButton))
+        			.addPreferredGap(ComponentPlacement.RELATED)
+        			.addGroup(clientsJPanelLayout.createParallelGroup(Alignment.LEADING)
+        				.addGroup(clientsJPanelLayout.createSequentialGroup()
+        					.addGroup(clientsJPanelLayout.createParallelGroup(Alignment.BASELINE)
+        						.addComponent(clientNameJTextField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+        						.addComponent(nameJLabel))
+        					.addPreferredGap(ComponentPlacement.RELATED)
+        					.addGroup(clientsJPanelLayout.createParallelGroup(Alignment.BASELINE)
+        						.addComponent(clientFirstNameJTextField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+        						.addComponent(firstNameJLabel))
+        					.addPreferredGap(ComponentPlacement.RELATED)
+        					.addGroup(clientsJPanelLayout.createParallelGroup(Alignment.BASELINE)
+        						.addComponent(clientCompanyJTextField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+        						.addComponent(companyJLabel))
+        					.addPreferredGap(ComponentPlacement.RELATED)
+        					.addGroup(clientsJPanelLayout.createParallelGroup(Alignment.BASELINE)
+        						.addComponent(clientEmailJTextField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+        						.addComponent(emailJLabel))
+        					.addPreferredGap(ComponentPlacement.RELATED)
+        					.addGroup(clientsJPanelLayout.createParallelGroup(Alignment.BASELINE)
+        						.addComponent(clientPhoneNumberJTextField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+        						.addComponent(phoneNumberJLabel))
+        					.addPreferredGap(ComponentPlacement.RELATED, 169, Short.MAX_VALUE)
+        					.addComponent(saveNewClientJButton))
+        				.addComponent(jScrollPane5, GroupLayout.DEFAULT_SIZE, 316, Short.MAX_VALUE))
+        			.addPreferredGap(ComponentPlacement.RELATED)
+        			.addGroup(clientsJPanelLayout.createParallelGroup(Alignment.TRAILING)
+        				.addComponent(saveClientJButton)
+        				.addComponent(removeClientJButton, GroupLayout.PREFERRED_SIZE, 23, GroupLayout.PREFERRED_SIZE))
+        			.addContainerGap())
         );
+        clientsJPanel.setLayout(clientsJPanelLayout);
 
         JTabbedPane.addTab("", new javax.swing.ImageIcon(getClass().getResource("/be/artesis/timelog/gui/icons/ClientsNeonIcon.png")), clientsJPanel, "Clients"); // NOI18N
 
@@ -1086,7 +1095,8 @@ public class GUIForm extends javax.swing.JFrame {
         saveProjectJButton.setEnabled(projectSelected);
         removeProjectJButton.setEnabled(projectSelected);
         saveClientJButton.setEnabled(clientSelected);
-        removeClientJButton.setEnabled(clientSelected);
+        saveNewClientJButton.setEnabled(clientSelected);
+        removeClientJButton.setEnabled(clientSelected);        
     }
     //testcomment gilliam is gay
 
@@ -1378,5 +1388,4 @@ public class GUIForm extends javax.swing.JFrame {
     private javax.swing.JLabel titleLabel;
     private javax.swing.JButton workJButton;
     private javax.swing.JList workedTimeJList;
-    // End of variables declaration//GEN-END:variables
 }
