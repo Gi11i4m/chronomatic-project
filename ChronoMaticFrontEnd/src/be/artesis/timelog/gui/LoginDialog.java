@@ -49,32 +49,34 @@ public class LoginDialog extends javax.swing.JDialog {
     public Validator validator;
     private java.awt.Frame parent;
     
-	CardLayout layout;
-	Container pane;
-	JPanel basisPanel;
-	JFXPanel browserPanel;
+    private CardLayout layout;
+    private Container pane;
+    private JPanel basisPanel;
+    private JFXPanel browserPanel;
 	private final String BASISPANEL = "Basis";
 	private final String BROWSERPANEL = "Browser";
-	private JTextField UsernameJTextField;
 	
-	private JPasswordField PasswordJPasswordField;
-	private JLabel gebruikersnaamJLabel;
+	private JTextField usernameJTextField;
+	private JPasswordField passwordJPasswordField;
+	private JLabel usernameJLabel;
 	private JLabel paswoordJLabel;
 	private JButton aanmeldenButton;
 	private JLabel newAccountJLabel;
-	private JLabel ThirdPartyJLabel;
+	private JLabel thirdPartyJLabel;
 	private JButton googleJButton;
 	private JButton facebookJButton;
-	
-	JButton browserGoBackJButton;
+	private JButton browserGoBackJButton;
 	
 	public LoginDialog(java.awt.Frame parent, boolean modal, Validator validator) {
 		super(parent, modal);
         setResizable(false);
         this.parent = parent;
+        setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
         setLocationRelativeTo(parent);
         this.validator = validator;
         result = false;
+        this.setTitle("Login");
+		this.setSize(720, 520);
 		
         initComponents();
         
@@ -99,7 +101,7 @@ public class LoginDialog extends javax.swing.JDialog {
 	
 	public void login() {
 		try {
-            if (gebruikersnaamJLabel.getText().equals("")) {
+            if (usernameJTextField.getText().equals("")) {
                 try {
                     UserControl.setUser(new Gebruiker("Flebus", "Gilliam", "Gi11i4m", "gi11i4m@gmail.com")); // tijdelijke user
                     UserControl.getUser().addOpdrachtgever(new Opdrachtgever("Flebus", "Gilliam", "Mot-art", "blabla", "0475", 456));
@@ -113,7 +115,7 @@ public class LoginDialog extends javax.swing.JDialog {
                 result = true;
                 this.dispose();
                 
-            } else if (loginOnServer(gebruikersnaamJLabel.getText(), PasswordJPasswordField.getPassword())) {
+            } else if (loginOnServer(usernameJTextField.getText(), passwordJPasswordField.getPassword())) {
                 UserControl.setUser(CreatorFromJSON.createGebruiker(validator.getSessionKey()));
                 UserControl.getUser().setProjects(CreatorFromJSON.createProjecten(validator.getSessionKey()));
                 UserControl.getUser().setOpdrachtgevers(CreatorFromJSON.createOpdrachtgevers(validator.getSessionKey()));                
@@ -123,13 +125,13 @@ public class LoginDialog extends javax.swing.JDialog {
                 }
                 
                 for(int i = 0; i < UserControl.getUser().getProjects().size(); i++){
-                    System.out.println("project: "+UserControl.getUser().getProject(i));
+                    //System.out.println("project: "+UserControl.getUser().getProject(i));
                     for(int j = 0; j <UserControl.getUser().getProject(i).getTaken().size(); j++){
                         UserControl.getUser().getProject(i).getTaak(j).setGewerkteTijd( CreatorFromJSON.createTijdspannes(validator.getSessionKey(), UserControl.getUser().getProject(i).getTaak(j).getID(),false));                     
                         UserControl.getUser().getProject(i).getTaak(j).setPauze( CreatorFromJSON.createTijdspannes(validator.getSessionKey(), UserControl.getUser().getProject(i).getTaak(j).getID(),true));                     
-                        System.out.println("taak " +UserControl.getUser().getProject(i).getTaak(j).getID()+ ": " + UserControl.getUser().getProject(i).getTaak(j));
-                        System.out.println("gewerkt: " + UserControl.getUser().getProject(i).getTaak(j).getGewerkteTijd());
-                        System.out.println("pauze: "+UserControl.getUser().getProject(i).getTaak(j).getPauze());                       
+                        //System.out.println("taak " +UserControl.getUser().getProject(i).getTaak(j).getID()+ ": " + UserControl.getUser().getProject(i).getTaak(j));
+                        //System.out.println("gewerkt: " + UserControl.getUser().getProject(i).getTaak(j).getGewerkteTijd());
+                        //System.out.println("pauze: "+UserControl.getUser().getProject(i).getTaak(j).getPauze());                       
                     }
                 }
                 result = true;
@@ -143,60 +145,66 @@ public class LoginDialog extends javax.swing.JDialog {
 	}
 	
 	private void initComponents() {
-		this.setTitle("Login");
-		this.setSize(720, 520);
+		
 		pane = getContentPane();
 		layout = new CardLayout();
-		pane.setBackground(Color.WHITE);
+		//pane.setBackground(Color.RED); Hoe werkt dees dan?
 		pane.setLayout(layout);
 		
 		basisPanel = new JPanel();
-		basisPanel.setLayout(null);
+		basisPanel.setLayout(null); //Geen cardlayout op dit panel
 		browserPanel = new JFXPanel();
 		pane.add(basisPanel, BASISPANEL);
 		pane.add(browserPanel, BROWSERPANEL);
 		
 		//initialize fields
-		gebruikersnaamJLabel = new JLabel("Gebruikersnaam:");
-		paswoordJLabel = new JLabel("Paswoord:");
+		usernameJLabel = new JLabel("Gebruikersnaam:");
+		paswoordJLabel = new JLabel("Wachtwoord:");
 		aanmeldenButton = new JButton("Aanmelden");
-		UsernameJTextField = new JTextField();
-		PasswordJPasswordField = new JPasswordField();
+		usernameJTextField = new JTextField("p");
+		passwordJPasswordField = new JPasswordField("p");
 		newAccountJLabel = new JLabel("Of maak een account aan");
-		ThirdPartyJLabel = new JLabel("Of meld u aan bij");
+		thirdPartyJLabel = new JLabel("Of meld u aan bij");
 		googleJButton = new JButton("Google");
 		facebookJButton = new JButton("Facebook");
 		browserGoBackJButton = new JButton("Aanmelden met een andere account");
 		
 		// set label fonts
-		gebruikersnaamJLabel.setFont(new Font("Tahoma", Font.PLAIN, 16));
+		usernameJLabel.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		paswoordJLabel.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		
 		// set bounds
-		gebruikersnaamJLabel.setBounds(31, 124, 138, 16);
+		usernameJLabel.setBounds(31, 124, 138, 16);
 		paswoordJLabel.setBounds(31, 227, 138, 16);
-		aanmeldenButton.setBounds(31, 327, 97, 25);
-		UsernameJTextField.setBounds(31, 153, 247, 22);
-		PasswordJPasswordField.setBounds(31, 256, 247, 22);
+		aanmeldenButton.setBounds(31, 327, 107, 25);
+		usernameJTextField.setBounds(31, 153, 247, 22);
+		passwordJPasswordField.setBounds(31, 256, 247, 22);
 		newAccountJLabel.setBounds(140, 331, 160, 16);
-		ThirdPartyJLabel.setBounds(464, 125, 118, 16);
+		thirdPartyJLabel.setBounds(464, 125, 118, 16);
 		googleJButton.setBounds(493, 175, 107, 25);
 		facebookJButton.setBounds(493, 228, 107, 25);
 		browserGoBackJButton.setBounds(0, 462, 240, 25);
 		
-		UsernameJTextField.setColumns(10);
+		usernameJTextField.setColumns(10);
 		
 		// add to panel
-		basisPanel.add(gebruikersnaamJLabel);
+		basisPanel.add(usernameJLabel);
 		basisPanel.add(paswoordJLabel);
 		basisPanel.add(aanmeldenButton);
-		basisPanel.add(UsernameJTextField);
-		basisPanel.add(PasswordJPasswordField);
+		basisPanel.add(usernameJTextField);
+		basisPanel.add(passwordJPasswordField);
 		basisPanel.add(newAccountJLabel);
-		basisPanel.add(ThirdPartyJLabel);
+		basisPanel.add(thirdPartyJLabel);
 		basisPanel.add(googleJButton);
 		basisPanel.add(facebookJButton);
 		browserPanel.add(browserGoBackJButton);
+		
+		// Action listeners
+		aanmeldenButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+            	login();
+            }
+        });
 		
 		googleJButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -210,6 +218,12 @@ public class LoginDialog extends javax.swing.JDialog {
             }
         });
 		
+		browserGoBackJButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+            	Platform.exit();
+            	displayTab(BASISPANEL);
+            }
+        });
 		
 	}
 	
