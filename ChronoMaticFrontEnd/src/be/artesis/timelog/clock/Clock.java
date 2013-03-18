@@ -7,7 +7,6 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
-//elke pauze apart bijhouden of gewoon totaal pauze in seconden?
 public class Clock {
 
     private boolean running, pauzed;
@@ -68,7 +67,12 @@ public class Clock {
     }
 
     public long getRuntime() {
-        return generateUnixTimestamp() - startTime;
+    	if (startTime == 0) {
+			return 0;
+		} else {
+			return generateUnixTimestamp() - startTime;
+		}
+        
     }
 
     //indien enkel start en stoptijd nodig zijn om tijdspanne te berekenen

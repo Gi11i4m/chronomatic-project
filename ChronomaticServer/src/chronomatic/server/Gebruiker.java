@@ -184,5 +184,37 @@ public class Gebruiker {
 		
 		return returnObject.toString();
 	}
+	
+	@GET
+	@Path("checkExists/{username}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public static String checkExists(@PathParam("username") String username) {
+		Connection con = DatabaseContainer.getConnection();
+
+		String query =  "SELECT Count(1) FROM gebruikers WHERE gebruikersnaam = '" + username + "'";
+		
+		try{
+			ResultSet rs = Database.executeQuery(con, query); 
+			if(rs.next()) {
+				
+				rs.previous();
+				JSONArray returnObject = ResultsetConverter.convert(rs);
+				
+				return returnObject.toString();
+			}
+			else { 
+				// Geen projecten
+				JSONObject error = new JSONObject();
+				error.put("error","Geen projecten");
+				
+				return error.toString();
+			}
+		}
+		catch (Exception e){
+			System.out.println(e.toString());
+		}
+		
+		return "error";
+	}
 
 }
