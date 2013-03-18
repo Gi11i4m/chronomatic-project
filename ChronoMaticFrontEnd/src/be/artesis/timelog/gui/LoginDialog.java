@@ -51,7 +51,7 @@ public class LoginDialog extends javax.swing.JDialog {
     
     private CardLayout layout;
     private Container pane;
-    private JPanel basisPanel;
+    private JFXPanel basisPanel;
     private JFXPanel browserPanel;
 	private final String BASISPANEL = "Basis";
 	private final String BROWSERPANEL = "Browser";
@@ -80,11 +80,11 @@ public class LoginDialog extends javax.swing.JDialog {
 		
         initComponents();
         
-        this.displayTab(BASISPANEL);
+        //this.displayTab(BASISPANEL);
 	}
 	
 	private void displayTab(String name) {
-		layout.show(this.getContentPane(), name);
+		layout.show(pane, name);
     }
 	
 	public boolean getResult() {
@@ -148,41 +148,40 @@ public class LoginDialog extends javax.swing.JDialog {
 		
 		pane = getContentPane();
 		layout = new CardLayout();
-		//pane.setBackground(Color.RED); Hoe werkt dees dan?
+		pane.setBackground(Color.WHITE);
 		pane.setLayout(layout);
 		
-		basisPanel = new JPanel();
-		basisPanel.setLayout(null); //Geen cardlayout op dit panel
+		//basisPanel.setLayout(null);
+		
+		basisPanel = new JFXPanel();
 		browserPanel = new JFXPanel();
 		pane.add(basisPanel, BASISPANEL);
 		pane.add(browserPanel, BROWSERPANEL);
 		
 		//initialize fields
 		usernameJLabel = new JLabel("Gebruikersnaam:");
+		usernameJLabel.setBounds(31, 124, 138, 16);
 		paswoordJLabel = new JLabel("Wachtwoord:");
+		paswoordJLabel.setBounds(31, 227, 138, 16);
 		aanmeldenButton = new JButton("Aanmelden");
+		aanmeldenButton.setBounds(31, 327, 107, 25);
 		usernameJTextField = new JTextField("p");
+		usernameJTextField.setBounds(31, 153, 247, 22);
 		passwordJPasswordField = new JPasswordField("p");
+		passwordJPasswordField.setBounds(31, 256, 247, 22);
 		newAccountJLabel = new JLabel("Of maak een account aan");
+		newAccountJLabel.setBounds(140, 331, 160, 16);
 		thirdPartyJLabel = new JLabel("Of meld u aan bij");
+		thirdPartyJLabel.setBounds(464, 125, 118, 16);
 		googleJButton = new JButton("Google");
+		googleJButton.setBounds(493, 175, 107, 25);
 		facebookJButton = new JButton("Facebook");
+		facebookJButton.setBounds(493, 228, 107, 25);
 		browserGoBackJButton = new JButton("Aanmelden met een andere account");
 		
 		// set label fonts
 		usernameJLabel.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		paswoordJLabel.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		
-		// set bounds
-		usernameJLabel.setBounds(31, 124, 138, 16);
-		paswoordJLabel.setBounds(31, 227, 138, 16);
-		aanmeldenButton.setBounds(31, 327, 107, 25);
-		usernameJTextField.setBounds(31, 153, 247, 22);
-		passwordJPasswordField.setBounds(31, 256, 247, 22);
-		newAccountJLabel.setBounds(140, 331, 160, 16);
-		thirdPartyJLabel.setBounds(464, 125, 118, 16);
-		googleJButton.setBounds(493, 175, 107, 25);
-		facebookJButton.setBounds(493, 228, 107, 25);
 		browserGoBackJButton.setBounds(0, 462, 240, 25);
 		
 		usernameJTextField.setColumns(10);
@@ -224,7 +223,6 @@ public class LoginDialog extends javax.swing.JDialog {
             	displayTab(BASISPANEL);
             }
         });
-		
 	}
 	
 	private void loginProviderJButtonClicked(ActionEvent evt) {
