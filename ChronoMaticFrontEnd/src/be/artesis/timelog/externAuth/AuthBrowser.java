@@ -1,14 +1,10 @@
 package be.artesis.timelog.externAuth;
 
+import be.artesis.timelog.controller.Inserter;
 import be.artesis.timelog.externAuth.*;
-import be.artesis.timelog.gui.LoginDialog;
-import be.artesis.timelog.model.CreatorFromJSON;
-import be.artesis.timelog.model.Validator;
-import be.artesis.timelog.view.DataInputException;
-import be.artesis.timelog.view.Gebruiker;
-import be.artesis.timelog.view.Opdrachtgever;
-import be.artesis.timelog.view.Project;
-import be.artesis.timelog.view.Taak;
+import be.artesis.timelog.gui.*;
+import be.artesis.timelog.model.*;
+import be.artesis.timelog.view.*;
 import java.awt.Color;
 import java.awt.HeadlessException;
 import java.io.IOException;
@@ -90,8 +86,9 @@ public class AuthBrowser {
                         if(title != null && title.startsWith("Success state=/profile&code=")) {
                             authCode = title.substring(28);
                             System.out.println(authCode);
-                            loginDialog.setResult(true);
-                            loginDialog.dispose();
+                            loginDialog.maakExterneGebruiker(authCode, "Google");
+                            //loginDialog.setResult(true);
+                            //loginDialog.dispose();
                             exit();
                         }
                     }
@@ -107,6 +104,7 @@ public class AuthBrowser {
                         if(url != null && url.startsWith("https://www.facebook.com/connect/login_success.html")) {
                             authCode = url.substring(65, 173);
                             System.out.println(authCode);
+                            loginDialog.maakExterneGebruiker(authCode, "Facebook");
                             exit(); 
                         }
                     }

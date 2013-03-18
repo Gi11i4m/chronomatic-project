@@ -1,9 +1,14 @@
 package be.artesis.timelog.gui;
 import java.awt.Color;
 import java.awt.CardLayout;
+import java.awt.Toolkit;
+
 import javax.swing.JPanel;
 
+import be.artesis.timelog.controller.Inserter;
 import be.artesis.timelog.externAuth.AuthBrowser;
+import be.artesis.timelog.externAuth.GetUserInfo;
+import be.artesis.timelog.externAuth.RequestGoogleToken;
 import be.artesis.timelog.model.CreatorFromJSON;
 import be.artesis.timelog.model.Validator;
 import be.artesis.timelog.model.WebserviceException;
@@ -16,6 +21,8 @@ import java.awt.Color;
 import java.awt.HeadlessException;
 import java.io.IOException;
 import java.net.ConnectException;
+import java.net.MalformedURLException;
+
 import javax.swing.JOptionPane;
 import org.json.JSONException;
 //
@@ -72,15 +79,21 @@ public class LoginDialog extends javax.swing.JDialog {
         setResizable(false);
         this.parent = parent;
         setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-        setLocationRelativeTo(parent);
         this.validator = validator;
         result = false;
         this.setTitle("Login");
 		this.setSize(720, 520);
 		
+		// set center
+		final Toolkit toolkit = Toolkit.getDefaultToolkit();
+		final Dimension screenSize = toolkit.getScreenSize();
+		final int x = (screenSize.width - this.getWidth()) / 2;
+		final int y = (screenSize.height - this.getHeight()) / 2;
+		this.setLocation(x, y);
+		
         initComponents();
         
-        //this.displayTab(BASISPANEL);
+        this.displayTab(BASISPANEL);
 	}
 	
 	private void displayTab(String name) {
@@ -95,9 +108,41 @@ public class LoginDialog extends javax.swing.JDialog {
         this.result = result;
     }
 	
+	// ni meer dan?
 	private boolean loginOnServer(String username, char[] password) throws ConnectException, IOException, JSONException, WebserviceException {
         return validator.login(username, new String(password));
     }
+	
+	public void maakExterneGebruiker(String authCode, String provider) {
+		try {
+			if(provider.equals("Google")) {
+				authCode = RequestGoogleToken.request(authCode);
+			}
+			String email = GetUserInfo.retreive(authCode);
+			Inserter.CreateUserExtern("Naamo", "Achternaamo", email, email);
+			
+			loginExtern(email);
+			
+		} catch (IOException | WebserviceException | JSONException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public void loginExtern(String email) {
+		try {
+			if (validator.loginExtern(email)) {
+				loadUserData();
+			    result = true;
+			    this.dispose();
+			} else {
+			    JOptionPane.showMessageDialog(this, "Login failed");
+			}
+		} catch (HeadlessException | IOException | JSONException
+				| WebserviceException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 	
 	public void login() {
 		try {
@@ -115,25 +160,8 @@ public class LoginDialog extends javax.swing.JDialog {
                 result = true;
                 this.dispose();
                 
-            } else if (loginOnServer(usernameJTextField.getText(), passwordJPasswordField.getPassword())) {
-                UserControl.setUser(CreatorFromJSON.createGebruiker(validator.getSessionKey()));
-                UserControl.getUser().setProjects(CreatorFromJSON.createProjecten(validator.getSessionKey()));
-                UserControl.getUser().setOpdrachtgevers(CreatorFromJSON.createOpdrachtgevers(validator.getSessionKey()));                
-                
-                for(int i = 0; i < UserControl.getUser().getProjects().size(); i++){
-                    UserControl.getUser().getProject(i).setTaken(CreatorFromJSON.createTaken(validator.getSessionKey(), UserControl.getUser().getProject(i).getId()));
-                }
-                
-                for(int i = 0; i < UserControl.getUser().getProjects().size(); i++){
-                    //System.out.println("project: "+UserControl.getUser().getProject(i));
-                    for(int j = 0; j <UserControl.getUser().getProject(i).getTaken().size(); j++){
-                        UserControl.getUser().getProject(i).getTaak(j).setGewerkteTijd( CreatorFromJSON.createTijdspannes(validator.getSessionKey(), UserControl.getUser().getProject(i).getTaak(j).getID(),false));                     
-                        UserControl.getUser().getProject(i).getTaak(j).setPauze( CreatorFromJSON.createTijdspannes(validator.getSessionKey(), UserControl.getUser().getProject(i).getTaak(j).getID(),true));                     
-                        //System.out.println("taak " +UserControl.getUser().getProject(i).getTaak(j).getID()+ ": " + UserControl.getUser().getProject(i).getTaak(j));
-                        //System.out.println("gewerkt: " + UserControl.getUser().getProject(i).getTaak(j).getGewerkteTijd());
-                        //System.out.println("pauze: "+UserControl.getUser().getProject(i).getTaak(j).getPauze());                       
-                    }
-                }
+            } else if (validator.login(usernameJTextField.getText(), passwordJPasswordField.getPassword().toString())) {
+            	loadUserData();
                 result = true;
                 this.dispose();
             } else {
@@ -142,6 +170,33 @@ public class LoginDialog extends javax.swing.JDialog {
         } catch (JSONException | HeadlessException | IOException | WebserviceException ex) {
             JOptionPane.showMessageDialog(this, ex.getMessage());
         }
+	}
+	
+	private void loadUserData() {
+		try {
+			UserControl.setUser(CreatorFromJSON.createGebruiker(validator.getSessionKey()));
+		    UserControl.getUser().setProjects(CreatorFromJSON.createProjecten(validator.getSessionKey()));
+		    UserControl.getUser().setOpdrachtgevers(CreatorFromJSON.createOpdrachtgevers(validator.getSessionKey()));                
+		    
+		    for(int i = 0; i < UserControl.getUser().getProjects().size(); i++){
+		        UserControl.getUser().getProject(i).setTaken(CreatorFromJSON.createTaken(validator.getSessionKey(), UserControl.getUser().getProject(i).getId()));
+		    }
+		    
+		    for(int i = 0; i < UserControl.getUser().getProjects().size(); i++){
+		        //System.out.println("project: "+UserControl.getUser().getProject(i));
+		        for(int j = 0; j <UserControl.getUser().getProject(i).getTaken().size(); j++){
+		            UserControl.getUser().getProject(i).getTaak(j).setGewerkteTijd( CreatorFromJSON.createTijdspannes(validator.getSessionKey(), UserControl.getUser().getProject(i).getTaak(j).getID(),false));                     
+		            UserControl.getUser().getProject(i).getTaak(j).setPauze( CreatorFromJSON.createTijdspannes(validator.getSessionKey(), UserControl.getUser().getProject(i).getTaak(j).getID(),true));                     
+		            //System.out.println("taak " +UserControl.getUser().getProject(i).getTaak(j).getID()+ ": " + UserControl.getUser().getProject(i).getTaak(j));
+		            //System.out.println("gewerkt: " + UserControl.getUser().getProject(i).getTaak(j).getGewerkteTijd());
+		            //System.out.println("pauze: "+UserControl.getUser().getProject(i).getTaak(j).getPauze());                       
+		        }
+		    }
+		}
+        catch (JSONException | IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 	private void initComponents() {

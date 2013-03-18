@@ -141,6 +141,29 @@ public class Gebruiker {
 		return "["+returnObject.toString()+"]";
 	}
 	
+	// Create user met externe auth
+	@GET
+	@Path("createExtern/{naam}/{voornaam}/{gebruikersnaam}/{email}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public String create(@PathParam("naam") String naam,@PathParam("voornaam") String voornaam,@PathParam("gebruikersnaam") String gebruikersnaam,@PathParam("email") String email) 
+	{
+		Connection con = DatabaseContainer.getConnection();
+		
+		String query = "INSERT INTO gebruikers (naam,voornaam,gebruikersnaam,email) VALUES ('"+naam+"','"+ voornaam +"','"+gebruikersnaam+"','" + email + "')";
+		
+		JSONObject returnObject = new JSONObject();
+		
+		try {
+			returnObject.put("result", Database.executeNullQuery(con, query));
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		
+		return "["+returnObject.toString()+"]";
+	}
+	
 	@GET
 	@Path("update/{sessieID}/{naam}/{voornaam}/{gebruikersnaam}/{email}")
 	@Produces(MediaType.APPLICATION_JSON)
