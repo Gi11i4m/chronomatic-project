@@ -1,6 +1,6 @@
 package be.artesis.timelog.gui;
 
-import be.artesis.timelog.view.Creator;
+import be.artesis.timelog.controller.Inserter;
 import be.artesis.timelog.view.DataControle;
 import be.artesis.timelog.view.DataInputException;
 import javax.swing.JOptionPane;
@@ -180,8 +180,7 @@ public class NewUserDialog extends javax.swing.JDialog {
                 throw new DataInputException("Wrong email format");
             }
             
-            
-            //Creator.createGebruiker(); -> moet nog afgewerkt worden
+            Inserter.CreateUser(name, firstName, username, password, email);
             
             JOptionPane.showMessageDialog(this, "Your account has been created!");
             dispose();

@@ -53,9 +53,54 @@ public class Authentication {
 	public String login(@PathParam("username") String username, @PathParam("password") String password) {
 		Connection con = DatabaseContainer.getConnection();
 		JSONObject returnObject = new JSONObject();
+		ResultSet rs = null;
+		
 		String query = "SELECT ID,gebruikersnaam FROM gebruikers WHERE gebruikersnaam = '" + username + "' AND passwoord = '" + password + "'";
 		try{
-			ResultSet rs = Database.executeQuery(con, query); 
+			if(password != null) {
+				rs = Database.executeQuery(con, query); 
+			}
+			if(rs.next()) {
+				String sessionKey = generateSessionID();
+				
+				long unixTimestamp = System.currentTimeMillis()/1000;
+				String sessionQuery = "INSERT INTO sessies (session_key,time_out,last_activity,begin,gebruiker_ID) VALUES ('" + sessionKey + "',3600," + unixTimestamp + "," + unixTimestamp + ", " + rs.getInt(1) + ")";
+				System.out.println(sessionQuery);
+				String checkedUsername = rs.getString(2);
+				
+				// Opslaan van sessie
+				if(Database.executeNullQuery(con, sessionQuery))  {
+					returnObject.put("username", checkedUsername);
+					returnObject.put("key", sessionKey);
+				}
+				else 
+					returnObject.put("error","Error saving session data");
+			}
+			else { 
+				// Foutieve login
+				returnObject.put("error","Wrong password/username.");
+			}
+		}
+		catch (Exception e){
+			System.out.println(e.toString());
+		}
+		return "[" + returnObject.toString() + "]";
+	}
+	
+	// Login via 3rd party provider
+	
+	@GET
+	@Path("loginExtern/{username}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public String loginExtern(@PathParam("username") String username) {
+		Connection con = DatabaseContainer.getConnection();
+		JSONObject returnObject = new JSONObject();
+		ResultSet rs = null;
+		
+		String query = "SELECT ID,gebruikersnaam FROM gebruikers WHERE gebruikersnaam = '" + username + "'";
+		try{
+			rs = Database.executeQuery(con, query); 
+
 			if(rs.next()) {
 				String sessionKey = generateSessionID();
 				

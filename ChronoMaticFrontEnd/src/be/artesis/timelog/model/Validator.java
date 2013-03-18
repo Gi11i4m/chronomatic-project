@@ -42,8 +42,7 @@ public class Validator
 	}
 	
 	public boolean login(String gebruikersnaam, String paswoord) throws IOException, JSONException, WebserviceException{
-   		
-		  				   			   					  
+	   			   					  
                 JSONObject jObject = Connection.getObject("auth/login/" + gebruikersnaam+ "/"+ paswoord);
 
                 if(jObject.has("error")){
@@ -57,12 +56,24 @@ public class Validator
                 }else{
                    return false; 
                 }
-		
-
-		
-		
-		
 	}
+	
+	public boolean loginExtern(String gebruikersnaam) throws IOException, JSONException, WebserviceException{
+			  
+        JSONObject jObject = Connection.getObject("auth/loginExtern/" + gebruikersnaam);
+
+        if(jObject.has("error")){
+         throw new WebserviceException("Failed : HTTP error code : "
+                                + jObject.getString("error"));
+
+        }else if(jObject.getString("key") != ""){
+                setSessionKey(jObject.getString("key"));
+                return true;
+
+        }else{
+           return false; 
+        }
+}
 
 	public boolean valideerSessie() throws IOException, JSONException{
 
