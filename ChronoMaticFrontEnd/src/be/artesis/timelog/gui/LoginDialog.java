@@ -145,6 +145,7 @@ public class LoginDialog extends javax.swing.JDialog {
 	}
 	
 	public void login() {
+		System.out.println(passwordJPasswordField.getPassword().toString());
 		try {
             if (usernameJTextField.getText().equals("")) {
                 try {
@@ -160,7 +161,7 @@ public class LoginDialog extends javax.swing.JDialog {
                 result = true;
                 this.dispose();
                 
-            } else if (validator.login(usernameJTextField.getText(), passwordJPasswordField.getPassword().toString())) {
+            } else if (loginOnServer(usernameJTextField.getText(), passwordJPasswordField.getPassword())) {
             	loadUserData();
                 result = true;
                 this.dispose();
