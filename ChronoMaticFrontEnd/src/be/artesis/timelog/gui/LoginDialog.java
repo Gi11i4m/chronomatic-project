@@ -3,6 +3,7 @@ import java.awt.Color;
 import java.awt.CardLayout;
 import java.awt.Toolkit;
 
+import javax.imageio.ImageIO;
 import javax.swing.JPanel;
 
 import be.artesis.timelog.controller.Inserter;
@@ -20,6 +21,7 @@ import be.artesis.timelog.view.Project;
 import be.artesis.timelog.view.Taak;
 import java.awt.Color;
 import java.awt.HeadlessException;
+import java.io.File;
 import java.io.IOException;
 import java.net.ConnectException;
 import java.net.MalformedURLException;
@@ -47,6 +49,7 @@ import javafx.beans.value.ObservableValue;
 import java.awt.Font;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.image.BufferedImage;
 
 public class LoginDialog extends javax.swing.JDialog {
 	@SuppressWarnings("unchecked")
@@ -85,7 +88,7 @@ public class LoginDialog extends javax.swing.JDialog {
         this.setTitle("Login");
 		this.setSize(720, 520);
 		
-		// set center
+		// set dialog in center
 		final Toolkit toolkit = Toolkit.getDefaultToolkit();
 		final Dimension screenSize = toolkit.getScreenSize();
 		final int x = (screenSize.width - this.getWidth()) / 2;
@@ -110,9 +113,9 @@ public class LoginDialog extends javax.swing.JDialog {
     }
 	
 	// ni meer dan?
-	private boolean loginOnServer(String username, char[] password) throws ConnectException, IOException, JSONException, WebserviceException {
-        return validator.login(username, new String(password));
-    }
+	//private boolean loginOnServer(String username, char[] password) throws ConnectException, IOException, JSONException, WebserviceException {
+    //    return validator.login(username, new String(password));
+    //}
 	
 	public void maakExterneGebruiker(String authCode, String provider) {
 		try {
@@ -148,7 +151,6 @@ public class LoginDialog extends javax.swing.JDialog {
 	}
 	
 	public void login() {
-		System.out.println(passwordJPasswordField.getPassword().toString());
 		try {
             if (usernameJTextField.getText().equals("")) {
                 try {
@@ -164,7 +166,7 @@ public class LoginDialog extends javax.swing.JDialog {
                 result = true;
                 this.dispose();
                 
-            } else if (loginOnServer(usernameJTextField.getText(), passwordJPasswordField.getPassword())) {
+            } else if (validator.login(usernameJTextField.getText(), new String(passwordJPasswordField.getPassword()))) {
             	loadUserData();
                 result = true;
                 this.dispose();

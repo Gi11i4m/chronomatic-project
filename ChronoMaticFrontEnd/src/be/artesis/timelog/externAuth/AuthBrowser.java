@@ -34,7 +34,6 @@ import javafx.beans.value.ObservableValue;
 
 public class AuthBrowser {
 	
-	private static String authCode;
 	private WebEngine webEngine;
 	private Group group;
 	private Scene scene;
@@ -84,11 +83,7 @@ public class AuthBrowser {
                     public void run() {
                         String title = webEngine.getTitle();
                         if(title != null && title.startsWith("Success state=/profile&code=")) {
-                            authCode = title.substring(28);
-                            System.out.println(authCode);
-                            loginDialog.maakExterneGebruiker(authCode, "Google");
-                            //loginDialog.setResult(true);
-                            //loginDialog.dispose();
+                            loginDialog.maakExterneGebruiker(title.substring(28), "Google");
                             exit();
                         }
                     }
@@ -102,9 +97,7 @@ public class AuthBrowser {
                     @Override public void run() {
                         String url = webEngine.getLocation();
                         if(url != null && url.startsWith("https://www.facebook.com/connect/login_success.html")) {
-                            authCode = url.substring(65, 173);
-                            System.out.println(authCode);
-                            loginDialog.maakExterneGebruiker(authCode, "Facebook");
+                            loginDialog.maakExterneGebruiker(url.substring(65, 173), "Facebook");
                             exit(); 
                         }
                     }
