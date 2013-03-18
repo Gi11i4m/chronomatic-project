@@ -9,6 +9,7 @@ import be.artesis.timelog.controller.Inserter;
 import be.artesis.timelog.externAuth.AuthBrowser;
 import be.artesis.timelog.externAuth.GetUserInfo;
 import be.artesis.timelog.externAuth.RequestGoogleToken;
+import be.artesis.timelog.model.CheckExistingUsernames;
 import be.artesis.timelog.model.CreatorFromJSON;
 import be.artesis.timelog.model.Validator;
 import be.artesis.timelog.model.WebserviceException;
@@ -119,11 +120,12 @@ public class LoginDialog extends javax.swing.JDialog {
 				authCode = RequestGoogleToken.request(authCode);
 			}
 			String email = GetUserInfo.retreive(authCode);
-			Inserter.CreateUserExtern("Naamo", "Achternaamo", email, email);
+			if(CheckExistingUsernames.check(email))
+			Inserter.CreateUserExtern("Naam", "Voornaam", email, "email@mail.com");
 			
 			loginExtern(email);
 			
-		} catch (IOException | WebserviceException | JSONException e) {
+		} catch (IOException | JSONException | WebserviceException e) {
 			e.printStackTrace();
 		}
 	}
