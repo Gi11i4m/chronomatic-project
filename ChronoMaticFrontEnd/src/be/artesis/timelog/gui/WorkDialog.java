@@ -128,10 +128,11 @@ public class WorkDialog extends javax.swing.JDialog {
                 t.setPauze(true);
                 pause.add(t);
             } else {
-                currentTask.addGewerkteTijd(t);
-                currentTask.getPauze().addAll(pause);
+                UserInterface.saveNewTimespan(start, stop, currentTask, false);
+                for (Tijdspanne p : pause) {
+                    UserInterface.saveNewTimespan(p.getBeginTijd(), p.getEindTijd(), currentTask, true);
+				}
             }
-            Inserter.inputTijdSpanne(validator.getSessionKey(), t, currentTask.getID());
         } catch (IOException | WebserviceException | DataInputException ex) {
             JOptionPane.showMessageDialog(this, ex.getMessage());
         }

@@ -144,10 +144,11 @@ public class NewTaskDialog extends javax.swing.JDialog {
             t.setGeschatteEinddatum(Clock.StringToTimestamp(enddateJTextField.getText()));
             t.setCommentaar(commentJTextArea.getText());
             //Send to Database
-            int pid = UserInterface.getCurrentProject().getId();
+            int pid = UserControl.getCurrentProject().getId();
             System.out.println(pid);
             t.setId((Inserter.inputTaak(validator.getSessionKey(), t, pid)));
-            UserInterface.getCurrentProject().addTaak(t);
+
+            UserControl.getCurrentProject().addTaak(t);
             JOptionPane.showMessageDialog(this, "Task added!");
             dispose();
         } catch (IOException | WebserviceException | JSONException | GUIException | DataInputException ex) {

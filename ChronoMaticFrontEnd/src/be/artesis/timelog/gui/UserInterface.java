@@ -174,12 +174,7 @@ public class UserInterface {
 		ts.setPauze(isPause);
 		Inserter.inputTijdSpanne(validator.getSessionKey(), ts, t.getID());
 		//FIXME indien Taak klasse 1 tijdspannelijst heeft, dit aanpassen
-		if(!isPause){
-			t.addGewerkteTijd(ts);
-		}
-		else{
-			t.addPauze(ts);
-		}
+		t.addGewerkteTijd(ts);
 		return ts;
 	}
 	
