@@ -14,7 +14,7 @@ public class Taak implements Cloneable {
     private boolean completed;
     private int id;
 
-    
+    //FIXME gewerkteTijd + pauze in 1 lijst bijhouden (dmv isPauze boolean onderschijden)
     private ArrayList<Tijdspanne> gewerkteTijd;
     private ArrayList<Tijdspanne> pauze;
 

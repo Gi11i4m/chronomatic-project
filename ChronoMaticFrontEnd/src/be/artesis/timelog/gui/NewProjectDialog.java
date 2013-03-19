@@ -289,7 +289,7 @@ public class NewProjectDialog extends javax.swing.JDialog {
         p.setEinddatum(endDate);
         p.setOpdrachtgeverId(opdrachtgeverID);
         p.setId(Inserter.inputProject(validator.getSessionKey(), p, client.getID()));
-        UserControl.getUser().addProject(p);
+        UserInterface.getUser().addProject(p);
     }
 
     private void addClient() throws JSONException, IOException, WebserviceException, DataInputException {
@@ -300,7 +300,7 @@ public class NewProjectDialog extends javax.swing.JDialog {
         client.setEmail(emailJTextField.getText());
         client.setTelefoonnummer(telephoneJTextField.getText());
         client.setID(Inserter.inputOpdrachtgever(validator.getSessionKey(), client)); // Make Client ++ Add ClientID returned from DB
-        UserControl.getUser().addOpdrachtgever(client);
+        UserInterface.getUser().addOpdrachtgever(client);
     }
 
     private void showClientForm() {
@@ -331,7 +331,7 @@ public class NewProjectDialog extends javax.swing.JDialog {
 
     private void initMyComponents() {
         startdateJTextField.setText(DataControle.sdf.format(new Date()));
-        clients = UserControl.getUser().getOpdrachtgevers();
+        clients = UserInterface.getUser().getOpdrachtgevers();
         DefaultComboBoxModel combomodel = new DefaultComboBoxModel();
         combomodel.addElement(new Opdrachtgever("Client", "New", "add a new client", "", "", 0));
         for (Iterator<Opdrachtgever> it = clients.iterator(); it.hasNext();) {

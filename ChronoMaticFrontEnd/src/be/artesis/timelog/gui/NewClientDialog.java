@@ -165,7 +165,7 @@ public class NewClientDialog extends javax.swing.JDialog {
         client.setEmail(emailJTextField.getText());
         client.setTelefoonnummer(telephoneJTextField.getText());
         client.setID(Inserter.inputOpdrachtgever(validator.getSessionKey(), client)); // Make Client ++ Add ClientID returned from DB
-        UserControl.getUser().addOpdrachtgever(client);
+        UserInterface.getUser().addOpdrachtgever(client);
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton addClientJButton;

@@ -23,10 +23,10 @@ public class Updater {
 	public static void updateOpdrachtgever(String sessionKey, Opdrachtgever opdrachtgever) throws MalformedURLException, IOException, WebserviceException{
 		Connection.execute("opdrachtgever/update/" + sessionKey + "/" + opdrachtgever.getID() + "/" + opdrachtgever.getBedrijfsnaam() + "/" + opdrachtgever.getNaam() + "/" + opdrachtgever.getVoornaam() + "/" + opdrachtgever.getEmail() + "/" + opdrachtgever.getTelefoonnummer());
 	}
-
+	
 	public static void updateTaak(String sessionKey, Taak taak) throws MalformedURLException, IOException, WebserviceException {
 		Connection.execute("task/update/" + sessionKey + "/" + taak.getNaam() + "/" + taak.getBegindatum()+ "/" + taak.getGeschatteEinddatum() + "/" + taak.getCommentaar() + "/" + taak.getID() + "/" + taak.getCompleted());
-        }
+    }
 
 
 }
