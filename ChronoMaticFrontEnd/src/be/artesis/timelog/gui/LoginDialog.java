@@ -4,6 +4,7 @@ import java.awt.CardLayout;
 import java.awt.Toolkit;
 
 import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 
 import be.artesis.timelog.controller.Inserter;
@@ -124,7 +125,7 @@ public class LoginDialog extends javax.swing.JDialog {
 			}
 			String email = GetUserInfo.retreive(authCode);
 			if(CheckExistingUsernames.check(email)) {
-			Inserter.CreateUserExtern("Naam", "Voornaam", email, "email@mail.com");
+			Inserter.CreateUserExtern("", "", email, "");
 			}
 			
 			loginExtern(email);
@@ -219,6 +220,16 @@ public class LoginDialog extends javax.swing.JDialog {
 		pane.add(basisPanel, BASISPANEL);
 		pane.add(browserPanel, BROWSERPANEL);
 		
+		
+		JFXPanel loading = new JFXPanel();
+		pane.add(loading, "loading");
+		
+		ImageIcon loadingGif = new ImageIcon();
+		loadingGif = new ImageIcon(Toolkit.getDefaultToolkit().getImage(getClass().getResource("/be/artesis/timelog/gui/icons/loading.gif")));
+        JLabel loadingJLabel = new JLabel(loadingGif);
+        loadingJLabel.setBounds(431, 124, 200, 200);
+        loading.add(loadingJLabel);
+		
 		//initialize fields
 		usernameJLabel = new JLabel("Gebruikersnaam:");
 		usernameJLabel.setBounds(31, 124, 138, 16);
@@ -262,7 +273,19 @@ public class LoginDialog extends javax.swing.JDialog {
 		// Action listeners
 		aanmeldenButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-            	login();
+            	
+            	// Thread voor het loading gifke
+            	Thread loginLoadingThread = new Thread(){ 
+            		public void run(){  
+                    	SwingUtilities.invokeLater(new Runnable() {
+                            public void run() { 
+                            	displayTab("loading");
+                            }  
+                          }); 
+                    	login(); 
+                    }
+            	};
+            	loginLoadingThread.start();                  
             }
         });
 		

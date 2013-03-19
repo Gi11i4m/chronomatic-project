@@ -25,8 +25,13 @@ public class Updater {
 	}
 	
 	public static void updateTaak(String sessionKey, Taak taak) throws MalformedURLException, IOException, WebserviceException {
+<<<<<<< HEAD
 		Connection.execute("task/update/" + sessionKey + "/" + taak.getNaam() + "/" + taak.getBegindatum()+ "/" + taak.getGeschatteEinddatum() + "/" + taak.getCommentaar() + "/" + taak.getID() + "/" + taak.getCompleted());
     }
+=======
+		Connection.execute("task/update/" + sessionKey + "/" + taak.getBegindatum() + "/" + taak.getGeschatteEinddatum()+ "/" + taak.getCommentaar() + "/" + taak.getID() + "/" + taak.getCompleted());
+        }
+>>>>>>> dfb48d54d2845af8be22b2eb68a2f23335a9f5a1
 
 
 }
