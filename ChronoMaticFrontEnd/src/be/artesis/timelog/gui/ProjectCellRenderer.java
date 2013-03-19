@@ -26,7 +26,7 @@ class ProjectCellRenderer extends JLabel implements ListCellRenderer {
         p = (Project)value;
 
         try {
-            if (p.equals(UserControl.getCurrentProject())) {
+            if (p.equals(UserInterface.getCurrentProject())) {
                 // renderer.setFont(new Font("Tahoma", Font.BOLD, 11));
                 renderer.setForeground(Color.GREEN);
             }
