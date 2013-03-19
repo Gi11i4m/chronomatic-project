@@ -75,7 +75,7 @@ public class AuthBrowser {
             webEngine.load(urlGoogle);
         }
         
-        webEngine.titleProperty().addListener(new ChangeListener<String>() {
+        /*webEngine.titleProperty().addListener(new ChangeListener<String>() {
             @Override
             public void changed(ObservableValue<? extends String> observable, String oldValue, final String newValue) {
                 SwingUtilities.invokeLater(new Runnable() {
@@ -103,7 +103,7 @@ public class AuthBrowser {
                     }
                 });
             }
-        });
+        });*/
     }
 	
 	private void exit() {
