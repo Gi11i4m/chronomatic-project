@@ -81,7 +81,7 @@ public class Opdrachtgever {
 		return returnObject.toString();
 	}
 	
-	@Path("update/{sessionKey}/{bedrijfsnaam}/{naam}/{voornaam}/{email}/{telefoonnummer}")
+	@Path("update/{sessionKey}/{opdrachtgeverID}/{bedrijfsnaam}/{naam}/{voornaam}/{email}/{telefoonnummer}")
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	public String updateOpdrachtgever(@PathParam("sessionKey") String sessionKey,
