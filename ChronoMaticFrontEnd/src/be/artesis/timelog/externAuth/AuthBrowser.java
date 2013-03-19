@@ -42,9 +42,11 @@ public class AuthBrowser {
 	private final int BROWSERHEIGHT = 490;
 	
 	private final String urlGoogle = "https://accounts.google.com/o/oauth2/auth?scope=https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.email+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.profile&state=%2Fprofile&redirect_uri=urn:ietf:wg:oauth:2.0:oob&response_type=code&client_id=536253651406.apps.googleusercontent.com";
-    private final String urlFacebook = "https://www.facebook.com/dialog/oauth?client_id=346106655506499&redirect_uri=https://www.facebook.com/connect/login_success.html&scope=email&response_type=token&type=user_agent";
+    //private final String urlFacebook = "https://www.facebook.com/dialog/oauth?client_id=346106655506499&redirect_uri=https://www.facebook.com/connect/login_success.html&scope=user_name&response_type=token&type=user_agent";
 	
-	public AuthBrowser() {
+    private final String urlFacebook = "https://www.facebook.com/dialog/oauth?client_id=346106655506499&redirect_uri=https://www.facebook.com/connect/login_success.html&scope=user_about_me&response_type=token&type=user_agent";
+    
+    public AuthBrowser() {
 		
 	}
 	
