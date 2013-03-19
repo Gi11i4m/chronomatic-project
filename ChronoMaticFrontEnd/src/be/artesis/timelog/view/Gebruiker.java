@@ -121,7 +121,7 @@ public class Gebruiker {
     }
 
     public void addOpdrachtgever(Opdrachtgever o) throws DataInputException {
-        if (!DataControle.naamBestaat(projects, o)) {
+        if (!DataControle.naamBestaat(opdrachtgevers, o)) {
             opdrachtgevers.add(o);
         } else {
             throw new DataInputException("Name already exists");

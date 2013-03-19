@@ -155,12 +155,12 @@ public class LoginDialog extends javax.swing.JDialog {
 		try {
             if (usernameJTextField.getText().equals("")) {
                 try {
-                    UserControl.setUser(new Gebruiker("Flebus", "Gilliam", "Gi11i4m", "gi11i4m@gmail.com")); // tijdelijke user
-                    UserControl.getUser().addOpdrachtgever(new Opdrachtgever("Flebus", "Gilliam", "Mot-art", "blabla", "0475", 456));
-                    UserControl.getUser().addOpdrachtgever(new Opdrachtgever("Schouten", "Girmi", "Artesis", "bla", "0478", 457));
-                    UserControl.getUser().addProject(new Project("Test project 1", 456, 1343059472, 1453059472));
-                    UserControl.getUser().addProject(new Project("Test project 2", 457, 1243059472, 1553059472));
-                    UserControl.getUser().getProjects().get(1).addTaak(new Taak("Test taak", 1343059472, 1453059472, ""));
+                    UserInterface.setUser(new Gebruiker("Flebus", "Gilliam", "Gi11i4m", "gi11i4m@gmail.com")); // tijdelijke user
+                    UserInterface.getUser().addOpdrachtgever(new Opdrachtgever("Flebus", "Gilliam", "Mot-art", "blabla", "0475", 456));
+                    UserInterface.getUser().addOpdrachtgever(new Opdrachtgever("Schouten", "Girmi", "Artesis", "bla", "0478", 457));
+                    UserInterface.getUser().addProject(new Project("Test project 1", 456, 1343059472, 1453059472));
+                    UserInterface.getUser().addProject(new Project("Test project 2", 457, 1243059472, 1553059472));
+                    UserInterface.getUser().getProjects().get(1).addTaak(new Taak("Test taak", 1343059472, 1453059472, ""));
                 } catch (DataInputException ex) {
                     //JOptionPane.showMessageDialog(this, ex.getMessage());
                 }
@@ -181,19 +181,19 @@ public class LoginDialog extends javax.swing.JDialog {
 	
 	private void loadUserData() {
 		try {
-			UserControl.setUser(CreatorFromJSON.createGebruiker(validator.getSessionKey()));
-		    UserControl.getUser().setProjects(CreatorFromJSON.createProjecten(validator.getSessionKey()));
-		    UserControl.getUser().setOpdrachtgevers(CreatorFromJSON.createOpdrachtgevers(validator.getSessionKey()));                
+			UserInterface.setUser(CreatorFromJSON.createGebruiker(validator.getSessionKey()));
+		    UserInterface.getUser().setProjects(CreatorFromJSON.createProjecten(validator.getSessionKey()));
+		    UserInterface.getUser().setOpdrachtgevers(CreatorFromJSON.createOpdrachtgevers(validator.getSessionKey()));                
 		    
-		    for(int i = 0; i < UserControl.getUser().getProjects().size(); i++){
-		        UserControl.getUser().getProject(i).setTaken(CreatorFromJSON.createTaken(validator.getSessionKey(), UserControl.getUser().getProject(i).getId()));
+		    for(int i = 0; i < UserInterface.getUser().getProjects().size(); i++){
+		        UserInterface.getUser().getProject(i).setTaken(CreatorFromJSON.createTaken(validator.getSessionKey(), UserInterface.getUser().getProject(i).getId()));
 		    }
 		    
-		    for(int i = 0; i < UserControl.getUser().getProjects().size(); i++){
+		    for(int i = 0; i < UserInterface.getUser().getProjects().size(); i++){
 		        //System.out.println("project: "+UserControl.getUser().getProject(i));
-		        for(int j = 0; j <UserControl.getUser().getProject(i).getTaken().size(); j++){
-		            UserControl.getUser().getProject(i).getTaak(j).setGewerkteTijd( CreatorFromJSON.createTijdspannes(validator.getSessionKey(), UserControl.getUser().getProject(i).getTaak(j).getID(),false));                     
-		            UserControl.getUser().getProject(i).getTaak(j).setPauze( CreatorFromJSON.createTijdspannes(validator.getSessionKey(), UserControl.getUser().getProject(i).getTaak(j).getID(),true));                     
+		        for(int j = 0; j <UserInterface.getUser().getProject(i).getTaken().size(); j++){
+		            UserInterface.getUser().getProject(i).getTaak(j).setGewerkteTijd( CreatorFromJSON.createTijdspannes(validator.getSessionKey(), UserInterface.getUser().getProject(i).getTaak(j).getID(),false));                     
+		            UserInterface.getUser().getProject(i).getTaak(j).setPauze( CreatorFromJSON.createTijdspannes(validator.getSessionKey(), UserInterface.getUser().getProject(i).getTaak(j).getID(),true));                     
 		            //System.out.println("taak " +UserControl.getUser().getProject(i).getTaak(j).getID()+ ": " + UserControl.getUser().getProject(i).getTaak(j));
 		            //System.out.println("gewerkt: " + UserControl.getUser().getProject(i).getTaak(j).getGewerkteTijd());
 		            //System.out.println("pauze: "+UserControl.getUser().getProject(i).getTaak(j).getPauze());                       

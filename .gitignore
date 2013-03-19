@@ -1,6 +1,7 @@
 # Project files #
 *.class
 *.db
+*.log
 
 # Package Files #
 *.war

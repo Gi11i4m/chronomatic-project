@@ -14,9 +14,7 @@ public class Taak implements Cloneable {
     private boolean completed;
     private int id;
 
-    
     private ArrayList<Tijdspanne> gewerkteTijd;
-    private ArrayList<Tijdspanne> pauze;
 
     public Taak(String naam, long begindatum, long geschatteEinddatum, String commentaar) {
         this(naam, begindatum, geschatteEinddatum, commentaar, 0);
@@ -28,8 +26,7 @@ public class Taak implements Cloneable {
         this.geschatteEinddatum = geschatteEinddatum;
         this.commentaar = commentaar;
         this.completed = false;    
-        this.gewerkteTijd = new ArrayList<Tijdspanne>();
-        this.pauze = new ArrayList<Tijdspanne>();        
+        this.gewerkteTijd = new ArrayList<Tijdspanne>();      
         this.id = id;       
     }
 
@@ -157,25 +154,6 @@ public class Taak implements Cloneable {
         gewerkteTijd.remove(i);
     }
 
-    public ArrayList<Tijdspanne> getPauze() {
-        return pauze;
-    }
-
-    public void addPauze(Tijdspanne t) throws DataInputException {
-        if (t.getBeginTijd() >= begindatum && t.getEindTijd() <= geschatteEinddatum) {
-            pauze.add(t);
-        } else {
-            throw new DataInputException("Timespan out of task bounds");
-        }
-    }
-
-    public boolean removePauze(Tijdspanne t) {
-        return pauze.remove(t);
-    }
-
-    public void removePauze(int i) {
-        pauze.remove(i);
-    }
 
     //return tijd tot de geschatte einddatum in seconden
     public long tijdResterend() {
@@ -195,25 +173,26 @@ public class Taak implements Cloneable {
     public long getTotaleWerktijd() {
         long l = 0;
         for (Tijdspanne t : gewerkteTijd) {
-            l += t.getTijdsduur();
+        	if (!t.isPauze()) {
+                l += t.getTijdsduur();
+			}
         }
         return l;
     }
 
     public long getTotalePauze() {
         long l = 0;
-        for (Tijdspanne t : pauze) {
-            l += t.getTijdsduur();
+        for (Tijdspanne t : gewerkteTijd) {
+        	if (t.isPauze()) {
+        		l += t.getTijdsduur();
+			}
+            
         }
         return l;
     }
 
     public void setGewerkteTijd(Tijdspanne[] t) {
         Collections.addAll(this.gewerkteTijd, t);
-    }
-
-    public void setPauze(Tijdspanne[] t) {
-        Collections.addAll(this.pauze, t);
     }
 
     @Override

@@ -289,7 +289,13 @@ public class NewProjectDialog extends javax.swing.JDialog {
         p.setEinddatum(endDate);
         p.setOpdrachtgeverId(opdrachtgeverID);
         p.setId(Inserter.inputProject(validator.getSessionKey(), p, client.getID()));
+<<<<<<< HEAD
+        UserControl.getUser().addProject(p);
+        
+        LocalDatabaseWriter.addProject(p);
+=======
         UserInterface.getUser().addProject(p);
+>>>>>>> 04f777885e221b4c4c61a113bb2f961c0ca3b200
     }
 
     private void addClient() throws JSONException, IOException, WebserviceException, DataInputException {

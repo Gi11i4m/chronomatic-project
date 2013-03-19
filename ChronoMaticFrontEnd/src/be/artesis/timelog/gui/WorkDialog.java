@@ -40,6 +40,7 @@ public class WorkDialog extends javax.swing.JDialog {
 
     public WorkDialog(java.awt.Frame parent, boolean modal, Validator validator) {
         super(parent, modal);
+        setUndecorated(true);
         setLocationRelativeTo(parent);
         initComponents();
         initMyComponents();
@@ -88,7 +89,7 @@ public class WorkDialog extends javax.swing.JDialog {
         setDefaultCloseOperation(javax.swing.JFrame.DO_NOTHING_ON_CLOSE);
 
         try {
-            for (Taak task : UserControl.getCurrentProject().getTaken()) {
+            for (Taak task : UserInterface.getCurrentProject().getTaken()) {
                 if (!task.overTijd()) {
                     tasksJComboBox.addItem(task);
                 }
@@ -127,10 +128,11 @@ public class WorkDialog extends javax.swing.JDialog {
                 t.setPauze(true);
                 pause.add(t);
             } else {
-                currentTask.addGewerkteTijd(t);
-                currentTask.getPauze().addAll(pause);
+                UserInterface.saveNewTimespan(start, stop, currentTask, false);
+                for (Tijdspanne p : pause) {
+                    UserInterface.saveNewTimespan(p.getBeginTijd(), p.getEindTijd(), currentTask, true);
+				}
             }
-            Inserter.inputTijdSpanne(validator.getSessionKey(), t, currentTask.getID());
         } catch (IOException | WebserviceException | DataInputException ex) {
             JOptionPane.showMessageDialog(this, ex.getMessage());
         }
@@ -258,7 +260,7 @@ public class WorkDialog extends javax.swing.JDialog {
 
     private void workDialogShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_workDialogShown
         try {
-            currentProjectJLabel.setText(UserControl.getCurrentProject().getNaam());
+            currentProjectJLabel.setText(UserInterface.getCurrentProject().getNaam());
         } catch (GUIException ex) {
             JOptionPane.showMessageDialog(this, ex.getMessage());
             this.dispose();
@@ -273,7 +275,6 @@ public class WorkDialog extends javax.swing.JDialog {
                 minimizedTimerJLabel.setText(Clock.longTimeToHMS(Clock.generateUnixTimestamp() - pauseStart + totalPause));
             }
         } else {
-            // !! zorgen dat indien tijd nog niet geset is juist waarde weergeeft
             if (!clock.isPaused()) {
                 timerJLabel.setText(Clock.longTimeToHMS(clock.getRuntime() - totalPause));
             } else {
