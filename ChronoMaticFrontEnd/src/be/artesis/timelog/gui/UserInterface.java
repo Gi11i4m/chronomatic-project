@@ -112,7 +112,7 @@ public class UserInterface {
 			throws DataInputException, JSONException, IOException, WebserviceException{
 		Opdrachtgever client = new Opdrachtgever();
 		client.setNaam(naam);
-		client.setVoornaam(vooraam);
+		client.setVoornaam(voornaam);
 		client.setBedrijfsnaam(bedrijfsnaam);
 		client.setEmail(email);
 		client.setTelefoonnummer(telefoonnummer);
@@ -131,7 +131,7 @@ public class UserInterface {
 			throws DataInputException, MalformedURLException, IOException, WebserviceException {
 		Opdrachtgever c = (Opdrachtgever) getClient(index).clone();
         c.setNaam(naam);
-        c.setVoornaam(vooraam);
+        c.setVoornaam(voornaam);
         c.setBedrijfsnaam(bedrijfsnaam);
         c.setEmail(email);
         c.setTelefoonnummer(telefoonnummer);

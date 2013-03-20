@@ -341,23 +341,32 @@ public class LoginDialog extends javax.swing.JDialog {
 		browserPanel.add(browserGoBackJButton);
 
 		// Action listeners
-		aanmeldenButton.addActionListener(new java.awt.event.ActionListener() {
-			public void actionPerformed(java.awt.event.ActionEvent evt) {
+		try {
+			aanmeldenButton.addActionListener(new java.awt.event.ActionListener() {
+				public void actionPerformed(java.awt.event.ActionEvent evt) {
+	
+					// Thread voor het loading gifke
+					/*Thread loginLoadingThread = new Thread() {
+						public void run() {
+							SwingUtilities.invokeLater(new Runnable() {
+								public void run() {
+									displayTab("loading");
+								}
+							});*/
+							login();
+						//}
+					//};
+					//loginLoadingThread.start();
+				}
+			});
+		}
+		catch (Exception e) {
 
-				// Thread voor het loading gifke
-				Thread loginLoadingThread = new Thread() {
-					public void run() {
-						SwingUtilities.invokeLater(new Runnable() {
-							public void run() {
-								displayTab("loading");
-							}
-						});
-						login();
-					}
-				};
-				loginLoadingThread.start();
-			}
-		});
+			e.printStackTrace();
+		}
+		finally {
+			//JOptionPane.showMessageDialog(this, "Login mislukt");			
+		}
 
 		googleJButton.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
