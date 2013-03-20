@@ -11,7 +11,7 @@ import be.artesis.timelog.view.*;
 
 public class LocalDatabaseWriter {
 
-	public static void addProject(Project p) throws JSONException {
+	/*public static void addProject(Project p) throws JSONException {
 		
 		JSONArray array = new JSONArray();
 		array.put("f");
@@ -22,7 +22,7 @@ public class LocalDatabaseWriter {
 		object.put("ff", "piet");
 		//object.
 		//System.out.println(object.get("ff"));
-	}
+	}*/
 	
 	/**
 	 * @param args

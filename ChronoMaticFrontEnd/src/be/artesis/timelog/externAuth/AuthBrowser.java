@@ -43,22 +43,25 @@ public class AuthBrowser {
 	
 	private String URL;
 	//private final String urlGoogle = "https://accounts.google.com/o/oauth2/auth?scope=https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.email+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.profile&state=%2Fprofile&redirect_uri=urn:ietf:wg:oauth:2.0:oob&response_type=code&client_id=536253651406.apps.googleusercontent.com";
-    private final String urlGoogle = "https://accounts.google.com/o/oauth2/auth?client_id=536253651406.apps.googleusercontent.com&redirect_uri=urn:ietf:wg:oauth:2.0:oob&scope=https://www.googleapis.com/auth/userinfo.profile&response_type=code";
+    //private final String urlGoogle = "https://accounts.google.com/o/oauth2/auth?client_id=536253651406.apps.googleusercontent.com&redirect_uri=urn:ietf:wg:oauth:2.0:oob&scope=https://www.googleapis.com/auth/userinfo.profile&response_type=code";
+	private final String urlGoogle = "https://accounts.google.com/o/oauth2/auth?client_id=131195431047.apps.googleusercontent.com&redirect_uri=https://www.google.be/oauth2callback&scope=https://www.googleapis.com/auth/userinfo.profile&response_type=code";
     
     private final String urlFacebook = "https://www.facebook.com/dialog/oauth?client_id=346106655506499&redirect_uri=https://www.facebook.com/connect/login_success.html&scope=user_about_me&response_type=token";
     
     private final String urlMicrosoft = "https://login.live.com/oauth20_authorize.srf?client_id=00000000440E9C2C&redirect_uri=https://login.live.com/oauth20_desktop.srf&scope=wl.basic&response_type=token";
     
-    String uri, clientID, scope, callbackUri, responseType;
+    //String uri, clientID, scope, callbackUri, responseType;
     
     public AuthBrowser() {
-		uri = "https://www.facebook.com/dialog/oauth?";
+		/*
+		 * uri = "https://www.facebook.com/dialog/oauth?";
 		clientID = "client_id=" + "346106655506499&";
 		scope = "scope=" + "user_about_me&";
 		callbackUri = "redirect_uri=" + "https://www.facebook.com/connect/login_success.html&";
 		responseType = "response_type=" + "token&";
 		
 		URL = uri+clientID+scope+callbackUri+responseType;
+		*/
 	}
 	
 	public void initBrowser(final LoginDialog loginDialog, final JFXPanel browserPanel, final String provider) {
@@ -113,14 +116,21 @@ public class AuthBrowser {
                     @Override public void run() {
                         String url = webEngine.getLocation();
                         
+                        //Google
+                        if(url != null && url.startsWith("https://www.google.be/oauth2callback")) {
+                        	//System.out.println(url.substring(42));
+                            loginDialog.maakExterneGebruiker(url.substring(64), "Google");
+                            exit(); 
+                        }
                         //Facebook
                         if(url != null && url.startsWith("https://www.facebook.com/connect/login_success.html")) {
-                            loginDialog.maakExterneGebruiker(url.substring(65, 173), "Facebook");
+                        	System.out.println(url.substring(65, 180));
+                            loginDialog.maakExterneGebruiker(url.substring(65, 180), "Facebook");
                             exit(); 
                         }
                         //Micosoft
                         if(url != null && url.startsWith("https://login.live.com/oauth20_desktop.srf?")) {
-                            loginDialog.maakExterneGebruiker(url.substring(64, 173), "Facebook");
+                            loginDialog.maakExterneGebruiker(url.substring(64, 173), "Microsoft");
                             exit(); 
                         }
                     }

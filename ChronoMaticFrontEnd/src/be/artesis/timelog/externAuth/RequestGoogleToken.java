@@ -16,9 +16,9 @@ public class RequestGoogleToken {
     public static String request(String code) throws IOException, JSONException {
 
         String token = "";
-        String clientSecret = "jEMJUo-qwpxCspCgnpxwn_s2";
-        String clientId = "536253651406.apps.googleusercontent.com";
-        String callback = "urn:ietf:wg:oauth:2.0:oob";
+        String clientSecret = "N2CHWpyn35OdOE1KqU_lXNx6";
+        String clientId = "131195431047.apps.googleusercontent.com";
+        String callback = "https://www.google.be/oauth2callback";
 
         String tokenUrl = new String("https://accounts.google.com/o/oauth2/token");
 
@@ -62,7 +62,7 @@ public class RequestGoogleToken {
         }
 
         rd.close();
-
+System.out.println(test);
         test = test.replace(" ","");
         test = test.replace("null", "");
 

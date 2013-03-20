@@ -15,18 +15,20 @@ import org.json.JSONObject;
 
 public class GetUserInfo {
 
-	public static String retreive(String token) throws IOException, JSONException {
+	public static String retreive(String token, String provider) throws IOException, JSONException {
                 
             String urlGoogle = "https://www.googleapis.com/oauth2/v1/userinfo?access_token=" + token;
             String urlFacebook = "https://graph.facebook.com/me?fields=email&access_token=" + token;
+            URL url = new URL(urlFacebook);
 
-            URL url = null;
-
-            if(token.length() == 108) {
+            if(provider.equals("Facebook")) {
                     url = new URL(urlFacebook);
             }
-            else if(token.length() == 51) {
+            else if(provider.equals("Google")) {
                     url = new URL(urlGoogle);
+            }
+            else if(provider.equals("Microsoft")) {
+                url = new URL(urlGoogle);
             }
 		
 	    HttpURLConnection conn = (HttpURLConnection) url.openConnection();
