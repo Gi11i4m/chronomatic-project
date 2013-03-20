@@ -4,6 +4,8 @@ import java.awt.Component;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.GregorianCalendar;
 import java.util.Iterator;
 
 import javafx.beans.property.Property;
@@ -11,12 +13,16 @@ import javafx.beans.property.Property;
 import net.fortuna.ical4j.data.CalendarBuilder;
 import net.fortuna.ical4j.data.ParserException;
 import net.fortuna.ical4j.model.Calendar;
+import net.fortuna.ical4j.model.Date;
+import net.fortuna.ical4j.model.DateTime;
 import net.fortuna.ical4j.model.component.VEvent;
+import net.fortuna.ical4j.model.property.DtEnd;
+import net.fortuna.ical4j.model.property.DtStart;
 import be.artesis.timelog.view.Taak;
 
 public class IcsImporteren {
 	
-	public static Taak[] importeren(String url) throws IOException, ParserException{
+	public static  ArrayList<Taak> importeren(String url) throws IOException, ParserException{
 		//opsplitsen in:
 		//lezen van ICS bestand 
 		//taak object maken van events
@@ -32,36 +38,68 @@ public class IcsImporteren {
 	private static Calendar inlezen(String url) throws IOException, ParserException{
 		
 		FileInputStream fin = new FileInputStream(url);
-
+			
+		
 		CalendarBuilder builder = new CalendarBuilder();
 		return builder.build(fin);
 	}
 	
-	private static Taak[] genereerArray(Calendar calendar){
-		
-		
+	private static ArrayList<Taak> genereerArray(Calendar calendar){
+				
+		ArrayList<Taak> taken = new ArrayList<Taak>();
 		
 		for (Iterator i = calendar.getComponents().iterator(); i.hasNext();) {
+			
 		    //Component component = (Component) i.next();
 		    VEvent vevent = (VEvent) i.next();
-		    //System.out.println("DERPIEComponent [" + vevent.getName() + "]");
-		    //vevent.getProperties().get
-		
+		    taken.add( maakTaak(vevent));
 		    
 		    
-		    
-		    
-		    /*for (Iterator j = component.getProperties().iterator(); j.hasNext();) {
-		        Property property = (Property) j.next();
-		        System.out.println("Property [" + property.getName() + ", " + property.getValue() + "]");
-		    }*/
 		}
-		return null;
+		return taken;
 	}
 	
-	private static Taak maakTaak(VEvent vTaak){
+	private static Taak maakTaak(VEvent vevent){
 		
-		return null;
+		DtStart dtBegin = vevent.getStartDate();
+		DtEnd dtEind =  vevent.getEndDate();
+		
+		//System.out.println("start: " + dtBegin.getValue());
+		//System.out.println("eind: "+dtEind.getValue());
+	    
+		
+		java.util.Calendar cBegin= new GregorianCalendar();
+		cBegin.set(java.util.Calendar.MONTH, Integer.parseInt(dtBegin.getValue().substring(4,6))-1);
+		cBegin.set(java.util.Calendar.DAY_OF_MONTH, Integer.parseInt(dtBegin.getValue().substring(6,8)));
+		cBegin.set(java.util.Calendar.YEAR, Integer.parseInt(dtBegin.getValue().substring(0, 4)));
+		cBegin.set(java.util.Calendar.HOUR_OF_DAY,Integer.parseInt(dtBegin.getValue().substring(9,11)));
+		cBegin.set(java.util.Calendar.MINUTE,Integer.parseInt(dtBegin.getValue().substring(11,13)));
+		cBegin.set(java.util.Calendar.SECOND,Integer.parseInt(dtBegin.getValue().substring(13,15)));
+		System.out.println("Calendar: " +cBegin.getTime());
+		
+		java.util.Calendar cEind= new GregorianCalendar();
+		cEind.set(java.util.Calendar.MONTH, Integer.parseInt(dtEind.getValue().substring(4,6))-1);
+		cEind.set(java.util.Calendar.DAY_OF_MONTH, Integer.parseInt(dtEind.getValue().substring(6,8)));
+		cEind.set(java.util.Calendar.YEAR, Integer.parseInt(dtEind.getValue().substring(0, 4)));
+		cEind.set(java.util.Calendar.HOUR_OF_DAY,Integer.parseInt(dtEind.getValue().substring(9,11)));
+		cEind.set(java.util.Calendar.MINUTE,Integer.parseInt(dtEind.getValue().substring(11,13)));
+		cEind.set(java.util.Calendar.SECOND,Integer.parseInt(dtEind.getValue().substring(13,15)));
+		System.out.println("Calendar: "+ cEind.getTime());
+		
+		long lBegin =(cBegin.getTimeInMillis() /1000)+21600 ;
+		long lEind = (cEind.getTimeInMillis() /1000) +21600;
+		System.out.println("begin: " + lBegin);
+		System.out.println("eind: " + lEind);
+		
+		return new Taak(vevent.getSummary().getValue(),lBegin,lEind,vevent.getDescription().getValue());
+		
+		//return null;
 	}
 
 }
+
+
+
+
+
+
