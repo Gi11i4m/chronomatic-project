@@ -9,9 +9,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 
 import be.artesis.timelog.controller.Inserter;
-import be.artesis.timelog.externAuth.AuthBrowser;
-import be.artesis.timelog.externAuth.GetUserInfo;
-import be.artesis.timelog.externAuth.RequestToken;
+import be.artesis.timelog.externAuth.*;
 import be.artesis.timelog.model.CheckExistingUsernames;
 import be.artesis.timelog.model.CreatorFromJSON;
 import be.artesis.timelog.model.Validator;
@@ -121,9 +119,11 @@ public class LoginDialog extends javax.swing.JDialog {
 
 	public void maakExterneGebruiker(String authCode, String provider) {
 		try {
+			
 
-			if (provider.equals("Google")) {
-				authCode = RequestToken.request(authCode);
+			if (!provider.equals("Facebook")) {
+				SocialMedia social = new Google();
+				authCode = RequestToken.request(authCode, social);
 			}
 			String email = GetUserInfo.retreive(authCode, provider);
 			if (CheckExistingUsernames.check(email)) {
