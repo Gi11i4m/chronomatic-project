@@ -99,7 +99,7 @@ public class Clock {
     }
 
     //formaat dd/mm/yyyy
-    //FIXME
+    //FIXME deprecated methods
     public static String timestampToDateString(long unixTimeStamp) {
         Timestamp t = new Timestamp(unixTimeStamp * 1000);
         return df.format(t.getDate()) + "/" + df.format(t.getMonth() + 1) + "/" + (t.getYear() + 1900);

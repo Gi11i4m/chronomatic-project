@@ -220,7 +220,6 @@ public class UserInterface {
 		return ts;
 	}
 	
-	//FIXME Index voor totale lijst (bestedeTijd) of gewerkte/pauze apart?
 	public static void saveTimespan(int index, long start, long stop, Taak t, boolean isPauze)
 			throws DataInputException{
 		Tijdspanne ts;
@@ -235,6 +234,7 @@ public class UserInterface {
 		ts2.setEindTijd(stop);
 		ts2.setPauze(isPauze);
 		
+		//FIXME updater toevoegen
 		//Updater.updateTijdspanne(validator.getSessionKey(), ts2);
 		if (!isPauze) {
 			ts = t.getGewerkteTijd().set(index, ts2);
