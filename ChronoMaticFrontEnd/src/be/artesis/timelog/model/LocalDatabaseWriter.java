@@ -29,30 +29,55 @@ public class LocalDatabaseWriter {
 	 * @throws JSONException
 	 */
 	public static void main(String[] args) throws JSONException {
-		 
-		JSONObject bestand = new JSONObject();
-	 
-		JSONArray listInserts = new JSONArray();
 		
-		JSONArray project1 = new JSONArray();
+		Project p = new Project("PietProject",17,123456,321564);
+		Taak t = new Taak("NegerTaak",123456,123654,"Commento");
+		Tijdspanne tijd = new Tijdspanne(123,123);
+		Tijdspanne tijd2 = new Tijdspanne(798,798);
 		
-		JSONArray gegevens = new JSONArray();
-		
-		JSONObject naam = new JSONObject();
-		JSONObject gebruikersnaam = new JSONObject();
-		
-		naam.put("naam","stijn");
-		gebruikersnaam.put("gebruikersnaam","depietos");
+		JSONObject soorten = new JSONObject();
 
-		gegevens.put(naam);
-		gegevens.put(gebruikersnaam);
+		JSONObject gegproject = new JSONObject();
 		
-		project1.put(gegevens);
+		gegproject.put("naam", p.getNaam());
+		gegproject.put("beginDatumPro", p.getBegindatum());
+		gegproject.put("eindDatumPro", p.getEinddatum());
 		
-		listInserts.put(project1);
-	 
-		bestand.put("insert", listInserts);
-		//obj.put("insert","ff");
+		//////////
+		
+		JSONObject gegtaak = new JSONObject();
+		gegtaak.put("naam", t.getNaam());
+		gegtaak.put("beginDatum", t.getBegindatum());
+		gegtaak.put("eindDatum", t.getGeschatteEinddatum());
+		gegtaak.put("commentaar", t.getCommentaar());
+		
+		JSONArray taakarray = new JSONArray();
+		taakarray.put(gegtaak);
+		
+		////
+		
+		JSONObject gegtijd = new JSONObject();
+		gegtijd.put("beginTijd", tijd.getBeginTijd());
+		gegtijd.put("eindTijd", tijd.getEindTijd());
+		
+		JSONArray tijdarray = new JSONArray();
+		tijdarray.put(gegtijd);
+		//
+		gegtijd = new JSONObject();
+		gegtijd.put("beginTijd", tijd2.getBeginTijd());
+		gegtijd.put("eindTijd", tijd2.getEindTijd());
+		
+		tijdarray.put(gegtijd);
+		
+		////
+		
+		gegtaak.put("tijdspannes", tijdarray);
+		
+		gegproject.put("taken", taakarray);
+		
+		soorten.put("project",gegproject);
+
+		System.out.println(soorten);
 	 
 		/*try {
 	 
@@ -65,7 +90,7 @@ public class LocalDatabaseWriter {
 			e.printStackTrace();
 		}*/
 	 
-		System.out.print(bestand);
+		
 	 
 	     }
 	

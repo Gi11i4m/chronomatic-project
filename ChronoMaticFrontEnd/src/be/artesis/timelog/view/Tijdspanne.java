@@ -4,11 +4,19 @@ import be.artesis.timelog.clock.Clock;
 
 public class Tijdspanne {
 
+    //================================================================================
+    //Properties
+    //================================================================================
+	
     private long beginTijd;
     private long eindTijd;
     private boolean pauze;  
     private int id;
 
+    //================================================================================
+    // Constructor 
+    //================================================================================
+    
     public Tijdspanne(long beginTijd, long eindTijd) {
         this.beginTijd = beginTijd;
         this.eindTijd = eindTijd;
@@ -23,6 +31,10 @@ public class Tijdspanne {
         this.pauze = pauze;
     }
 
+    //================================================================================
+    // Getters + setters
+    //================================================================================
+    
      public void setPauze(boolean pauze) {
         this.pauze = pauze;
     }
@@ -66,6 +78,10 @@ public class Tijdspanne {
     public long getTijdsduur() {
         return eindTijd - beginTijd;
     }
+    
+    //================================================================================
+    // Extra
+    //================================================================================
     
     @Override
     public String toString(){

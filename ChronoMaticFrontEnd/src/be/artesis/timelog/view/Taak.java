@@ -191,7 +191,7 @@ public class Taak implements Cloneable {
     }
     
     //================================================================================
-    // Add + remove functies
+    // Add + remove
     //================================================================================
     
     public void addBestedeTijd(Tijdspanne t) throws DataInputException {
@@ -211,7 +211,7 @@ public class Taak implements Cloneable {
     }
 
     //================================================================================
-    // Extra functionaliteit
+    // Extra
     //================================================================================
     
     //return tijd tot de geschatte einddatum in seconden

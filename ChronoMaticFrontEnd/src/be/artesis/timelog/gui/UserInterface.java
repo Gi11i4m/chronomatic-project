@@ -193,9 +193,27 @@ public class UserInterface {
 		return ts;
 	}
 	
-	//FIXME
-	public static void saveTimespan(int index, long start, long stop, Taak t, boolean isPauze){
-		//Tijdspanne ts = (Tijdspanne) getTi
+	//FIXME Index voor totale lijst (bestedeTijd) of gewerkte/pauze apart?
+	public static void saveTimespan(int index, long start, long stop, Taak t, boolean isPauze)
+			throws DataInputException{
+		Tijdspanne ts;
+		if (!isPauze) {
+			ts = t.getGewerkteTijd().get(index);
+		} else {
+			ts = t.getPauze().get(index);
+		}
+		
+		Tijdspanne ts2 = (Tijdspanne) ts.clone();
+		ts2.setBeginTijd(start);
+		ts2.setEindTijd(stop);
+		ts2.setPauze(isPauze);
+		
+		//Updater.updateTijdspanne(validator.getSessionKey(), ts2);
+		if (!isPauze) {
+			ts = t.getGewerkteTijd().set(index, ts2);
+		} else {
+			ts = t.getPauze().set(index, ts2);
+		}
 	}
 
     //================================================================================

@@ -2,6 +2,10 @@ package be.artesis.timelog.view;
 
 public class Opdrachtgever implements Cloneable{
 
+	//================================================================================
+    // Properties
+    //================================================================================
+	
     private String naam;
     private String voornaam;
     private String bedrijfsnaam;
@@ -9,6 +13,10 @@ public class Opdrachtgever implements Cloneable{
     private String telefoonnummer;
     private int id;
 
+    //================================================================================
+    // Constructors
+    //================================================================================
+    
     public Opdrachtgever(String naam, String voornaam, String bedrijfsnaam, String email, String telefoonnummer, int id) {
         this.naam = naam;
         this.voornaam = voornaam;
@@ -22,6 +30,10 @@ public class Opdrachtgever implements Cloneable{
         this.id = 0;
     };
 
+    //================================================================================
+    // Getters + setters
+    //================================================================================
+    
     public String getNaam() {
         return naam;
     }
@@ -95,6 +107,10 @@ public class Opdrachtgever implements Cloneable{
         this.id = ID;
     }
 
+    //================================================================================
+    // Extra
+    //================================================================================
+    
     @Override
     public String toString() {
         return getVoornaam() + " " + getNaam() + " [" + getBedrijfsnaam() + "]";

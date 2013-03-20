@@ -5,6 +5,10 @@ import java.util.Collections;
 
 public class Gebruiker {
 
+    //================================================================================
+    // Properties
+    //================================================================================
+	
     private String naam;
     private String voornaam;
     private String gebruikersnaam;
@@ -13,6 +17,10 @@ public class Gebruiker {
     private ArrayList<Project> projects;
     private ArrayList<Opdrachtgever> opdrachtgevers;
 
+    //================================================================================
+    // Constructors
+    //================================================================================
+    
     public Gebruiker(String naam, String voornaam, String gebruikersnaam, String email) {
         this.naam = naam;
         this.voornaam = voornaam;
@@ -35,6 +43,10 @@ public class Gebruiker {
         this.opdrachtgevers = new ArrayList<Opdrachtgever>();
     }
 
+    //================================================================================
+    // Getters + setters
+    //================================================================================
+    
     public void setProjects(Project[] projects) {
         Collections.addAll(this.projects, projects);
     }
@@ -98,7 +110,33 @@ public class Gebruiker {
     public int getID() {
         return id;
     }
+    
+    public ArrayList<Opdrachtgever> getOpdrachtgevers() {
+        return opdrachtgevers;
+    }
 
+    public Opdrachtgever getOpdrachtgever(int id) throws DataInputException {
+        Opdrachtgever client = null;
+        for (Opdrachtgever o : opdrachtgevers) {
+            if (o.getID() == id) {
+                client = o;
+            }
+        }
+        if (client == null) {
+            throw new DataInputException("Client not found");
+        }
+        return client;
+    }
+    
+   public Project getProject(int index){
+        return projects.get(index);
+    }
+
+    
+    //================================================================================
+    // Add + remove methods
+    //================================================================================
+    
     public void addProject(Project p) throws DataInputException {
         if (!DataControle.naamBestaat(projects, p)) {
             projects.add(p);
@@ -127,28 +165,11 @@ public class Gebruiker {
             throw new DataInputException("Name already exists");
         }
     }
-
-    public ArrayList<Opdrachtgever> getOpdrachtgevers() {
-        return opdrachtgevers;
-    }
-
-    public Opdrachtgever getOpdrachtgever(int id) throws DataInputException {
-        Opdrachtgever client = null;
-        for (Opdrachtgever o : opdrachtgevers) {
-            if (o.getID() == id) {
-                client = o;
-            }
-        }
-        if (client == null) {
-            throw new DataInputException("Client not found");
-        }
-        return client;
-    }
     
-   public Project getProject(int index){
-        return projects.get(index);
-    }
-
+    //================================================================================
+    // Extra
+    //================================================================================
+    
     @Override
     public String toString() {
         return voornaam + " " + naam + " (" + gebruikersnaam + ")";
