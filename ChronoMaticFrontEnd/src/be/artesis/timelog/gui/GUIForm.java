@@ -1198,7 +1198,7 @@ public class GUIForm extends javax.swing.JFrame {
 
 			DefaultListModel listmodel = new DefaultListModel();
 
-			for (Iterator<Tijdspanne> it = t.getGewerkteTijd().iterator(); it
+			for (Iterator<Tijdspanne> it = t.getBestedeTijd().iterator(); it
 					.hasNext();) {
 				Tijdspanne ts = it.next();
 				listmodel.addElement(ts);

@@ -31,7 +31,7 @@ public class UserInterface {
     private static Validator validator = Validator.getInstance();
 
     //================================================================================
-    // Getter + setters
+    // Getters + setters
     //================================================================================
     
     public static Gebruiker getUser() {
@@ -76,6 +76,10 @@ public class UserInterface {
     	return getProject(projectIndex).getTaken();
     }
     
+    public static Taak getTask(int projectindex, int taskindex){
+    	return getProject(projectindex).getTaak(taskindex);
+    }
+    
     public static ArrayList<Opdrachtgever> getClients(){
     	return user.getOpdrachtgevers();
     }
@@ -86,6 +90,18 @@ public class UserInterface {
     
     public static Opdrachtgever getClient(int index) throws DataInputException{
     	return user.getOpdrachtgever(index);
+    }
+    
+    public static Tijdspanne getTimespan(int projectindex, int taskindex, int index){
+    	return getTask(projectindex, taskindex).getBestedeTijd().get(index);
+    }
+    
+    public static Tijdspanne getWorkedTimespan(int projectindex, int taskindex, int index){
+    	return getTask(projectindex, taskindex).getGewerkteTijd().get(index);
+    }
+    
+    public static Tijdspanne getPauzedTimespan(int projectindex, int taskindex, int index){
+    	return getTask(projectindex, taskindex).getPauze().get(index);
     }
 
     //================================================================================
@@ -173,14 +189,13 @@ public class UserInterface {
 		Tijdspanne ts = new Tijdspanne(start, stop);
 		ts.setPauze(isPause);
 		Inserter.inputTijdSpanne(validator.getSessionKey(), ts, t.getID());
-		//FIXME indien Taak klasse 1 tijdspannelijst heeft, dit aanpassen
-		t.addGewerkteTijd(ts);
+		t.addBestedeTijd(ts);
 		return ts;
 	}
 	
 	//FIXME
-	public static void saveTimespan(long start, long stop, Taak t, boolean isPauze){
-		
+	public static void saveTimespan(int index, long start, long stop, Taak t, boolean isPauze){
+		//Tijdspanne ts = (Tijdspanne) getTi
 	}
 
     //================================================================================
@@ -207,7 +222,6 @@ public class UserInterface {
 	public static void removeTimespan(Tijdspanne ts, Taak t) throws MalformedURLException, IOException, WebserviceException{
 		Deleter.deleteTijdSpanne(validator.getSessionKey(), ts);
 		t.getGewerkteTijd().remove(ts);
-		t.getPauze().remove(ts);
 	}
 	
 	
