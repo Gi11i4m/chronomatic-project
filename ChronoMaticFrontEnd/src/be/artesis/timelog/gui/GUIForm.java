@@ -5,11 +5,13 @@ import java.awt.Component;
 import java.awt.SystemColor;
 import java.io.IOException;
 import java.text.ParseException;
+import java.util.Date;
 import java.util.Iterator;
 
 import javax.swing.DefaultListModel;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
+import javax.swing.InputVerifier;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JLabel;
@@ -42,6 +44,7 @@ import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import com.toedter.calendar.JDateChooser;
 
 /**
  * @author Gilliam
@@ -592,11 +595,52 @@ public class GUIForm extends javax.swing.JFrame {
 		scheduleJLabel.setFont(new java.awt.Font("Tw Cen MT", 1, 14));
 		scheduleJLabel.setForeground(new java.awt.Color(255, 255, 255));
 		scheduleJLabel.setText("Schedule");
+		
+		dateChooser = new JDateChooser();
+		
+		//FIXME moet weg
+		dateChooser.setDateFormatString("dd-MM-yyyy");
+		testButton = new JButton("New button");
+		testButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				testMethod();
+			}
+		});
+		
+		testLabel = new JLabel("New label");
 
 		javax.swing.GroupLayout scheduleJPanelLayout = new javax.swing.GroupLayout(scheduleJPanel);
+		scheduleJPanelLayout.setHorizontalGroup(
+			scheduleJPanelLayout.createParallelGroup(Alignment.LEADING)
+				.addGroup(scheduleJPanelLayout.createSequentialGroup()
+					.addGroup(scheduleJPanelLayout.createParallelGroup(Alignment.LEADING)
+						.addGroup(scheduleJPanelLayout.createSequentialGroup()
+							.addContainerGap()
+							.addComponent(scheduleJLabel))
+						.addGroup(scheduleJPanelLayout.createSequentialGroup()
+							.addGap(100)
+							.addComponent(testButton)
+							.addGap(60)
+							.addComponent(testLabel))
+						.addGroup(scheduleJPanelLayout.createSequentialGroup()
+							.addGap(70)
+							.addComponent(dateChooser, GroupLayout.PREFERRED_SIZE, 119, GroupLayout.PREFERRED_SIZE)))
+					.addContainerGap(402, Short.MAX_VALUE))
+		);
+		scheduleJPanelLayout.setVerticalGroup(
+			scheduleJPanelLayout.createParallelGroup(Alignment.LEADING)
+				.addGroup(scheduleJPanelLayout.createSequentialGroup()
+					.addContainerGap()
+					.addComponent(scheduleJLabel)
+					.addGap(57)
+					.addComponent(dateChooser, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+					.addGap(30)
+					.addGroup(scheduleJPanelLayout.createParallelGroup(Alignment.BASELINE)
+						.addComponent(testButton)
+						.addComponent(testLabel))
+					.addContainerGap(294, Short.MAX_VALUE))
+		);
 		scheduleJPanel.setLayout(scheduleJPanelLayout);
-		scheduleJPanelLayout.setHorizontalGroup(scheduleJPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGroup(scheduleJPanelLayout.createSequentialGroup().addContainerGap().addComponent(scheduleJLabel).addContainerGap(621, Short.MAX_VALUE)));
-		scheduleJPanelLayout.setVerticalGroup(scheduleJPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGroup(scheduleJPanelLayout.createSequentialGroup().addContainerGap().addComponent(scheduleJLabel).addContainerGap(369, Short.MAX_VALUE)));
 
 		JTabbedPane.addTab("", new javax.swing.ImageIcon(getClass().getResource("/be/artesis/timelog/gui/icons/CalendarNeonIcon.png")), scheduleJPanel, "Schedule");
 
@@ -655,6 +699,16 @@ public class GUIForm extends javax.swing.JFrame {
 
 	/* Einde gegenereerde code */
 
+	public void testMethod(){
+		Date d = dateChooser.getDate();
+		dateChooser.setDateFormatString("dd-MM-yyyy");
+		InputVerifier test = dateChooser.getInputVerifier();
+		if (test == null) {
+			JOptionPane.showMessageDialog(this," ttt");
+		}
+		
+	}
+	
 	// ================================================================================
 	// Save / Edit methods
 	// ================================================================================
@@ -1151,4 +1205,7 @@ public class GUIForm extends javax.swing.JFrame {
 	private JPanel projectFieldsJPanel;
 	private JList tasksJList_1;
 	private JList projectTasksJList;
+	private JDateChooser dateChooser;
+	private JButton testButton;
+	private JLabel testLabel;
 }

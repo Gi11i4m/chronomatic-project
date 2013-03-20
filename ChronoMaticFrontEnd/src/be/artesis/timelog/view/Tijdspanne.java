@@ -71,10 +71,6 @@ public class Tijdspanne {
         }
     }
 
-    public int getID() {
-        return id;
-    }
-
     public long getTijdsduur() {
         return eindTijd - beginTijd;
     }
