@@ -86,6 +86,7 @@ public class IcsExporteren {
 		//System.out.println(cal);
 		CalendarOutputter outputter = new CalendarOutputter();
 		outputter.output(cal, fout);
-		
+		fout.flush();
+		fout.close();
 	}
 }

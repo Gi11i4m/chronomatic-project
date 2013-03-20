@@ -1,4 +1,4 @@
-package be.artesis.timelog.model;
+package be.artesis.timelog.lokaleopslag;
 
 import java.io.FileWriter;
 import java.io.IOException;
