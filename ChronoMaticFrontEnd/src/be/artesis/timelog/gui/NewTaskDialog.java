@@ -1,5 +1,12 @@
 package be.artesis.timelog.gui;
 
+import java.io.IOException;
+import java.util.Date;
+
+import javax.swing.JOptionPane;
+
+import org.json.JSONException;
+
 import be.artesis.timelog.clock.Clock;
 import be.artesis.timelog.controle.DataControle;
 import be.artesis.timelog.controller.Inserter;
@@ -7,10 +14,6 @@ import be.artesis.timelog.model.Validator;
 import be.artesis.timelog.model.WebserviceException;
 import be.artesis.timelog.view.DataInputException;
 import be.artesis.timelog.view.Taak;
-import java.io.IOException;
-import java.util.Date;
-import javax.swing.JOptionPane;
-import org.json.JSONException;
 
 /**
  * 

@@ -153,8 +153,29 @@ public class LoginDialog extends javax.swing.JDialog {
 
 	public void login() {
 		try {
+            if (usernameJTextField.getText().equals("")) {
+                
+                    UserInterface.setUser(new Gebruiker("Flebus", "Gilliam", "Gi11i4m", "gi11i4m@gmail.com")); // tijdelijke user
+                    
+						UserInterface.getUser().addOpdrachtgever(new Opdrachtgever("Flebus", "Gilliam", "Mot-art", "blabla", "0475", 456));
+					
+                    UserInterface.getUser().addOpdrachtgever(new Opdrachtgever("Schouten", "Girmi", "Artesis", "bla", "0478", 457));
+                    UserInterface.getUser().addProject(new Project("Test project 1", 456, 1343059472, 1453059472));
+                    UserInterface.getUser().addProject(new Project("Test project 2", 457, 1243059472, 1553059472));
+                    UserInterface.getUser().getProjects().get(1).addTaak(new Taak("Test taak", 1343059472, 1453059472, ""));
+
+                result = true;
+                this.dispose();
+                
+            } else if (validator.login(usernameJTextField.getText(), new String(passwordJPasswordField.getPassword()))) {
+            	loadUserData();
+                result = true;
+                this.dispose();
+            } else {
+
+            }
 			if (usernameJTextField.getText().equals("")) {
-				try {
+
 					UserInterface.setUser(new Gebruiker("Flebus", "Gilliam",
 							"Gi11i4m", "gi11i4m@gmail.com")); // tijdelijke user
 					UserInterface.getUser().addOpdrachtgever(
@@ -176,9 +197,6 @@ public class LoginDialog extends javax.swing.JDialog {
 							.addTaak(
 									new Taak("Test taak", 1343059472,
 											1453059472, ""));
-				} catch (DataInputException ex) {
-					// JOptionPane.showMessageDialog(this, ex.getMessage());
-				}
 				result = true;
 				this.dispose();
 
@@ -190,10 +208,12 @@ public class LoginDialog extends javax.swing.JDialog {
 			} else {
 				JOptionPane.showMessageDialog(this, "Login failed");
 			}
-		} catch (JSONException | HeadlessException | IOException
-				| WebserviceException ex) {
-			JOptionPane.showMessageDialog(this, ex.getMessage());
+			
+		} catch (DataInputException | HeadlessException | IOException | JSONException | WebserviceException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
+
 	}
 
 	private void loadUserData() {
