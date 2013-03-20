@@ -99,6 +99,7 @@ public class WorkDialog extends javax.swing.JDialog {
         }
     }
 
+    //Reset timertask
     private void resetUpdater() {
         updater = new TimerTask() {
             @Override
@@ -108,6 +109,7 @@ public class WorkDialog extends javax.swing.JDialog {
         };
     }
 
+    //Reset het clock form
     private void resetClockForm() {
         clock = new Clock();
         timerJLabel.setText("00 : 00 : 00");
@@ -117,8 +119,10 @@ public class WorkDialog extends javax.swing.JDialog {
         tasksJComboBox.setEnabled(true);
         resetUpdater();
         totalPause = 0;
+        pause = new ArrayList<Tijdspanne>();
     }
 
+    //Aanmaken en opslaan van Tijdspanne object
     private void saveTimeSpan(long start, long stop, boolean isPause) {
         try {
             Tijdspanne t = new Tijdspanne(start, stop);
@@ -132,6 +136,7 @@ public class WorkDialog extends javax.swing.JDialog {
                 for (Tijdspanne p : pause) {
                     UserInterface.saveNewTimespan(p.getBeginTijd(), p.getEindTijd(), currentTask, true);
 				}
+                resetClockForm();
             }
         } catch (IOException | WebserviceException | DataInputException ex) {
             JOptionPane.showMessageDialog(this, ex.getMessage());
@@ -258,6 +263,7 @@ public class WorkDialog extends javax.swing.JDialog {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    //set currentProjectJLabel
     private void workDialogShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_workDialogShown
         try {
             currentProjectJLabel.setText(UserInterface.getCurrentProject().getNaam());
@@ -267,6 +273,7 @@ public class WorkDialog extends javax.swing.JDialog {
         }
     }//GEN-LAST:event_workDialogShown
 
+    //Timer action on clockJLabel te updaten
     private void updateClockAction() {
         if (minimized) {
             if (!clock.isPaused()) {
@@ -287,6 +294,7 @@ public class WorkDialog extends javax.swing.JDialog {
         stopTimerAction();
     }//GEN-LAST:event_stopJButtonActionPerformed
 
+    //Stopt de clock, slaat Tijdspannes op en reset het form
     private void stopTimerAction() {
         try {
             if (clock.isPaused()) {
@@ -296,14 +304,14 @@ public class WorkDialog extends javax.swing.JDialog {
             stopTime = clock.stop();
             updater.cancel();
             firstRun = true;
-            saveTimeSpan(startTime, stopTime, false);
             JOptionPane.showMessageDialog(this, "You worked for " + Clock.longTimeToString((stopTime - startTime) - totalPause, true) + "\nand took " + Clock.longTimeToString(totalPause, true) + " pause");
-            resetClockForm();
+            saveTimeSpan(startTime, stopTime, false);
         } catch (ClockException ex) {
             JOptionPane.showMessageDialog(this, ex.getMessage());
         }
     }
 
+    //toggle tussen minimized en maximized state
     private void minimizeJButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_minimizeJButtonActionPerformed
         boolean value;
         Dimension frameDim;
@@ -338,6 +346,7 @@ public class WorkDialog extends javax.swing.JDialog {
         updateClockAction();  
     }//GEN-LAST:event_minimizeJButtonActionPerformed
 
+    //Clock state togglen tussen running en paused + Tijdspannes bijhouden
     private void startPauseJButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_startPauseJButtonMouseClicked
         if (!clock.isRunning()) {
             try {
@@ -379,6 +388,7 @@ public class WorkDialog extends javax.swing.JDialog {
         }
     }//GEN-LAST:event_startPauseJButtonMouseClicked
 
+    //Bevestingen (en opslaan indien nodig) voor het venster afsluiten
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
         if (clock.isRunning()) {
             int result = JOptionPane.showConfirmDialog(tasksJComboBox, "Do you want to save?");

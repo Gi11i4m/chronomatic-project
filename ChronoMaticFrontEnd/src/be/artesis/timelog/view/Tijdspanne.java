@@ -72,7 +72,8 @@ public class Tijdspanne {
         return Clock.timestampToString(beginTijd) + "    →    " + Clock.timestampToString(eindTijd);
     }
     
-    
-    public static void main(String[] args) {
+    public Object clone(){
+        Tijdspanne t = new Tijdspanne(this.beginTijd, this.eindTijd, this.id, this.pauze);
+        return t;
     }
 }
