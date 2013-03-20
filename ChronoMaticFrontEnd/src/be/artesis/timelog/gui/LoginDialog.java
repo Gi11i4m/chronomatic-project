@@ -11,7 +11,7 @@ import javax.swing.JPanel;
 import be.artesis.timelog.controller.Inserter;
 import be.artesis.timelog.externAuth.AuthBrowser;
 import be.artesis.timelog.externAuth.GetUserInfo;
-import be.artesis.timelog.externAuth.RequestGoogleToken;
+import be.artesis.timelog.externAuth.RequestToken;
 import be.artesis.timelog.model.CheckExistingUsernames;
 import be.artesis.timelog.model.CreatorFromJSON;
 import be.artesis.timelog.model.Validator;
@@ -77,6 +77,7 @@ public class LoginDialog extends javax.swing.JDialog {
 	private JButton googleJButton;
 	private JButton facebookJButton;
 	private JButton browserGoBackJButton;
+	private JButton microsoftJButton;
 
 	public LoginDialog(java.awt.Frame parent, boolean modal, Validator validator) {
 		super(parent, modal);
@@ -120,10 +121,11 @@ public class LoginDialog extends javax.swing.JDialog {
 
 	public void maakExterneGebruiker(String authCode, String provider) {
 		try {
+
 			if (provider.equals("Google")) {
-				authCode = RequestGoogleToken.request(authCode);
+				authCode = RequestToken.request(authCode);
 			}
-			String email = GetUserInfo.retreive(authCode);
+			String email = GetUserInfo.retreive(authCode, provider);
 			if (CheckExistingUsernames.check(email)) {
 				Inserter.CreateUserExtern("", "", email, "");
 			}
@@ -320,6 +322,8 @@ public class LoginDialog extends javax.swing.JDialog {
 		facebookJButton = new JButton("Facebook");
 		facebookJButton.setBounds(493, 228, 107, 25);
 		browserGoBackJButton = new JButton("Aanmelden met een andere account");
+		microsoftJButton = new JButton("Microsoft");
+		microsoftJButton.setBounds(493, 281, 107, 25);
 
 		// set label fonts
 		usernameJLabel.setFont(new Font("Tahoma", Font.PLAIN, 16));
@@ -338,6 +342,7 @@ public class LoginDialog extends javax.swing.JDialog {
 		basisPanel.add(thirdPartyJLabel);
 		basisPanel.add(googleJButton);
 		basisPanel.add(facebookJButton);
+		basisPanel.add(microsoftJButton);
 		browserPanel.add(browserGoBackJButton);
 
 		// Action listeners
@@ -379,6 +384,11 @@ public class LoginDialog extends javax.swing.JDialog {
 				loginProviderJButtonClicked(evt);
 			}
 		});
+		microsoftJButton.addActionListener(new java.awt.event.ActionListener() {
+			public void actionPerformed(java.awt.event.ActionEvent evt) {
+				loginProviderJButtonClicked(evt);
+			}
+		});
 
 		browserGoBackJButton
 				.addActionListener(new java.awt.event.ActionListener() {
@@ -386,7 +396,7 @@ public class LoginDialog extends javax.swing.JDialog {
 						Platform.exit();
 						displayTab(BASISPANEL);
 					}
-				});
+		});
 	}
 
 	private void loginProviderJButtonClicked(ActionEvent evt) {

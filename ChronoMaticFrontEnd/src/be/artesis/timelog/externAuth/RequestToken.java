@@ -11,16 +11,17 @@ import java.net.URLEncoder;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class RequestGoogleToken {
+public class RequestToken {
     
     public static String request(String code) throws IOException, JSONException {
 
         String token = "";
-        String clientSecret = "N2CHWpyn35OdOE1KqU_lXNx6";
         String clientId = "131195431047.apps.googleusercontent.com";
+        String clientSecret = "N2CHWpyn35OdOE1KqU_lXNx6";
         String callback = "https://www.google.be/oauth2callback";
 
-        String tokenUrl = new String("https://accounts.google.com/o/oauth2/token");
+        String tokenUrl = "https://accounts.google.com/o/oauth2/token";
+        tokenUrl = "https://login.live.com/oauth20_token.srf";
 
         StringBuilder params = new StringBuilder("");
         params.append("code=").append(URLEncoder.encode(code, "UTF-8")); 

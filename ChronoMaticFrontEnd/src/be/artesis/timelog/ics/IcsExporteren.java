@@ -5,8 +5,6 @@ import java.io.IOException;
 import java.net.SocketException;
 import java.util.GregorianCalendar;
 
-import org.codehaus.groovy.syntax.CSTNode;
-
 import be.artesis.timelog.view.Taak;
 
 import net.fortuna.ical4j.data.CalendarOutputter;
@@ -88,6 +86,7 @@ public class IcsExporteren {
 		//System.out.println(cal);
 		CalendarOutputter outputter = new CalendarOutputter();
 		outputter.output(cal, fout);
-		
+		fout.flush();
+		fout.close();
 	}
 }
