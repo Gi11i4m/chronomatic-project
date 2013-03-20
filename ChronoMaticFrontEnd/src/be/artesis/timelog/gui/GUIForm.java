@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.SystemColor;
 import java.io.IOException;
+import java.text.ParseException;
 import java.util.Iterator;
 
 import javax.swing.DefaultListModel;
@@ -19,6 +20,8 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.border.BevelBorder;
+
+import org.json.JSONException;
 
 import be.artesis.timelog.clock.Clock;
 import be.artesis.timelog.controller.Deleter;
@@ -80,8 +83,7 @@ public class GUIForm extends javax.swing.JFrame {
 		projectsJLabel = new javax.swing.JLabel();
 		jScrollPane1 = new javax.swing.JScrollPane();
 		setCurrentProjectJButton = new javax.swing.JButton();
-		filler2 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
-				new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 32767));
+		filler2 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 32767));
 		removeProjectJButton = new javax.swing.JButton();
 		tasksJPanel = new javax.swing.JPanel();
 		tasksJLabel = new javax.swing.JLabel();
@@ -137,15 +139,12 @@ public class GUIForm extends javax.swing.JFrame {
 			}
 		});
 
-		homeProjectsJList
-				.setToolTipText("Press enter to set the current project");
-		homeProjectsJList
-				.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
-					public void valueChanged(
-							javax.swing.event.ListSelectionEvent evt) {
-						homeProjectsJListValueChanged(evt);
-					}
-				});
+		homeProjectsJList.setToolTipText("Press enter to set the current project");
+		homeProjectsJList.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
+			public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
+				homeProjectsJListValueChanged(evt);
+			}
+		});
 		homeProjectsJList.addKeyListener(new java.awt.event.KeyAdapter() {
 			public void keyReleased(java.awt.event.KeyEvent evt) {
 				homeProjectsJListKeyReleased(evt);
@@ -163,111 +162,12 @@ public class GUIForm extends javax.swing.JFrame {
 		TasksJLabel.setForeground(new java.awt.Color(0, 153, 153));
 		TasksJLabel.setText("Tasks");
 
-		javax.swing.GroupLayout homeJPanelLayout = new javax.swing.GroupLayout(
-				homeJPanel);
+		javax.swing.GroupLayout homeJPanelLayout = new javax.swing.GroupLayout(homeJPanel);
 		homeJPanel.setLayout(homeJPanelLayout);
-		homeJPanelLayout
-				.setHorizontalGroup(homeJPanelLayout
-						.createParallelGroup(
-								javax.swing.GroupLayout.Alignment.LEADING)
-						.addGroup(
-								homeJPanelLayout
-										.createSequentialGroup()
-										.addContainerGap()
-										.addGroup(
-												homeJPanelLayout
-														.createParallelGroup(
-																javax.swing.GroupLayout.Alignment.LEADING)
-														.addComponent(
-																workJButton,
-																javax.swing.GroupLayout.DEFAULT_SIZE,
-																662,
-																Short.MAX_VALUE)
-														.addGroup(
-																homeJPanelLayout
-																		.createSequentialGroup()
-																		.addGroup(
-																				homeJPanelLayout
-																						.createParallelGroup(
-																								javax.swing.GroupLayout.Alignment.LEADING)
-																						.addComponent(
-																								homeJLabel)
-																						.addGroup(
-																								homeJPanelLayout
-																										.createSequentialGroup()
-																										.addGroup(
-																												homeJPanelLayout
-																														.createParallelGroup(
-																																javax.swing.GroupLayout.Alignment.LEADING)
-																														.addComponent(
-																																jScrollPane7,
-																																javax.swing.GroupLayout.PREFERRED_SIZE,
-																																157,
-																																javax.swing.GroupLayout.PREFERRED_SIZE)
-																														.addComponent(
-																																HomeProjectsJLabel))
-																										.addPreferredGap(
-																												javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-																										.addGroup(
-																												homeJPanelLayout
-																														.createParallelGroup(
-																																javax.swing.GroupLayout.Alignment.LEADING)
-																														.addComponent(
-																																TasksJLabel)
-																														.addComponent(
-																																jScrollPane8,
-																																javax.swing.GroupLayout.PREFERRED_SIZE,
-																																160,
-																																javax.swing.GroupLayout.PREFERRED_SIZE))))
-																		.addGap(0,
-																				0,
-																				Short.MAX_VALUE)))
-										.addContainerGap()));
-		homeJPanelLayout
-				.setVerticalGroup(homeJPanelLayout
-						.createParallelGroup(
-								javax.swing.GroupLayout.Alignment.LEADING)
-						.addGroup(
-								homeJPanelLayout
-										.createSequentialGroup()
-										.addContainerGap()
-										.addComponent(homeJLabel)
-										.addPreferredGap(
-												javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-										.addComponent(
-												workJButton,
-												javax.swing.GroupLayout.PREFERRED_SIZE,
-												53,
-												javax.swing.GroupLayout.PREFERRED_SIZE)
-										.addGap(28, 28, 28)
-										.addGroup(
-												homeJPanelLayout
-														.createParallelGroup(
-																javax.swing.GroupLayout.Alignment.BASELINE)
-														.addComponent(
-																HomeProjectsJLabel)
-														.addComponent(
-																TasksJLabel))
-										.addPreferredGap(
-												javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-										.addGroup(
-												homeJPanelLayout
-														.createParallelGroup(
-																javax.swing.GroupLayout.Alignment.LEADING)
-														.addComponent(
-																jScrollPane8,
-																javax.swing.GroupLayout.DEFAULT_SIZE,
-																249,
-																Short.MAX_VALUE)
-														.addComponent(
-																jScrollPane7))
-										.addContainerGap()));
+		homeJPanelLayout.setHorizontalGroup(homeJPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGroup(homeJPanelLayout.createSequentialGroup().addContainerGap().addGroup(homeJPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addComponent(workJButton, javax.swing.GroupLayout.DEFAULT_SIZE, 662, Short.MAX_VALUE).addGroup(homeJPanelLayout.createSequentialGroup().addGroup(homeJPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addComponent(homeJLabel).addGroup(homeJPanelLayout.createSequentialGroup().addGroup(homeJPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addComponent(jScrollPane7, javax.swing.GroupLayout.PREFERRED_SIZE, 157, javax.swing.GroupLayout.PREFERRED_SIZE).addComponent(HomeProjectsJLabel)).addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED).addGroup(homeJPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addComponent(TasksJLabel).addComponent(jScrollPane8, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)))).addGap(0, 0, Short.MAX_VALUE))).addContainerGap()));
+		homeJPanelLayout.setVerticalGroup(homeJPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGroup(homeJPanelLayout.createSequentialGroup().addContainerGap().addComponent(homeJLabel).addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED).addComponent(workJButton, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE).addGap(28, 28, 28).addGroup(homeJPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE).addComponent(HomeProjectsJLabel).addComponent(TasksJLabel)).addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED).addGroup(homeJPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addComponent(jScrollPane8, javax.swing.GroupLayout.DEFAULT_SIZE, 249, Short.MAX_VALUE).addComponent(jScrollPane7)).addContainerGap()));
 
-		JTabbedPane.addTab(
-				"",
-				new javax.swing.ImageIcon(getClass().getResource(
-						"/be/artesis/timelog/gui/icons/HomeNeonIcon.png")),
-				homeJPanel, "Home"); // NOI18N
+		JTabbedPane.addTab("", new javax.swing.ImageIcon(getClass().getResource("/be/artesis/timelog/gui/icons/HomeNeonIcon.png")), homeJPanel, "Home"); // NOI18N
 
 		projectsJPanel.setBackground(new java.awt.Color(153, 153, 153));
 
@@ -277,134 +177,31 @@ public class GUIForm extends javax.swing.JFrame {
 
 		setCurrentProjectJButton.setText("Set as current project");
 		setCurrentProjectJButton.setEnabled(false);
-		setCurrentProjectJButton
-				.addActionListener(new java.awt.event.ActionListener() {
-					public void actionPerformed(java.awt.event.ActionEvent evt) {
-						setCurrentProjectJButtonActionPerformed(evt);
-					}
-				});
+		setCurrentProjectJButton.addActionListener(new java.awt.event.ActionListener() {
+			public void actionPerformed(java.awt.event.ActionEvent evt) {
+				setCurrentProjectJButtonActionPerformed(evt);
+			}
+		});
 
 		removeProjectJButton.setText("Remove project");
 		removeProjectJButton.setEnabled(false);
-		removeProjectJButton
-				.addActionListener(new java.awt.event.ActionListener() {
-					public void actionPerformed(java.awt.event.ActionEvent evt) {
-						removeProject();
-					}
-				});
+		removeProjectJButton.addActionListener(new java.awt.event.ActionListener() {
+			public void actionPerformed(java.awt.event.ActionEvent evt) {
+				removeProject();
+			}
+		});
 
 		projectFieldsJPanel = new JPanel();
 		projectFieldsJPanel.setBackground(Color.DARK_GRAY);
-		projectFieldsJPanel.setBorder(new BevelBorder(BevelBorder.RAISED, null,
-				null, null, null));
+		projectFieldsJPanel.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
 
-		javax.swing.GroupLayout projectsJPanelLayout = new javax.swing.GroupLayout(
-				projectsJPanel);
-		projectsJPanelLayout
-				.setHorizontalGroup(projectsJPanelLayout
-						.createParallelGroup(Alignment.LEADING)
-						.addGroup(
-								projectsJPanelLayout
-										.createSequentialGroup()
-										.addContainerGap()
-										.addGroup(
-												projectsJPanelLayout
-														.createParallelGroup(
-																Alignment.LEADING)
-														.addGroup(
-																projectsJPanelLayout
-																		.createSequentialGroup()
-																		.addGroup(
-																				projectsJPanelLayout
-																						.createParallelGroup(
-																								Alignment.LEADING)
-																						.addComponent(
-																								removeProjectJButton,
-																								Alignment.TRAILING,
-																								GroupLayout.DEFAULT_SIZE,
-																								204,
-																								Short.MAX_VALUE)
-																						.addComponent(
-																								setCurrentProjectJButton,
-																								GroupLayout.DEFAULT_SIZE,
-																								204,
-																								Short.MAX_VALUE)
-																						.addComponent(
-																								jScrollPane1,
-																								GroupLayout.PREFERRED_SIZE,
-																								204,
-																								GroupLayout.PREFERRED_SIZE))
-																		.addPreferredGap(
-																				ComponentPlacement.RELATED)
-																		.addComponent(
-																				filler2,
-																				GroupLayout.PREFERRED_SIZE,
-																				GroupLayout.DEFAULT_SIZE,
-																				GroupLayout.PREFERRED_SIZE)
-																		.addGap(147)
-																		.addComponent(
-																				projectFieldsJPanel,
-																				GroupLayout.PREFERRED_SIZE,
-																				307,
-																				GroupLayout.PREFERRED_SIZE))
-														.addComponent(
-																projectsJLabel))
-										.addContainerGap()));
-		projectsJPanelLayout
-				.setVerticalGroup(projectsJPanelLayout
-						.createParallelGroup(Alignment.LEADING)
-						.addGroup(
-								projectsJPanelLayout
-										.createSequentialGroup()
-										.addContainerGap()
-										.addComponent(projectsJLabel)
-										.addPreferredGap(
-												ComponentPlacement.RELATED, 6,
-												Short.MAX_VALUE)
-										.addGroup(
-												projectsJPanelLayout
-														.createParallelGroup(
-																Alignment.TRAILING,
-																false)
-														.addGroup(
-																projectsJPanelLayout
-																		.createSequentialGroup()
-																		.addGap(119)
-																		.addComponent(
-																				filler2,
-																				GroupLayout.PREFERRED_SIZE,
-																				GroupLayout.DEFAULT_SIZE,
-																				GroupLayout.PREFERRED_SIZE)
-																		.addGap(246))
-														.addGroup(
-																projectsJPanelLayout
-																		.createSequentialGroup()
-																		.addGroup(
-																				projectsJPanelLayout
-																						.createParallelGroup(
-																								Alignment.TRAILING)
-																						.addComponent(
-																								projectFieldsJPanel,
-																								GroupLayout.PREFERRED_SIZE,
-																								336,
-																								GroupLayout.PREFERRED_SIZE)
-																						.addComponent(
-																								jScrollPane1))
-																		.addPreferredGap(
-																				ComponentPlacement.RELATED)
-																		.addComponent(
-																				removeProjectJButton)))
-										.addPreferredGap(
-												ComponentPlacement.RELATED)
-										.addComponent(setCurrentProjectJButton,
-												GroupLayout.PREFERRED_SIZE, 36,
-												GroupLayout.PREFERRED_SIZE)
-										.addContainerGap()));
+		javax.swing.GroupLayout projectsJPanelLayout = new javax.swing.GroupLayout(projectsJPanel);
+		projectsJPanelLayout.setHorizontalGroup(projectsJPanelLayout.createParallelGroup(Alignment.LEADING).addGroup(projectsJPanelLayout.createSequentialGroup().addContainerGap().addGroup(projectsJPanelLayout.createParallelGroup(Alignment.LEADING).addGroup(projectsJPanelLayout.createSequentialGroup().addGroup(projectsJPanelLayout.createParallelGroup(Alignment.LEADING).addComponent(removeProjectJButton, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 204, Short.MAX_VALUE).addComponent(setCurrentProjectJButton, GroupLayout.DEFAULT_SIZE, 204, Short.MAX_VALUE).addComponent(jScrollPane1, GroupLayout.PREFERRED_SIZE, 204, GroupLayout.PREFERRED_SIZE)).addPreferredGap(ComponentPlacement.RELATED).addComponent(filler2, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE).addGap(147).addComponent(projectFieldsJPanel, GroupLayout.PREFERRED_SIZE, 307, GroupLayout.PREFERRED_SIZE)).addComponent(projectsJLabel)).addContainerGap()));
+		projectsJPanelLayout.setVerticalGroup(projectsJPanelLayout.createParallelGroup(Alignment.LEADING).addGroup(projectsJPanelLayout.createSequentialGroup().addContainerGap().addComponent(projectsJLabel).addPreferredGap(ComponentPlacement.RELATED, 6, Short.MAX_VALUE).addGroup(projectsJPanelLayout.createParallelGroup(Alignment.TRAILING, false).addGroup(projectsJPanelLayout.createSequentialGroup().addGap(119).addComponent(filler2, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE).addGap(246)).addGroup(projectsJPanelLayout.createSequentialGroup().addGroup(projectsJPanelLayout.createParallelGroup(Alignment.TRAILING).addComponent(projectFieldsJPanel, GroupLayout.PREFERRED_SIZE, 336, GroupLayout.PREFERRED_SIZE).addComponent(jScrollPane1)).addPreferredGap(ComponentPlacement.RELATED).addComponent(removeProjectJButton))).addPreferredGap(ComponentPlacement.RELATED).addComponent(setCurrentProjectJButton, GroupLayout.PREFERRED_SIZE, 36, GroupLayout.PREFERRED_SIZE).addContainerGap()));
 		projectsJList = new javax.swing.JList();
 		jScrollPane1.setViewportView(projectsJList);
 
-		projectsJList.setBorder(javax.swing.BorderFactory
-				.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+		projectsJList.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
 		projectsJList.setModel(new javax.swing.AbstractListModel() {
 			String[] strings = {};
 
@@ -416,30 +213,12 @@ public class GUIForm extends javax.swing.JFrame {
 				return strings[i];
 			}
 		});
-		projectsJList
-				.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
-					public void valueChanged(
-							javax.swing.event.ListSelectionEvent evt) {
-						projectsJListValueChanged(evt);
-					}
-				});
-		projectFieldsJPanel.setLayout(new FormLayout(
-				new ColumnSpec[] { FormFactory.UNRELATED_GAP_COLSPEC,
-						ColumnSpec.decode("54px"),
-						FormFactory.LABEL_COMPONENT_GAP_COLSPEC,
-						ColumnSpec.decode("221px:grow"),
-						FormFactory.RELATED_GAP_COLSPEC,
-						FormFactory.DEFAULT_COLSPEC, }, new RowSpec[] {
-						FormFactory.UNRELATED_GAP_ROWSPEC,
-						RowSpec.decode("20px"), FormFactory.LINE_GAP_ROWSPEC,
-						RowSpec.decode("20px"), FormFactory.LINE_GAP_ROWSPEC,
-						RowSpec.decode("20px"),
-						FormFactory.RELATED_GAP_ROWSPEC,
-						RowSpec.decode("96px"),
-						FormFactory.UNRELATED_GAP_ROWSPEC,
-						RowSpec.decode("20px"), FormFactory.LINE_GAP_ROWSPEC,
-						RowSpec.decode("21px"), RowSpec.decode("60px"),
-						RowSpec.decode("23px"), }));
+		projectsJList.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
+			public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
+				projectsJListValueChanged(evt);
+			}
+		});
+		projectFieldsJPanel.setLayout(new FormLayout(new ColumnSpec[] { FormFactory.UNRELATED_GAP_COLSPEC, ColumnSpec.decode("54px"), FormFactory.LABEL_COMPONENT_GAP_COLSPEC, ColumnSpec.decode("221px:grow"), FormFactory.RELATED_GAP_COLSPEC, FormFactory.DEFAULT_COLSPEC, }, new RowSpec[] { FormFactory.UNRELATED_GAP_ROWSPEC, RowSpec.decode("20px"), FormFactory.LINE_GAP_ROWSPEC, RowSpec.decode("20px"), FormFactory.LINE_GAP_ROWSPEC, RowSpec.decode("20px"), FormFactory.RELATED_GAP_ROWSPEC, RowSpec.decode("96px"), FormFactory.UNRELATED_GAP_ROWSPEC, RowSpec.decode("20px"), FormFactory.LINE_GAP_ROWSPEC, RowSpec.decode("21px"), RowSpec.decode("60px"), RowSpec.decode("23px"), }));
 		namecompJLabel = new javax.swing.JLabel();
 		projectFieldsJPanel.add(namecompJLabel, "2, 2, left, center");
 
@@ -464,8 +243,7 @@ public class GUIForm extends javax.swing.JFrame {
 
 		projectTasksJList = new JList();
 		projectTasksJList.setEnabled(false);
-		projectTasksJList.setBorder(new BevelBorder(BevelBorder.LOWERED, null,
-				null, null, null));
+		projectTasksJList.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
 		projectTasksJList.setBackground(Color.LIGHT_GRAY);
 		projectFieldsJPanel.add(projectTasksJList, "4, 8, fill, fill");
 		clientcompJLabel1 = new javax.swing.JLabel();
@@ -478,10 +256,8 @@ public class GUIForm extends javax.swing.JFrame {
 
 		clientJLabel.setBackground(new java.awt.Color(204, 255, 255));
 		clientJLabel.setForeground(new java.awt.Color(255, 255, 255));
-		clientJLabel.setBorder(javax.swing.BorderFactory
-				.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
-		clientJLabel
-				.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+		clientJLabel.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+		clientJLabel.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
 		clientJLabel.setMaximumSize(null);
 		clientJLabel.setMinimumSize(new java.awt.Dimension(34, 20));
 		clientJLabel.setName("");
@@ -492,26 +268,22 @@ public class GUIForm extends javax.swing.JFrame {
 		taskscompJLabel.setForeground(new java.awt.Color(255, 255, 255));
 		taskscompJLabel.setText("Tasks");
 		percentageCompleteJProgressBar = new javax.swing.JProgressBar();
-		projectFieldsJPanel.add(percentageCompleteJProgressBar,
-				"4, 12, fill, fill");
+		projectFieldsJPanel.add(percentageCompleteJProgressBar, "4, 12, fill, fill");
 		percentageCompletecompJLabel = new javax.swing.JLabel();
-		projectFieldsJPanel.add(percentageCompletecompJLabel,
-				"2, 12, fill, fill");
+		projectFieldsJPanel.add(percentageCompletecompJLabel, "2, 12, fill, fill");
 
-		percentageCompletecompJLabel.setForeground(new java.awt.Color(255, 255,
-				255));
+		percentageCompletecompJLabel.setForeground(new java.awt.Color(255, 255, 255));
 		percentageCompletecompJLabel.setText("Complete");
 		saveProjectJButton = new javax.swing.JButton();
 		projectFieldsJPanel.add(saveProjectJButton, "2, 14, 3, 1, fill, top");
 
 		saveProjectJButton.setText("Save");
 		saveProjectJButton.setEnabled(false);
-		saveProjectJButton
-				.addActionListener(new java.awt.event.ActionListener() {
-					public void actionPerformed(java.awt.event.ActionEvent evt) {
-						saveProject();
-					}
-				});
+		saveProjectJButton.addActionListener(new java.awt.event.ActionListener() {
+			public void actionPerformed(java.awt.event.ActionEvent evt) {
+				saveProject();
+			}
+		});
 
 		enddateJTextField.addFocusListener(new java.awt.event.FocusAdapter() {
 			public void focusGained(java.awt.event.FocusEvent evt) {
@@ -532,11 +304,7 @@ public class GUIForm extends javax.swing.JFrame {
 		});
 		projectsJPanel.setLayout(projectsJPanelLayout);
 
-		JTabbedPane.addTab(
-				"",
-				new javax.swing.ImageIcon(getClass().getResource(
-						"/be/artesis/timelog/gui/icons/ProjectsNeonIcon.png")),
-				projectsJPanel, "Projects");
+		JTabbedPane.addTab("", new javax.swing.ImageIcon(getClass().getResource("/be/artesis/timelog/gui/icons/ProjectsNeonIcon.png")), projectsJPanel, "Projects");
 
 		tasksJPanel.setBackground(new java.awt.Color(153, 153, 153));
 
@@ -546,18 +314,13 @@ public class GUIForm extends javax.swing.JFrame {
 
 		removeTaskJButton.setText("Remove task");
 		removeTaskJButton.setEnabled(false);
-		removeTaskJButton
-				.addActionListener(new java.awt.event.ActionListener() {
-					public void actionPerformed(java.awt.event.ActionEvent evt) {
-						removeTask();
-					}
-				});
+		removeTaskJButton.addActionListener(new java.awt.event.ActionListener() {
+			public void actionPerformed(java.awt.event.ActionEvent evt) {
+				removeTask();
+			}
+		});
 
-		JTabbedPane.addTab(
-				"",
-				new javax.swing.ImageIcon(getClass().getResource(
-						"/be/artesis/timelog/gui/icons/TasksNeonIcon.png")),
-				tasksJPanel, "Tasks");
+		JTabbedPane.addTab("", new javax.swing.ImageIcon(getClass().getResource("/be/artesis/timelog/gui/icons/TasksNeonIcon.png")), tasksJPanel, "Tasks");
 		tasksJPanel.setLayout(null);
 		tasksJPanel.add(tasksJLabel);
 		tasksJPanel.add(jScrollPane3);
@@ -567,26 +330,11 @@ public class GUIForm extends javax.swing.JFrame {
 		tasksJPanel.add(removeTaskJButton);
 
 		taskFieldsJPanel = new JPanel();
-		taskFieldsJPanel.setBorder(new BevelBorder(BevelBorder.RAISED, null,
-				null, null, null));
+		taskFieldsJPanel.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
 		taskFieldsJPanel.setBackground(Color.DARK_GRAY);
 		taskFieldsJPanel.setBounds(273, 40, 399, 366);
 		tasksJPanel.add(taskFieldsJPanel);
-		taskFieldsJPanel.setLayout(new FormLayout(new ColumnSpec[] {
-				FormFactory.UNRELATED_GAP_COLSPEC, ColumnSpec.decode("56px"),
-				FormFactory.UNRELATED_GAP_COLSPEC, ColumnSpec.decode("1px"),
-				FormFactory.LABEL_COMPONENT_GAP_COLSPEC,
-				ColumnSpec.decode("92px"), ColumnSpec.decode("77px"),
-				ColumnSpec.decode("51px"), FormFactory.RELATED_GAP_COLSPEC,
-				ColumnSpec.decode("77px"), }, new RowSpec[] {
-				FormFactory.UNRELATED_GAP_ROWSPEC, RowSpec.decode("20px"),
-				FormFactory.RELATED_GAP_ROWSPEC, RowSpec.decode("20px"),
-				FormFactory.RELATED_GAP_ROWSPEC, RowSpec.decode("20px"),
-				RowSpec.decode("38px"), RowSpec.decode("51px"),
-				FormFactory.UNRELATED_GAP_ROWSPEC, RowSpec.decode("51px"),
-				FormFactory.UNRELATED_GAP_ROWSPEC, RowSpec.decode("23px"),
-				FormFactory.UNRELATED_GAP_ROWSPEC, RowSpec.decode("37px"),
-				FormFactory.UNRELATED_GAP_ROWSPEC, RowSpec.decode("41px"), }));
+		taskFieldsJPanel.setLayout(new FormLayout(new ColumnSpec[] { FormFactory.UNRELATED_GAP_COLSPEC, ColumnSpec.decode("56px"), FormFactory.UNRELATED_GAP_COLSPEC, ColumnSpec.decode("1px"), FormFactory.LABEL_COMPONENT_GAP_COLSPEC, ColumnSpec.decode("92px"), ColumnSpec.decode("77px"), ColumnSpec.decode("51px"), FormFactory.RELATED_GAP_COLSPEC, ColumnSpec.decode("77px"), }, new RowSpec[] { FormFactory.UNRELATED_GAP_ROWSPEC, RowSpec.decode("20px"), FormFactory.RELATED_GAP_ROWSPEC, RowSpec.decode("20px"), FormFactory.RELATED_GAP_ROWSPEC, RowSpec.decode("20px"), RowSpec.decode("38px"), RowSpec.decode("51px"), FormFactory.UNRELATED_GAP_ROWSPEC, RowSpec.decode("51px"), FormFactory.UNRELATED_GAP_ROWSPEC, RowSpec.decode("23px"), FormFactory.UNRELATED_GAP_ROWSPEC, RowSpec.decode("37px"), FormFactory.UNRELATED_GAP_ROWSPEC, RowSpec.decode("41px"), }));
 
 		label_5 = new JLabel();
 		label_5.setText("Name");
@@ -630,8 +378,7 @@ public class GUIForm extends javax.swing.JFrame {
 			}
 		});
 		taskCompletedJCheckBox.setBackground(Color.DARK_GRAY);
-		taskFieldsJPanel.add(taskCompletedJCheckBox,
-				"10, 4, 1, 3, left, center");
+		taskFieldsJPanel.add(taskCompletedJCheckBox, "10, 4, 1, 3, left, center");
 
 		taskEnddateJTextField = new JTextField();
 		taskEnddateJTextField.addFocusListener(new FocusAdapter() {
@@ -650,8 +397,7 @@ public class GUIForm extends javax.swing.JFrame {
 		tasksJList = new javax.swing.JList();
 		taskFieldsJPanel.add(tasksJList, "2, 7");
 
-		tasksJList.setBorder(javax.swing.BorderFactory
-				.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+		tasksJList.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
 		tasksJList.setModel(new javax.swing.AbstractListModel() {
 			String[] strings = {};
 
@@ -663,13 +409,11 @@ public class GUIForm extends javax.swing.JFrame {
 				return strings[i];
 			}
 		});
-		tasksJList
-				.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
-					public void valueChanged(
-							javax.swing.event.ListSelectionEvent evt) {
-						tasksJListprojectListValueChanged(evt);
-					}
-				});
+		tasksJList.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
+			public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
+				tasksJListprojectListValueChanged(evt);
+			}
+		});
 
 		label_9 = new JLabel();
 		label_9.setText("Comment");
@@ -685,16 +429,19 @@ public class GUIForm extends javax.swing.JFrame {
 		taskTotalTimeCompJLabel.setToolTipText("");
 		taskTotalTimeCompJLabel.setForeground(SystemColor.menu);
 		taskTotalTimeCompJLabel.setBackground(Color.LIGHT_GRAY);
-		taskFieldsJPanel
-				.add(taskTotalTimeCompJLabel, "6, 12, 5, 1, fill, fill");
+		taskFieldsJPanel.add(taskTotalTimeCompJLabel, "6, 12, 5, 1, fill, fill");
 
 		taskTotalPauseCompJLabel = new JLabel();
 		taskTotalPauseCompJLabel.setForeground(SystemColor.menu);
 		taskTotalPauseCompJLabel.setBackground(Color.LIGHT_GRAY);
-		taskFieldsJPanel.add(taskTotalPauseCompJLabel,
-				"6, 14, 5, 1, fill, fill");
+		taskFieldsJPanel.add(taskTotalPauseCompJLabel, "6, 14, 5, 1, fill, fill");
 
 		saveTaskJButton = new JButton();
+		saveTaskJButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				saveTask();
+			}
+		});
 		saveTaskJButton.setText("Save");
 		saveTaskJButton.setEnabled(false);
 		taskFieldsJPanel.add(saveTaskJButton, "2, 16, 9, 1, fill, top");
@@ -733,130 +480,29 @@ public class GUIForm extends javax.swing.JFrame {
 				return strings[i];
 			}
 		});
-		clientsJList
-				.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
-					public void valueChanged(
-							javax.swing.event.ListSelectionEvent evt) {
-						clientsJListValueChanged(evt);
-					}
-				});
+		clientsJList.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
+			public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
+				clientsJListValueChanged(evt);
+			}
+		});
 		jScrollPane5.setViewportView(clientsJList);
 
 		removeClientJButton.setText("Remove client");
 		removeClientJButton.setEnabled(false);
-		removeClientJButton
-				.addActionListener(new java.awt.event.ActionListener() {
-					public void actionPerformed(java.awt.event.ActionEvent evt) {
-						removeClient();
-					}
-				});
+		removeClientJButton.addActionListener(new java.awt.event.ActionListener() {
+			public void actionPerformed(java.awt.event.ActionEvent evt) {
+				removeClient();
+			}
+		});
 
 		clientFieldsJPanel = new JPanel();
-		clientFieldsJPanel.setBorder(new BevelBorder(BevelBorder.RAISED, null,
-				null, null, null));
+		clientFieldsJPanel.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
 		clientFieldsJPanel.setBackground(Color.DARK_GRAY);
 
-		javax.swing.GroupLayout clientsJPanelLayout = new javax.swing.GroupLayout(
-				clientsJPanel);
-		clientsJPanelLayout
-				.setHorizontalGroup(clientsJPanelLayout
-						.createParallelGroup(Alignment.LEADING)
-						.addGroup(
-								clientsJPanelLayout
-										.createSequentialGroup()
-										.addContainerGap()
-										.addGroup(
-												clientsJPanelLayout
-														.createParallelGroup(
-																Alignment.LEADING)
-														.addGroup(
-																clientsJPanelLayout
-																		.createSequentialGroup()
-																		.addGroup(
-																				clientsJPanelLayout
-																						.createParallelGroup(
-																								Alignment.LEADING,
-																								false)
-																						.addComponent(
-																								jScrollPane5,
-																								GroupLayout.DEFAULT_SIZE,
-																								197,
-																								Short.MAX_VALUE)
-																						.addComponent(
-																								removeClientJButton,
-																								GroupLayout.DEFAULT_SIZE,
-																								GroupLayout.DEFAULT_SIZE,
-																								Short.MAX_VALUE))
-																		.addPreferredGap(
-																				ComponentPlacement.RELATED,
-																				143,
-																				Short.MAX_VALUE)
-																		.addComponent(
-																				clientFieldsJPanel,
-																				GroupLayout.PREFERRED_SIZE,
-																				324,
-																				GroupLayout.PREFERRED_SIZE))
-														.addComponent(
-																clientsJLabel))
-										.addContainerGap()));
-		clientsJPanelLayout
-				.setVerticalGroup(clientsJPanelLayout
-						.createParallelGroup(Alignment.TRAILING)
-						.addGroup(
-								clientsJPanelLayout
-										.createSequentialGroup()
-										.addGroup(
-												clientsJPanelLayout
-														.createParallelGroup(
-																Alignment.TRAILING)
-														.addGroup(
-																Alignment.LEADING,
-																clientsJPanelLayout
-																		.createSequentialGroup()
-																		.addGap(33)
-																		.addComponent(
-																				clientFieldsJPanel,
-																				GroupLayout.DEFAULT_SIZE,
-																				378,
-																				Short.MAX_VALUE))
-														.addGroup(
-																clientsJPanelLayout
-																		.createSequentialGroup()
-																		.addContainerGap()
-																		.addComponent(
-																				clientsJLabel)
-																		.addPreferredGap(
-																				ComponentPlacement.RELATED)
-																		.addComponent(
-																				jScrollPane5,
-																				GroupLayout.DEFAULT_SIZE,
-																				336,
-																				Short.MAX_VALUE)))
-										.addPreferredGap(
-												ComponentPlacement.RELATED)
-										.addComponent(removeClientJButton,
-												GroupLayout.PREFERRED_SIZE, 23,
-												GroupLayout.PREFERRED_SIZE)
-										.addContainerGap()));
-		clientFieldsJPanel
-				.setLayout(new FormLayout(
-						new ColumnSpec[] { FormFactory.UNRELATED_GAP_COLSPEC,
-								ColumnSpec.decode("79px"),
-								ColumnSpec.decode("225px"), }, new RowSpec[] {
-								FormFactory.RELATED_GAP_ROWSPEC,
-								RowSpec.decode("20px"),
-								FormFactory.LINE_GAP_ROWSPEC,
-								RowSpec.decode("20px"),
-								FormFactory.LINE_GAP_ROWSPEC,
-								RowSpec.decode("20px"),
-								FormFactory.LINE_GAP_ROWSPEC,
-								RowSpec.decode("20px"),
-								FormFactory.LINE_GAP_ROWSPEC,
-								RowSpec.decode("20px"),
-								RowSpec.decode("192px"),
-								RowSpec.decode("17px"),
-								FormFactory.RELATED_GAP_ROWSPEC,
-								FormFactory.DEFAULT_ROWSPEC, }));
+		javax.swing.GroupLayout clientsJPanelLayout = new javax.swing.GroupLayout(clientsJPanel);
+		clientsJPanelLayout.setHorizontalGroup(clientsJPanelLayout.createParallelGroup(Alignment.LEADING).addGroup(clientsJPanelLayout.createSequentialGroup().addContainerGap().addGroup(clientsJPanelLayout.createParallelGroup(Alignment.LEADING).addGroup(clientsJPanelLayout.createSequentialGroup().addGroup(clientsJPanelLayout.createParallelGroup(Alignment.LEADING, false).addComponent(jScrollPane5, GroupLayout.DEFAULT_SIZE, 197, Short.MAX_VALUE).addComponent(removeClientJButton, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)).addPreferredGap(ComponentPlacement.RELATED, 143, Short.MAX_VALUE).addComponent(clientFieldsJPanel, GroupLayout.PREFERRED_SIZE, 324, GroupLayout.PREFERRED_SIZE)).addComponent(clientsJLabel)).addContainerGap()));
+		clientsJPanelLayout.setVerticalGroup(clientsJPanelLayout.createParallelGroup(Alignment.TRAILING).addGroup(clientsJPanelLayout.createSequentialGroup().addGroup(clientsJPanelLayout.createParallelGroup(Alignment.TRAILING).addGroup(Alignment.LEADING, clientsJPanelLayout.createSequentialGroup().addGap(33).addComponent(clientFieldsJPanel, GroupLayout.DEFAULT_SIZE, 378, Short.MAX_VALUE)).addGroup(clientsJPanelLayout.createSequentialGroup().addContainerGap().addComponent(clientsJLabel).addPreferredGap(ComponentPlacement.RELATED).addComponent(jScrollPane5, GroupLayout.DEFAULT_SIZE, 336, Short.MAX_VALUE))).addPreferredGap(ComponentPlacement.RELATED).addComponent(removeClientJButton, GroupLayout.PREFERRED_SIZE, 23, GroupLayout.PREFERRED_SIZE).addContainerGap()));
+		clientFieldsJPanel.setLayout(new FormLayout(new ColumnSpec[] { FormFactory.UNRELATED_GAP_COLSPEC, ColumnSpec.decode("79px"), ColumnSpec.decode("225px"), }, new RowSpec[] { FormFactory.RELATED_GAP_ROWSPEC, RowSpec.decode("20px"), FormFactory.LINE_GAP_ROWSPEC, RowSpec.decode("20px"), FormFactory.LINE_GAP_ROWSPEC, RowSpec.decode("20px"), FormFactory.LINE_GAP_ROWSPEC, RowSpec.decode("20px"), FormFactory.LINE_GAP_ROWSPEC, RowSpec.decode("20px"), RowSpec.decode("192px"), RowSpec.decode("17px"), FormFactory.RELATED_GAP_ROWSPEC, FormFactory.DEFAULT_ROWSPEC, }));
 
 		JLabel label = new JLabel();
 		label.setText("Name");
@@ -939,11 +585,7 @@ public class GUIForm extends javax.swing.JFrame {
 		clientFieldsJPanel.add(saveClientJButton, "2, 14, 2, 1, fill, top");
 		clientsJPanel.setLayout(clientsJPanelLayout);
 
-		JTabbedPane.addTab(
-				"",
-				new javax.swing.ImageIcon(getClass().getResource(
-						"/be/artesis/timelog/gui/icons/ClientsNeonIcon.png")),
-				clientsJPanel, "Clients");
+		JTabbedPane.addTab("", new javax.swing.ImageIcon(getClass().getResource("/be/artesis/timelog/gui/icons/ClientsNeonIcon.png")), clientsJPanel, "Clients");
 
 		scheduleJPanel.setBackground(new java.awt.Color(153, 153, 153));
 
@@ -951,27 +593,12 @@ public class GUIForm extends javax.swing.JFrame {
 		scheduleJLabel.setForeground(new java.awt.Color(255, 255, 255));
 		scheduleJLabel.setText("Schedule");
 
-		javax.swing.GroupLayout scheduleJPanelLayout = new javax.swing.GroupLayout(
-				scheduleJPanel);
+		javax.swing.GroupLayout scheduleJPanelLayout = new javax.swing.GroupLayout(scheduleJPanel);
 		scheduleJPanel.setLayout(scheduleJPanelLayout);
-		scheduleJPanelLayout.setHorizontalGroup(scheduleJPanelLayout
-				.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-				.addGroup(
-						scheduleJPanelLayout.createSequentialGroup()
-								.addContainerGap().addComponent(scheduleJLabel)
-								.addContainerGap(621, Short.MAX_VALUE)));
-		scheduleJPanelLayout.setVerticalGroup(scheduleJPanelLayout
-				.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-				.addGroup(
-						scheduleJPanelLayout.createSequentialGroup()
-								.addContainerGap().addComponent(scheduleJLabel)
-								.addContainerGap(369, Short.MAX_VALUE)));
+		scheduleJPanelLayout.setHorizontalGroup(scheduleJPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGroup(scheduleJPanelLayout.createSequentialGroup().addContainerGap().addComponent(scheduleJLabel).addContainerGap(621, Short.MAX_VALUE)));
+		scheduleJPanelLayout.setVerticalGroup(scheduleJPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGroup(scheduleJPanelLayout.createSequentialGroup().addContainerGap().addComponent(scheduleJLabel).addContainerGap(369, Short.MAX_VALUE)));
 
-		JTabbedPane.addTab(
-				"",
-				new javax.swing.ImageIcon(getClass().getResource(
-						"/be/artesis/timelog/gui/icons/CalendarNeonIcon.png")),
-				scheduleJPanel, "Schedule");
+		JTabbedPane.addTab("", new javax.swing.ImageIcon(getClass().getResource("/be/artesis/timelog/gui/icons/CalendarNeonIcon.png")), scheduleJPanel, "Schedule");
 
 		optionsJPanel.setBackground(new java.awt.Color(153, 153, 153));
 
@@ -979,27 +606,12 @@ public class GUIForm extends javax.swing.JFrame {
 		settingsJLabel.setForeground(new java.awt.Color(255, 255, 255));
 		settingsJLabel.setText("Settings");
 
-		javax.swing.GroupLayout optionsJPanelLayout = new javax.swing.GroupLayout(
-				optionsJPanel);
+		javax.swing.GroupLayout optionsJPanelLayout = new javax.swing.GroupLayout(optionsJPanel);
 		optionsJPanel.setLayout(optionsJPanelLayout);
-		optionsJPanelLayout.setHorizontalGroup(optionsJPanelLayout
-				.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-				.addGroup(
-						optionsJPanelLayout.createSequentialGroup()
-								.addContainerGap().addComponent(settingsJLabel)
-								.addContainerGap(627, Short.MAX_VALUE)));
-		optionsJPanelLayout.setVerticalGroup(optionsJPanelLayout
-				.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-				.addGroup(
-						optionsJPanelLayout.createSequentialGroup()
-								.addContainerGap().addComponent(settingsJLabel)
-								.addContainerGap(369, Short.MAX_VALUE)));
+		optionsJPanelLayout.setHorizontalGroup(optionsJPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGroup(optionsJPanelLayout.createSequentialGroup().addContainerGap().addComponent(settingsJLabel).addContainerGap(627, Short.MAX_VALUE)));
+		optionsJPanelLayout.setVerticalGroup(optionsJPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGroup(optionsJPanelLayout.createSequentialGroup().addContainerGap().addComponent(settingsJLabel).addContainerGap(369, Short.MAX_VALUE)));
 
-		JTabbedPane.addTab(
-				"",
-				new javax.swing.ImageIcon(getClass().getResource(
-						"/be/artesis/timelog/gui/icons/SettingsNeonIcon.png")),
-				optionsJPanel, "Settings");
+		JTabbedPane.addTab("", new javax.swing.ImageIcon(getClass().getResource("/be/artesis/timelog/gui/icons/SettingsNeonIcon.png")), optionsJPanel, "Settings");
 
 		headerJPanel.setBackground(new java.awt.Color(64, 64, 64));
 
@@ -1010,119 +622,34 @@ public class GUIForm extends javax.swing.JFrame {
 		ingelogdJLabel.setBackground(new java.awt.Color(255, 255, 255));
 		ingelogdJLabel.setFont(new java.awt.Font("Tahoma", 1, 11));
 		ingelogdJLabel.setForeground(new java.awt.Color(255, 0, 0));
-		ingelogdJLabel
-				.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+		ingelogdJLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
 		ingelogdJLabel.setText("Not logged in");
-		ingelogdJLabel.setBorder(new javax.swing.border.SoftBevelBorder(
-				javax.swing.border.BevelBorder.LOWERED));
+		ingelogdJLabel.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.LOWERED));
 		ingelogdJLabel.setName("");
 		ingelogdJLabel.setOpaque(true);
 
 		currentProjectJLabel.setBackground(new java.awt.Color(255, 255, 255));
 		currentProjectJLabel.setFont(new java.awt.Font("Tahoma", 1, 11));
 		currentProjectJLabel.setForeground(new java.awt.Color(0, 204, 204));
-		currentProjectJLabel
-				.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+		currentProjectJLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
 		currentProjectJLabel.setText("Current project: ...");
-		currentProjectJLabel.setBorder(new javax.swing.border.SoftBevelBorder(
-				javax.swing.border.BevelBorder.LOWERED));
+		currentProjectJLabel.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.LOWERED));
 		currentProjectJLabel.setName("");
 		currentProjectJLabel.setOpaque(true);
 
-		clockJLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource(
-				"/be/artesis/timelog/gui/icons/ClockNeonIcon.png")));
+		clockJLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/be/artesis/timelog/gui/icons/ClockNeonIcon.png")));
 
-		javax.swing.GroupLayout headerJPanelLayout = new javax.swing.GroupLayout(
-				headerJPanel);
+		javax.swing.GroupLayout headerJPanelLayout = new javax.swing.GroupLayout(headerJPanel);
 		headerJPanel.setLayout(headerJPanelLayout);
-		headerJPanelLayout
-				.setHorizontalGroup(headerJPanelLayout
-						.createParallelGroup(
-								javax.swing.GroupLayout.Alignment.LEADING)
-						.addGroup(
-								javax.swing.GroupLayout.Alignment.TRAILING,
-								headerJPanelLayout
-										.createSequentialGroup()
-										.addContainerGap()
-										.addGroup(
-												headerJPanelLayout
-														.createParallelGroup(
-																javax.swing.GroupLayout.Alignment.LEADING,
-																false)
-														.addComponent(
-																currentProjectJLabel,
-																javax.swing.GroupLayout.DEFAULT_SIZE,
-																201,
-																Short.MAX_VALUE)
-														.addComponent(
-																ingelogdJLabel,
-																javax.swing.GroupLayout.DEFAULT_SIZE,
-																javax.swing.GroupLayout.DEFAULT_SIZE,
-																Short.MAX_VALUE))
-										.addPreferredGap(
-												javax.swing.LayoutStyle.ComponentPlacement.RELATED,
-												javax.swing.GroupLayout.DEFAULT_SIZE,
-												Short.MAX_VALUE)
-										.addComponent(titleLabel)
-										.addGap(18, 18, 18)
-										.addComponent(clockJLabel)
-										.addGap(6, 6, 6)));
-		headerJPanelLayout
-				.setVerticalGroup(headerJPanelLayout
-						.createParallelGroup(
-								javax.swing.GroupLayout.Alignment.LEADING)
-						.addGroup(
-								headerJPanelLayout
-										.createSequentialGroup()
-										.addContainerGap()
-										.addGroup(
-												headerJPanelLayout
-														.createParallelGroup(
-																javax.swing.GroupLayout.Alignment.LEADING)
-														.addComponent(
-																titleLabel,
-																javax.swing.GroupLayout.DEFAULT_SIZE,
-																javax.swing.GroupLayout.DEFAULT_SIZE,
-																Short.MAX_VALUE)
-														.addComponent(
-																clockJLabel,
-																javax.swing.GroupLayout.Alignment.TRAILING)
-														.addGroup(
-																headerJPanelLayout
-																		.createSequentialGroup()
-																		.addComponent(
-																				ingelogdJLabel)
-																		.addPreferredGap(
-																				javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-																		.addComponent(
-																				currentProjectJLabel)
-																		.addGap(0,
-																				0,
-																				Short.MAX_VALUE)))
-										.addContainerGap()));
+		headerJPanelLayout.setHorizontalGroup(headerJPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGroup(javax.swing.GroupLayout.Alignment.TRAILING, headerJPanelLayout.createSequentialGroup().addContainerGap().addGroup(headerJPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false).addComponent(currentProjectJLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 201, Short.MAX_VALUE).addComponent(ingelogdJLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)).addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE).addComponent(titleLabel).addGap(18, 18, 18).addComponent(clockJLabel).addGap(6, 6, 6)));
+		headerJPanelLayout.setVerticalGroup(headerJPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGroup(headerJPanelLayout.createSequentialGroup().addContainerGap().addGroup(headerJPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addComponent(titleLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE).addComponent(clockJLabel, javax.swing.GroupLayout.Alignment.TRAILING).addGroup(headerJPanelLayout.createSequentialGroup().addComponent(ingelogdJLabel).addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED).addComponent(currentProjectJLabel).addGap(0, 0, Short.MAX_VALUE))).addContainerGap()));
 
 		clockJLabel.getAccessibleContext().setAccessibleName("iconJLabel");
 
-		javax.swing.GroupLayout layout = new javax.swing.GroupLayout(
-				getContentPane());
+		javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
 		getContentPane().setLayout(layout);
-		layout.setHorizontalGroup(layout
-				.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-				.addComponent(headerJPanel,
-						javax.swing.GroupLayout.DEFAULT_SIZE,
-						javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-				.addComponent(JTabbedPane));
-		layout.setVerticalGroup(layout
-				.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-				.addGroup(
-						layout.createSequentialGroup()
-								.addComponent(headerJPanel,
-										javax.swing.GroupLayout.PREFERRED_SIZE,
-										javax.swing.GroupLayout.DEFAULT_SIZE,
-										javax.swing.GroupLayout.PREFERRED_SIZE)
-								.addPreferredGap(
-										javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-								.addComponent(JTabbedPane)));
+		layout.setHorizontalGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addComponent(headerJPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE).addComponent(JTabbedPane));
+		layout.setVerticalGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGroup(layout.createSequentialGroup().addComponent(headerJPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE).addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED).addComponent(JTabbedPane)));
 		pack();
 	}
 
@@ -1132,36 +659,70 @@ public class GUIForm extends javax.swing.JFrame {
 	// Save / Edit methods
 	// ================================================================================
 
-	// Save project
+	// Save PROJECT
 	private void saveProject() {
-		try {
-			Project p = (Project) UserInterface.getUser().getProjects()
-					.get(projectsJList.getSelectedIndex()).clone();
-			p.setNaam(nameJTextField.getText());
-			p.setBegindatum(Clock.StringToTimestamp(startdateJTextField
-					.getText()));
-			p.setEinddatum(Clock.StringToTimestamp(enddateJTextField.getText()));
-			// Past projectwaarden aan in database
-			Updater.updateProject(validator.getSessionKey(), p);
-			JOptionPane.showMessageDialog(this, "Project edited!");
-			UserInterface.getUser().getProjects()
-					.set(projectsJList.getSelectedIndex(), p);
-		} catch (DataInputException | IOException | WebserviceException ex) {
-			ex.printStackTrace();
-			JOptionPane.showMessageDialog(this, ex.getMessage());
-		} finally {
-			refreshProjectsList(projectsJList, homeProjectsJList);
-			clearFieldsOnPanel(projectFieldsJPanel);
-			toggleButtonStates();
+		String name = nameJTextField.getText();
+		String startdate = startdateJTextField.getText();
+		String enddate = enddateJTextField.getText();
+		int opdrachtgeverID = 0; // FIXME int halen uit selectie uit dropdownbox
+
+		if (projectsJList.getSelectedValue().equals(NEWPROJECTITEM)) {
+			try {
+				UserInterface.saveNewProject(name, startdate, enddate, opdrachtgeverID);
+			} catch (DataInputException | IOException | WebserviceException | JSONException | ParseException ex) {
+				ex.printStackTrace();
+				JOptionPane.showMessageDialog(this, ex.getMessage());
+			} finally {
+				refreshProjectsList(projectsJList, homeProjectsJList);
+				clearFieldsOnPanel(projectFieldsJPanel);
+				toggleButtonStates();
+			}
+		} else {
+			try {
+				UserInterface.saveProject(projectsJList.getSelectedIndex(), name, startdate, enddate);
+				JOptionPane.showMessageDialog(this, "Project edited!");
+			} catch (DataInputException | IOException | WebserviceException | ParseException ex) {
+				ex.printStackTrace();
+				JOptionPane.showMessageDialog(this, ex.getMessage());
+			} finally {
+				refreshProjectsList(projectsJList, homeProjectsJList);
+				clearFieldsOnPanel(projectFieldsJPanel);
+				toggleButtonStates();
+			}
 		}
 	}
 
-	// Save client
+	// Save TASK
+	private void saveTask() {
+		try {
+			Taak t = (Taak) UserInterface.getCurrentProject().getTaken().get(tasksJList.getSelectedIndex()).clone();
+			t.setNaam(taskNameJTextField.getText());
+			long startdate = Clock.StringToTimestamp(taskStartdateJTextField.getText());
+			long enddate = Clock.StringToTimestamp(taskEnddateJTextField.getText());
+			t.setBegindatum(startdate);
+			t.setGeschatteEinddatum(enddate);
+
+			t.setCommentaar(taskCommentJTextArea.getText());
+			t.setCompleted(taskCompletedJCheckBox.isSelected());
+			// Taakwaarden worden aangepast in database
+			Updater.updateTaak(validator.getSessionKey(), t);
+			JOptionPane.showMessageDialog(this, "Task edited!");
+			UserInterface.getCurrentProject().getTaken().set(tasksJList.getSelectedIndex(), t);
+			refreshTasksList(UserInterface.getCurrentProject(), tasksJList);
+		} catch (GUIException | DataInputException | IOException | WebserviceException ex) {
+			JOptionPane.showMessageDialog(this, ex.getMessage());
+		} finally {
+			clearFieldsOnPanel(tasksJPanel);
+			clearFieldsOnPanel(projectsJPanel);
+			toggleButtonStates();
+			loadProjectInfo(projectsJList.getSelectedIndex());
+		}
+	}
+
+	// Save CLIENT
 	private void saveClient() {
 		try {
-			Opdrachtgever c = (Opdrachtgever) UserInterface.getUser()
-					.getOpdrachtgevers().get(clientsJList.getSelectedIndex())
-					.clone();
+			Opdrachtgever c = (Opdrachtgever) UserInterface.getUser().getOpdrachtgevers().get(clientsJList.getSelectedIndex()).clone();
 			c.setNaam(clientNameJTextField.getText());
 			c.setVoornaam(clientFirstNameJTextField.getText());
 			c.setBedrijfsnaam(clientCompanyJTextField.getText());
@@ -1170,8 +731,7 @@ public class GUIForm extends javax.swing.JFrame {
 			// Past opdrachtgeverwaarden aan in database
 			Updater.updateOpdrachtgever(validator.getSessionKey(), c);
 			JOptionPane.showMessageDialog(this, "Client edited!");
-			UserInterface.getUser().getOpdrachtgevers()
-					.set(clientsJList.getSelectedIndex(), c);
+			UserInterface.getUser().getOpdrachtgevers().set(clientsJList.getSelectedIndex(), c);
 		} catch (DataInputException | IOException | WebserviceException ex) {
 			JOptionPane.showMessageDialog(this, ex.getMessage());
 		} finally {
@@ -1185,18 +745,14 @@ public class GUIForm extends javax.swing.JFrame {
 	// Remove methods
 	// ================================================================================
 
-	// Remove project
+	// Remove PROJECT
 	private void removeProject() {
-		int result = JOptionPane.showConfirmDialog(this,
-				"Are you sure you want to delete this project?", null,
-				JOptionPane.YES_NO_OPTION);
+		int result = JOptionPane.showConfirmDialog(this, "Are you sure you want to delete this project?", null, JOptionPane.YES_NO_OPTION);
 		if (result == JOptionPane.YES_OPTION) {
 			try {
-				Project p = UserInterface.getUser().getProjects()
-						.get(projectsJList.getSelectedIndex());
+				Project p = UserInterface.getUser().getProjects().get(projectsJList.getSelectedIndex());
 				Deleter.deleteProject(validator.getSessionKey(), p);
-				UserInterface.getUser().removeProject(
-						(Project) projectsJList.getSelectedValue());
+				UserInterface.getUser().removeProject((Project) projectsJList.getSelectedValue());
 				refreshProjectsList(projectsJList, homeProjectsJList);
 				clearFieldsOnPanel(projectFieldsJPanel);
 				toggleButtonStates();
@@ -1208,15 +764,12 @@ public class GUIForm extends javax.swing.JFrame {
 		}
 	}
 
-	// Remove task
+	// Remove TASK
 	private void removeTask() {
-		int result = JOptionPane.showConfirmDialog(this,
-				"Are you sure you want to delete this task?", null,
-				JOptionPane.YES_NO_OPTION);
+		int result = JOptionPane.showConfirmDialog(this, "Are you sure you want to delete this task?", null, JOptionPane.YES_NO_OPTION);
 		if (result == JOptionPane.YES_OPTION) {
 			try {
-				Taak t = UserInterface.getCurrentProject().getTaken()
-						.get(tasksJList.getSelectedIndex());
+				Taak t = UserInterface.getCurrentProject().getTaken().get(tasksJList.getSelectedIndex());
 				Deleter.deleteTaak(validator.getSessionKey(), t);
 				UserInterface.getCurrentProject().getTaken().remove(t);
 				refreshTasksList(UserInterface.getCurrentProject(), tasksJList);
@@ -1230,22 +783,17 @@ public class GUIForm extends javax.swing.JFrame {
 		}
 	}
 
-	// Remove client
+	// Remove CLIENT
 	private void removeClient() {
-		int result = JOptionPane.showConfirmDialog(this,
-				"Are you sure you want to delete this client?", null,
-				JOptionPane.YES_NO_OPTION);
+		int result = JOptionPane.showConfirmDialog(this, "Are you sure you want to delete this client?", null, JOptionPane.YES_NO_OPTION);
 		if (result == JOptionPane.YES_OPTION) {
 			try {
-				Opdrachtgever c = UserInterface.getUser().getOpdrachtgever(
-						((Opdrachtgever) clientsJList.getSelectedValue())
-								.getID());
+				Opdrachtgever c = UserInterface.getUser().getOpdrachtgever(((Opdrachtgever) clientsJList.getSelectedValue()).getID());
 				// !! Deze for-lus moet verwijderd worden en vervangen worden
 				// door een error van de server
 				for (Project p : UserInterface.getUser().getProjects()) {
 					if (p.getOpdrachtgeverId() == c.getID()) {
-						throw new GUIException(
-								"This client is associated with a project");
+						throw new GUIException("This client is associated with a project");
 					}
 				}
 				Deleter.deleteOpdrachtgever(validator.getSessionKey(), c);
@@ -1254,8 +802,7 @@ public class GUIForm extends javax.swing.JFrame {
 				clearFieldsOnPanel(clientFieldsJPanel);
 				toggleButtonStates();
 				JOptionPane.showMessageDialog(this, "Client removed!");
-			} catch (GUIException | DataInputException | IOException
-					| WebserviceException ex) {
+			} catch (GUIException | DataInputException | IOException | WebserviceException ex) {
 				ex.printStackTrace();
 				JOptionPane.showMessageDialog(this, ex.getMessage());
 			}
@@ -1271,8 +818,7 @@ public class GUIForm extends javax.swing.JFrame {
 		for (JList list : lists) {
 			DefaultListModel listmodel = new DefaultListModel();
 
-			for (Iterator<Project> it = UserInterface.getUser().getProjects()
-					.iterator(); it.hasNext();) {
+			for (Iterator<Project> it = UserInterface.getUser().getProjects().iterator(); it.hasNext();) {
 				Project p = it.next();
 				listmodel.addElement(p);
 			}
@@ -1318,8 +864,7 @@ public class GUIForm extends javax.swing.JFrame {
 		for (JList list : lists) {
 			DefaultListModel listmodel = new DefaultListModel();
 
-			for (Iterator<Opdrachtgever> it = UserInterface.getUser()
-					.getOpdrachtgevers().iterator(); it.hasNext();) {
+			for (Iterator<Opdrachtgever> it = UserInterface.getUser().getOpdrachtgevers().iterator(); it.hasNext();) {
 				Opdrachtgever o = it.next();
 				listmodel.addElement(o);
 			}
@@ -1345,22 +890,17 @@ public class GUIForm extends javax.swing.JFrame {
 		if (index != -1) {
 			Project p = UserInterface.getUser().getProjects().get(index);
 			nameJTextField.setText(p.getNaam());
-			startdateJTextField.setText(Clock.timestampToDateString(p
-					.getBegindatum()));
-			enddateJTextField.setText(Clock.timestampToDateString(p
-					.getEinddatum()));
+			startdateJTextField.setText(Clock.timestampToDateString(p.getBegindatum()));
+			enddateJTextField.setText(Clock.timestampToDateString(p.getEinddatum()));
 			try {
-				clientJLabel.setText(UserInterface.getUser()
-						.getOpdrachtgever(p.getOpdrachtgeverId()).toString());
+				clientJLabel.setText(UserInterface.getUser().getOpdrachtgever(p.getOpdrachtgeverId()).toString());
 			} catch (DataInputException ex) {
 				ex.printStackTrace();
 				JOptionPane.showMessageDialog(this, ex.getMessage());
 			}
 
 			refreshTasksList(p, projectTasksJList);
-			percentageCompleteJProgressBar
-					.setValue((int) (((Project) projectsJList
-							.getSelectedValue()).getPercentageComplete() * 100));
+			percentageCompleteJProgressBar.setValue((int) (((Project) projectsJList.getSelectedValue()).getPercentageComplete() * 100));
 		}
 	}
 
@@ -1369,26 +909,21 @@ public class GUIForm extends javax.swing.JFrame {
 		if (index != -1) {
 			Taak t = (Taak) tasksJList.getSelectedValue();
 			taskNameJTextField.setText(t.getNaam());
-			taskStartdateJTextField.setText(Clock.timestampToDateString(t
-					.getBegindatum()));
-			taskEnddateJTextField.setText(Clock.timestampToDateString(t
-					.getGeschatteEinddatum()));
+			taskStartdateJTextField.setText(Clock.timestampToDateString(t.getBegindatum()));
+			taskEnddateJTextField.setText(Clock.timestampToDateString(t.getGeschatteEinddatum()));
 			taskCommentJTextArea.setText(t.getCommentaar());
 			taskCompletedJCheckBox.setSelected(t.getCompleted());
 
 			DefaultListModel listmodel = new DefaultListModel();
 
-			for (Iterator<Tijdspanne> it = t.getBestedeTijd().iterator(); it
-					.hasNext();) {
+			for (Iterator<Tijdspanne> it = t.getBestedeTijd().iterator(); it.hasNext();) {
 				Tijdspanne ts = it.next();
 				listmodel.addElement(ts);
 			}
 
 			workedTimeJList.setModel(listmodel);
-			taskTotalTimeCompJLabel.setText("Total worked : "
-					+ Clock.longTimeToString(t.getTotaleWerktijd(), false));
-			taskTotalPauseCompJLabel.setText("Total paused : "
-					+ Clock.longTimeToString(t.getTotalePauze(), false));
+			taskTotalTimeCompJLabel.setText("Total worked : " + Clock.longTimeToString(t.getTotaleWerktijd(), false));
+			taskTotalPauseCompJLabel.setText("Total paused : " + Clock.longTimeToString(t.getTotalePauze(), false));
 		}
 	}
 
@@ -1422,8 +957,7 @@ public class GUIForm extends javax.swing.JFrame {
 				}
 			}
 			if (!taskAvailable) {
-				throw new GUIException(
-						"Current project contains no running tasks");
+				throw new GUIException("Current project contains no running tasks");
 			}
 			setVisible(false);
 			WorkDialog work = new WorkDialog(this, true, validator);
@@ -1478,15 +1012,11 @@ public class GUIForm extends javax.swing.JFrame {
 	// Event handlers, FIXME afsplitsen!
 	// ================================================================================
 
-	private void setCurrentProjectJButtonActionPerformed(
-			java.awt.event.ActionEvent evt) {
+	private void setCurrentProjectJButtonActionPerformed(java.awt.event.ActionEvent evt) {
 		try {
-			UserInterface.setCurrentProjectIndex(projectsJList
-					.getSelectedIndex());
-			currentProjectJLabel.setText("Current project: "
-					+ UserInterface.getCurrentProject().getNaam());
-			saveTaskJButton.setText("Save to "
-					+ UserInterface.getCurrentProject().getNaam());
+			UserInterface.setCurrentProjectIndex(projectsJList.getSelectedIndex());
+			currentProjectJLabel.setText("Current project: " + UserInterface.getCurrentProject().getNaam());
+			saveTaskJButton.setText("Save to " + UserInterface.getCurrentProject().getNaam());
 			refreshProjectsList(projectsJList, homeProjectsJList);
 			refreshTasksList(UserInterface.getCurrentProject(), tasksJList);
 			clearFieldsOnPanel(taskFieldsJPanel);
@@ -1496,8 +1026,7 @@ public class GUIForm extends javax.swing.JFrame {
 		}
 	}
 
-	private void projectsJListValueChanged(
-			javax.swing.event.ListSelectionEvent evt) {
+	private void projectsJListValueChanged(javax.swing.event.ListSelectionEvent evt) {
 		loadProjectInfo(projectsJList.getSelectedIndex());
 		toggleButtonStates();
 	}
@@ -1513,8 +1042,7 @@ public class GUIForm extends javax.swing.JFrame {
 		toggleButtonStates();
 	}
 
-	private void clientsJListValueChanged(
-			javax.swing.event.ListSelectionEvent evt) {
+	private void clientsJListValueChanged(javax.swing.event.ListSelectionEvent evt) {
 
 		if (clientsJList.getSelectedValue().equals(NEWCLIENTITEM)) {
 			clearFieldsOnPanel(clientFieldsJPanel);
@@ -1526,8 +1054,7 @@ public class GUIForm extends javax.swing.JFrame {
 		toggleButtonStates();
 	}
 
-	private void tasksJListprojectListValueChanged(
-			javax.swing.event.ListSelectionEvent evt) {
+	private void tasksJListprojectListValueChanged(javax.swing.event.ListSelectionEvent evt) {
 		try {
 			loadTaskInfo(tasksJList.getSelectedIndex());
 		} catch (GUIException ex) {
@@ -1537,17 +1064,12 @@ public class GUIForm extends javax.swing.JFrame {
 		toggleButtonStates();
 	}
 
-	private void homeProjectsJListValueChanged(
-			javax.swing.event.ListSelectionEvent evt) {
+	private void homeProjectsJListValueChanged(javax.swing.event.ListSelectionEvent evt) {
 		if (homeProjectsJList.getSelectedIndex() != -1) {
-			refreshTasksList(
-					UserInterface.getUser().getProject(
-							homeProjectsJList.getSelectedIndex()),
-					homeTasksJList);
+			refreshTasksList(UserInterface.getUser().getProject(homeProjectsJList.getSelectedIndex()), homeTasksJList);
 		} else {
 			try {
-				refreshTasksList(UserInterface.getCurrentProject(),
-						homeTasksJList);
+				refreshTasksList(UserInterface.getCurrentProject(), homeTasksJList);
 			} catch (GUIException ex) {
 				ex.printStackTrace();
 			}
@@ -1556,8 +1078,7 @@ public class GUIForm extends javax.swing.JFrame {
 
 	private void homeProjectsJListKeyReleased(java.awt.event.KeyEvent evt) {
 		if (evt.getKeyCode() == 10) {
-			UserInterface.setCurrentProjectIndex(homeProjectsJList
-					.getSelectedIndex());
+			UserInterface.setCurrentProjectIndex(homeProjectsJList.getSelectedIndex());
 			refreshProjectsList(homeProjectsJList);
 			try {
 				refreshTasksList(UserInterface.getCurrentProject(), tasksJList);
