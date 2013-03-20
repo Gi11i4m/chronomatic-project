@@ -7,15 +7,22 @@ import java.util.Collections;
 
 public class Taak implements Cloneable {
 
+	//================================================================================
+    // Properties
+    //================================================================================
+	
     private String naam;
     private long begindatum;
     private long geschatteEinddatum;
     private String commentaar;
     private boolean completed;
     private int id;
+    private ArrayList<Tijdspanne> bestedeTijd;
 
-    private ArrayList<Tijdspanne> gewerkteTijd;
-
+    //================================================================================
+    // Constructors
+    //================================================================================
+    
     public Taak(String naam, long begindatum, long geschatteEinddatum, String commentaar) {
         this(naam, begindatum, geschatteEinddatum, commentaar, 0);
     }
@@ -26,13 +33,17 @@ public class Taak implements Cloneable {
         this.geschatteEinddatum = geschatteEinddatum;
         this.commentaar = commentaar;
         this.completed = false;    
-        this.gewerkteTijd = new ArrayList<Tijdspanne>();      
+        this.bestedeTijd = new ArrayList<Tijdspanne>();      
         this.id = id;       
     }
 
     public Taak() {
         this("", 0, 0, "");
     }
+    
+    //================================================================================
+    // Getters + setters
+    //================================================================================
     
     public int getId() {
         return id;
@@ -69,7 +80,7 @@ public class Taak implements Cloneable {
 
     public void setBegindatum(long datum) throws DataInputException {
         if (geschatteEinddatum == 0 || datum <= geschatteEinddatum) {
-            for (Tijdspanne t : gewerkteTijd) {
+            for (Tijdspanne t : bestedeTijd) {
                 if (t.getBeginTijd() < datum) {
                     throw new DataInputException("One or more timespans out of task bounds");
                 }
@@ -95,7 +106,7 @@ public class Taak implements Cloneable {
 
     public void setGeschatteEinddatum(long datum) throws DataInputException {
         if (datum >= begindatum) {
-            for (Tijdspanne t : gewerkteTijd) {
+            for (Tijdspanne t : bestedeTijd) {
                 if (t.getEindTijd() > datum) {
                     throw new DataInputException("One or more timespans out of task bounds");
                 }
@@ -134,27 +145,75 @@ public class Taak implements Cloneable {
         return id;
     }
 
-    public ArrayList<Tijdspanne> getGewerkteTijd() {
-        return gewerkteTijd;
+    public ArrayList<Tijdspanne> getBestedeTijd() {
+        return bestedeTijd;
     }
 
-    public void addGewerkteTijd(Tijdspanne t) throws DataInputException {
+    public ArrayList<Tijdspanne> getGewerkteTijd(){
+    	ArrayList<Tijdspanne> gewerkt = new ArrayList<Tijdspanne>();
+    	for (Tijdspanne ts : bestedeTijd) {
+			if (!ts.isPauze()) {
+				gewerkt.add(ts);
+			}
+		}
+    	return gewerkt;
+    }
+    
+    public ArrayList<Tijdspanne> getPauze(){
+    	ArrayList<Tijdspanne> pauze = new ArrayList<Tijdspanne>();
+    	for (Tijdspanne ts : bestedeTijd) {
+			if (ts.isPauze()) {
+				pauze.add(ts);
+			}
+		}
+    	return pauze;
+    }
+    
+    public long getTotaleWerktijd() {
+        long l = 0;
+        for (Tijdspanne t : bestedeTijd) {
+        	if (!t.isPauze()) {
+                l += t.getTijdsduur();
+			}
+        }
+        return l;
+    }
+
+    public long getTotalePauze() {
+        long l = 0;
+        for (Tijdspanne t : bestedeTijd) {
+        	if (t.isPauze()) {
+        		l += t.getTijdsduur();
+			}
+            
+        }
+        return l;
+    }
+    
+    //================================================================================
+    // Add + remove functies
+    //================================================================================
+    
+    public void addBestedeTijd(Tijdspanne t) throws DataInputException {
         if (t.getBeginTijd() >= begindatum && t.getEindTijd() <= geschatteEinddatum) {
-            gewerkteTijd.add(t);
+            bestedeTijd.add(t);
         } else {
             throw new DataInputException("Timespan out of task bounds");
         }
     }
 
-    public boolean removeGewerkteUren(Tijdspanne t) {
-        return gewerkteTijd.remove(t);
+    public boolean removeBestedeTijd(Tijdspanne t) {
+        return bestedeTijd.remove(t);
     }
 
-    public void removeGewerkteUren(int i) {
-        gewerkteTijd.remove(i);
+    public void removeBestedeTijd(int i) {
+        bestedeTijd.remove(i);
     }
 
-
+    //================================================================================
+    // Extra functionaliteit
+    //================================================================================
+    
     //return tijd tot de geschatte einddatum in seconden
     public long tijdResterend() {
         long now = Clock.generateUnixTimestamp();
@@ -170,29 +229,8 @@ public class Taak implements Cloneable {
         return diff < 0;
     }
 
-    public long getTotaleWerktijd() {
-        long l = 0;
-        for (Tijdspanne t : gewerkteTijd) {
-        	if (!t.isPauze()) {
-                l += t.getTijdsduur();
-			}
-        }
-        return l;
-    }
-
-    public long getTotalePauze() {
-        long l = 0;
-        for (Tijdspanne t : gewerkteTijd) {
-        	if (t.isPauze()) {
-        		l += t.getTijdsduur();
-			}
-            
-        }
-        return l;
-    }
-
     public void setGewerkteTijd(Tijdspanne[] t) {
-        Collections.addAll(this.gewerkteTijd, t);
+        Collections.addAll(this.bestedeTijd, t);
     }
 
     @Override
