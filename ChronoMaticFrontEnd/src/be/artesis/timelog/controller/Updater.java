@@ -7,6 +7,8 @@ import be.artesis.timelog.view.Gebruiker;
 import be.artesis.timelog.view.Opdrachtgever;
 import be.artesis.timelog.view.Project;
 import be.artesis.timelog.view.Taak;
+import be.artesis.timelog.view.Tijdspanne;
+
 import java.io.IOException;
 import java.net.MalformedURLException;
 
@@ -27,6 +29,9 @@ public class Updater {
 	public static void updateTaak(String sessionKey, Taak taak) throws MalformedURLException, IOException, WebserviceException {
 		Connection.execute("task/update/" + sessionKey + "/" + taak.getNaam() + "/" + taak.getBegindatum()+ "/" + taak.getGeschatteEinddatum() + "/" + taak.getCommentaar() + "/" + taak.getID() + "/" + taak.getCompleted());
     }
+	public static void updateTijdspanne(String sessionKey, Tijdspanne tijdspanne) throws IOException, WebserviceException{		 
+		Connection.execute("tijdspanne/update/" +sessionKey + "/" + tijdspanne.getEindTijd()+ "/" +tijdspanne.getEindTijd() + "/" + tijdspanne.isPauze() + "/" + tijdspanne.getId());
+	}
 	
 	// FIXME updateTijdspanne methode toevoegen
 }

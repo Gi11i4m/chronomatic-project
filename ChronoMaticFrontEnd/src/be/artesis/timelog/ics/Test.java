@@ -17,10 +17,10 @@ public abstract class Test {
 		// TODO Auto-generated method stub
 		try {
 			System.out.println("export: ");
-			Taak[] taken = new Taak[1];
+			Taak[] taken = new Taak[3];
 			taken[0] = new Taak("gimliam",1364261402, 1364358105,"de archon");
-			//taken[1] = new Taak("stijn", 1364187600, 1364187600,"de derper");
-			//taken[2] = new Taak("Yolan",1364259600, 1364266800,"het kieke ofte koe");
+			taken[1] = new Taak("stijn", 1364187600, 1364187600,"de derper");
+			taken[2] = new Taak("Yolan",1364259600, 1364266800,"het kieke ofte koe");
 										
 			//System.out.println(taken[0].getBegindatum());
 			
