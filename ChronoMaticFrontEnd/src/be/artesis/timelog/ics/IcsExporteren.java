@@ -5,8 +5,6 @@ import java.io.IOException;
 import java.net.SocketException;
 import java.util.GregorianCalendar;
 
-import org.codehaus.groovy.syntax.CSTNode;
-
 import be.artesis.timelog.view.Taak;
 
 import net.fortuna.ical4j.data.CalendarOutputter;
