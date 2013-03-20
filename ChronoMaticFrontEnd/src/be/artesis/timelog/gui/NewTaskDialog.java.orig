@@ -147,7 +147,12 @@ public class NewTaskDialog extends javax.swing.JDialog {
             int pid = UserInterface.getCurrentProject().getId();
             System.out.println(pid);
             t.setId((Inserter.inputTaak(validator.getSessionKey(), t, pid)));
+<<<<<<< HEAD
+
+            UserControl.getCurrentProject().addTaak(t);
+=======
             UserInterface.getCurrentProject().addTaak(t);
+>>>>>>> 04f777885e221b4c4c61a113bb2f961c0ca3b200
             JOptionPane.showMessageDialog(this, "Task added!");
             dispose();
         } catch (IOException | WebserviceException | JSONException | GUIException | DataInputException ex) {
