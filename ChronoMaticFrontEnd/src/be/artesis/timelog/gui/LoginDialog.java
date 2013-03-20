@@ -172,9 +172,10 @@ public class LoginDialog extends javax.swing.JDialog {
                 result = true;
                 this.dispose();
             } else {
-                JOptionPane.showMessageDialog(this, "Login failed");
+
             }
         } catch (JSONException | HeadlessException | IOException | WebserviceException ex) {
+        	ex.printStackTrace();
             JOptionPane.showMessageDialog(this, ex.getMessage());
         }
 	}
