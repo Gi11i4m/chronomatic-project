@@ -108,7 +108,7 @@ public class UserInterface {
     // Save methods
     //================================================================================
     
-	public static Opdrachtgever saveNewClient(String naam, String vooraam, String bedrijfsnaam, String email, String telefoonnummer)
+	public static Opdrachtgever saveNewClient(String naam, String voornaam, String bedrijfsnaam, String email, String telefoonnummer)
 			throws DataInputException, JSONException, IOException, WebserviceException{
 		Opdrachtgever client = new Opdrachtgever();
 		client.setNaam(naam);
@@ -127,7 +127,7 @@ public class UserInterface {
 		return client;
 	}
 	
-	public static void saveClient(int index, String naam, String vooraam, String bedrijfsnaam, String email, String telefoonnummer)
+	public static void saveClient(int index, String naam, String voornaam, String bedrijfsnaam, String email, String telefoonnummer)
 			throws DataInputException, MalformedURLException, IOException, WebserviceException {
 		Opdrachtgever c = (Opdrachtgever) getClient(index).clone();
         c.setNaam(naam);
@@ -175,6 +175,9 @@ public class UserInterface {
         t.setNaam(name);
         t.setBegindatum(startdate);
         t.setGeschatteEinddatum(enddate);
+        if ("".equals(comment)) {
+			comment = " ";
+		}
         t.setCommentaar(comment);
         //Send to Database
         int pid = UserInterface.getCurrentProject().getId();
@@ -245,7 +248,12 @@ public class UserInterface {
     //================================================================================
 	
 	public static void removeClient(Opdrachtgever c)
-			throws MalformedURLException, IOException, WebserviceException{
+			throws MalformedURLException, IOException, WebserviceException, GUIException{
+		for (Project p : UserInterface.getProjects()) {
+			if (p.getOpdrachtgeverId() == c.getID()) {
+				throw new GUIException("This client is associated with a project");
+			}
+		}
 		Deleter.deleteOpdrachtgever(validator.getSessionKey(), c);
 		getClients().remove(c);
 	}
