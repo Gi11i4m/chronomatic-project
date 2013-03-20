@@ -42,6 +42,7 @@ import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.util.Observer;
 
 /**
  * @author Gilliam
@@ -815,7 +816,6 @@ public class GUIForm extends javax.swing.JFrame {
 				list.setModel(listmodel);
 			}
 			list.setCellRenderer(new ProjectCellRenderer());
-			// FIXME selected index bijhouden en terugzetten
 			list.setSelectedIndex(selectedIndex);
 		}
 	}
@@ -839,7 +839,6 @@ public class GUIForm extends javax.swing.JFrame {
 				list.setModel(listmodel);
 			}
 			list.setCellRenderer(new TaskCellRenderer());
-			// FIXME selected index bijhouden en terugzetten
 			list.setSelectedIndex(selectedIndex);
 		}
 	}
@@ -862,7 +861,6 @@ public class GUIForm extends javax.swing.JFrame {
 			} else {
 				list.setModel(listmodel);
 			}
-			// FIXME selected index bijhouden en terugzetten
 			list.setSelectedIndex(selectedIndex);
 		}
 	}
@@ -962,7 +960,6 @@ public class GUIForm extends javax.swing.JFrame {
 	// ================================================================================
 
 	// Clear all fields on the panels in parameter
-	// FIXME nieuwe panelnamen meegeven waar deze methode gebruikt wordt
 	private void clearFieldsOnPanel(JPanel panel) {
 		Component[] clientPanelComps = panel.getComponents();
 		for (Component c : clientPanelComps) {
@@ -1013,7 +1010,13 @@ public class GUIForm extends javax.swing.JFrame {
 	}
 
 	private void projectsJListValueChanged(javax.swing.event.ListSelectionEvent evt) {
-		loadProjectInfo(projectsJList.getSelectedIndex());
+		if (projectsJList.getSelectedValue().equals(NEWPROJECTITEM)) {
+			clearFieldsOnPanel(projectFieldsJPanel);
+			saveProjectJButton.setText("Save [new]");
+		} else {
+			loadProjectInfo(projectsJList.getSelectedIndex());
+			saveProjectJButton.setText("Save");
+		}
 		toggleButtonStates();
 	}
 
@@ -1029,7 +1032,6 @@ public class GUIForm extends javax.swing.JFrame {
 	}
 
 	private void clientsJListValueChanged(javax.swing.event.ListSelectionEvent evt) {
-
 		if (clientsJList.getSelectedValue().equals(NEWCLIENTITEM)) {
 			clearFieldsOnPanel(clientFieldsJPanel);
 			saveClientJButton.setText("Save [new]");
@@ -1041,11 +1043,18 @@ public class GUIForm extends javax.swing.JFrame {
 	}
 
 	private void tasksJListprojectListValueChanged(javax.swing.event.ListSelectionEvent evt) {
-		try {
-			loadTaskInfo(tasksJList.getSelectedIndex());
-		} catch (GUIException ex) {
-			ex.printStackTrace();
-			JOptionPane.showMessageDialog(this, ex.getMessage());
+		if (tasksJList.getSelectedValue().equals(NEWTASKITEM)) {
+			clearFieldsOnPanel(taskFieldsJPanel);
+			saveTaskJButton.setText("Save [new]");
+		} else {
+			try {
+				loadTaskInfo(tasksJList.getSelectedIndex());
+			} catch (GUIException ex) {
+				ex.printStackTrace();
+				JOptionPane.showMessageDialog(this, ex.getMessage());
+			} finally {
+				saveTaskJButton.setText("Save");
+			}
 		}
 		toggleButtonStates();
 	}
