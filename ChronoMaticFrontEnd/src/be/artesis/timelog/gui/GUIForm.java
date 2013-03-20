@@ -659,9 +659,6 @@ public class GUIForm extends javax.swing.JFrame {
 	// Save / Edit methods
 	// ================================================================================
 
-	// FIXME eerst index bijhouden van de refresh methoden, dan
-	// clearfieldsonpanel methoden verwijderen
-
 	// Save PROJECT
 	private void saveProject() {
 		String name = nameJTextField.getText();
@@ -683,7 +680,6 @@ public class GUIForm extends javax.swing.JFrame {
 			JOptionPane.showMessageDialog(this, ex.getMessage());
 		} finally {
 			refreshProjectsList(projectsJList, homeProjectsJList);
-			clearFieldsOnPanel(projectFieldsJPanel);
 			toggleButtonStates();
 		}
 	}
@@ -710,8 +706,6 @@ public class GUIForm extends javax.swing.JFrame {
 			ex.printStackTrace();
 			JOptionPane.showMessageDialog(this, ex.getMessage());
 		} finally {
-			clearFieldsOnPanel(tasksJPanel);
-			clearFieldsOnPanel(projectsJPanel);
 			toggleButtonStates();
 			loadProjectInfo(projectsJList.getSelectedIndex());
 		}
@@ -738,7 +732,6 @@ public class GUIForm extends javax.swing.JFrame {
 			JOptionPane.showMessageDialog(this, ex.getMessage());
 		} finally {
 			refreshClientsList();
-			clearFieldsOnPanel(clientsJPanel);
 			toggleButtonStates();
 		}
 	}
@@ -792,7 +785,7 @@ public class GUIForm extends javax.swing.JFrame {
 				clearFieldsOnPanel(clientFieldsJPanel);
 				toggleButtonStates();
 				JOptionPane.showMessageDialog(this, "Client removed!");
-			} catch (GUIException | DataInputException | IOException | WebserviceException ex) {
+			} catch (GUIException | IOException | WebserviceException ex) {
 				ex.printStackTrace();
 				JOptionPane.showMessageDialog(this, ex.getMessage());
 			}
@@ -806,6 +799,7 @@ public class GUIForm extends javax.swing.JFrame {
 	// Refresh all PROJECT lists
 	private void refreshProjectsList(JList... lists) {
 		for (JList list : lists) {
+			int selectedIndex = list.getSelectedIndex();
 			DefaultListModel listmodel = new DefaultListModel();
 
 			for (Iterator<Project> it = UserInterface.getUser().getProjects().iterator(); it.hasNext();) {
@@ -822,13 +816,14 @@ public class GUIForm extends javax.swing.JFrame {
 			}
 			list.setCellRenderer(new ProjectCellRenderer());
 			// FIXME selected index bijhouden en terugzetten
-			list.setSelectedIndex(-1);
+			list.setSelectedIndex(selectedIndex);
 		}
 	}
 
 	// Refresh all TASK lists
 	private void refreshTasksList(Project p, JList... lists) {
 		for (JList list : lists) {
+			int selectedIndex = list.getSelectedIndex();
 			DefaultListModel listmodel = new DefaultListModel();
 
 			for (Iterator<Taak> it = p.getTaken().iterator(); it.hasNext();) {
@@ -845,13 +840,14 @@ public class GUIForm extends javax.swing.JFrame {
 			}
 			list.setCellRenderer(new TaskCellRenderer());
 			// FIXME selected index bijhouden en terugzetten
-			list.setSelectedIndex(-1);
+			list.setSelectedIndex(selectedIndex);
 		}
 	}
 
 	// Refresh all CLIENT lists
 	private void refreshClientsList(JList... lists) {
 		for (JList list : lists) {
+			int selectedIndex = list.getSelectedIndex();
 			DefaultListModel listmodel = new DefaultListModel();
 
 			for (Iterator<Opdrachtgever> it = UserInterface.getUser().getOpdrachtgevers().iterator(); it.hasNext();) {
@@ -867,7 +863,7 @@ public class GUIForm extends javax.swing.JFrame {
 				list.setModel(listmodel);
 			}
 			// FIXME selected index bijhouden en terugzetten
-			list.setSelectedIndex(-1);
+			list.setSelectedIndex(selectedIndex);
 		}
 	}
 

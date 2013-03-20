@@ -3,20 +3,17 @@ package be.artesis.timelog.ics;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.SocketException;
-import java.sql.Timestamp;
 import java.util.GregorianCalendar;
-import java.util.TimeZone;
+
+import org.codehaus.groovy.syntax.CSTNode;
 
 import be.artesis.timelog.view.Taak;
 
 import net.fortuna.ical4j.data.CalendarOutputter;
 import net.fortuna.ical4j.model.Calendar;
-import net.fortuna.ical4j.model.Date;
-import net.fortuna.ical4j.model.TimeZoneRegistry;
-import net.fortuna.ical4j.model.TimeZoneRegistryFactory;
+import net.fortuna.ical4j.model.DateTime;
 import net.fortuna.ical4j.model.ValidationException;
 import net.fortuna.ical4j.model.component.VEvent;
-import net.fortuna.ical4j.model.component.VTimeZone;
 import net.fortuna.ical4j.util.UidGenerator;
 import net.fortuna.ical4j.model.property.CalScale;
 import net.fortuna.ical4j.model.property.Description;
@@ -56,42 +53,27 @@ public class IcsExporteren {
 	}
 	private static VEvent maakVEvent(Taak taak) throws SocketException{
 		
-		Timestamp tBegin = new Timestamp(taak.getBegindatum() * 1000);
+		//System.out.println(taak.getBegindatum());
+		//Timestamp tBegin = new Timestamp(taak.getBegindatum() * 1000);		
 		java.util.Calendar cBegin = GregorianCalendar.getInstance();
-		cBegin.setTime(tBegin);
+		cBegin.setTimeInMillis((taak.getBegindatum() * 1000)- 21600000);
+		System.out.println(cBegin.getTime());
 		
-		Timestamp tEind = new Timestamp(taak.getGeschatteEinddatum() * 1000);
+		//Timestamp tEind = new Timestamp(taak.getGeschatteEinddatum() * 1000);
 		java.util.Calendar cEind= GregorianCalendar.getInstance();
-		cEind.setTime(tEind);
+		cEind.setTimeInMillis((taak.getGeschatteEinddatum() * 1000)- 21600000);
+		System.out.println(cEind.getTime());				 
 		
-		// Create a TimeZone
-		/*TimeZoneRegistry registry = TimeZoneRegistryFactory.getInstance().createRegistry();
-		TimeZone timezone = registry.getTimeZone("America/Mexico_City");
-		VTimeZone tz = ((net.fortuna.ical4j.model.TimeZone) timezone).getVTimeZone();
-		 */
-		 // Start Date
-		java.util.Calendar startDate = new GregorianCalendar();
-		//startDate.setTimeZone(timezone);
-		startDate.set(java.util.Calendar.MONTH, cBegin.get(java.util.Calendar.MONTH) +1);
-		startDate.set(java.util.Calendar.DAY_OF_MONTH, cBegin.get(java.util.Calendar.DAY_OF_MONTH));
-		startDate.set(java.util.Calendar.YEAR, cBegin.get(java.util.Calendar.YEAR));
-		startDate.set(java.util.Calendar.HOUR, cBegin.get(java.util.Calendar.HOUR));
-		
-		java.util.Calendar eindDate = new GregorianCalendar();
-		//eindDate.setTimeZone(timezone);
-		eindDate.set(java.util.Calendar.MONTH, cEind.get(java.util.Calendar.MONTH) +1);
-		eindDate.set(java.util.Calendar.DAY_OF_MONTH, cEind.get(java.util.Calendar.DAY_OF_MONTH));
-		eindDate.set(java.util.Calendar.YEAR, cEind.get(java.util.Calendar.YEAR));
-		eindDate.set(java.util.Calendar.HOUR, cEind.get(java.util.Calendar.HOUR));
-		
-		
-		Date dBegin = new Date(startDate.getTime()); 
-		Date dEind = new Date(eindDate.getTime()); 
+	
+		DateTime dBegin = new DateTime(cBegin.getTime()); 
+		DateTime dEind = new DateTime(cEind.getTime()); 
+		//System.out.println("start: " + startDate.getTime());
+		//System.out.println("eind: " + eindDate.getTime());
 		
 		VEvent event = new VEvent(dBegin, dEind, taak.getNaam());
 		
 		event.getProperties().add(new Description(taak.getCommentaar()));
-		System.out.println(event.getDescription());
+		//System.out.println(event.getDescription());
 		// Generate a UID for the event..
 		UidGenerator ug = new UidGenerator("1");
 		event.getProperties().add(ug.generateUid());
