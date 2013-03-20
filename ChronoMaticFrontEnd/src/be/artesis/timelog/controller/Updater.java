@@ -27,4 +27,6 @@ public class Updater {
 	public static void updateTaak(String sessionKey, Taak taak) throws MalformedURLException, IOException, WebserviceException {
 		Connection.execute("task/update/" + sessionKey + "/" + taak.getNaam() + "/" + taak.getBegindatum()+ "/" + taak.getGeschatteEinddatum() + "/" + taak.getCommentaar() + "/" + taak.getID() + "/" + taak.getCompleted());
     }
+	
+	// FIXME updateTijdspanne methode toevoegen
 }

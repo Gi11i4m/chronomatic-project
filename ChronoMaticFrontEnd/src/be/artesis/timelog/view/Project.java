@@ -7,20 +7,20 @@ import java.util.Collections;
 
 public class Project implements Cloneable{
 
+	//================================================================================
+    // Properties
+    //================================================================================
+	
     private String naam;
     private int opdrachtgeverId;
     private long begindatum;
     private long einddatum;
-    private int id;
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
+    private int id;    
     private ArrayList<Taak> taken;
+
+    //================================================================================
+    // Constructor
+    //================================================================================
 
     public Project(String naam, int opdrachtgeverId, long begindatum, long einddatum) {
         this.naam = naam;
@@ -40,6 +40,10 @@ public class Project implements Cloneable{
     public Project() {
         this.taken = new ArrayList<Taak>();
     }
+    
+    //================================================================================
+    // Getters + setters
+    //================================================================================
 
     public String getNaam() {
         return naam;
@@ -59,6 +63,10 @@ public class Project implements Cloneable{
 
     public void setOpdrachtgeverId(int opdrachtgeverId) {
         this.opdrachtgeverId = opdrachtgeverId;
+    }
+
+    public ArrayList<Taak> getTaken() {
+        return taken;
     }
 
     public long getBegindatum() {
@@ -115,7 +123,19 @@ public class Project implements Cloneable{
             throw new DataInputException("Enddate is earlier than startdate");
         }
     }
+    
+    public int getId() {
+        return id;
+    }
 
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    //================================================================================
+    // Add + remove
+    //================================================================================
+    
     public void addTaak(Taak t) throws DataInputException {
         if (!DataControle.naamBestaat(taken, t)) {
             if (t.getBegindatum() >= begindatum && t.getGeschatteEinddatum() <= einddatum) {
@@ -126,10 +146,6 @@ public class Project implements Cloneable{
         } else {
             throw new DataInputException("Name already exists");
         }
-    }
-
-    public ArrayList<Taak> getTaken() {
-        return taken;
     }
 
     public boolean removeTaak(Taak t) {
@@ -163,7 +179,11 @@ public class Project implements Cloneable{
     
     public Taak getTaak(int index){
         return taken.get(index);
-    }
+    }    
+    
+    //================================================================================
+    // Extra
+    //================================================================================
 
     @Override
     public String toString() {

@@ -3,7 +3,6 @@ package be.artesis.timelog.gui;
 import be.artesis.timelog.clock.Clock;
 import be.artesis.timelog.controle.DataControle;
 import be.artesis.timelog.controller.Inserter;
-import be.artesis.timelog.model.LocalDatabaseWriter;
 import be.artesis.timelog.model.Validator;
 import be.artesis.timelog.model.WebserviceException;
 import be.artesis.timelog.view.DataInputException;
