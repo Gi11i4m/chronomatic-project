@@ -37,12 +37,18 @@ import com.jgoodies.forms.layout.FormLayout;
 import com.jgoodies.forms.layout.RowSpec;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 /**
  * @author Gilliam
  */
 @SuppressWarnings({ "unchecked", "rawtypes", "serial" })
 public class GUIForm extends javax.swing.JFrame {
+
+	// ================================================================================
+	// Properties
+	// ================================================================================
 
 	LoginDialog login;
 	Validator validator;
@@ -82,8 +88,6 @@ public class GUIForm extends javax.swing.JFrame {
 		tasksJLabel.setBounds(10, 14, 33, 16);
 		jScrollPane3 = new javax.swing.JScrollPane();
 		jScrollPane3.setBounds(10, 40, 204, 366);
-		addTaskJButton = new javax.swing.JButton();
-		addTaskJButton.setBounds(442, 11, 230, 23);
 		removeTaskJButton = new javax.swing.JButton();
 		removeTaskJButton.setBounds(10, 417, 204, 23);
 		scheduleJPanel = new javax.swing.JPanel();
@@ -285,7 +289,7 @@ public class GUIForm extends javax.swing.JFrame {
 		removeProjectJButton
 				.addActionListener(new java.awt.event.ActionListener() {
 					public void actionPerformed(java.awt.event.ActionEvent evt) {
-						removeProjectJButtonActionPerformed(evt);
+						removeProject();
 					}
 				});
 
@@ -505,7 +509,7 @@ public class GUIForm extends javax.swing.JFrame {
 		saveProjectJButton
 				.addActionListener(new java.awt.event.ActionListener() {
 					public void actionPerformed(java.awt.event.ActionEvent evt) {
-						saveProjectJButtonActionPerformed(evt);
+						saveProject();
 					}
 				});
 
@@ -540,19 +544,12 @@ public class GUIForm extends javax.swing.JFrame {
 		tasksJLabel.setForeground(new java.awt.Color(255, 255, 255));
 		tasksJLabel.setText("Tasks");
 
-		addTaskJButton.setText("Add Task to current Project");
-		addTaskJButton.addActionListener(new java.awt.event.ActionListener() {
-			public void actionPerformed(java.awt.event.ActionEvent evt) {
-				addTaskJButtonActionPerformed(evt);
-			}
-		});
-
 		removeTaskJButton.setText("Remove task");
 		removeTaskJButton.setEnabled(false);
 		removeTaskJButton
 				.addActionListener(new java.awt.event.ActionListener() {
 					public void actionPerformed(java.awt.event.ActionEvent evt) {
-						removeTaskJButtonActionPerformed(evt);
+						removeTask();
 					}
 				});
 
@@ -563,7 +560,6 @@ public class GUIForm extends javax.swing.JFrame {
 				tasksJPanel, "Tasks");
 		tasksJPanel.setLayout(null);
 		tasksJPanel.add(tasksJLabel);
-		tasksJPanel.add(addTaskJButton);
 		tasksJPanel.add(jScrollPane3);
 
 		tasksJList_1 = new JList();
@@ -751,7 +747,7 @@ public class GUIForm extends javax.swing.JFrame {
 		removeClientJButton
 				.addActionListener(new java.awt.event.ActionListener() {
 					public void actionPerformed(java.awt.event.ActionEvent evt) {
-						removeClientJButtonActionPerformed(evt);
+						removeClient();
 					}
 				});
 
@@ -933,6 +929,11 @@ public class GUIForm extends javax.swing.JFrame {
 		clientFieldsJPanel.add(clientPhoneNumberJTextField, "3, 10, fill, top");
 
 		saveClientJButton = new JButton();
+		saveClientJButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				saveClient();
+			}
+		});
 		saveClientJButton.setText("Save");
 		saveClientJButton.setEnabled(false);
 		clientFieldsJPanel.add(saveClientJButton, "2, 14, 2, 1, fill, top");
@@ -1127,6 +1128,286 @@ public class GUIForm extends javax.swing.JFrame {
 
 	/* Einde gegenereerde code */
 
+	// ================================================================================
+	// Save / Edit methods
+	// ================================================================================
+
+	// Save project
+	private void saveProject() {
+		try {
+			Project p = (Project) UserInterface.getUser().getProjects()
+					.get(projectsJList.getSelectedIndex()).clone();
+			p.setNaam(nameJTextField.getText());
+			p.setBegindatum(Clock.StringToTimestamp(startdateJTextField
+					.getText()));
+			p.setEinddatum(Clock.StringToTimestamp(enddateJTextField.getText()));
+			// Past projectwaarden aan in database
+			Updater.updateProject(validator.getSessionKey(), p);
+			JOptionPane.showMessageDialog(this, "Project edited!");
+			UserInterface.getUser().getProjects()
+					.set(projectsJList.getSelectedIndex(), p);
+		} catch (DataInputException | IOException | WebserviceException ex) {
+			ex.printStackTrace();
+			JOptionPane.showMessageDialog(this, ex.getMessage());
+		} finally {
+			refreshProjectsList(projectsJList, homeProjectsJList);
+			clearFieldsOnPanel(projectFieldsJPanel);
+			toggleButtonStates();
+		}
+	}
+
+	// Save client
+	private void saveClient() {
+		try {
+			Opdrachtgever c = (Opdrachtgever) UserInterface.getUser()
+					.getOpdrachtgevers().get(clientsJList.getSelectedIndex())
+					.clone();
+			c.setNaam(clientNameJTextField.getText());
+			c.setVoornaam(clientFirstNameJTextField.getText());
+			c.setBedrijfsnaam(clientCompanyJTextField.getText());
+			c.setEmail(clientEmailJTextField.getText());
+			c.setTelefoonnummer(clientPhoneNumberJTextField.getText());
+			// Past opdrachtgeverwaarden aan in database
+			Updater.updateOpdrachtgever(validator.getSessionKey(), c);
+			JOptionPane.showMessageDialog(this, "Client edited!");
+			UserInterface.getUser().getOpdrachtgevers()
+					.set(clientsJList.getSelectedIndex(), c);
+		} catch (DataInputException | IOException | WebserviceException ex) {
+			JOptionPane.showMessageDialog(this, ex.getMessage());
+		} finally {
+			refreshClientsList();
+			clearFieldsOnPanel(clientsJPanel);
+			toggleButtonStates();
+		}
+	}
+
+	// ================================================================================
+	// Remove methods
+	// ================================================================================
+
+	// Remove project
+	private void removeProject() {
+		int result = JOptionPane.showConfirmDialog(this,
+				"Are you sure you want to delete this project?", null,
+				JOptionPane.YES_NO_OPTION);
+		if (result == JOptionPane.YES_OPTION) {
+			try {
+				Project p = UserInterface.getUser().getProjects()
+						.get(projectsJList.getSelectedIndex());
+				Deleter.deleteProject(validator.getSessionKey(), p);
+				UserInterface.getUser().removeProject(
+						(Project) projectsJList.getSelectedValue());
+				refreshProjectsList(projectsJList, homeProjectsJList);
+				clearFieldsOnPanel(projectFieldsJPanel);
+				toggleButtonStates();
+				JOptionPane.showMessageDialog(this, "Project removed!");
+			} catch (IOException | WebserviceException ex) {
+				ex.printStackTrace();
+				JOptionPane.showMessageDialog(this, ex.getMessage());
+			}
+		}
+	}
+
+	// Remove task
+	private void removeTask() {
+		int result = JOptionPane.showConfirmDialog(this,
+				"Are you sure you want to delete this task?", null,
+				JOptionPane.YES_NO_OPTION);
+		if (result == JOptionPane.YES_OPTION) {
+			try {
+				Taak t = UserInterface.getCurrentProject().getTaken()
+						.get(tasksJList.getSelectedIndex());
+				Deleter.deleteTaak(validator.getSessionKey(), t);
+				UserInterface.getCurrentProject().getTaken().remove(t);
+				refreshTasksList(UserInterface.getCurrentProject(), tasksJList);
+				clearFieldsOnPanel(taskFieldsJPanel);
+				toggleButtonStates();
+				JOptionPane.showMessageDialog(this, "Task removed!");
+			} catch (GUIException | IOException | WebserviceException ex) {
+				ex.printStackTrace();
+				JOptionPane.showMessageDialog(this, ex.getMessage());
+			}
+		}
+	}
+
+	// Remove client
+	private void removeClient() {
+		int result = JOptionPane.showConfirmDialog(this,
+				"Are you sure you want to delete this client?", null,
+				JOptionPane.YES_NO_OPTION);
+		if (result == JOptionPane.YES_OPTION) {
+			try {
+				Opdrachtgever c = UserInterface.getUser().getOpdrachtgever(
+						((Opdrachtgever) clientsJList.getSelectedValue())
+								.getID());
+				// !! Deze for-lus moet verwijderd worden en vervangen worden
+				// door een error van de server
+				for (Project p : UserInterface.getUser().getProjects()) {
+					if (p.getOpdrachtgeverId() == c.getID()) {
+						throw new GUIException(
+								"This client is associated with a project");
+					}
+				}
+				Deleter.deleteOpdrachtgever(validator.getSessionKey(), c);
+				UserInterface.getUser().getOpdrachtgevers().remove(c);
+				refreshClientsList(clientsJList);
+				clearFieldsOnPanel(clientFieldsJPanel);
+				toggleButtonStates();
+				JOptionPane.showMessageDialog(this, "Client removed!");
+			} catch (GUIException | DataInputException | IOException
+					| WebserviceException ex) {
+				ex.printStackTrace();
+				JOptionPane.showMessageDialog(this, ex.getMessage());
+			}
+		}
+	}
+
+	// ================================================================================
+	// Refresh methods
+	// ================================================================================
+
+	// Refresh all PROJECT lists
+	private void refreshProjectsList(JList... lists) {
+		for (JList list : lists) {
+			DefaultListModel listmodel = new DefaultListModel();
+
+			for (Iterator<Project> it = UserInterface.getUser().getProjects()
+					.iterator(); it.hasNext();) {
+				Project p = it.next();
+				listmodel.addElement(p);
+			}
+
+			if (list == projectsJList) {
+				listmodel.addElement(NEWPROJECTITEM);
+				list.setModel(listmodel);
+				listmodel.removeElement(NEWPROJECTITEM);
+			} else {
+				list.setModel(listmodel);
+			}
+			list.setCellRenderer(new ProjectCellRenderer());
+			// FIXME selected index bijhouden en terugzetten
+			list.setSelectedIndex(-1);
+		}
+	}
+
+	// Refresh all TASK lists
+	private void refreshTasksList(Project p, JList... lists) {
+		for (JList list : lists) {
+			DefaultListModel listmodel = new DefaultListModel();
+
+			for (Iterator<Taak> it = p.getTaken().iterator(); it.hasNext();) {
+				Taak t = it.next();
+				listmodel.addElement(t);
+			}
+
+			if (list == tasksJList) {
+				listmodel.addElement(NEWTASKITEM);
+				list.setModel(listmodel);
+				listmodel.removeElement(NEWTASKITEM);
+			} else {
+				list.setModel(listmodel);
+			}
+			list.setCellRenderer(new TaskCellRenderer());
+			// FIXME selected index bijhouden en terugzetten
+			list.setSelectedIndex(-1);
+		}
+	}
+
+	// Refresh all CLIENT lists
+	private void refreshClientsList(JList... lists) {
+		for (JList list : lists) {
+			DefaultListModel listmodel = new DefaultListModel();
+
+			for (Iterator<Opdrachtgever> it = UserInterface.getUser()
+					.getOpdrachtgevers().iterator(); it.hasNext();) {
+				Opdrachtgever o = it.next();
+				listmodel.addElement(o);
+			}
+
+			if (list == clientsJList) {
+				listmodel.addElement(NEWCLIENTITEM);
+				list.setModel(listmodel);
+				listmodel.removeElement(NEWCLIENTITEM);
+			} else {
+				list.setModel(listmodel);
+			}
+			// FIXME selected index bijhouden en terugzetten
+			list.setSelectedIndex(-1);
+		}
+	}
+
+	// ================================================================================
+	// Loading methods
+	// ================================================================================
+
+	// Load info from PROJECT with index parameter
+	private void loadProjectInfo(int index) {
+		if (index != -1) {
+			Project p = UserInterface.getUser().getProjects().get(index);
+			nameJTextField.setText(p.getNaam());
+			startdateJTextField.setText(Clock.timestampToDateString(p
+					.getBegindatum()));
+			enddateJTextField.setText(Clock.timestampToDateString(p
+					.getEinddatum()));
+			try {
+				clientJLabel.setText(UserInterface.getUser()
+						.getOpdrachtgever(p.getOpdrachtgeverId()).toString());
+			} catch (DataInputException ex) {
+				ex.printStackTrace();
+				JOptionPane.showMessageDialog(this, ex.getMessage());
+			}
+
+			refreshTasksList(p, projectTasksJList);
+			percentageCompleteJProgressBar
+					.setValue((int) (((Project) projectsJList
+							.getSelectedValue()).getPercentageComplete() * 100));
+		}
+	}
+
+	// Load info from TASK with index parameter
+	private void loadTaskInfo(int index) throws GUIException {
+		if (index != -1) {
+			Taak t = (Taak) tasksJList.getSelectedValue();
+			taskNameJTextField.setText(t.getNaam());
+			taskStartdateJTextField.setText(Clock.timestampToDateString(t
+					.getBegindatum()));
+			taskEnddateJTextField.setText(Clock.timestampToDateString(t
+					.getGeschatteEinddatum()));
+			taskCommentJTextArea.setText(t.getCommentaar());
+			taskCompletedJCheckBox.setSelected(t.getCompleted());
+
+			DefaultListModel listmodel = new DefaultListModel();
+
+			for (Iterator<Tijdspanne> it = t.getBestedeTijd().iterator(); it
+					.hasNext();) {
+				Tijdspanne ts = it.next();
+				listmodel.addElement(ts);
+			}
+
+			workedTimeJList.setModel(listmodel);
+			taskTotalTimeCompJLabel.setText("Total worked : "
+					+ Clock.longTimeToString(t.getTotaleWerktijd(), false));
+			taskTotalPauseCompJLabel.setText("Total paused : "
+					+ Clock.longTimeToString(t.getTotalePauze(), false));
+		}
+	}
+
+	// Load info from CLIENT with index parameter
+	private void loadClientInfo(int index) {
+		if (index != -1) {
+			Opdrachtgever o = (Opdrachtgever) clientsJList.getSelectedValue();
+			clientNameJTextField.setText(o.getNaam());
+			clientFirstNameJTextField.setText(o.getVoornaam());
+			clientCompanyJTextField.setText(o.getBedrijfsnaam());
+			clientEmailJTextField.setText(o.getEmail());
+			clientPhoneNumberJTextField.setText(o.getTelefoonnummer());
+		}
+	}
+
+	// ================================================================================
+	// Other methods (nakijken)
+	// ================================================================================
+
 	private void workClicked(java.awt.event.MouseEvent evt) {
 		try {
 			Project p = UserInterface.getCurrentProject();
@@ -1156,140 +1437,11 @@ public class GUIForm extends javax.swing.JFrame {
 		}
 	}
 
-	private void projectsJListValueChanged(
-			javax.swing.event.ListSelectionEvent evt) {
-		loadProjectInfo(projectsJList.getSelectedIndex());
-		toggleButtonStates();
-	}
+	// ================================================================================
+	// GUI methods
+	// ================================================================================
 
-	private void loadProjectInfo(int index) {
-		if (index != -1) {
-			Project p = UserInterface.getUser().getProjects().get(index);
-			nameJTextField.setText(p.getNaam());
-			startdateJTextField.setText(Clock.timestampToDateString(p
-					.getBegindatum()));
-			enddateJTextField.setText(Clock.timestampToDateString(p
-					.getEinddatum()));
-			try {
-				clientJLabel.setText(UserInterface.getUser()
-						.getOpdrachtgever(p.getOpdrachtgeverId()).toString());
-			} catch (DataInputException ex) {
-				ex.printStackTrace();
-				JOptionPane.showMessageDialog(this, ex.getMessage());
-			}
-
-			refreshTasksList(p, projectTasksJList);
-			percentageCompleteJProgressBar
-					.setValue((int) (((Project) projectsJList
-							.getSelectedValue()).getPercentageComplete() * 100));
-		}
-	}
-
-	private void loadTaskInfo(int index) throws GUIException {
-		if (index != -1) {
-			Taak t = (Taak) tasksJList.getSelectedValue();
-			taskNameJTextField.setText(t.getNaam());
-			taskStartdateJTextField.setText(Clock.timestampToDateString(t
-					.getBegindatum()));
-			taskEnddateJTextField.setText(Clock.timestampToDateString(t
-					.getGeschatteEinddatum()));
-			taskCommentJTextArea.setText(t.getCommentaar());
-			taskCompletedJCheckBox.setSelected(t.getCompleted());
-
-			DefaultListModel listmodel = new DefaultListModel();
-
-			for (Iterator<Tijdspanne> it = t.getBestedeTijd().iterator(); it
-					.hasNext();) {
-				Tijdspanne ts = it.next();
-				listmodel.addElement(ts);
-			}
-
-			workedTimeJList.setModel(listmodel);
-			taskTotalTimeCompJLabel.setText("Total worked : "
-					+ Clock.longTimeToString(t.getTotaleWerktijd(), false));
-			taskTotalPauseCompJLabel.setText("Total paused : "
-					+ Clock.longTimeToString(t.getTotalePauze(), false));
-		}
-	}
-
-	private void loadClientInfo(int index) {
-		if (index != -1) {
-			Opdrachtgever o = (Opdrachtgever) clientsJList.getSelectedValue();
-			clientNameJTextField.setText(o.getNaam());
-			clientFirstNameJTextField.setText(o.getVoornaam());
-			clientCompanyJTextField.setText(o.getBedrijfsnaam());
-			clientEmailJTextField.setText(o.getEmail());
-			clientPhoneNumberJTextField.setText(o.getTelefoonnummer());
-		}
-	}
-
-	private void refreshProjectsList(JList... lists) {
-		for (JList list : lists) {
-			DefaultListModel listmodel = new DefaultListModel();
-
-			for (Iterator<Project> it = UserInterface.getUser().getProjects()
-					.iterator(); it.hasNext();) {
-				Project p = it.next();
-				listmodel.addElement(p);
-			}
-
-			if (list == projectsJList) {
-				listmodel.addElement(NEWPROJECTITEM);
-				list.setModel(listmodel);
-				listmodel.removeElement(NEWPROJECTITEM);
-			} else {
-				list.setModel(listmodel);
-			}
-			list.setCellRenderer(new ProjectCellRenderer());
-			// FIXME selected index bijhouden en terugzetten
-			list.setSelectedIndex(-1);
-		}
-	}
-
-	private void refreshTasksList(Project p, JList... lists) {
-		for (JList list : lists) {
-			DefaultListModel listmodel = new DefaultListModel();
-
-			for (Iterator<Taak> it = p.getTaken().iterator(); it.hasNext();) {
-				Taak t = it.next();
-				listmodel.addElement(t);
-			}
-
-			if (list == tasksJList) {
-				listmodel.addElement(NEWTASKITEM);
-				list.setModel(listmodel);
-				listmodel.removeElement(NEWTASKITEM);
-			} else {
-				list.setModel(listmodel);
-			}
-			list.setCellRenderer(new TaskCellRenderer());
-			// FIXME selected index bijhouden en terugzetten
-			list.setSelectedIndex(-1);
-		}
-	}
-
-	private void refreshClientsList(JList... lists) {
-		for (JList list : lists) {
-			DefaultListModel listmodel = new DefaultListModel();
-
-			for (Iterator<Opdrachtgever> it = UserInterface.getUser()
-					.getOpdrachtgevers().iterator(); it.hasNext();) {
-				Opdrachtgever o = it.next();
-				listmodel.addElement(o);
-			}
-
-			if (list == clientsJList) {
-				listmodel.addElement(NEWCLIENTITEM);
-				list.setModel(listmodel);
-				listmodel.removeElement(NEWCLIENTITEM);
-			} else {
-				list.setModel(listmodel);
-			}
-			// FIXME selected index bijhouden en terugzetten
-			list.setSelectedIndex(-1);
-		}
-	}
-
+	// Clear all fields on the panels in parameter
 	// FIXME nieuwe panelnamen meegeven waar deze methode gebruikt wordt
 	private void clearFieldsOnPanel(JPanel panel) {
 		Component[] clientPanelComps = panel.getComponents();
@@ -1308,6 +1460,7 @@ public class GUIForm extends javax.swing.JFrame {
 		}
 	}
 
+	// Change button states (enabled / disabled) looking at selected indexes
 	private void toggleButtonStates() {
 		boolean taskSelected = tasksJList.getSelectedIndex() != -1;
 		boolean projectSelected = projectsJList.getSelectedIndex() != -1;
@@ -1321,12 +1474,41 @@ public class GUIForm extends javax.swing.JFrame {
 		removeClientJButton.setEnabled(clientSelected);
 	}
 
+	// ================================================================================
+	// Event handlers, FIXME afsplitsen!
+	// ================================================================================
+
+	private void setCurrentProjectJButtonActionPerformed(
+			java.awt.event.ActionEvent evt) {
+		try {
+			UserInterface.setCurrentProjectIndex(projectsJList
+					.getSelectedIndex());
+			currentProjectJLabel.setText("Current project: "
+					+ UserInterface.getCurrentProject().getNaam());
+			saveTaskJButton.setText("Save to "
+					+ UserInterface.getCurrentProject().getNaam());
+			refreshProjectsList(projectsJList, homeProjectsJList);
+			refreshTasksList(UserInterface.getCurrentProject(), tasksJList);
+			clearFieldsOnPanel(taskFieldsJPanel);
+		} catch (GUIException ex) {
+			ex.printStackTrace();
+			JOptionPane.showMessageDialog(this, ex.getMessage());
+		}
+	}
+
+	private void projectsJListValueChanged(
+			javax.swing.event.ListSelectionEvent evt) {
+		loadProjectInfo(projectsJList.getSelectedIndex());
+		toggleButtonStates();
+	}
+
 	private void guiOpened(java.awt.event.WindowEvent evt) {
 		ingelogdJLabel.setText(UserInterface.getUser().getGebruikersnaam());
 		refreshProjectsList(projectsJList, homeProjectsJList);
 		refreshClientsList(clientsJList);
 	}
 
+	// Event handlers for all the edit fields
 	private void editFieldsFocused(java.awt.event.FocusEvent evt) {
 		toggleButtonStates();
 	}
@@ -1344,45 +1526,6 @@ public class GUIForm extends javax.swing.JFrame {
 		toggleButtonStates();
 	}
 
-	private void saveProjectJButtonActionPerformed(
-			java.awt.event.ActionEvent evt) {
-		try {
-			Project p = (Project) UserInterface.getUser().getProjects()
-					.get(projectsJList.getSelectedIndex()).clone();
-			p.setNaam(nameJTextField.getText());
-			p.setBegindatum(Clock.StringToTimestamp(startdateJTextField
-					.getText()));
-			p.setEinddatum(Clock.StringToTimestamp(enddateJTextField.getText()));
-			// Past projectwaarden aan in database
-			Updater.updateProject(validator.getSessionKey(), p);
-			JOptionPane.showMessageDialog(this, "Project edited!");
-			UserInterface.getUser().getProjects()
-					.set(projectsJList.getSelectedIndex(), p);
-		} catch (DataInputException | IOException | WebserviceException ex) {
-			ex.printStackTrace();
-			JOptionPane.showMessageDialog(this, ex.getMessage());
-		} finally {
-			refreshProjectsList(projectsJList, homeProjectsJList);
-			clearFieldsOnPanel(projectFieldsJPanel);
-			toggleButtonStates();
-		}
-	}
-
-	private void addTaskJButtonActionPerformed(java.awt.event.ActionEvent evt) {
-		try {
-			NewTaskDialog addTaskDialog = new NewTaskDialog(this, true,
-					validator);
-			addTaskDialog.setVisible(true);
-			refreshTasksList(UserInterface.getCurrentProject(), tasksJList);
-		} catch (GUIException ex) {
-			ex.printStackTrace();
-			JOptionPane.showMessageDialog(this, ex.getMessage());
-		} finally {
-			clearFieldsOnPanel(taskFieldsJPanel);
-			loadProjectInfo(projectsJList.getSelectedIndex());
-		}
-	}
-
 	private void tasksJListprojectListValueChanged(
 			javax.swing.event.ListSelectionEvent evt) {
 		try {
@@ -1392,80 +1535,6 @@ public class GUIForm extends javax.swing.JFrame {
 			JOptionPane.showMessageDialog(this, ex.getMessage());
 		}
 		toggleButtonStates();
-	}
-
-	private void removeProjectJButtonActionPerformed(
-			java.awt.event.ActionEvent evt) {
-		int result = JOptionPane.showConfirmDialog(this,
-				"Are you sure you want to delete this project?", null,
-				JOptionPane.YES_NO_OPTION);
-		if (result == JOptionPane.YES_OPTION) {
-			try {
-				Project p = UserInterface.getUser().getProjects()
-						.get(projectsJList.getSelectedIndex());
-				Deleter.deleteProject(validator.getSessionKey(), p);
-				UserInterface.getUser().removeProject(
-						(Project) projectsJList.getSelectedValue());
-				refreshProjectsList(projectsJList, homeProjectsJList);
-				clearFieldsOnPanel(projectFieldsJPanel);
-				toggleButtonStates();
-				JOptionPane.showMessageDialog(this, "Project removed!");
-			} catch (IOException | WebserviceException ex) {
-				ex.printStackTrace();
-				JOptionPane.showMessageDialog(this, ex.getMessage());
-			}
-		}
-	}
-
-	private void removeClientJButtonActionPerformed(
-			java.awt.event.ActionEvent evt) {
-		int result = JOptionPane.showConfirmDialog(this,
-				"Are you sure you want to delete this client?", null,
-				JOptionPane.YES_NO_OPTION);
-		if (result == JOptionPane.YES_OPTION) {
-			try {
-				Opdrachtgever c = UserInterface.getUser().getOpdrachtgever(
-						((Opdrachtgever) clientsJList.getSelectedValue())
-								.getID());
-				// !! Deze for-lus moet verwijderd worden en vervangen worden
-				// door een error van de server
-				for (Project p : UserInterface.getUser().getProjects()) {
-					if (p.getOpdrachtgeverId() == c.getID()) {
-						throw new GUIException(
-								"This client is associated with a project");
-					}
-				}
-				Deleter.deleteOpdrachtgever(validator.getSessionKey(), c);
-				UserInterface.getUser().getOpdrachtgevers().remove(c);
-				refreshClientsList(clientsJList);
-				clearFieldsOnPanel(clientFieldsJPanel);
-				toggleButtonStates();
-				JOptionPane.showMessageDialog(this, "Client removed!");
-			} catch (GUIException | DataInputException | IOException
-					| WebserviceException ex) {
-				ex.printStackTrace();
-				JOptionPane.showMessageDialog(this, ex.getMessage());
-			}
-		}
-
-	}
-
-	private void setCurrentProjectJButtonActionPerformed(
-			java.awt.event.ActionEvent evt) {
-		try {
-			UserInterface.setCurrentProjectIndex(projectsJList
-					.getSelectedIndex());
-			currentProjectJLabel.setText("Current project: "
-					+ UserInterface.getCurrentProject().getNaam());
-			addTaskJButton.setText("Add Task to "
-					+ UserInterface.getCurrentProject().getNaam());
-			refreshProjectsList(projectsJList, homeProjectsJList);
-			refreshTasksList(UserInterface.getCurrentProject(), tasksJList);
-			clearFieldsOnPanel(taskFieldsJPanel);
-		} catch (GUIException ex) {
-			ex.printStackTrace();
-			JOptionPane.showMessageDialog(this, ex.getMessage());
-		}
 	}
 
 	private void homeProjectsJListValueChanged(
@@ -1498,32 +1567,12 @@ public class GUIForm extends javax.swing.JFrame {
 		}
 	}
 
-	private void removeTaskJButtonActionPerformed(java.awt.event.ActionEvent evt) {
-		int result = JOptionPane.showConfirmDialog(this,
-				"Are you sure you want to delete this task?", null,
-				JOptionPane.YES_NO_OPTION);
-		if (result == JOptionPane.YES_OPTION) {
-			try {
-				Taak t = UserInterface.getCurrentProject().getTaken()
-						.get(tasksJList.getSelectedIndex());
-				Deleter.deleteTaak(validator.getSessionKey(), t);
-				UserInterface.getCurrentProject().getTaken().remove(t);
-				refreshTasksList(UserInterface.getCurrentProject(), tasksJList);
-				clearFieldsOnPanel(taskFieldsJPanel);
-				toggleButtonStates();
-				JOptionPane.showMessageDialog(this, "Task removed!");
-			} catch (GUIException | IOException | WebserviceException ex) {
-				ex.printStackTrace();
-				JOptionPane.showMessageDialog(this, ex.getMessage());
-			}
-		}
-	}
-
-	// Variables declaration - do not modify
+	// ================================================================================
+	// Variable declarations
+	// ================================================================================
 	private javax.swing.JLabel HomeProjectsJLabel;
 	private javax.swing.JTabbedPane JTabbedPane;
 	private javax.swing.JLabel TasksJLabel;
-	private javax.swing.JButton addTaskJButton;
 	private javax.swing.JLabel clientJLabel;
 	private javax.swing.JLabel clientcompJLabel1;
 	private javax.swing.JLabel clientsJLabel;
