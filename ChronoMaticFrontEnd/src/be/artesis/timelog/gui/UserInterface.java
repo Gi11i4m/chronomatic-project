@@ -109,15 +109,21 @@ public class UserInterface {
     //================================================================================
     
 	public static Opdrachtgever saveNewClient(String naam, String vooraam, String bedrijfsnaam, String email, String telefoonnummer)
-			throws DataInputException, MalformedURLException, JSONException, IOException, WebserviceException {
+			throws DataInputException, JSONException, IOException, WebserviceException{
 		Opdrachtgever client = new Opdrachtgever();
 		client.setNaam(naam);
 		client.setVoornaam(vooraam);
 		client.setBedrijfsnaam(bedrijfsnaam);
 		client.setEmail(email);
 		client.setTelefoonnummer(telefoonnummer);
-		client.setID(Inserter.inputOpdrachtgever(validator.getSessionKey(), client)); // Make Client ++ Add ClientID returned from DB
 		user.addOpdrachtgever(client);
+		try {
+			client.setID(Inserter.inputOpdrachtgever(validator.getSessionKey(), client));
+		} catch (JSONException | IOException | WebserviceException e) {
+			user.removeOpdrachtgever(client);
+			e.printStackTrace(); 
+			throw e;
+		} // Make Client ++ Add ClientID returned from DB
 		return client;
 	}
 	
@@ -135,14 +141,20 @@ public class UserInterface {
 	}
 	
 	public static Project saveNewProject(String naam, String begindatum, String einddatum, int opdrachtgeverID)
-			throws DataInputException, ParseException, MalformedURLException, IOException, WebserviceException, JSONException{
+			throws DataInputException, ParseException, IOException, WebserviceException, JSONException{
 		Project p = new Project();
         p.setNaam(naam);
         p.setBegindatum(begindatum);
         p.setEinddatum(einddatum);
         p.setOpdrachtgeverId(opdrachtgeverID);
         UserInterface.getUser().addProject(p);
-        p.setId(Inserter.inputProject(validator.getSessionKey(), p, opdrachtgeverID));
+        try {
+			p.setId(Inserter.inputProject(validator.getSessionKey(), p, opdrachtgeverID));
+		} catch (IOException | WebserviceException| JSONException e) {
+			user.removeProject(p);
+			e.printStackTrace();
+			throw e;
+		}
 		return p;
 	}
 	
@@ -158,7 +170,7 @@ public class UserInterface {
 	}
 	
 	public static Taak saveNewTask(String name, String startdate, String enddate, String comment, boolean completed)
-			throws DataInputException, ParseException, GUIException, MalformedURLException, IOException, WebserviceException, JSONException{
+			throws DataInputException, ParseException, GUIException, IOException, WebserviceException, JSONException{
         Taak t = new Taak();
         t.setNaam(name);
         t.setBegindatum(startdate);
@@ -166,8 +178,14 @@ public class UserInterface {
         t.setCommentaar(comment);
         //Send to Database
         int pid = UserInterface.getCurrentProject().getId();
-        t.setId((Inserter.inputTaak(validator.getSessionKey(), t, pid)));
         getCurrentProject().addTaak(t);
+        try {
+			t.setId((Inserter.inputTaak(validator.getSessionKey(), t, pid)));
+		} catch (IOException | WebserviceException | JSONException e) {
+			getCurrentProject().removeTaak(t);
+			e.printStackTrace();
+			throw e;
+		}
         return t;
 	}
 	
@@ -185,11 +203,17 @@ public class UserInterface {
 	}
     
 	public static Tijdspanne saveNewTimespan(long start, long stop, Taak t, boolean isPause)
-			throws MalformedURLException, IOException, WebserviceException, DataInputException{
+			throws DataInputException, IOException, WebserviceException{
 		Tijdspanne ts = new Tijdspanne(start, stop);
 		ts.setPauze(isPause);
-		Inserter.inputTijdSpanne(validator.getSessionKey(), ts, t.getID());
 		t.addBestedeTijd(ts);
+		try {
+			Inserter.inputTijdSpanne(validator.getSessionKey(), ts, t.getID());
+		} catch (IOException | WebserviceException e) {
+			t.removeBestedeTijd(ts);
+			e.printStackTrace();
+			throw e;
+		}
 		return ts;
 	}
 	

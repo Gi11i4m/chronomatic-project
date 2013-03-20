@@ -132,6 +132,10 @@ public class Gebruiker {
         return projects.get(index);
     }
 
+   public ArrayList<Project> getProjects() {
+       return projects;
+   }
+
     
     //================================================================================
     // Add + remove methods
@@ -149,10 +153,6 @@ public class Gebruiker {
         return projects.remove(p);
     }
 
-    public ArrayList<Project> getProjects() {
-        return projects;
-    }
-
     public boolean removeProject(int i) {
         Project p = projects.get(i);
         return projects.remove(p);
@@ -164,6 +164,15 @@ public class Gebruiker {
         } else {
             throw new DataInputException("Name already exists");
         }
+    }
+    
+    public boolean removeOpdrachtgever(Opdrachtgever o){
+    	return opdrachtgevers.remove(o);
+    }
+    
+    public boolean removeOpdrachtgever(int i){
+    	Opdrachtgever o = opdrachtgevers.get(i);
+    	return opdrachtgevers.remove(o);
     }
     
     //================================================================================
