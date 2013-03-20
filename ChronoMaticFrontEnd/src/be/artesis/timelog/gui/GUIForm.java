@@ -659,6 +659,9 @@ public class GUIForm extends javax.swing.JFrame {
 	// Save / Edit methods
 	// ================================================================================
 
+	// FIXME eerst index bijhouden van de refresh methoden, dan
+	// clearfieldsonpanel methoden verwijderen
+
 	// Save PROJECT
 	private void saveProject() {
 		String name = nameJTextField.getText();
@@ -666,50 +669,45 @@ public class GUIForm extends javax.swing.JFrame {
 		String enddate = enddateJTextField.getText();
 		int opdrachtgeverID = 0; // FIXME int halen uit selectie uit dropdownbox
 
-		if (projectsJList.getSelectedValue().equals(NEWPROJECTITEM)) {
-			try {
+		try {
+			if (projectsJList.getSelectedValue().equals(NEWPROJECTITEM)) {
 				UserInterface.saveNewProject(name, startdate, enddate, opdrachtgeverID);
-			} catch (DataInputException | IOException | WebserviceException | JSONException | ParseException ex) {
-				ex.printStackTrace();
-				JOptionPane.showMessageDialog(this, ex.getMessage());
-			} finally {
-				refreshProjectsList(projectsJList, homeProjectsJList);
-				clearFieldsOnPanel(projectFieldsJPanel);
-				toggleButtonStates();
-			}
-		} else {
-			try {
+				JOptionPane.showMessageDialog(this, "Project added!");
+			} else {
 				UserInterface.saveProject(projectsJList.getSelectedIndex(), name, startdate, enddate);
 				JOptionPane.showMessageDialog(this, "Project edited!");
-			} catch (DataInputException | IOException | WebserviceException | ParseException ex) {
-				ex.printStackTrace();
-				JOptionPane.showMessageDialog(this, ex.getMessage());
-			} finally {
-				refreshProjectsList(projectsJList, homeProjectsJList);
-				clearFieldsOnPanel(projectFieldsJPanel);
-				toggleButtonStates();
+
 			}
+		} catch (DataInputException | IOException | WebserviceException | JSONException | ParseException ex) {
+			ex.printStackTrace();
+			JOptionPane.showMessageDialog(this, ex.getMessage());
+		} finally {
+			refreshProjectsList(projectsJList, homeProjectsJList);
+			clearFieldsOnPanel(projectFieldsJPanel);
+			toggleButtonStates();
 		}
 	}
 
 	// Save TASK
 	private void saveTask() {
-		try {
-			Taak t = (Taak) UserInterface.getCurrentProject().getTaken().get(tasksJList.getSelectedIndex()).clone();
-			t.setNaam(taskNameJTextField.getText());
-			long startdate = Clock.StringToTimestamp(taskStartdateJTextField.getText());
-			long enddate = Clock.StringToTimestamp(taskEnddateJTextField.getText());
-			t.setBegindatum(startdate);
-			t.setGeschatteEinddatum(enddate);
+		String name = taskNameJTextField.getText();
+		String startdate = taskStartdateJTextField.getText();
+		String enddate = taskEnddateJTextField.getText();
+		String comment = taskCommentJTextArea.getText();
+		boolean completed = taskCompletedJCheckBox.isSelected();
 
-			t.setCommentaar(taskCommentJTextArea.getText());
-			t.setCompleted(taskCompletedJCheckBox.isSelected());
-			// Taakwaarden worden aangepast in database
-			Updater.updateTaak(validator.getSessionKey(), t);
-			JOptionPane.showMessageDialog(this, "Task edited!");
-			UserInterface.getCurrentProject().getTaken().set(tasksJList.getSelectedIndex(), t);
-			refreshTasksList(UserInterface.getCurrentProject(), tasksJList);
-		} catch (GUIException | DataInputException | IOException | WebserviceException ex) {
+		try {
+			if (tasksJList.getSelectedValue().equals(NEWTASKITEM)) {
+				UserInterface.saveNewTask(name, startdate, enddate, comment, completed);
+				JOptionPane.showMessageDialog(this, "Task added!");
+				refreshTasksList(UserInterface.getCurrentProject(), tasksJList);
+			} else {
+				UserInterface.saveTask(tasksJList.getSelectedIndex(), name, startdate, enddate, comment, completed);
+				JOptionPane.showMessageDialog(this, "Task edited!");
+				refreshTasksList(UserInterface.getCurrentProject(), tasksJList);
+			}
+		} catch (GUIException | DataInputException | JSONException | ParseException | IOException | WebserviceException ex) {
+			ex.printStackTrace();
 			JOptionPane.showMessageDialog(this, ex.getMessage());
 		} finally {
 			clearFieldsOnPanel(tasksJPanel);
@@ -721,18 +719,22 @@ public class GUIForm extends javax.swing.JFrame {
 
 	// Save CLIENT
 	private void saveClient() {
+		String naam = clientNameJTextField.getText();
+		String voornaam = clientFirstNameJTextField.getText();
+		String bedrijfsnaam = clientCompanyJTextField.getText();
+		String email = clientEmailJTextField.getText();
+		String telefoonnummer = clientPhoneNumberJTextField.getText();
+
 		try {
-			Opdrachtgever c = (Opdrachtgever) UserInterface.getUser().getOpdrachtgevers().get(clientsJList.getSelectedIndex()).clone();
-			c.setNaam(clientNameJTextField.getText());
-			c.setVoornaam(clientFirstNameJTextField.getText());
-			c.setBedrijfsnaam(clientCompanyJTextField.getText());
-			c.setEmail(clientEmailJTextField.getText());
-			c.setTelefoonnummer(clientPhoneNumberJTextField.getText());
-			// Past opdrachtgeverwaarden aan in database
-			Updater.updateOpdrachtgever(validator.getSessionKey(), c);
-			JOptionPane.showMessageDialog(this, "Client edited!");
-			UserInterface.getUser().getOpdrachtgevers().set(clientsJList.getSelectedIndex(), c);
-		} catch (DataInputException | IOException | WebserviceException ex) {
+			if (clientsJList.getSelectedValue().equals(NEWCLIENTITEM)) {
+				UserInterface.saveNewClient(naam, voornaam, bedrijfsnaam, email, telefoonnummer);
+				JOptionPane.showMessageDialog(this, "Client added!");
+			} else {
+				UserInterface.saveClient(clientsJList.getSelectedIndex(), voornaam, voornaam, bedrijfsnaam, email, telefoonnummer);
+				JOptionPane.showMessageDialog(this, "Client edited!");
+			}
+		} catch (DataInputException | IOException | WebserviceException | JSONException ex) {
+			ex.printStackTrace();
 			JOptionPane.showMessageDialog(this, ex.getMessage());
 		} finally {
 			refreshClientsList();
@@ -750,16 +752,15 @@ public class GUIForm extends javax.swing.JFrame {
 		int result = JOptionPane.showConfirmDialog(this, "Are you sure you want to delete this project?", null, JOptionPane.YES_NO_OPTION);
 		if (result == JOptionPane.YES_OPTION) {
 			try {
-				Project p = UserInterface.getUser().getProjects().get(projectsJList.getSelectedIndex());
-				Deleter.deleteProject(validator.getSessionKey(), p);
-				UserInterface.getUser().removeProject((Project) projectsJList.getSelectedValue());
+				UserInterface.removeProject((Project) projectsJList.getSelectedValue());
 				refreshProjectsList(projectsJList, homeProjectsJList);
-				clearFieldsOnPanel(projectFieldsJPanel);
-				toggleButtonStates();
 				JOptionPane.showMessageDialog(this, "Project removed!");
 			} catch (IOException | WebserviceException ex) {
 				ex.printStackTrace();
 				JOptionPane.showMessageDialog(this, ex.getMessage());
+			} finally {
+				clearFieldsOnPanel(projectFieldsJPanel);
+				toggleButtonStates();
 			}
 		}
 	}
@@ -769,16 +770,14 @@ public class GUIForm extends javax.swing.JFrame {
 		int result = JOptionPane.showConfirmDialog(this, "Are you sure you want to delete this task?", null, JOptionPane.YES_NO_OPTION);
 		if (result == JOptionPane.YES_OPTION) {
 			try {
-				Taak t = UserInterface.getCurrentProject().getTaken().get(tasksJList.getSelectedIndex());
-				Deleter.deleteTaak(validator.getSessionKey(), t);
-				UserInterface.getCurrentProject().getTaken().remove(t);
-				refreshTasksList(UserInterface.getCurrentProject(), tasksJList);
-				clearFieldsOnPanel(taskFieldsJPanel);
-				toggleButtonStates();
+				UserInterface.removeTask((Taak) tasksJList.getSelectedValue());
 				JOptionPane.showMessageDialog(this, "Task removed!");
 			} catch (GUIException | IOException | WebserviceException ex) {
 				ex.printStackTrace();
 				JOptionPane.showMessageDialog(this, ex.getMessage());
+			} finally {
+				clearFieldsOnPanel(taskFieldsJPanel);
+				toggleButtonStates();
 			}
 		}
 	}
@@ -788,16 +787,7 @@ public class GUIForm extends javax.swing.JFrame {
 		int result = JOptionPane.showConfirmDialog(this, "Are you sure you want to delete this client?", null, JOptionPane.YES_NO_OPTION);
 		if (result == JOptionPane.YES_OPTION) {
 			try {
-				Opdrachtgever c = UserInterface.getUser().getOpdrachtgever(((Opdrachtgever) clientsJList.getSelectedValue()).getID());
-				// !! Deze for-lus moet verwijderd worden en vervangen worden
-				// door een error van de server
-				for (Project p : UserInterface.getUser().getProjects()) {
-					if (p.getOpdrachtgeverId() == c.getID()) {
-						throw new GUIException("This client is associated with a project");
-					}
-				}
-				Deleter.deleteOpdrachtgever(validator.getSessionKey(), c);
-				UserInterface.getUser().getOpdrachtgevers().remove(c);
+				UserInterface.removeClient((Opdrachtgever) clientsJList.getSelectedValue());
 				refreshClientsList(clientsJList);
 				clearFieldsOnPanel(clientFieldsJPanel);
 				toggleButtonStates();
