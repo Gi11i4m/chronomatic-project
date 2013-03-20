@@ -695,6 +695,11 @@ public class GUIForm extends javax.swing.JFrame {
 				"6, 14, 5, 1, fill, fill");
 
 		saveTaskJButton = new JButton();
+		saveTaskJButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				saveTask();
+			}
+		});
 		saveTaskJButton.setText("Save");
 		saveTaskJButton.setEnabled(false);
 		taskFieldsJPanel.add(saveTaskJButton, "2, 16, 9, 1, fill, top");
@@ -1132,7 +1137,7 @@ public class GUIForm extends javax.swing.JFrame {
 	// Save / Edit methods
 	// ================================================================================
 
-	// Save project
+	// Save PROJECT
 	private void saveProject() {
 		try {
 			Project p = (Project) UserInterface.getUser().getProjects()
@@ -1156,7 +1161,39 @@ public class GUIForm extends javax.swing.JFrame {
 		}
 	}
 
-	// Save client
+	// Save TASK
+	private void saveTask() {
+		try {
+			Taak t = (Taak) UserInterface.getCurrentProject().getTaken()
+					.get(tasksJList.getSelectedIndex()).clone();
+			t.setNaam(taskNameJTextField.getText());
+			long startdate = Clock.StringToTimestamp(taskStartdateJTextField
+					.getText());
+			long enddate = Clock.StringToTimestamp(taskEnddateJTextField
+					.getText());
+			t.setBegindatum(startdate);
+			t.setGeschatteEinddatum(enddate);
+
+			t.setCommentaar(taskCommentJTextArea.getText());
+			t.setCompleted(taskCompletedJCheckBox.isSelected());
+			// Taakwaarden worden aangepast in database
+			Updater.updateTaak(validator.getSessionKey(), t);
+			JOptionPane.showMessageDialog(this, "Task edited!");
+			UserInterface.getCurrentProject().getTaken()
+					.set(tasksJList.getSelectedIndex(), t);
+			refreshTasksList(UserInterface.getCurrentProject(), tasksJList);
+		} catch (GUIException | DataInputException | IOException
+				| WebserviceException ex) {
+			JOptionPane.showMessageDialog(this, ex.getMessage());
+		} finally {
+			clearFieldsOnPanel(tasksJPanel);
+			clearFieldsOnPanel(projectsJPanel);
+			toggleButtonStates();
+			loadProjectInfo(projectsJList.getSelectedIndex());
+		}
+	}
+
+	// Save CLIENT
 	private void saveClient() {
 		try {
 			Opdrachtgever c = (Opdrachtgever) UserInterface.getUser()
@@ -1185,7 +1222,7 @@ public class GUIForm extends javax.swing.JFrame {
 	// Remove methods
 	// ================================================================================
 
-	// Remove project
+	// Remove PROJECT
 	private void removeProject() {
 		int result = JOptionPane.showConfirmDialog(this,
 				"Are you sure you want to delete this project?", null,
@@ -1208,7 +1245,7 @@ public class GUIForm extends javax.swing.JFrame {
 		}
 	}
 
-	// Remove task
+	// Remove TASK
 	private void removeTask() {
 		int result = JOptionPane.showConfirmDialog(this,
 				"Are you sure you want to delete this task?", null,
@@ -1230,7 +1267,7 @@ public class GUIForm extends javax.swing.JFrame {
 		}
 	}
 
-	// Remove client
+	// Remove CLIENT
 	private void removeClient() {
 		int result = JOptionPane.showConfirmDialog(this,
 				"Are you sure you want to delete this client?", null,
