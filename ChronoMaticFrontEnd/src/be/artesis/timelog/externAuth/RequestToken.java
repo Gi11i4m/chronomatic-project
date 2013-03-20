@@ -13,7 +13,7 @@ import org.json.JSONObject;
 
 public class RequestToken {
     
-    public static String request(String code) throws IOException, JSONException {
+    public static String request(String code, SocialMedia social) throws IOException, JSONException {
 
         String token = "";
         String clientId = "131195431047.apps.googleusercontent.com";
