@@ -46,7 +46,7 @@ public class GetUserInfo {
 	    }
 	    
 	    br.close();
-	    
+	    System.out.println(test);
 	    test = test.replace(" ","");
 	    test = test.replace("null", "");
 	    

@@ -11,7 +11,7 @@ import javax.swing.JPanel;
 import be.artesis.timelog.controller.Inserter;
 import be.artesis.timelog.externAuth.AuthBrowser;
 import be.artesis.timelog.externAuth.GetUserInfo;
-import be.artesis.timelog.externAuth.RequestGoogleToken;
+import be.artesis.timelog.externAuth.RequestToken;
 import be.artesis.timelog.model.CheckExistingUsernames;
 import be.artesis.timelog.model.CreatorFromJSON;
 import be.artesis.timelog.model.Validator;
@@ -120,11 +120,10 @@ public class LoginDialog extends javax.swing.JDialog {
 	// }
 
 	public void maakExterneGebruiker(String authCode, String provider) {
-		//try {
-			System.out.println(authCode);
-			/*
+		try {
+
 			if (provider.equals("Google")) {
-				authCode = RequestGoogleToken.request(authCode);
+				authCode = RequestToken.request(authCode);
 			}
 			String email = GetUserInfo.retreive(authCode, provider);
 			if (CheckExistingUsernames.check(email)) {
@@ -135,7 +134,7 @@ public class LoginDialog extends javax.swing.JDialog {
 
 		} catch (IOException | JSONException | WebserviceException e) {
 			e.printStackTrace();
-		}*/
+		}
 	}
 
 	public void loginExtern(String email) {
