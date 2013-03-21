@@ -602,8 +602,8 @@ public class GUIForm extends javax.swing.JFrame {
 		testButton = new JButton("New button");
 		testButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				Date d = dateChooser.getDate();
-				testTextField.setText(d.toString());
+					Date d = dateChooser.getDate();
+					testTextField.setText(d.toString());
 			}
 		});
 		testButton.setBounds(10, 79, 89, 23);
