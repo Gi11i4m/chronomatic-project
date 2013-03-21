@@ -596,18 +596,6 @@ public class GUIForm extends javax.swing.JFrame {
 		scheduleJLabel.setForeground(new java.awt.Color(255, 255, 255));
 		scheduleJLabel.setText("Schedule");
 		
-		dateChooser = new JDateChooser();
-		
-		//FIXME testcode
-		dateChooser.setDateFormatString("dd-MM-yyyy");
-		testButton = new JButton("New button");
-		testButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				testMethod();
-			}
-		});
-		
-		testLabel = new JLabel("New label");
 
 		javax.swing.GroupLayout scheduleJPanelLayout = new javax.swing.GroupLayout(scheduleJPanel);
 		scheduleJPanelLayout.setHorizontalGroup(
@@ -616,15 +604,7 @@ public class GUIForm extends javax.swing.JFrame {
 					.addGroup(scheduleJPanelLayout.createParallelGroup(Alignment.LEADING)
 						.addGroup(scheduleJPanelLayout.createSequentialGroup()
 							.addContainerGap()
-							.addComponent(scheduleJLabel))
-						.addGroup(scheduleJPanelLayout.createSequentialGroup()
-							.addGap(100)
-							.addComponent(testButton)
-							.addGap(60)
-							.addComponent(testLabel))
-						.addGroup(scheduleJPanelLayout.createSequentialGroup()
-							.addGap(70)
-							.addComponent(dateChooser, GroupLayout.PREFERRED_SIZE, 119, GroupLayout.PREFERRED_SIZE)))
+							.addComponent(scheduleJLabel)))
 					.addContainerGap(402, Short.MAX_VALUE))
 		);
 		scheduleJPanelLayout.setVerticalGroup(
@@ -632,12 +612,6 @@ public class GUIForm extends javax.swing.JFrame {
 				.addGroup(scheduleJPanelLayout.createSequentialGroup()
 					.addContainerGap()
 					.addComponent(scheduleJLabel)
-					.addGap(57)
-					.addComponent(dateChooser, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-					.addGap(30)
-					.addGroup(scheduleJPanelLayout.createParallelGroup(Alignment.BASELINE)
-						.addComponent(testButton)
-						.addComponent(testLabel))
 					.addContainerGap(294, Short.MAX_VALUE))
 		);
 		scheduleJPanel.setLayout(scheduleJPanelLayout);
@@ -702,13 +676,6 @@ public class GUIForm extends javax.swing.JFrame {
 	/* Einde gegenereerde code */
 	
 	//FIXME testcode
-	public void testMethod(){
-		Date d = dateChooser.getDate();
-		
-		JOptionPane.showMessageDialog(this, d.toString());
-		
-		
-	}
 	
 	// ================================================================================
 	// Save / Edit methods
@@ -1214,7 +1181,4 @@ public class GUIForm extends javax.swing.JFrame {
 	private JPanel projectFieldsJPanel;
 	private JList tasksJList_1;
 	private JList projectTasksJList;
-	private JDateChooser dateChooser;
-	private JButton testButton;
-	private JLabel testLabel;
 }
