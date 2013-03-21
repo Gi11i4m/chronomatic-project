@@ -83,10 +83,15 @@ public class GUIForm extends javax.swing.JFrame {
 		TasksJLabel = new javax.swing.JLabel();
 		projectsJPanel = new javax.swing.JPanel();
 		projectsJLabel = new javax.swing.JLabel();
+		projectsJLabel.setBounds(10, 11, 44, 16);
 		jScrollPane1 = new javax.swing.JScrollPane();
+		jScrollPane1.setBounds(10, 33, 204, 336);
 		setCurrentProjectJButton = new javax.swing.JButton();
+		setCurrentProjectJButton.setBounds(10, 404, 204, 36);
 		filler2 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 32767));
+		filler2.setBounds(220, 152, 0, 0);
 		removeProjectJButton = new javax.swing.JButton();
+		removeProjectJButton.setBounds(10, 375, 204, 23);
 		tasksJPanel = new javax.swing.JPanel();
 		tasksJLabel = new javax.swing.JLabel();
 		tasksJLabel.setBounds(10, 14, 33, 16);
@@ -195,12 +200,9 @@ public class GUIForm extends javax.swing.JFrame {
 		});
 
 		projectFieldsJPanel = new JPanel();
+		projectFieldsJPanel.setBounds(321, 33, 353, 336);
 		projectFieldsJPanel.setBackground(Color.DARK_GRAY);
 		projectFieldsJPanel.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
-
-		javax.swing.GroupLayout projectsJPanelLayout = new javax.swing.GroupLayout(projectsJPanel);
-		projectsJPanelLayout.setHorizontalGroup(projectsJPanelLayout.createParallelGroup(Alignment.LEADING).addGroup(projectsJPanelLayout.createSequentialGroup().addContainerGap().addGroup(projectsJPanelLayout.createParallelGroup(Alignment.LEADING).addGroup(projectsJPanelLayout.createSequentialGroup().addGroup(projectsJPanelLayout.createParallelGroup(Alignment.LEADING).addComponent(removeProjectJButton, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 204, Short.MAX_VALUE).addComponent(setCurrentProjectJButton, GroupLayout.DEFAULT_SIZE, 204, Short.MAX_VALUE).addComponent(jScrollPane1, GroupLayout.PREFERRED_SIZE, 204, GroupLayout.PREFERRED_SIZE)).addPreferredGap(ComponentPlacement.RELATED).addComponent(filler2, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE).addGap(147).addComponent(projectFieldsJPanel, GroupLayout.PREFERRED_SIZE, 307, GroupLayout.PREFERRED_SIZE)).addComponent(projectsJLabel)).addContainerGap()));
-		projectsJPanelLayout.setVerticalGroup(projectsJPanelLayout.createParallelGroup(Alignment.LEADING).addGroup(projectsJPanelLayout.createSequentialGroup().addContainerGap().addComponent(projectsJLabel).addPreferredGap(ComponentPlacement.RELATED, 6, Short.MAX_VALUE).addGroup(projectsJPanelLayout.createParallelGroup(Alignment.TRAILING, false).addGroup(projectsJPanelLayout.createSequentialGroup().addGap(119).addComponent(filler2, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE).addGap(246)).addGroup(projectsJPanelLayout.createSequentialGroup().addGroup(projectsJPanelLayout.createParallelGroup(Alignment.TRAILING).addComponent(projectFieldsJPanel, GroupLayout.PREFERRED_SIZE, 336, GroupLayout.PREFERRED_SIZE).addComponent(jScrollPane1)).addPreferredGap(ComponentPlacement.RELATED).addComponent(removeProjectJButton))).addPreferredGap(ComponentPlacement.RELATED).addComponent(setCurrentProjectJButton, GroupLayout.PREFERRED_SIZE, 36, GroupLayout.PREFERRED_SIZE).addContainerGap()));
 		projectsJList = new javax.swing.JList();
 		jScrollPane1.setViewportView(projectsJList);
 
@@ -221,41 +223,45 @@ public class GUIForm extends javax.swing.JFrame {
 				projectsJListValueChanged(evt);
 			}
 		});
-		projectFieldsJPanel.setLayout(new FormLayout(new ColumnSpec[] { FormFactory.UNRELATED_GAP_COLSPEC, ColumnSpec.decode("54px"), FormFactory.LABEL_COMPONENT_GAP_COLSPEC, ColumnSpec.decode("221px:grow"), FormFactory.RELATED_GAP_COLSPEC, FormFactory.DEFAULT_COLSPEC, }, new RowSpec[] { FormFactory.UNRELATED_GAP_ROWSPEC, RowSpec.decode("20px"), FormFactory.LINE_GAP_ROWSPEC, RowSpec.decode("20px"), FormFactory.LINE_GAP_ROWSPEC, RowSpec.decode("20px"), FormFactory.RELATED_GAP_ROWSPEC, RowSpec.decode("96px"), FormFactory.UNRELATED_GAP_ROWSPEC, RowSpec.decode("20px"), FormFactory.LINE_GAP_ROWSPEC, RowSpec.decode("21px"), RowSpec.decode("60px"), RowSpec.decode("23px"), }));
+		projectFieldsJPanel.setLayout(new FormLayout(new ColumnSpec[] { FormFactory.UNRELATED_GAP_COLSPEC, ColumnSpec.decode("65px"), FormFactory.LABEL_COMPONENT_GAP_COLSPEC, ColumnSpec.decode("max(53dlu;default)"), FormFactory.RELATED_GAP_COLSPEC, ColumnSpec.decode("123px"), FormFactory.RELATED_GAP_COLSPEC, FormFactory.DEFAULT_COLSPEC, }, new RowSpec[] { FormFactory.UNRELATED_GAP_ROWSPEC, RowSpec.decode("20px"), FormFactory.LINE_GAP_ROWSPEC, FormFactory.PREF_ROWSPEC, FormFactory.LINE_GAP_ROWSPEC, FormFactory.PREF_ROWSPEC, FormFactory.RELATED_GAP_ROWSPEC, RowSpec.decode("96px"), FormFactory.UNRELATED_GAP_ROWSPEC, RowSpec.decode("20px"), FormFactory.LINE_GAP_ROWSPEC, RowSpec.decode("21px"), RowSpec.decode("60px"), RowSpec.decode("23px"), }));
 		namecompJLabel = new javax.swing.JLabel();
 		projectFieldsJPanel.add(namecompJLabel, "2, 2, left, center");
 
 		namecompJLabel.setForeground(new java.awt.Color(255, 255, 255));
 		namecompJLabel.setText("Naam");
 		nameJTextField = new javax.swing.JTextField();
-		projectFieldsJPanel.add(nameJTextField, "4, 2, fill, top");
+		projectFieldsJPanel.add(nameJTextField, "4, 2, 3, 1, fill, top");
 		startdatecompJLabel = new javax.swing.JLabel();
-		projectFieldsJPanel.add(startdatecompJLabel, "2, 4, left, center");
+		projectFieldsJPanel.add(startdatecompJLabel, "2, 4, 2, 1, left, center");
 
 		startdatecompJLabel.setForeground(new java.awt.Color(255, 255, 255));
 		startdatecompJLabel.setText("Start date");
-		startdateJTextField = new javax.swing.JTextField();
-		projectFieldsJPanel.add(startdateJTextField, "4, 4, fill, top");
+
+		projectStartDateChooser = new JDateChooser();
+		projectStartDateChooser.setDateFormatString("dd/MM/yyyy");
+		projectFieldsJPanel.add(projectStartDateChooser, "4, 4, fill, fill");
 		enddatecompJLabel1 = new javax.swing.JLabel();
-		projectFieldsJPanel.add(enddatecompJLabel1, "2, 6, left, center");
+		projectFieldsJPanel.add(enddatecompJLabel1, "2, 6, 2, 1, left, center");
 
 		enddatecompJLabel1.setForeground(new java.awt.Color(255, 255, 255));
 		enddatecompJLabel1.setText("End date");
-		enddateJTextField = new javax.swing.JTextField();
-		projectFieldsJPanel.add(enddateJTextField, "4, 6, fill, top");
+
+		projectEndDateChooser = new JDateChooser();
+		projectEndDateChooser.setDateFormatString("dd/MM/yyyy");
+		projectFieldsJPanel.add(projectEndDateChooser, "4, 6, fill, fill");
 
 		projectTasksJList = new JList();
 		projectTasksJList.setEnabled(false);
 		projectTasksJList.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
 		projectTasksJList.setBackground(Color.LIGHT_GRAY);
-		projectFieldsJPanel.add(projectTasksJList, "4, 8, fill, fill");
+		projectFieldsJPanel.add(projectTasksJList, "4, 8, 3, 1, fill, fill");
 		clientcompJLabel1 = new javax.swing.JLabel();
 		projectFieldsJPanel.add(clientcompJLabel1, "2, 10, left, top");
 
 		clientcompJLabel1.setForeground(new java.awt.Color(255, 255, 255));
 		clientcompJLabel1.setText("Client");
 		clientJLabel = new javax.swing.JLabel();
-		projectFieldsJPanel.add(clientJLabel, "4, 10, fill, top");
+		projectFieldsJPanel.add(clientJLabel, "4, 10, 3, 1, fill, top");
 
 		clientJLabel.setBackground(new java.awt.Color(204, 255, 255));
 		clientJLabel.setForeground(new java.awt.Color(255, 255, 255));
@@ -271,14 +277,14 @@ public class GUIForm extends javax.swing.JFrame {
 		taskscompJLabel.setForeground(new java.awt.Color(255, 255, 255));
 		taskscompJLabel.setText("Tasks");
 		percentageCompleteJProgressBar = new javax.swing.JProgressBar();
-		projectFieldsJPanel.add(percentageCompleteJProgressBar, "4, 12, fill, fill");
+		projectFieldsJPanel.add(percentageCompleteJProgressBar, "4, 12, 3, 1, fill, fill");
 		percentageCompletecompJLabel = new javax.swing.JLabel();
 		projectFieldsJPanel.add(percentageCompletecompJLabel, "2, 12, fill, fill");
 
 		percentageCompletecompJLabel.setForeground(new java.awt.Color(255, 255, 255));
 		percentageCompletecompJLabel.setText("Complete");
 		saveProjectJButton = new javax.swing.JButton();
-		projectFieldsJPanel.add(saveProjectJButton, "2, 14, 3, 1, fill, top");
+		projectFieldsJPanel.add(saveProjectJButton, "2, 14, 5, 1, fill, top");
 
 		saveProjectJButton.setText("Save");
 		saveProjectJButton.setEnabled(false);
@@ -288,26 +294,20 @@ public class GUIForm extends javax.swing.JFrame {
 			}
 		});
 
-		enddateJTextField.addFocusListener(new java.awt.event.FocusAdapter() {
-			public void focusGained(java.awt.event.FocusEvent evt) {
-				editFieldsFocused(evt);
-			}
-		});
-
-		startdateJTextField.addFocusListener(new java.awt.event.FocusAdapter() {
-			public void focusGained(java.awt.event.FocusEvent evt) {
-				editFieldsFocused(evt);
-			}
-		});
-
 		nameJTextField.addFocusListener(new java.awt.event.FocusAdapter() {
 			public void focusGained(java.awt.event.FocusEvent evt) {
 				editFieldsFocused(evt);
 			}
 		});
-		projectsJPanel.setLayout(projectsJPanelLayout);
 
 		JTabbedPane.addTab("", new javax.swing.ImageIcon(getClass().getResource("/be/artesis/timelog/gui/icons/ProjectsNeonIcon.png")), projectsJPanel, "Projects");
+		projectsJPanel.setLayout(null);
+		projectsJPanel.add(removeProjectJButton);
+		projectsJPanel.add(setCurrentProjectJButton);
+		projectsJPanel.add(jScrollPane1);
+		projectsJPanel.add(filler2);
+		projectsJPanel.add(projectFieldsJPanel);
+		projectsJPanel.add(projectsJLabel);
 
 		tasksJPanel.setBackground(new java.awt.Color(153, 153, 153));
 
@@ -335,9 +335,9 @@ public class GUIForm extends javax.swing.JFrame {
 		taskFieldsJPanel = new JPanel();
 		taskFieldsJPanel.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
 		taskFieldsJPanel.setBackground(Color.DARK_GRAY);
-		taskFieldsJPanel.setBounds(273, 40, 399, 366);
+		taskFieldsJPanel.setBounds(273, 40, 399, 400);
 		tasksJPanel.add(taskFieldsJPanel);
-		taskFieldsJPanel.setLayout(new FormLayout(new ColumnSpec[] { FormFactory.UNRELATED_GAP_COLSPEC, ColumnSpec.decode("56px"), FormFactory.UNRELATED_GAP_COLSPEC, ColumnSpec.decode("1px"), FormFactory.LABEL_COMPONENT_GAP_COLSPEC, ColumnSpec.decode("92px"), ColumnSpec.decode("77px"), ColumnSpec.decode("51px"), FormFactory.RELATED_GAP_COLSPEC, ColumnSpec.decode("77px"), }, new RowSpec[] { FormFactory.UNRELATED_GAP_ROWSPEC, RowSpec.decode("20px"), FormFactory.RELATED_GAP_ROWSPEC, RowSpec.decode("20px"), FormFactory.RELATED_GAP_ROWSPEC, RowSpec.decode("20px"), RowSpec.decode("38px"), RowSpec.decode("51px"), FormFactory.UNRELATED_GAP_ROWSPEC, RowSpec.decode("51px"), FormFactory.UNRELATED_GAP_ROWSPEC, RowSpec.decode("23px"), FormFactory.UNRELATED_GAP_ROWSPEC, RowSpec.decode("37px"), FormFactory.UNRELATED_GAP_ROWSPEC, RowSpec.decode("41px"), }));
+		taskFieldsJPanel.setLayout(new FormLayout(new ColumnSpec[] { FormFactory.UNRELATED_GAP_COLSPEC, ColumnSpec.decode("56px"), FormFactory.UNRELATED_GAP_COLSPEC, ColumnSpec.decode("1px"), FormFactory.LABEL_COMPONENT_GAP_COLSPEC, ColumnSpec.decode("110px"), FormFactory.DEFAULT_COLSPEC, FormFactory.RELATED_GAP_COLSPEC, ColumnSpec.decode("55px"), ColumnSpec.decode("51px"), FormFactory.RELATED_GAP_COLSPEC, ColumnSpec.decode("max(27dlu;default)"), FormFactory.RELATED_GAP_COLSPEC, ColumnSpec.decode("max(15dlu;default)"), }, new RowSpec[] { FormFactory.UNRELATED_GAP_ROWSPEC, RowSpec.decode("20px"), FormFactory.RELATED_GAP_ROWSPEC, RowSpec.decode("20px:grow"), FormFactory.RELATED_GAP_ROWSPEC, RowSpec.decode("20px:grow"), RowSpec.decode("38px"), RowSpec.decode("51px"), FormFactory.UNRELATED_GAP_ROWSPEC, RowSpec.decode("51px"), FormFactory.RELATED_GAP_ROWSPEC, RowSpec.decode("37px"), FormFactory.UNRELATED_GAP_ROWSPEC, RowSpec.decode("23px"), FormFactory.UNRELATED_GAP_ROWSPEC, FormFactory.DEFAULT_ROWSPEC, FormFactory.UNRELATED_GAP_ROWSPEC, RowSpec.decode("41px"), }));
 
 		label_5 = new JLabel();
 		label_5.setText("Name");
@@ -351,27 +351,21 @@ public class GUIForm extends javax.swing.JFrame {
 				editFieldsFocused(e);
 			}
 		});
-		taskFieldsJPanel.add(taskNameJTextField, "4, 2, 7, 1, fill, top");
+		taskFieldsJPanel.add(taskNameJTextField, "4, 2, 9, 1, fill, top");
 
 		label_6 = new JLabel();
 		label_6.setText("Start date");
 		label_6.setForeground(Color.WHITE);
 		taskFieldsJPanel.add(label_6, "2, 4, fill, center");
 
-		taskStartdateJTextField = new JTextField();
-		taskStartdateJTextField.addFocusListener(new FocusAdapter() {
-			@Override
-			public void focusGained(FocusEvent e) {
-				editFieldsFocused(e);
-			}
-		});
-		taskStartdateJTextField.setToolTipText("dd/mm/yyyy");
-		taskFieldsJPanel.add(taskStartdateJTextField, "4, 4, 3, 1, fill, top");
+		taskStartDateChooser = new JDateChooser();
+		taskStartDateChooser.setDateFormatString("dd/MM/yyyy");
+		taskFieldsJPanel.add(taskStartDateChooser, "4, 4, 3, 1, fill, center");
 
 		label_7 = new JLabel();
 		label_7.setText("Completed");
 		label_7.setForeground(Color.WHITE);
-		taskFieldsJPanel.add(label_7, "8, 4, 1, 3, left, center");
+		taskFieldsJPanel.add(label_7, "9, 4, 2, 1, center, center");
 
 		taskCompletedJCheckBox = new JCheckBox();
 		taskCompletedJCheckBox.addFocusListener(new FocusAdapter() {
@@ -381,22 +375,16 @@ public class GUIForm extends javax.swing.JFrame {
 			}
 		});
 		taskCompletedJCheckBox.setBackground(Color.DARK_GRAY);
-		taskFieldsJPanel.add(taskCompletedJCheckBox, "10, 4, 1, 3, left, center");
-
-		taskEnddateJTextField = new JTextField();
-		taskEnddateJTextField.addFocusListener(new FocusAdapter() {
-			@Override
-			public void focusGained(FocusEvent arg0) {
-				editFieldsFocused(arg0);
-			}
-		});
-		taskEnddateJTextField.setToolTipText("dd/mm/yyyy");
-		taskFieldsJPanel.add(taskEnddateJTextField, "4, 6, 3, 1, fill, top");
+		taskFieldsJPanel.add(taskCompletedJCheckBox, "12, 4, left, center");
 
 		label_8 = new JLabel();
 		label_8.setText("End date");
 		label_8.setForeground(Color.WHITE);
 		taskFieldsJPanel.add(label_8, "2, 6, fill, center");
+
+		taskEndDateChooser = new JDateChooser();
+		taskEndDateChooser.setDateFormatString("dd/MM/yyyy");
+		taskFieldsJPanel.add(taskEndDateChooser, "4, 6, 3, 1, fill, center");
 		tasksJList = new javax.swing.JList();
 		taskFieldsJPanel.add(tasksJList, "2, 7");
 
@@ -423,21 +411,16 @@ public class GUIForm extends javax.swing.JFrame {
 		label_9.setForeground(Color.WHITE);
 		taskFieldsJPanel.add(label_9, "2, 8, fill, top");
 
-		label_10 = new JLabel();
-		label_10.setText("Worked time");
-		label_10.setForeground(Color.WHITE);
-		taskFieldsJPanel.add(label_10, "2, 10, 3, 1, fill, top");
+		lblWorked = new JLabel();
+		lblWorked.setText("Worked");
+		lblWorked.setForeground(Color.WHITE);
+		taskFieldsJPanel.add(lblWorked, "2, 10, 3, 1, fill, top");
 
 		taskTotalTimeCompJLabel = new JLabel();
 		taskTotalTimeCompJLabel.setToolTipText("");
 		taskTotalTimeCompJLabel.setForeground(SystemColor.menu);
 		taskTotalTimeCompJLabel.setBackground(Color.LIGHT_GRAY);
-		taskFieldsJPanel.add(taskTotalTimeCompJLabel, "6, 12, 5, 1, fill, fill");
-
-		taskTotalPauseCompJLabel = new JLabel();
-		taskTotalPauseCompJLabel.setForeground(SystemColor.menu);
-		taskTotalPauseCompJLabel.setBackground(Color.LIGHT_GRAY);
-		taskFieldsJPanel.add(taskTotalPauseCompJLabel, "6, 14, 5, 1, fill, fill");
+		taskFieldsJPanel.add(taskTotalTimeCompJLabel, "6, 14, 8, 1, fill, fill");
 
 		saveTaskJButton = new JButton();
 		saveTaskJButton.addActionListener(new ActionListener() {
@@ -445,9 +428,14 @@ public class GUIForm extends javax.swing.JFrame {
 				saveTask();
 			}
 		});
+
+		taskTotalPauseCompJLabel = new JLabel();
+		taskTotalPauseCompJLabel.setForeground(SystemColor.menu);
+		taskTotalPauseCompJLabel.setBackground(Color.LIGHT_GRAY);
+		taskFieldsJPanel.add(taskTotalPauseCompJLabel, "6, 16, 8, 1, fill, fill");
 		saveTaskJButton.setText("Save");
 		saveTaskJButton.setEnabled(false);
-		taskFieldsJPanel.add(saveTaskJButton, "2, 16, 9, 1, fill, top");
+		taskFieldsJPanel.add(saveTaskJButton, "2, 18, 11, 1, fill, top");
 
 		taskCommentJTextArea = new JTextArea();
 		taskCommentJTextArea.addFocusListener(new FocusAdapter() {
@@ -456,10 +444,10 @@ public class GUIForm extends javax.swing.JFrame {
 				editFieldsFocused(e);
 			}
 		});
-		taskFieldsJPanel.add(taskCommentJTextArea, "4, 8, 7, 1, fill, fill");
+		taskFieldsJPanel.add(taskCommentJTextArea, "4, 8, 9, 1, fill, fill");
 
 		workedTimeJList = new JList();
-		taskFieldsJPanel.add(workedTimeJList, "4, 10, 7, 1, fill, fill");
+		taskFieldsJPanel.add(workedTimeJList, "5, 10, 8, 3, fill, fill");
 		clientsJPanel = new javax.swing.JPanel();
 		clientsJLabel = new javax.swing.JLabel();
 		jScrollPane5 = new javax.swing.JScrollPane();
@@ -595,28 +583,9 @@ public class GUIForm extends javax.swing.JFrame {
 		scheduleJLabel.setFont(new java.awt.Font("Tw Cen MT", 1, 14));
 		scheduleJLabel.setForeground(new java.awt.Color(255, 255, 255));
 		scheduleJLabel.setText("Schedule");
-		
-		dateChooser = new JDateChooser();
-		dateChooser.setBounds(10, 48, 99, 20);
-		
-		testButton = new JButton("New button");
-		testButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				Date d = dateChooser.getDate();
-				testTextField.setText(d.toString());
-			}
-		});
-		testButton.setBounds(10, 79, 89, 23);
-		
-		testTextField = new JTextField();
-		testTextField.setBounds(147, 82, 137, 20);
-		testTextField.setColumns(10);
 
 		JTabbedPane.addTab("", new javax.swing.ImageIcon(getClass().getResource("/be/artesis/timelog/gui/icons/CalendarNeonIcon.png")), scheduleJPanel, "Schedule");
 		scheduleJPanel.setLayout(null);
-		scheduleJPanel.add(dateChooser);
-		scheduleJPanel.add(testButton);
-		scheduleJPanel.add(testTextField);
 		scheduleJPanel.add(scheduleJLabel);
 
 		optionsJPanel.setBackground(new java.awt.Color(153, 153, 153));
@@ -673,9 +642,7 @@ public class GUIForm extends javax.swing.JFrame {
 	}
 
 	/* Einde gegenereerde code */
-	
-	//FIXME testcode
-	
+
 	// ================================================================================
 	// Save / Edit methods
 	// ================================================================================
@@ -707,13 +674,13 @@ public class GUIForm extends javax.swing.JFrame {
 
 	// Save TASK
 	private void saveTask() {
-		String name = taskNameJTextField.getText();
-		String startdate = taskStartdateJTextField.getText();
-		String enddate = taskEnddateJTextField.getText();
-		String comment = taskCommentJTextArea.getText();
-		boolean completed = taskCompletedJCheckBox.isSelected();
-
 		try {
+			String name = taskNameJTextField.getText();
+			long startdate = taskStartDateChooser.getDate().getTime();
+			long enddate = taskEndDateChooser.getDate().getTime();
+			String comment = taskCommentJTextArea.getText();
+			boolean completed = taskCompletedJCheckBox.isSelected();
+
 			if (tasksJList.getSelectedValue().equals(NEWTASKITEM)) {
 				UserInterface.saveNewTask(name, startdate, enddate, comment, completed);
 				JOptionPane.showMessageDialog(this, "Task added!");
@@ -726,6 +693,9 @@ public class GUIForm extends javax.swing.JFrame {
 		} catch (GUIException | DataInputException | JSONException | ParseException | IOException | WebserviceException ex) {
 			ex.printStackTrace();
 			JOptionPane.showMessageDialog(this, ex.getMessage());
+		} catch (NullPointerException ex) {
+			ex.printStackTrace();
+			JOptionPane.showMessageDialog(this, "Please choose a valid date");
 		} finally {
 			toggleButtonStates();
 			loadProjectInfo(projectsJList.getSelectedIndex());
@@ -913,11 +883,10 @@ public class GUIForm extends javax.swing.JFrame {
 		if (index != -1) {
 			Taak t = (Taak) tasksJList.getSelectedValue();
 			taskNameJTextField.setText(t.getNaam());
-			taskStartdateJTextField.setText(Clock.timestampToDateString(t.getBegindatum()));
-			taskEnddateJTextField.setText(Clock.timestampToDateString(t.getGeschatteEinddatum()));
+			taskStartDateChooser.setDate(new Date(t.getBegindatum()));
+			taskEndDateChooser.setDate(new Date(t.getGeschatteEinddatum()));
 			taskCommentJTextArea.setText(t.getCommentaar());
 			taskCompletedJCheckBox.setSelected(t.getCompleted());
-
 			DefaultListModel listmodel = new DefaultListModel();
 
 			for (Iterator<Tijdspanne> it = t.getTotaleTijd().iterator(); it.hasNext();) {
@@ -1116,7 +1085,6 @@ public class GUIForm extends javax.swing.JFrame {
 	private javax.swing.JPanel clientsJPanel;
 	private javax.swing.JLabel clockJLabel;
 	private javax.swing.JLabel currentProjectJLabel;
-	private javax.swing.JTextField enddateJTextField;
 	private javax.swing.JLabel enddatecompJLabel1;
 	private javax.swing.Box.Filler filler2;
 	private javax.swing.JPanel headerJPanel;
@@ -1146,7 +1114,6 @@ public class GUIForm extends javax.swing.JFrame {
 	private javax.swing.JPanel scheduleJPanel;
 	private javax.swing.JButton setCurrentProjectJButton;
 	private javax.swing.JLabel settingsJLabel;
-	private javax.swing.JTextField startdateJTextField;
 	private javax.swing.JLabel startdatecompJLabel;
 	private javax.swing.JLabel tasksJLabel;
 	private javax.swing.JList tasksJList;
@@ -1165,13 +1132,11 @@ public class GUIForm extends javax.swing.JFrame {
 	private JLabel label_5;
 	private JTextField taskNameJTextField;
 	private JLabel label_6;
-	private JTextField taskStartdateJTextField;
 	private JLabel label_7;
 	private JCheckBox taskCompletedJCheckBox;
-	private JTextField taskEnddateJTextField;
 	private JLabel label_8;
 	private JLabel label_9;
-	private JLabel label_10;
+	private JLabel lblWorked;
 	private JLabel taskTotalTimeCompJLabel;
 	private JLabel taskTotalPauseCompJLabel;
 	private JButton saveTaskJButton;
@@ -1180,7 +1145,8 @@ public class GUIForm extends javax.swing.JFrame {
 	private JPanel projectFieldsJPanel;
 	private JList tasksJList_1;
 	private JList projectTasksJList;
-	private JDateChooser dateChooser;
-	private JButton testButton;
-	private JTextField testTextField;
+	private JDateChooser taskStartDateChooser;
+	private JDateChooser taskEndDateChooser;
+	private JDateChooser projectStartDateChooser;
+	private JDateChooser projectEndDateChooser;
 }
