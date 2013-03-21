@@ -1,22 +1,6 @@
 package be.artesis.timelog.externAuth;
 
-import be.artesis.timelog.controller.Inserter;
-import be.artesis.timelog.externAuth.*;
 import be.artesis.timelog.gui.*;
-import be.artesis.timelog.model.*;
-import be.artesis.timelog.view.*;
-import java.awt.Color;
-import java.awt.HeadlessException;
-import java.io.IOException;
-import java.net.ConnectException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.swing.JOptionPane;
-import org.json.JSONException;
-////
-import java.awt.Dimension;
-import java.awt.Point;
-
 import javafx.application.Platform;
 import javafx.embed.swing.JFXPanel;
 import javafx.scene.Group;
@@ -24,11 +8,6 @@ import javafx.scene.Scene;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
 import javax.swing.*;
-
-import javax.swing.JPanel;
-import java.awt.CardLayout;
-import java.awt.Container;
-import java.awt.event.ActionEvent;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 
@@ -40,41 +19,39 @@ public class AuthBrowser {
 	private WebView webView;
 	private final int BROWSERWIDTH = 720;
 	private final int BROWSERHEIGHT = 490;
+	private LoginDialog loginDialog;
+	private String Url;
+	private SocialMedia social;
 	
-	private String URL;
-	//private final String urlGoogle = "https://accounts.google.com/o/oauth2/auth?scope=https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.email+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.profile&state=%2Fprofile&redirect_uri=urn:ietf:wg:oauth:2.0:oob&response_type=code&client_id=536253651406.apps.googleusercontent.com";
-    //private final String urlGoogle = "https://accounts.google.com/o/oauth2/auth?client_id=536253651406.apps.googleusercontent.com&redirect_uri=urn:ietf:wg:oauth:2.0:oob&scope=https://www.googleapis.com/auth/userinfo.profile&response_type=code";
-	private final String urlGoogle = "https://accounts.google.com/o/oauth2/auth?client_id=131195431047.apps.googleusercontent.com&redirect_uri=https://www.google.be/oauth2callback&scope=https://www.googleapis.com/auth/userinfo.email&response_type=code";
-    
-    private final String urlFacebook = "https://www.facebook.com/dialog/oauth?client_id=346106655506499&redirect_uri=https://www.facebook.com/connect/login_success.html&scope=user_about_me&response_type=token";
-    
-    private final String urlMicrosoft = "https://login.live.com/oauth20_authorize.srf?client_id=00000000440E9C2C&redirect_uri=https://login.live.com/oauth20_desktop.srf&scope=wl.basic&response_type=token";
-    
-    //String uri, clientID, scope, callbackUri, responseType;
-    
-    public AuthBrowser() {
-		/*
-		 * uri = "https://www.facebook.com/dialog/oauth?";
-		clientID = "client_id=" + "346106655506499&";
-		scope = "scope=" + "user_about_me&";
-		callbackUri = "redirect_uri=" + "https://www.facebook.com/connect/login_success.html&";
-		responseType = "response_type=" + "token&";
-		
-		URL = uri+clientID+scope+callbackUri+responseType;
-		*/
+	public AuthBrowser(final LoginDialog loginDialog, SocialMedia social) {
+    	this.social = social;
+    	this.loginDialog = loginDialog;
 	}
+    
+    public void buildUrl() {
+    	StringBuilder params = new StringBuilder("");
+    	params.append(social.getAuthorizeTokenUrl());
+        params.append("client_id=").append(social.getClientID());
+        params.append("&scope=").append(social.getScope());
+        params.append("&response_type=").append(social.getResponseType());
+        //params.append("&state=").append("DCEEFWF45453sdffef424"); // enkel Linkedin => state is soort van code
+        params.append("&redirect_uri=").append(social.getRedirectUrl());
+        
+        Url = params.toString();
+        System.out.println(Url);
+    }
 	
-	public void initBrowser(final LoginDialog loginDialog, final JFXPanel browserPanel, final String provider) {
+	public void initBrowser(final JFXPanel browserPanel) {
         //this.pack();
         Platform.runLater(new Runnable() { // this will run initFX as JavaFX-Thread
             @Override
             public void run() {
-                startBrowser(loginDialog, browserPanel, provider);
+                startBrowser(browserPanel);
             }
         });
     }
 	
-	private void startBrowser(final LoginDialog loginDialog, final JFXPanel BrowserPanel, String provider) {
+	private void startBrowser(final JFXPanel BrowserPanel) {
         group = new Group();
         scene = new Scene(group);
         BrowserPanel.setScene(scene);
@@ -84,17 +61,9 @@ public class AuthBrowser {
         webView.setMaxSize(BROWSERWIDTH, BROWSERHEIGHT);
         webEngine = webView.getEngine();
         
-        if(provider.equals("Facebook")) {
-            webEngine.load(urlFacebook);
-        }
-        else if(provider.equals("Google")) {
-            webEngine.load(urlGoogle);
-        }
-        else if(provider.equals("Microsoft")) {
-            webEngine.load(urlMicrosoft);
-        }
+        webEngine.load(Url);
         
-        webEngine.titleProperty().addListener(new ChangeListener<String>() {
+        /*webEngine.titleProperty().addListener(new ChangeListener<String>() {
             @Override
             public void changed(ObservableValue<? extends String> observable, String oldValue, final String newValue) {
                 SwingUtilities.invokeLater(new Runnable() {
@@ -108,7 +77,7 @@ public class AuthBrowser {
                     }
                 });
             }
-        });
+        });*/
         webEngine.locationProperty().addListener(new ChangeListener<String>() {
             @Override
             public void changed(ObservableValue<? extends String> ov, String oldValue, final String newValue) {
@@ -119,19 +88,26 @@ public class AuthBrowser {
                         //Google
                         if(url != null && url.startsWith("https://www.google.be/oauth2callback")) {
                         	//System.out.println(url.substring(42));
-                            loginDialog.maakExterneGebruiker(url.substring(42), "Google");
-                            exit(); 
+                            loginDialog.loginExtern(url.substring(42), "Google");
+                            //exit(); 
+                        }
+                        //Linkedin
+                        if(url != null && url.startsWith("http://www.linkedin.com/chronomatic?code=")) {
+                        	//System.out.println(url.substring(41,156));
+                            loginDialog.loginExtern(url.substring(41,156), "Linkedin");
+                            //exit(); 
                         }
                         //Facebook
                         if(url != null && url.startsWith("https://www.facebook.com/connect/login_success.html")) {
-                        	System.out.println(url.substring(65, 180));
-                            loginDialog.maakExterneGebruiker(url.substring(65, 180), "Facebook");
-                            exit(); 
+                        	//System.out.println(url.substring(65, 195));
+                            loginDialog.loginExtern(url.substring(65), "Facebook");
+                            //exit(); 
                         }
                         //Micosoft
-                        if(url != null && url.startsWith("https://login.live.com/oauth20_desktop.srf?")) {
-                            loginDialog.maakExterneGebruiker(url.substring(64, 173), "Microsoft");
-                            exit(); 
+                        if(url != null && url.startsWith("http://www.dvl-sanitair.be/")) {
+                        	//System.out.println(url.substring(33,69));
+                            loginDialog.loginExtern(url.substring(33, 69), "Microsoft");
+                            //exit(); 
                         }
                     }
                 });
@@ -150,9 +126,7 @@ public class AuthBrowser {
                     @Override 
                     public void run() {
                         //System.err.println( "exit/invokeLater/run" );
-                        //thisDialog.dispose();
-                    	
-                    	
+                        loginDialog.dispose();
                     }
                 });
             }

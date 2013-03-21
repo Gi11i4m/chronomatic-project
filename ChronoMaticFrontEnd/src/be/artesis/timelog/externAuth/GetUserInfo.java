@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package be.artesis.timelog.externAuth;
 
 import java.io.BufferedReader;
@@ -12,24 +8,16 @@ import java.net.URL;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-
 public class GetUserInfo {
 
-	public static String retreive(String token, String provider) throws IOException, JSONException {
-                
-            String urlGoogle = "https://www.googleapis.com/oauth2/v1/userinfo?access_token=" + token;
-            String urlFacebook = "https://graph.facebook.com/me?fields=email&access_token=" + token;
-            URL url = new URL(urlFacebook);
-
-            if(provider.equals("Facebook")) {
-                    url = new URL(urlFacebook);
-            }
-            else if(provider.equals("Google")) {
-                    url = new URL(urlGoogle);
-            }
-            else if(provider.equals("Microsoft")) {
-                url = new URL(urlGoogle);
-            }
+	public static String request(String token, SocialMedia social) throws IOException, JSONException {
+		
+		StringBuilder params = new StringBuilder();
+		params.append(social.getUserInfoUrl());
+		params.append("access_token=");
+		params.append(token);
+		
+		URL url = new URL(params.toString());
 		
 	    HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 	    conn.setRequestMethod("GET");
@@ -37,24 +25,26 @@ public class GetUserInfo {
 	    if (conn.getResponseCode() != 200){
 	        throw new RuntimeException("Failed : HTTP error code : " + conn.getResponseCode());
 	    }
+	    
 	    BufferedReader br = new BufferedReader(new InputStreamReader((conn.getInputStream())));
-	    String line;
-	    String test = null;
-	    while ((line = br.readLine()) != null)
-	    {
-	        test+=(line);
+	    String readLine;
+	    String JSONString = null;
+	    while ((readLine = br.readLine()) != null) {
+	        JSONString+=(readLine);
 	    }
 	    
 	    br.close();
-	    System.out.println(test);
-	    test = test.replace(" ","");
-	    test = test.replace("null", "");
 	    
-	    JSONObject requestedJson = new JSONObject(test);
+	    JSONString = JSONString.replace(" ","");
+	    JSONString = JSONString.replace("null", "");
+	    
+	    JSONObject requestedJson = new JSONObject(JSONString);
+	    //System.out.println(requestedJson.getJSONObject("emails"));
+	    
 	    
 //	    String info = "id: " + requestedJson.getString("id");
 //	    info += "\r\nemail: " + requestedJson.getString("email");
-	    
-	    return requestedJson.getString("email");
+	    return requestedJson.getString("email"); // MS
+	    //return requestedJson.getString("email");
 	}
 }

@@ -56,6 +56,7 @@ public class LoginDialog extends javax.swing.JDialog {
 	private static final long serialVersionUID = 1L;
 	private boolean result;
 	public Validator validator;
+	private SocialMedia social;
 	private java.awt.Frame parent;
 
 	private CardLayout layout;
@@ -110,35 +111,24 @@ public class LoginDialog extends javax.swing.JDialog {
 	public void setResult(boolean result) {
 		this.result = result;
 	}
+	
+	
 
-	// ni meer dan?
-	// private boolean loginOnServer(String username, char[] password) throws
-	// ConnectException, IOException, JSONException, WebserviceException {
-	// return validator.login(username, new String(password));
-	// }
-
-	public void maakExterneGebruiker(String authCode, String provider) {
+	public void loginExtern(String accessToken, String provider) {
 		try {
-			
-
+			// Facebook moet geen Access token aanvragen, de rest wel
 			if (!provider.equals("Facebook")) {
-				SocialMedia social = new Google();
-				authCode = RequestToken.request(authCode, social);
+				accessToken = AccessToken.request(accessToken, social);
 			}
-			String email = GetUserInfo.retreive(authCode, provider);
+			
+			String email = GetUserInfo.request(accessToken, social);
+			
+			// bestaat gebruiker al?
 			if (CheckExistingUsernames.check(email)) {
 				Inserter.CreateUserExtern("", "", email, "");
 			}
-
-			loginExtern(email);
-
-		} catch (IOException | JSONException | WebserviceException e) {
-			e.printStackTrace();
-		}
-	}
-
-	public void loginExtern(String email) {
-		try {
+			//System.out.println(email);
+			
 			if (validator.loginExtern(email)) {
 				loadUserData();
 				result = true;
@@ -146,9 +136,8 @@ public class LoginDialog extends javax.swing.JDialog {
 			} else {
 				JOptionPane.showMessageDialog(this, "Login failed");
 			}
-		} catch (HeadlessException | IOException | JSONException
-				| WebserviceException e) {
-			// TODO Auto-generated catch block
+
+		} catch (IOException | JSONException | WebserviceException e) {
 			e.printStackTrace();
 		}
 	}
@@ -350,18 +339,18 @@ public class LoginDialog extends javax.swing.JDialog {
 			aanmeldenButton.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent evt) {
 	
-					// Thread voor het loading gifke
-					/*Thread loginLoadingThread = new Thread() {
+					 //Thread voor het loading gifke
+					Thread loginLoadingThread = new Thread() {
 						public void run() {
 							SwingUtilities.invokeLater(new Runnable() {
 								public void run() {
 									displayTab("loading");
 								}
-							});*/
+							});
 							login();
-						//}
-					//};
-					//loginLoadingThread.start();
+						}
+					};
+					loginLoadingThread.start();
 				}
 			});
 		}
@@ -375,17 +364,20 @@ public class LoginDialog extends javax.swing.JDialog {
 
 		googleJButton.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
+				social = new Google();
 				loginProviderJButtonClicked(evt);
 			}
 		});
 
 		facebookJButton.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
+				social = new Facebook();
 				loginProviderJButtonClicked(evt);
 			}
 		});
 		microsoftJButton.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
+				social = new Microsoft();
 				loginProviderJButtonClicked(evt);
 			}
 		});
@@ -400,8 +392,9 @@ public class LoginDialog extends javax.swing.JDialog {
 	}
 
 	private void loginProviderJButtonClicked(ActionEvent evt) {
-		AuthBrowser browser = new AuthBrowser();
-		browser.initBrowser(this, browserPanel, evt.getActionCommand());
+		AuthBrowser browser = new AuthBrowser(this, social);
+		browser.buildUrl();
+		browser.initBrowser(browserPanel);
 		this.displayTab(BROWSERPANEL);
 	}
 }

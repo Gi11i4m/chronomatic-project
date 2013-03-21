@@ -2,40 +2,46 @@ package be.artesis.timelog.externAuth;
 
 public class Facebook extends SocialMedia {
 
-	private Facebook() {}
+	public Facebook() {}
 	
-	private static String clientID = "";
-	private static String clientSecret = "";
-	private static String redirectUri = "";
+	private final String clientID = "346106655506499";
+	private final String clientSecret = "N2CHWpyn35OdOE1KqU_lXNx6";
+	private final String redirectUrl = "https://www.facebook.com/connect/login_success.html";
+	private final String scope = "user_about_me";
+	private final String responseType = "token";
+	private final String authorizeTokenUrl = "https://www.facebook.com/dialog/oauth?";
+	private final String accesTokenUrl = "";
+	private final String userInfoUrl = "https://graph.facebook.com/me?fields=email&";
 	
-
-	@Override
 	public String getClientID() {
-		// TODO Auto-generated method stub
-		return null;
+		return clientID;
 	}
 
-	@Override
 	public String getClientSecret() {
-		// TODO Auto-generated method stub
-		return null;
+		return clientSecret;
 	}
 
-	@Override
-	public String getRedirectUri() {
-		// TODO Auto-generated method stub
-		return null;
+	public String getRedirectUrl() {
+		return redirectUrl;
 	}
 
-	@Override
 	public String getScope() {
-		// TODO Auto-generated method stub
-		return null;
+		return scope;
 	}
 
-	@Override
 	public String getResponseType() {
-		// TODO Auto-generated method stub
-		return null;
+		return responseType;
+	}
+
+	public String getAuthorizeTokenUrl() {
+		return authorizeTokenUrl;
+	}
+
+	public String getAccessTokenUrl() {
+		return accesTokenUrl;
+	}
+
+	public String getUserInfoUrl() {
+		return userInfoUrl;
 	}
 }

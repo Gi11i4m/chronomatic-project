@@ -1,17 +1,15 @@
 package be.artesis.timelog.externAuth;
 
-public class Google extends SocialMedia {
+public class Twitter extends SocialMedia {
 
-	public Google() {}
-	
-	private final String clientID = "131195431047.apps.googleusercontent.com";
-	private final String clientSecret = "N2CHWpyn35OdOE1KqU_lXNx6";
-	private final String redirectUrl = "https://www.google.be/oauth2callback";
+	private final String clientID = "Xj4mD97cHYAa5TRgDc37g";
+	private final String clientSecret = "6CeWGfo99pJoWTKITbJsMWDiLJRmyErh1C9w4CYi2E";
+	private final String redirectUrl = "http://www.twitter.com/#";
 	private final String scope = "https://www.googleapis.com/auth/userinfo.email";
 	private final String responseType = "code";
-	private final String authorizeTokenUrl = "https://accounts.google.com/o/oauth2/auth?";
-	private final String accesTokenUrl = "https://accounts.google.com/o/oauth2/token";
-	private final String userInfoUrl = "https://www.googleapis.com/oauth2/v1/userinfo?";
+	private final String authorizeTokenUrl = "https://api.twitter.com/oauth/authorize";
+	private final String accesTokenUrl = "https://api.twitter.com/oauth/request_token";
+	private final String userInfoUrl = "https://api.twitter.com/oauth/";
 	
 	public String getClientID() {
 		return clientID;
@@ -44,4 +42,5 @@ public class Google extends SocialMedia {
 	public String getUserInfoUrl() {
 		return userInfoUrl;
 	}
+
 }
