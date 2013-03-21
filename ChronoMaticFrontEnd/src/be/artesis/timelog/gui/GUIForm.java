@@ -55,9 +55,9 @@ public class GUIForm extends javax.swing.JFrame {
 
 	LoginDialog login;
 	Validator validator;
-	final String NEWCLIENTITEM = "New client";
-	final String NEWTASKITEM = "New task";
-	final String NEWPROJECTITEM = "New project";
+	final String NEWCLIENTITEM = "< New client >";
+	final String NEWTASKITEM = "< New task >";
+	final String NEWPROJECTITEM = "< New project >";
 
 	public GUIForm() {
 		validator = Validator.getInstance();
@@ -81,7 +81,7 @@ public class GUIForm extends javax.swing.JFrame {
 		TasksJLabel = new javax.swing.JLabel();
 		projectsJPanel = new javax.swing.JPanel();
 		projectsJLabel = new javax.swing.JLabel();
-		projectsJLabel.setBounds(10, 11, 44, 16);
+		projectsJLabel.setBounds(10, 11, 204, 16);
 		jScrollPane1 = new javax.swing.JScrollPane();
 		jScrollPane1.setBounds(10, 33, 204, 336);
 		setCurrentProjectJButton = new javax.swing.JButton();
@@ -659,7 +659,6 @@ public class GUIForm extends javax.swing.JFrame {
 			} else {
 				UserInterface.saveProject(projectsJList.getSelectedIndex(), name, startdate, enddate, opdrachtgeverID);
 				JOptionPane.showMessageDialog(this, "Project edited!");
-
 			}
 		} catch (DataInputException | IOException | WebserviceException | JSONException | ParseException ex) {
 			ex.printStackTrace();
@@ -794,15 +793,14 @@ public class GUIForm extends javax.swing.JFrame {
 			int selectedIndex = list.getSelectedIndex();
 			DefaultListModel listmodel = new DefaultListModel();
 
-			for (Iterator<Project> it = UserInterface.getUser().getProjects().iterator(); it.hasNext();) {
+			for (Iterator<Project> it = UserInterface.getProjects().iterator(); it.hasNext();) {
 				Project p = it.next();
 				listmodel.addElement(p);
 			}
 
-			if (list == projectsJList) {
+			if (list.equals(projectsJList)) {
 				listmodel.addElement(NEWPROJECTITEM);
 				list.setModel(listmodel);
-				listmodel.removeElement(NEWPROJECTITEM);
 			} else {
 				list.setModel(listmodel);
 			}
@@ -840,7 +838,7 @@ public class GUIForm extends javax.swing.JFrame {
 			int selectedIndex = list.getSelectedIndex();
 			DefaultListModel listmodel = new DefaultListModel();
 
-			for (Iterator<Opdrachtgever> it = UserInterface.getUser().getOpdrachtgevers().iterator(); it.hasNext();) {
+			for (Iterator<Opdrachtgever> it = UserInterface.getClients().iterator(); it.hasNext();) {
 				Opdrachtgever o = it.next();
 				listmodel.addElement(o);
 			}
@@ -863,17 +861,16 @@ public class GUIForm extends javax.swing.JFrame {
 	// Load info from PROJECT with index parameter
 	private void loadProjectInfo(int index) {
 		if (index != -1) {
-			Project p = UserInterface.getUser().getProjects().get(index);
+			Project p = UserInterface.getProjects().get(index);
 			nameJTextField.setText(p.getNaam());
-			projectStartDateChooser.setDate(new Date(p.getBegindatum()));
-			projectEndDateChooser.setDate(new Date(p.getEinddatum()));
+			projectStartDateChooser.setDate(new Date(p.getBegindatum()*1000));
+			projectEndDateChooser.setDate(new Date(p.getEinddatum()*1000));
 			try {
-				clientJLabel.setText(UserInterface.getUser().getOpdrachtgever(p.getOpdrachtgeverId()).toString());
+				clientJLabel.setText(UserInterface.getClient(p.getOpdrachtgeverId()).toString());
 			} catch (DataInputException ex) {
 				ex.printStackTrace();
 				JOptionPane.showMessageDialog(this, ex.getMessage());
 			}
-
 			refreshTasksList(p, projectTasksJList);
 			percentageCompleteJProgressBar.setValue((int) (((Project) projectsJList.getSelectedValue()).getPercentageComplete() * 100));
 		}
@@ -884,8 +881,8 @@ public class GUIForm extends javax.swing.JFrame {
 		if (index != -1) {
 			Taak t = (Taak) tasksJList.getSelectedValue();
 			taskNameJTextField.setText(t.getNaam());
-			taskStartDateChooser.setDate(new Date(t.getBegindatum()));
-			taskEndDateChooser.setDate(new Date(t.getGeschatteEinddatum()));
+			taskStartDateChooser.setDate(new Date(t.getBegindatum()*1000));
+			taskEndDateChooser.setDate(new Date(t.getGeschatteEinddatum()*1000));
 			taskCommentJTextArea.setText(t.getCommentaar());
 			taskCompletedJCheckBox.setSelected(t.getCompleted());
 			DefaultListModel listmodel = new DefaultListModel();
@@ -954,16 +951,19 @@ public class GUIForm extends javax.swing.JFrame {
 		Component[] clientPanelComps = panel.getComponents();
 		for (Component c : clientPanelComps) {
 			if (c instanceof JTextField) {
-				((JTextField) c).setText(null);
+				((JTextField)c).setText(null);
+			} else if(c instanceof JList){
+				((JList)c).setModel(new DefaultListModel());
+			} else if(c instanceof JTextArea){
+				((JTextArea)c).setText(null);
+			} else if(c instanceof JCheckBox){
+				((JCheckBox)c).setSelected(false);
+			} else if(c instanceof JDateChooser){
+				((JDateChooser)c).invalidate();
+				((JDateChooser)c).repaint();
 			}
-		}
-		if (panel.equals(projectFieldsJPanel)) {
-			projectTasksJList.setModel(new DefaultListModel());
-			clientJLabel.setText(null);
-		} else if (panel.equals(taskFieldsJPanel)) {
-			taskCommentJTextArea.setText(null);
-			workedTimeJList.setModel(new DefaultListModel());
-			taskCompletedJCheckBox.setSelected(false);
+			
+			
 		}
 	}
 
@@ -1000,14 +1000,16 @@ public class GUIForm extends javax.swing.JFrame {
 	}
 
 	private void projectsJListValueChanged(javax.swing.event.ListSelectionEvent evt) {
-		if (projectsJList.getSelectedValue().equals(NEWPROJECTITEM)) {
-			clearFieldsOnPanel(projectFieldsJPanel);
-			saveProjectJButton.setText("Save [new]");
-		} else {
-			loadProjectInfo(projectsJList.getSelectedIndex());
-			saveProjectJButton.setText("Save");
+		if (projectsJList.getSelectedIndex() != -1) {
+			if (projectsJList.getSelectedValue().equals(NEWPROJECTITEM)) {
+				clearFieldsOnPanel(projectFieldsJPanel);
+				saveProjectJButton.setText("Save [new]");
+			} else {
+				loadProjectInfo(projectsJList.getSelectedIndex());
+				saveProjectJButton.setText("Save");
+			}
+			toggleButtonStates();
 		}
-		toggleButtonStates();
 	}
 
 	private void guiOpened(java.awt.event.WindowEvent evt) {
@@ -1022,36 +1024,40 @@ public class GUIForm extends javax.swing.JFrame {
 	}
 
 	private void clientsJListValueChanged(javax.swing.event.ListSelectionEvent evt) {
-		if (clientsJList.getSelectedValue().equals(NEWCLIENTITEM)) {
-			clearFieldsOnPanel(clientFieldsJPanel);
-			saveClientJButton.setText("Save [new]");
-		} else {
-			loadClientInfo(clientsJList.getSelectedIndex());
-			saveClientJButton.setText("Save");
+		if (projectsJList.getSelectedIndex() != -1) {
+			if (clientsJList.getSelectedValue().equals(NEWCLIENTITEM)) {
+				clearFieldsOnPanel(clientFieldsJPanel);
+				saveClientJButton.setText("Save [new]");
+			} else {
+				loadClientInfo(clientsJList.getSelectedIndex());
+				saveClientJButton.setText("Save");
+			}
+			toggleButtonStates();
 		}
-		toggleButtonStates();
 	}
 
 	private void tasksJListprojectListValueChanged(javax.swing.event.ListSelectionEvent evt) {
-		if (tasksJList.getSelectedValue().equals(NEWTASKITEM)) {
-			clearFieldsOnPanel(taskFieldsJPanel);
-			saveTaskJButton.setText("Save [new]");
-		} else {
-			try {
-				loadTaskInfo(tasksJList.getSelectedIndex());
-			} catch (GUIException ex) {
-				ex.printStackTrace();
-				JOptionPane.showMessageDialog(this, ex.getMessage());
-			} finally {
-				saveTaskJButton.setText("Save");
+		if (projectsJList.getSelectedIndex() != -1) {
+			if (tasksJList.getSelectedValue().equals(NEWTASKITEM)) {
+				clearFieldsOnPanel(taskFieldsJPanel);
+				saveTaskJButton.setText("Save [new]");
+			} else {
+				try {
+					loadTaskInfo(tasksJList.getSelectedIndex());
+				} catch (GUIException ex) {
+					ex.printStackTrace();
+					JOptionPane.showMessageDialog(this, ex.getMessage());
+				} finally {
+					saveTaskJButton.setText("Save");
+				}
 			}
+			toggleButtonStates();
 		}
-		toggleButtonStates();
 	}
 
 	private void homeProjectsJListValueChanged(javax.swing.event.ListSelectionEvent evt) {
 		if (homeProjectsJList.getSelectedIndex() != -1) {
-			refreshTasksList(UserInterface.getUser().getProject(homeProjectsJList.getSelectedIndex()), homeTasksJList);
+			refreshTasksList(UserInterface.getProject(homeProjectsJList.getSelectedIndex()), homeTasksJList);
 		} else {
 			try {
 				refreshTasksList(UserInterface.getCurrentProject(), homeTasksJList);
