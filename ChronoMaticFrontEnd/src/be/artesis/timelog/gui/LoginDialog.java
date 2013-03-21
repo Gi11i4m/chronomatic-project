@@ -47,11 +47,12 @@ import java.awt.event.ActionEvent;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import java.awt.Font;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 
-public class LoginDialog extends javax.swing.JDialog {
+public class LoginDialog extends javax.swing.JDialog implements ActionListener {
 	@SuppressWarnings("unchecked")
 	private static final long serialVersionUID = 1L;
 	private boolean result;
@@ -77,6 +78,8 @@ public class LoginDialog extends javax.swing.JDialog {
 	private JButton facebookJButton;
 	private JButton browserGoBackJButton;
 	private JButton microsoftJButton;
+	private JButton twitterJButton;
+	private JButton linkedinJButton;
 
 	public LoginDialog(java.awt.Frame parent, boolean modal, Validator validator) {
 		super(parent, modal);
@@ -306,13 +309,17 @@ public class LoginDialog extends javax.swing.JDialog {
 		newAccountJLabel.setBounds(140, 331, 160, 16);
 		thirdPartyJLabel = new JLabel("Of meld u aan bij");
 		thirdPartyJLabel.setBounds(464, 125, 118, 16);
+		browserGoBackJButton = new JButton("Aanmelden met een andere account");
 		googleJButton = new JButton("Google");
 		googleJButton.setBounds(493, 175, 107, 25);
 		facebookJButton = new JButton("Facebook");
 		facebookJButton.setBounds(493, 228, 107, 25);
-		browserGoBackJButton = new JButton("Aanmelden met een andere account");
 		microsoftJButton = new JButton("Microsoft");
 		microsoftJButton.setBounds(493, 281, 107, 25);
+		twitterJButton = new JButton("Twitter");
+		twitterJButton.setBounds(493, 334, 107, 25);
+		linkedinJButton = new JButton("LinkedIn");
+		linkedinJButton.setBounds(400, 287, 107, 25);
 
 		// set label fonts
 		usernameJLabel.setFont(new Font("Tahoma", Font.PLAIN, 16));
@@ -320,6 +327,13 @@ public class LoginDialog extends javax.swing.JDialog {
 		browserGoBackJButton.setBounds(0, 462, 240, 25);
 
 		usernameJTextField.setColumns(10);
+		
+		// set action listener
+		googleJButton.addActionListener(this);
+		facebookJButton.addActionListener(this);
+		microsoftJButton.addActionListener(this);
+		twitterJButton.addActionListener(this);
+		linkedinJButton.addActionListener(this);
 
 		// add to panel
 		basisPanel.add(usernameJLabel);
@@ -332,6 +346,8 @@ public class LoginDialog extends javax.swing.JDialog {
 		basisPanel.add(googleJButton);
 		basisPanel.add(facebookJButton);
 		basisPanel.add(microsoftJButton);
+		basisPanel.add(twitterJButton);
+		basisPanel.add(linkedinJButton);
 		browserPanel.add(browserGoBackJButton);
 
 		// Action listeners
@@ -361,26 +377,8 @@ public class LoginDialog extends javax.swing.JDialog {
 		finally {
 			//JOptionPane.showMessageDialog(this, "Login mislukt");			
 		}
-
-		googleJButton.addActionListener(new java.awt.event.ActionListener() {
-			public void actionPerformed(java.awt.event.ActionEvent evt) {
-				social = new Google();
-				loginProviderJButtonClicked(evt);
-			}
-		});
-
-		facebookJButton.addActionListener(new java.awt.event.ActionListener() {
-			public void actionPerformed(java.awt.event.ActionEvent evt) {
-				social = new Facebook();
-				loginProviderJButtonClicked(evt);
-			}
-		});
-		microsoftJButton.addActionListener(new java.awt.event.ActionListener() {
-			public void actionPerformed(java.awt.event.ActionEvent evt) {
-				social = new Microsoft();
-				loginProviderJButtonClicked(evt);
-			}
-		});
+		
+		
 
 		browserGoBackJButton
 				.addActionListener(new java.awt.event.ActionListener() {
@@ -389,8 +387,31 @@ public class LoginDialog extends javax.swing.JDialog {
 						displayTab(BASISPANEL);
 					}
 		});
+		
+		
 	}
+	
+	@Override
+	public void actionPerformed(ActionEvent evt) {
 
+        switch (evt.getActionCommand()) {
+            case "Google":  social = new Google();
+                     break;
+            case "Facebook":  social = new Facebook();
+                     break;
+            case "Microsoft":  social = new Microsoft();
+                     break;
+            case "Twitter":  social = new Twitter();
+                     break;
+            case "Linkedin":  social = new Linkedin();
+                     break;
+            default: social = new Google();
+                     break;
+        }
+        
+        loginProviderJButtonClicked(evt);
+	}
+	
 	private void loginProviderJButtonClicked(ActionEvent evt) {
 		AuthBrowser browser = new AuthBrowser(this, social);
 		browser.buildUrl();
