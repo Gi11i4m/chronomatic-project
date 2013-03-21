@@ -129,11 +129,15 @@ public class LoginDialog extends javax.swing.JDialog implements ActionListener {
 			}
 
 			String email = GetUserInfo.request(accessToken, social);
+<<<<<<< HEAD
+			System.out.println(email);
+=======
 
+>>>>>>> 0461c66ba78bd58258f86852ac322b62c27d1655
 			// bestaat gebruiker al?
-			if (CheckExistingUsernames.check(email)) {
-				Inserter.CreateUserExtern("", "", email, "");
-			}
+			//if (CheckExistingUsernames.check(email)) {
+				//Inserter.CreateUserExtern("", "", email, "");
+			//}
 			//System.out.println(email);
 
 			if (validator.loginExtern(email)) {
@@ -151,27 +155,27 @@ public class LoginDialog extends javax.swing.JDialog implements ActionListener {
 
 	public void login() {
 		try {
-            if (usernameJTextField.getText().equals("")) {
-                
-                    UserInterface.setUser(new Gebruiker("Flebus", "Gilliam", "Gi11i4m", "gi11i4m@gmail.com")); // tijdelijke user
-                    
-						UserInterface.getUser().addOpdrachtgever(new Opdrachtgever("Flebus", "Gilliam", "Mot-art", "blabla", "0475", 456));
-					
-                    UserInterface.getUser().addOpdrachtgever(new Opdrachtgever("Schouten", "Girmi", "Artesis", "bla", "0478", 457));
-                    UserInterface.getUser().addProject(new Project("Test project 1", 456, 1343059472, 1453059472));
-                    UserInterface.getUser().addProject(new Project("Test project 2", 457, 1243059472, 1553059472));
-                    UserInterface.getUser().getProjects().get(1).addTaak(new Taak("Test taak", 1343059472, 1453059472, ""));
+			if (usernameJTextField.getText().equals("")) {
 
-                result = true;
-                this.dispose();
-                
-            } else if (validator.login(usernameJTextField.getText(), new String(passwordJPasswordField.getPassword()))) {
-            	loadUserData();
-                result = true;
-                this.dispose();
-            } else {
+				UserInterface.setUser(new Gebruiker("Flebus", "Gilliam", "Gi11i4m", "gi11i4m@gmail.com")); // tijdelijke user
 
-            }
+				UserInterface.getUser().addOpdrachtgever(new Opdrachtgever("Flebus", "Gilliam", "Mot-art", "blabla", "0475", 456));
+
+				UserInterface.getUser().addOpdrachtgever(new Opdrachtgever("Schouten", "Girmi", "Artesis", "bla", "0478", 457));
+				UserInterface.getUser().addProject(new Project("Test project 1", 456, 1343059472, 1453059472));
+				UserInterface.getUser().addProject(new Project("Test project 2", 457, 1243059472, 1553059472));
+				UserInterface.getUser().getProjects().get(1).addTaak(new Taak("Test taak", 1343059472, 1453059472, ""));
+
+				result = true;
+				this.dispose();
+
+			} else if (validator.login(usernameJTextField.getText(), new String(passwordJPasswordField.getPassword()))) {
+				loadUserData();
+				result = true;
+				this.dispose();
+			} else {
+
+			}
 			if (usernameJTextField.getText().equals("")) {
 
 				UserInterface.setUser(new Gebruiker("Flebus", "Gilliam", "Gi11i4m", "gi11i4m@gmail.com")); // tijdelijke user
@@ -246,8 +250,12 @@ public class LoginDialog extends javax.swing.JDialog implements ActionListener {
 		pane.add(loading, "loading");
 
 		ImageIcon loadingGif = new ImageIcon();
+<<<<<<< HEAD
 		loadingGif = new ImageIcon(Toolkit.getDefaultToolkit().getImage(
 				getClass().getResource("/be/artesis/timelog/gui/icons/loading.gif")));
+=======
+		loadingGif = new ImageIcon(Toolkit.getDefaultToolkit().getImage(getClass().getResource("/be/artesis/timelog/gui/icons/loading.gif")));
+>>>>>>> 0461c66ba78bd58258f86852ac322b62c27d1655
 		JLabel loadingJLabel = new JLabel(loadingGif);
 		loadingJLabel.setBounds(431, 124, 200, 200);
 		loading.add(loadingJLabel);
@@ -376,6 +384,7 @@ public class LoginDialog extends javax.swing.JDialog implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent evt) {
 
+<<<<<<< HEAD
 		JButton btn = (JButton) evt.getSource();
 
         switch (btn.getName()) {
@@ -398,6 +407,33 @@ public class LoginDialog extends javax.swing.JDialog implements ActionListener {
 	}
 	
 	private void loginProviderJButtonClicked() {
+=======
+		switch (evt.getActionCommand()) {
+		case "Google":
+			social = new Google();
+			break;
+		case "Facebook":
+			social = new Facebook();
+			break;
+		case "Microsoft":
+			social = new Microsoft();
+			break;
+		case "Twitter":
+			social = new Twitter();
+			break;
+		case "Linkedin":
+			social = new Linkedin();
+			break;
+		default:
+			social = new Google();
+			break;
+		}
+
+		loginProviderJButtonClicked(evt);
+	}
+
+	private void loginProviderJButtonClicked(ActionEvent evt) {
+>>>>>>> 0461c66ba78bd58258f86852ac322b62c27d1655
 		AuthBrowser browser = new AuthBrowser(this, social);
 		browser.buildUrl();
 		browser.initBrowser(browserPanel);

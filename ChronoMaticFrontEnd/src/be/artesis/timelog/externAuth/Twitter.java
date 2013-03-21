@@ -43,4 +43,7 @@ public class Twitter extends SocialMedia {
 		return userInfoUrl;
 	}
 
+	public String toString() {
+		return "twitter";
+	}
 }

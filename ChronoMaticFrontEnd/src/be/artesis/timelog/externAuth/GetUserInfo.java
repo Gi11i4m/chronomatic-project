@@ -1,23 +1,35 @@
 package be.artesis.timelog.externAuth;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.StringReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.w3c.dom.Document;
+import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
 
 public class GetUserInfo {
 
-	public static String request(String token, SocialMedia social) throws IOException, JSONException {
+	public static String request(String token, SocialMedia social) throws IOException, JSONException, ParserConfigurationException, SAXException {
+		URL url;
+		String returnString = null;
 		
 		StringBuilder params = new StringBuilder();
 		params.append(social.getUserInfoUrl());
 		params.append("access_token=");
 		params.append(token);
 		
-		URL url = new URL(params.toString());
+		url = new URL(params.toString());
 		
 	    HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 	    conn.setRequestMethod("GET");
@@ -28,23 +40,34 @@ public class GetUserInfo {
 	    
 	    BufferedReader br = new BufferedReader(new InputStreamReader((conn.getInputStream())));
 	    String readLine;
-	    String JSONString = null;
+	    String inputData = "";
 	    while ((readLine = br.readLine()) != null) {
-	        JSONString+=(readLine);
+	        inputData+=(readLine);
 	    }
-	    
 	    br.close();
 	    
-	    JSONString = JSONString.replace(" ","");
-	    JSONString = JSONString.replace("null", "");
+	    System.out.println(inputData);
+	    //inputData = inputData.replace(" ","");
+	    JSONObject requestedJson; 
 	    
-	    JSONObject requestedJson = new JSONObject(JSONString);
-	    //System.out.println(requestedJson.getJSONObject("emails"));
+	    if(social.toString().equals("linkedin")) {
+	    	DocumentBuilderFactory docBuilderFactory = DocumentBuilderFactory.newInstance();
+	        DocumentBuilder docBuilder = docBuilderFactory.newDocumentBuilder();
+	        Document doc = docBuilder.parse (new InputSource(new StringReader(inputData)));
+	        doc.getDocumentElement ().normalize ();
+	        returnString = doc.getElementsByTagName("email-address").item(0).getTextContent();
+	    }
 	    
-	    
-//	    String info = "id: " + requestedJson.getString("id");
-//	    info += "\r\nemail: " + requestedJson.getString("email");
-	    return requestedJson.getString("email"); // MS
-	    //return requestedJson.getString("email");
+	    else if(social.toString().equals("microsoft")) {
+	    	requestedJson = new JSONObject(inputData);
+	    	JSONObject obj = requestedJson.getJSONObject("emails");
+	    	returnString = obj.getString("account");
+	    }
+	    else {
+	    	requestedJson = new JSONObject(inputData);
+	    	returnString = requestedJson.getString("email");
+	    }
+
+	    return returnString;
 	}
 }
