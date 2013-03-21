@@ -17,10 +17,10 @@ public class AccessToken {
 
     	// maak de POST query
         StringBuilder params = new StringBuilder();
-        params.append("client_id=").append(social.getClientID());
+        params.append("code=").append(URLEncoder.encode(code, "UTF-8"));
+        params.append("&client_id=").append(social.getClientID());
         params.append("&redirect_uri=").append(social.getRedirectUrl());
         params.append("&client_secret=").append(social.getClientSecret());
-        params.append("&code=").append(URLEncoder.encode(code, "UTF-8"));
         params.append("&grant_type=authorization_code");
 
 
@@ -30,7 +30,7 @@ public class AccessToken {
         conn.setRequestMethod("POST");
         conn.setDoOutput(true);
         conn.setRequestProperty("Content-Type","application/x-www-form-urlencoded");
-        //conn.setRequestProperty("Content-Length", Integer.toString(params.toString().length()));
+        //conn.setRequestProperty("Content-Length", Integer.toString(params.toString().length())); // blijkbaar ni nodig
         conn.connect();
 
 
@@ -50,16 +50,15 @@ public class AccessToken {
         String line;
 
         String test = "";
-        while ((line = rd.readLine()) != null)
-        {
+        while ((line = rd.readLine()) != null) {
             test+=(line);
         }
 
         rd.close();
-        System.out.println(test);
+        
         test = test.replace(" ","");
         test = test.replace("null", "");
-
+        System.out.println(test);
         JSONObject requestedJson = new JSONObject(test);
 
         return requestedJson.getString("access_token");

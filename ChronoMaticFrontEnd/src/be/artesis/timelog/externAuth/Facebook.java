@@ -44,4 +44,8 @@ public class Facebook extends SocialMedia {
 	public String getUserInfoUrl() {
 		return userInfoUrl;
 	}
+	
+	public String toString() {
+		return "facebook";
+	}
 }

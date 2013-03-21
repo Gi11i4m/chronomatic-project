@@ -9,6 +9,5 @@ public abstract class SocialMedia {
 	public abstract String getAuthorizeTokenUrl();
 	public abstract String getAccessTokenUrl();
 	public abstract String getUserInfoUrl();
-	
-	
+	public abstract String toString();
 }

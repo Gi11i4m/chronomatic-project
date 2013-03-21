@@ -28,6 +28,7 @@ import java.net.MalformedURLException;
 
 import javax.swing.JOptionPane;
 import org.json.JSONException;
+import org.xml.sax.SAXException;
 //
 import java.awt.Dimension;
 import java.awt.Point;
@@ -41,6 +42,9 @@ import javafx.scene.web.WebView;
 import javax.swing.*;
 
 import javax.swing.JPanel;
+import javax.swing.border.Border;
+import javax.xml.parsers.ParserConfigurationException;
+
 import java.awt.CardLayout;
 import java.awt.Container;
 import java.awt.event.ActionEvent;
@@ -50,6 +54,7 @@ import java.awt.Font;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
 
 public class LoginDialog extends javax.swing.JDialog implements ActionListener {
@@ -73,13 +78,14 @@ public class LoginDialog extends javax.swing.JDialog implements ActionListener {
 	private JLabel paswoordJLabel;
 	private JButton aanmeldenButton;
 	private JLabel newAccountJLabel;
-	private JLabel thirdPartyJLabel;
+	private JLabel socialMediaJLabel;
 	private JButton googleJButton;
 	private JButton facebookJButton;
 	private JButton browserGoBackJButton;
 	private JButton microsoftJButton;
 	private JButton twitterJButton;
 	private JButton linkedinJButton;
+	JLabel googleIconJLabel;
 
 	public LoginDialog(java.awt.Frame parent, boolean modal, Validator validator) {
 		super(parent, modal);
@@ -125,11 +131,11 @@ public class LoginDialog extends javax.swing.JDialog implements ActionListener {
 			}
 			
 			String email = GetUserInfo.request(accessToken, social);
-			
+			System.out.println(email);
 			// bestaat gebruiker al?
-			if (CheckExistingUsernames.check(email)) {
-				Inserter.CreateUserExtern("", "", email, "");
-			}
+			//if (CheckExistingUsernames.check(email)) {
+				//Inserter.CreateUserExtern("", "", email, "");
+			//}
 			//System.out.println(email);
 			
 			if (validator.loginExtern(email)) {
@@ -140,7 +146,7 @@ public class LoginDialog extends javax.swing.JDialog implements ActionListener {
 				JOptionPane.showMessageDialog(this, "Login failed");
 			}
 
-		} catch (IOException | JSONException | WebserviceException e) {
+		} catch (IOException | JSONException | WebserviceException | ParserConfigurationException | SAXException e) {
 			e.printStackTrace();
 		}
 	}
@@ -288,11 +294,22 @@ public class LoginDialog extends javax.swing.JDialog implements ActionListener {
 
 		ImageIcon loadingGif = new ImageIcon();
 		loadingGif = new ImageIcon(Toolkit.getDefaultToolkit().getImage(
-				getClass().getResource(
-						"/be/artesis/timelog/gui/icons/loading.gif")));
+				getClass().getResource("/be/artesis/timelog/gui/icons/loading.gif")));
 		JLabel loadingJLabel = new JLabel(loadingGif);
 		loadingJLabel.setBounds(431, 124, 200, 200);
 		loading.add(loadingJLabel);
+		
+		ImageIcon googleIcon = new ImageIcon(Toolkit.getDefaultToolkit().getImage(
+				getClass().getResource("/be/artesis/timelog/gui/icons/google.png")));
+		ImageIcon facebookIcon = new ImageIcon(Toolkit.getDefaultToolkit().getImage(
+				getClass().getResource("/be/artesis/timelog/gui/icons/facebook.png")));
+		ImageIcon microsoftIcon = new ImageIcon(Toolkit.getDefaultToolkit().getImage(
+				getClass().getResource("/be/artesis/timelog/gui/icons/microsoft.png")));
+		ImageIcon twitterIcon = new ImageIcon(Toolkit.getDefaultToolkit().getImage(
+				getClass().getResource("/be/artesis/timelog/gui/icons/twitter.png")));
+		ImageIcon linkedinIcon = new ImageIcon(Toolkit.getDefaultToolkit().getImage(
+				getClass().getResource("/be/artesis/timelog/gui/icons/linkedin.png")));
+
 
 		// initialize fields
 		usernameJLabel = new JLabel("Gebruikersnaam:");
@@ -307,21 +324,38 @@ public class LoginDialog extends javax.swing.JDialog implements ActionListener {
 		passwordJPasswordField.setBounds(31, 256, 247, 22);
 		newAccountJLabel = new JLabel("Of maak een account aan");
 		newAccountJLabel.setBounds(140, 331, 160, 16);
-		thirdPartyJLabel = new JLabel("Of meld u aan bij");
-		thirdPartyJLabel.setBounds(464, 125, 118, 16);
+		socialMediaJLabel = new JLabel("Of meld u aan bij");
+		socialMediaJLabel.setBounds(464, 125, 130, 20);
+		
 		browserGoBackJButton = new JButton("Aanmelden met een andere account");
-		googleJButton = new JButton("Google");
-		googleJButton.setBounds(493, 175, 107, 25);
-		facebookJButton = new JButton("Facebook");
-		facebookJButton.setBounds(493, 228, 107, 25);
-		microsoftJButton = new JButton("Microsoft");
-		microsoftJButton.setBounds(493, 281, 107, 25);
-		twitterJButton = new JButton("Twitter");
-		twitterJButton.setBounds(493, 334, 107, 25);
-		linkedinJButton = new JButton("LinkedIn");
-		linkedinJButton.setBounds(400, 287, 107, 25);
+		googleJButton = new JButton(googleIcon);
+		googleJButton.setBounds(493, 175, 48, 48);
+		googleJButton.setName("google");
+		facebookJButton = new JButton(facebookIcon);
+		facebookJButton.setBounds(493, 228, 48, 48);
+		facebookJButton.setName("facebook");
+		microsoftJButton = new JButton(microsoftIcon);
+		microsoftJButton.setBounds(493, 281, 48, 48);
+		microsoftJButton.setName("microsoft");
+		twitterJButton = new JButton(twitterIcon);
+		twitterJButton.setBounds(493, 334, 48, 48);
+		twitterJButton.setName("twitter");
+		linkedinJButton = new JButton(linkedinIcon);
+		linkedinJButton.setBounds(493, 387, 48, 48);
+		linkedinJButton.setName("linkedin");
+		
+		// Backgrounds socialmedia buttons
+		googleJButton.setBackground(Color.WHITE);
+		facebookJButton.setBackground(Color.WHITE);
+		microsoftJButton.setBackground(Color.WHITE);
+		twitterJButton.setBackground(Color.WHITE);
+		linkedinJButton.setBackground(Color.WHITE);
+		
+		linkedinJButton.setIcon(linkedinIcon);
+		linkedinJButton.setName("linkedin");
 
 		// set label fonts
+		socialMediaJLabel.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		usernameJLabel.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		paswoordJLabel.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		browserGoBackJButton.setBounds(0, 462, 240, 25);
@@ -335,6 +369,7 @@ public class LoginDialog extends javax.swing.JDialog implements ActionListener {
 		twitterJButton.addActionListener(this);
 		linkedinJButton.addActionListener(this);
 
+
 		// add to panel
 		basisPanel.add(usernameJLabel);
 		basisPanel.add(paswoordJLabel);
@@ -342,7 +377,7 @@ public class LoginDialog extends javax.swing.JDialog implements ActionListener {
 		basisPanel.add(usernameJTextField);
 		basisPanel.add(passwordJPasswordField);
 		basisPanel.add(newAccountJLabel);
-		basisPanel.add(thirdPartyJLabel);
+		basisPanel.add(socialMediaJLabel);
 		basisPanel.add(googleJButton);
 		basisPanel.add(facebookJButton);
 		basisPanel.add(microsoftJButton);
@@ -394,25 +429,28 @@ public class LoginDialog extends javax.swing.JDialog implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent evt) {
 
-        switch (evt.getActionCommand()) {
-            case "Google":  social = new Google();
+		JButton btn = (JButton) evt.getSource();
+
+        switch (btn.getName()) {
+            case "google":  social = new Google();
                      break;
-            case "Facebook":  social = new Facebook();
+            case "facebook":  social = new Facebook();
                      break;
-            case "Microsoft":  social = new Microsoft();
+            case "microsoft":  social = new Microsoft();
                      break;
-            case "Twitter":  social = new Twitter();
+            case "twitter":  social = new Twitter();
                      break;
-            case "Linkedin":  social = new Linkedin();
+            case "linkedin":  social = new Linkedin();
                      break;
             default: social = new Google();
                      break;
         }
+        this.displayTab("loading");
         
-        loginProviderJButtonClicked(evt);
+        loginProviderJButtonClicked();
 	}
 	
-	private void loginProviderJButtonClicked(ActionEvent evt) {
+	private void loginProviderJButtonClicked() {
 		AuthBrowser browser = new AuthBrowser(this, social);
 		browser.buildUrl();
 		browser.initBrowser(browserPanel);
