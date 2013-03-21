@@ -3,6 +3,10 @@ package be.artesis.timelog.gui;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.SystemColor;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
 import java.io.IOException;
 import java.text.ParseException;
 import java.util.Date;
@@ -25,8 +29,6 @@ import javax.swing.border.BevelBorder;
 import org.json.JSONException;
 
 import be.artesis.timelog.clock.Clock;
-import be.artesis.timelog.controller.Deleter;
-import be.artesis.timelog.controller.Updater;
 import be.artesis.timelog.model.Validator;
 import be.artesis.timelog.model.WebserviceException;
 import be.artesis.timelog.view.DataInputException;
@@ -39,10 +41,6 @@ import com.jgoodies.forms.factories.FormFactory;
 import com.jgoodies.forms.layout.ColumnSpec;
 import com.jgoodies.forms.layout.FormLayout;
 import com.jgoodies.forms.layout.RowSpec;
-import java.awt.event.FocusAdapter;
-import java.awt.event.FocusEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
 import com.toedter.calendar.JDateChooser;
 
 /**
@@ -200,7 +198,7 @@ public class GUIForm extends javax.swing.JFrame {
 		});
 
 		projectFieldsJPanel = new JPanel();
-		projectFieldsJPanel.setBounds(321, 33, 353, 336);
+		projectFieldsJPanel.setBounds(340, 33, 334, 336);
 		projectFieldsJPanel.setBackground(Color.DARK_GRAY);
 		projectFieldsJPanel.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
 		projectsJList = new javax.swing.JList();
@@ -649,23 +647,26 @@ public class GUIForm extends javax.swing.JFrame {
 
 	// Save PROJECT
 	private void saveProject() {
-		String name = nameJTextField.getText();
-		String startdate = startdateJTextField.getText();
-		String enddate = enddateJTextField.getText();
-		int opdrachtgeverID = 0; // FIXME int halen uit selectie uit dropdownbox
-
 		try {
+			String name = nameJTextField.getText();
+			long startdate = projectStartDateChooser.getDate().getTime();
+			long enddate = projectEndDateChooser.getDate().getTime();
+			int opdrachtgeverID = 0; // FIXME int halen uit selectie uit dropdownbox
+
 			if (projectsJList.getSelectedValue().equals(NEWPROJECTITEM)) {
 				UserInterface.saveNewProject(name, startdate, enddate, opdrachtgeverID);
 				JOptionPane.showMessageDialog(this, "Project added!");
 			} else {
-				UserInterface.saveProject(projectsJList.getSelectedIndex(), name, startdate, enddate);
+				UserInterface.saveProject(projectsJList.getSelectedIndex(), name, startdate, enddate, opdrachtgeverID);
 				JOptionPane.showMessageDialog(this, "Project edited!");
 
 			}
 		} catch (DataInputException | IOException | WebserviceException | JSONException | ParseException ex) {
 			ex.printStackTrace();
 			JOptionPane.showMessageDialog(this, ex.getMessage());
+		} catch (NullPointerException ex) {
+			ex.printStackTrace();
+			JOptionPane.showMessageDialog(this, "Please choose a valid date");
 		} finally {
 			refreshProjectsList(projectsJList, homeProjectsJList);
 			toggleButtonStates();
@@ -864,8 +865,8 @@ public class GUIForm extends javax.swing.JFrame {
 		if (index != -1) {
 			Project p = UserInterface.getUser().getProjects().get(index);
 			nameJTextField.setText(p.getNaam());
-			startdateJTextField.setText(Clock.timestampToDateString(p.getBegindatum()));
-			enddateJTextField.setText(Clock.timestampToDateString(p.getEinddatum()));
+			projectStartDateChooser.setDate(new Date(p.getBegindatum()));
+			projectEndDateChooser.setDate(new Date(p.getEinddatum()));
 			try {
 				clientJLabel.setText(UserInterface.getUser().getOpdrachtgever(p.getOpdrachtgeverId()).toString());
 			} catch (DataInputException ex) {
@@ -1010,7 +1011,7 @@ public class GUIForm extends javax.swing.JFrame {
 	}
 
 	private void guiOpened(java.awt.event.WindowEvent evt) {
-		ingelogdJLabel.setText(UserInterface.getUser().getGebruikersnaam());
+		ingelogdJLabel.setText(UserInterface.getUser().getVolledigeNaam());
 		refreshProjectsList(projectsJList, homeProjectsJList);
 		refreshClientsList(clientsJList);
 	}
