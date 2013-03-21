@@ -327,6 +327,7 @@ public class GUIForm extends javax.swing.JFrame {
 		tasksJPanel.add(jScrollPane3);
 
 		tasksJList_1 = new JList();
+		tasksJList_1.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
 		jScrollPane3.setViewportView(tasksJList_1);
 		tasksJPanel.add(removeTaskJButton);
 
@@ -450,6 +451,7 @@ public class GUIForm extends javax.swing.JFrame {
 		clientsJLabel = new javax.swing.JLabel();
 		jScrollPane5 = new javax.swing.JScrollPane();
 		clientsJList = new javax.swing.JList();
+		clientsJList.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
 		removeClientJButton = new javax.swing.JButton();
 
 		clientsJPanel.setBackground(new java.awt.Color(153, 153, 153));
