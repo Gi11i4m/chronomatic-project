@@ -2,6 +2,7 @@
 *.class
 *.db
 *.log
+DatabaseContainer.java
 
 # Package Files #
 *.war
