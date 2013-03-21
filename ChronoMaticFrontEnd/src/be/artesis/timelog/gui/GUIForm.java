@@ -11,7 +11,6 @@ import java.util.Iterator;
 import javax.swing.DefaultListModel;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
-import javax.swing.InputVerifier;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JLabel;
@@ -97,6 +96,7 @@ public class GUIForm extends javax.swing.JFrame {
 		removeTaskJButton.setBounds(10, 417, 204, 23);
 		scheduleJPanel = new javax.swing.JPanel();
 		scheduleJLabel = new javax.swing.JLabel();
+		scheduleJLabel.setBounds(10, 11, 66, 19);
 		optionsJPanel = new javax.swing.JPanel();
 		settingsJLabel = new javax.swing.JLabel();
 		headerJPanel = new javax.swing.JPanel();
@@ -596,29 +596,28 @@ public class GUIForm extends javax.swing.JFrame {
 		scheduleJLabel.setForeground(new java.awt.Color(255, 255, 255));
 		scheduleJLabel.setText("Schedule");
 		
-
-		javax.swing.GroupLayout scheduleJPanelLayout = new javax.swing.GroupLayout(scheduleJPanel);
-		scheduleJPanelLayout.setHorizontalGroup(
-			scheduleJPanelLayout.createParallelGroup(Alignment.LEADING)
-				.addGroup(scheduleJPanelLayout.createSequentialGroup()
-					.addGroup(scheduleJPanelLayout.createParallelGroup(Alignment.LEADING)
-						.addGroup(scheduleJPanelLayout.createSequentialGroup()
-							.addContainerGap()
-							.addComponent(scheduleJLabel)))
-					.addContainerGap(402, Short.MAX_VALUE))
-		);
-		scheduleJPanelLayout.setVerticalGroup(
-			scheduleJPanelLayout.createParallelGroup(Alignment.LEADING)
-				.addGroup(scheduleJPanelLayout.createSequentialGroup()
-					.addContainerGap()
-					.addComponent(scheduleJLabel)
-					.addContainerGap(294, Short.MAX_VALUE))
-		);
-		scheduleJPanel.setLayout(scheduleJPanelLayout);
-		scheduleJPanelLayout.setHorizontalGroup(scheduleJPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGroup(scheduleJPanelLayout.createSequentialGroup().addContainerGap().addComponent(scheduleJLabel).addContainerGap(621, Short.MAX_VALUE)));
-		scheduleJPanelLayout.setVerticalGroup(scheduleJPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGroup(scheduleJPanelLayout.createSequentialGroup().addContainerGap().addComponent(scheduleJLabel).addContainerGap(369, Short.MAX_VALUE)));
+		dateChooser = new JDateChooser();
+		dateChooser.setBounds(10, 48, 99, 20);
+		
+		testButton = new JButton("New button");
+		testButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				Date d = dateChooser.getDate();
+				testTextField.setText(d.toString());
+			}
+		});
+		testButton.setBounds(10, 79, 89, 23);
+		
+		testTextField = new JTextField();
+		testTextField.setBounds(147, 82, 137, 20);
+		testTextField.setColumns(10);
 
 		JTabbedPane.addTab("", new javax.swing.ImageIcon(getClass().getResource("/be/artesis/timelog/gui/icons/CalendarNeonIcon.png")), scheduleJPanel, "Schedule");
+		scheduleJPanel.setLayout(null);
+		scheduleJPanel.add(dateChooser);
+		scheduleJPanel.add(testButton);
+		scheduleJPanel.add(testTextField);
+		scheduleJPanel.add(scheduleJLabel);
 
 		optionsJPanel.setBackground(new java.awt.Color(153, 153, 153));
 
@@ -1181,4 +1180,7 @@ public class GUIForm extends javax.swing.JFrame {
 	private JPanel projectFieldsJPanel;
 	private JList tasksJList_1;
 	private JList projectTasksJList;
+	private JDateChooser dateChooser;
+	private JButton testButton;
+	private JTextField testTextField;
 }
