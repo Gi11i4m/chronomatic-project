@@ -17,7 +17,7 @@ public class Taak implements Cloneable {
     private String commentaar;
     private boolean completed;
     private int id;
-    private ArrayList<Tijdspanne> bestedeTijd;
+    private ArrayList<Tijdspanne> totaleTijd;
 
     //================================================================================
     // Constructors
@@ -33,7 +33,7 @@ public class Taak implements Cloneable {
         this.geschatteEinddatum = geschatteEinddatum;
         this.commentaar = commentaar;
         this.completed = false;    
-        this.bestedeTijd = new ArrayList<Tijdspanne>();      
+        this.totaleTijd = new ArrayList<Tijdspanne>();      
         this.id = id;       
     }
 
@@ -80,7 +80,7 @@ public class Taak implements Cloneable {
 
     public void setBegindatum(long datum) throws DataInputException {
         if (geschatteEinddatum == 0 || datum <= geschatteEinddatum) {
-            for (Tijdspanne t : bestedeTijd) {
+            for (Tijdspanne t : totaleTijd) {
                 if (t.getBeginTijd() < datum) {
                     throw new DataInputException("One or more timespans out of task bounds");
                 }
@@ -106,7 +106,7 @@ public class Taak implements Cloneable {
 
     public void setGeschatteEinddatum(long datum) throws DataInputException {
         if (datum >= begindatum) {
-            for (Tijdspanne t : bestedeTijd) {
+            for (Tijdspanne t : totaleTijd) {
                 if (t.getEindTijd() > datum) {
                     throw new DataInputException("One or more timespans out of task bounds");
                 }
@@ -145,13 +145,13 @@ public class Taak implements Cloneable {
         return id;
     }
 
-    public ArrayList<Tijdspanne> getBestedeTijd() {
-        return bestedeTijd;
+    public ArrayList<Tijdspanne> getTotaleTijd() {
+        return totaleTijd;
     }
 
     public ArrayList<Tijdspanne> getGewerkteTijd(){
     	ArrayList<Tijdspanne> gewerkt = new ArrayList<Tijdspanne>();
-    	for (Tijdspanne ts : bestedeTijd) {
+    	for (Tijdspanne ts : totaleTijd) {
 			if (!ts.isPauze()) {
 				gewerkt.add(ts);
 			}
@@ -161,7 +161,7 @@ public class Taak implements Cloneable {
     
     public ArrayList<Tijdspanne> getPauze(){
     	ArrayList<Tijdspanne> pauze = new ArrayList<Tijdspanne>();
-    	for (Tijdspanne ts : bestedeTijd) {
+    	for (Tijdspanne ts : totaleTijd) {
 			if (ts.isPauze()) {
 				pauze.add(ts);
 			}
@@ -171,7 +171,7 @@ public class Taak implements Cloneable {
     
     public long getTotaleWerktijd() {
         long l = 0;
-        for (Tijdspanne t : bestedeTijd) {
+        for (Tijdspanne t : totaleTijd) {
         	if (!t.isPauze()) {
                 l += t.getTijdsduur();
 			}
@@ -181,7 +181,7 @@ public class Taak implements Cloneable {
 
     public long getTotalePauze() {
         long l = 0;
-        for (Tijdspanne t : bestedeTijd) {
+        for (Tijdspanne t : totaleTijd) {
         	if (t.isPauze()) {
         		l += t.getTijdsduur();
 			}
@@ -196,23 +196,35 @@ public class Taak implements Cloneable {
     
     public void addBestedeTijd(Tijdspanne t) throws DataInputException {
         if (t.getBeginTijd() >= begindatum && t.getEindTijd() <= geschatteEinddatum) {
-            bestedeTijd.add(t);
+            totaleTijd.add(t);
         } else {
             throw new DataInputException("Timespan out of task bounds");
         }
     }
 
     public boolean removeBestedeTijd(Tijdspanne t) {
-        return bestedeTijd.remove(t);
+        return totaleTijd.remove(t);
     }
 
     public void removeBestedeTijd(int i) {
-        bestedeTijd.remove(i);
+        totaleTijd.remove(i);
     }
 
     //================================================================================
     // Extra
     //================================================================================
+    
+    // zet de index van een Tijdspanne binnen de pauze/gewerkte lijst om in een index van de totale lijst
+    public int convertTimespanIndex(int index, boolean isPause) {
+    	ArrayList<Tijdspanne> list;
+    	if (isPause) {
+    		list = getPauze();
+		} else {
+			list = getGewerkteTijd();
+		}
+		Tijdspanne ts = list.get(index);
+		return totaleTijd.indexOf(ts);
+    }
     
     //return tijd tot de geschatte einddatum in seconden
     public long tijdResterend() {
@@ -230,7 +242,7 @@ public class Taak implements Cloneable {
     }
 
     public void setGewerkteTijd(Tijdspanne[] t) {
-        Collections.addAll(this.bestedeTijd, t);
+        Collections.addAll(this.totaleTijd, t);
     }
 
     @Override

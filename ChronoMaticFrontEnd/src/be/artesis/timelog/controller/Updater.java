@@ -32,6 +32,4 @@ public class Updater {
 	public static void updateTijdspanne(String sessionKey, Tijdspanne tijdspanne) throws IOException, WebserviceException{		 
 		Connection.execute("tijdspanne/update/" +sessionKey + "/" + tijdspanne.getEindTijd()+ "/" +tijdspanne.getEindTijd() + "/" + tijdspanne.isPauze() + "/" + tijdspanne.getId());
 	}
-	
-	// FIXME updateTijdspanne methode toevoegen
 }

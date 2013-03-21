@@ -598,7 +598,7 @@ public class GUIForm extends javax.swing.JFrame {
 		
 		dateChooser = new JDateChooser();
 		
-		//FIXME moet weg
+		//FIXME testcode
 		dateChooser.setDateFormatString("dd-MM-yyyy");
 		testButton = new JButton("New button");
 		testButton.addActionListener(new ActionListener() {
@@ -700,14 +700,13 @@ public class GUIForm extends javax.swing.JFrame {
 	}
 
 	/* Einde gegenereerde code */
-
+	
+	//FIXME testcode
 	public void testMethod(){
 		Date d = dateChooser.getDate();
-		dateChooser.setDateFormatString("dd-MM-yyyy");
-		InputVerifier test = dateChooser.getInputVerifier();
-		if (test == null) {
-			JOptionPane.showMessageDialog(this," ttt");
-		}
+		
+		JOptionPane.showMessageDialog(this, d.toString());
+		
 		
 	}
 	
@@ -955,7 +954,7 @@ public class GUIForm extends javax.swing.JFrame {
 
 			DefaultListModel listmodel = new DefaultListModel();
 
-			for (Iterator<Tijdspanne> it = t.getBestedeTijd().iterator(); it.hasNext();) {
+			for (Iterator<Tijdspanne> it = t.getTotaleTijd().iterator(); it.hasNext();) {
 				Tijdspanne ts = it.next();
 				listmodel.addElement(ts);
 			}

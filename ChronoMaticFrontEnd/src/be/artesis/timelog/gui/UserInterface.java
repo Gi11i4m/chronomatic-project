@@ -93,7 +93,7 @@ public class UserInterface {
     }
     
     public static Tijdspanne getTimespan(int projectindex, int taskindex, int index){
-    	return getTask(projectindex, taskindex).getBestedeTijd().get(index);
+    	return getTask(projectindex, taskindex).getTotaleTijd().get(index);
     }
     
     public static Tijdspanne getWorkedTimespan(int projectindex, int taskindex, int index){
@@ -220,27 +220,17 @@ public class UserInterface {
 		return ts;
 	}
 	
-	public static void saveTimespan(int index, long start, long stop, Taak t, boolean isPauze)
-			throws DataInputException{
-		Tijdspanne ts;
-		if (!isPauze) {
-			ts = t.getGewerkteTijd().get(index);
-		} else {
-			ts = t.getPauze().get(index);
-		}
+	public static void saveTimespan(int index, long start, long stop, Taak t, boolean isPause)
+			throws DataInputException, IOException, WebserviceException{
+		int i = t.convertTimespanIndex(index, isPause);
 		
-		Tijdspanne ts2 = (Tijdspanne) ts.clone();
-		ts2.setBeginTijd(start);
-		ts2.setEindTijd(stop);
-		ts2.setPauze(isPauze);
+		Tijdspanne ts = (Tijdspanne) t.getTotaleTijd().get(i).clone();
+		ts.setBeginTijd(start);
+		ts.setEindTijd(stop);
+		ts.setPauze(isPause);
 		
-		//FIXME updater toevoegen
-		//Updater.updateTijdspanne(validator.getSessionKey(), ts2);
-		if (!isPauze) {
-			ts = t.getGewerkteTijd().set(index, ts2);
-		} else {
-			ts = t.getPauze().set(index, ts2);
-		}
+		t.getTotaleTijd().set(i, ts);
+		Updater.updateTijdspanne(validator.getSessionKey(), ts);
 	}
 
     //================================================================================
