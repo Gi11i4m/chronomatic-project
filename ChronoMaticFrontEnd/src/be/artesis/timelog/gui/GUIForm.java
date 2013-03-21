@@ -964,15 +964,15 @@ public class GUIForm extends javax.swing.JFrame {
 		Component[] clientPanelComps = panel.getComponents();
 		for (Component c : clientPanelComps) {
 			if (c instanceof JTextField) {
-				((JTextField)c).setText(null);
-			} else if(c instanceof JList){
-				((JList)c).setModel(new DefaultListModel());
-			} else if(c instanceof JTextArea){
-				((JTextArea)c).setText(null);
-			} else if(c instanceof JCheckBox){
-				((JCheckBox)c).setSelected(false);
-			} else if(c instanceof JDateChooser){
-				((JDateChooser)c).setDate(new Date());
+				((JTextField) c).setText(null);
+			} else if (c instanceof JList) {
+				((JList) c).setModel(new DefaultListModel());
+			} else if (c instanceof JTextArea) {
+				((JTextArea) c).setText(null);
+			} else if (c instanceof JCheckBox) {
+				((JCheckBox) c).setSelected(false);
+			} else if (c instanceof JDateChooser) {
+				((JDateChooser) c).setDate(new Date());
 			}
 		}
 	}
@@ -1009,6 +1009,8 @@ public class GUIForm extends javax.swing.JFrame {
 			refreshProjectsList(projectsJList, homeProjectsJList);
 			refreshTasksList(UserInterface.getCurrentProject(), tasksJList);
 			clearFieldsOnPanel(taskFieldsJPanel);
+			// FIXME takenlijst selected index op -1 na setten van curr. project
+			tasksJList.setSelectedIndex(-1);
 		} catch (GUIException ex) {
 			ex.printStackTrace();
 			JOptionPane.showMessageDialog(this, ex.getMessage());
