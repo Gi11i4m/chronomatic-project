@@ -31,26 +31,29 @@ public class LocalDatabaseWriter {
 	
 		
 		
-		public void schrijf(){
+		public void schrijfProject(Project project){
 			JSONObject soorten = new JSONObject();
 	
 			JSONObject gegproject = new JSONObject();
 			
-			gegproject.put("naam", p.getNaam());
-			gegproject.put("beginDatumPro", p.getBegindatum());
-			gegproject.put("eindDatumPro", p.getEinddatum());
+			gegproject.put("naam", project.getNaam());
+			gegproject.put("beginDatumPro", project.getBegindatum());
+			gegproject.put("eindDatumPro", project.getEinddatum());
 			
 			//////////
+		}
+		public void schrijfTaak(Taak taak){
 			
 			JSONObject gegtaak = new JSONObject();
-			gegtaak.put("naam", t.getNaam());
-			gegtaak.put("beginDatum", t.getBegindatum());
-			gegtaak.put("eindDatum", t.getGeschatteEinddatum());
-			gegtaak.put("commentaar", t.getCommentaar());
+			gegtaak.put("naam", taak.getNaam());
+			gegtaak.put("beginDatum", taak.getBegindatum());
+			gegtaak.put("eindDatum", taak.getGeschatteEinddatum());
+			gegtaak.put("commentaar", taak.getCommentaar());
 			
 			JSONArray taakarray = new JSONArray();
 			taakarray.put(gegtaak);
-			
+		}
+		public void schrijfTijdspannne(Tijdspanne tijd){
 			////
 			
 			JSONObject gegtijd = new JSONObject();
@@ -59,14 +62,11 @@ public class LocalDatabaseWriter {
 			
 			JSONArray tijdarray = new JSONArray();
 			tijdarray.put(gegtijd);
-			//
-			gegtijd = new JSONObject();
-			gegtijd.put("beginTijd", tijd2.getBeginTijd());
-			gegtijd.put("eindTijd", tijd2.getEindTijd());
+											
+		}
+		
 			
-			tijdarray.put(gegtijd);
-			
-			////
+		private void schrijfweg(){
 			
 			gegtaak.put("tijdspannes", tijdarray);
 			
@@ -75,7 +75,7 @@ public class LocalDatabaseWriter {
 			soorten.put("project",gegproject);
 	
 			System.out.println(soorten);
-		 
+		}
 			/*try {
 		 
 				FileWriter file = new FileWriter("c:\\test.json");

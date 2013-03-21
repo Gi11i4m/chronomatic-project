@@ -16,7 +16,7 @@ public class Test {
 		Tijdspanne tijd = new Tijdspanne(123,123);
 		Tijdspanne tijd2 = new Tijdspanne(798,798);
 		
-		
+		LocalDatabaseWriter(p);
 		
 
 	}
