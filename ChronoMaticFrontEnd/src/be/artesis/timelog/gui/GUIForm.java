@@ -583,22 +583,6 @@ public class GUIForm extends javax.swing.JFrame {
 		scheduleJLabel.setFont(new java.awt.Font("Tw Cen MT", 1, 14));
 		scheduleJLabel.setForeground(new java.awt.Color(255, 255, 255));
 		scheduleJLabel.setText("Schedule");
-		
-		dateChooser = new JDateChooser();
-		dateChooser.setBounds(10, 48, 99, 20);
-		
-		testButton = new JButton("New button");
-		testButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-					Date d = dateChooser.getDate();
-					testTextField.setText(d.toString());
-			}
-		});
-		testButton.setBounds(10, 79, 89, 23);
-		
-		testTextField = new JTextField();
-		testTextField.setBounds(147, 82, 137, 20);
-		testTextField.setColumns(10);
 
 		JTabbedPane.addTab("", new javax.swing.ImageIcon(getClass().getResource("/be/artesis/timelog/gui/icons/CalendarNeonIcon.png")), scheduleJPanel, "Schedule");
 		scheduleJPanel.setLayout(null);
