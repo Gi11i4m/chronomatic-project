@@ -92,7 +92,7 @@ public class GUIForm extends javax.swing.JFrame {
 		removeProjectJButton.setBounds(10, 375, 204, 23);
 		tasksJPanel = new javax.swing.JPanel();
 		tasksJLabel = new javax.swing.JLabel();
-		tasksJLabel.setBounds(10, 14, 33, 16);
+		tasksJLabel.setBounds(10, 14, 204, 16);
 		jScrollPane3 = new javax.swing.JScrollPane();
 		jScrollPane3.setBounds(10, 40, 204, 366);
 		removeTaskJButton = new javax.swing.JButton();
@@ -825,7 +825,6 @@ public class GUIForm extends javax.swing.JFrame {
 			if (list == tasksJList) {
 				listmodel.addElement(NEWTASKITEM);
 				list.setModel(listmodel);
-				listmodel.removeElement(NEWTASKITEM);
 			} else {
 				list.setModel(listmodel);
 			}
@@ -848,7 +847,6 @@ public class GUIForm extends javax.swing.JFrame {
 			if (list == clientsJList) {
 				listmodel.addElement(NEWCLIENTITEM);
 				list.setModel(listmodel);
-				listmodel.removeElement(NEWCLIENTITEM);
 			} else {
 				list.setModel(listmodel);
 			}
@@ -961,11 +959,8 @@ public class GUIForm extends javax.swing.JFrame {
 			} else if(c instanceof JCheckBox){
 				((JCheckBox)c).setSelected(false);
 			} else if(c instanceof JDateChooser){
-				((JDateChooser)c).invalidate();
-				((JDateChooser)c).repaint();
+				((JDateChooser)c).setDate(new Date());
 			}
-			
-			
 		}
 	}
 

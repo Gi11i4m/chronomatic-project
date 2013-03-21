@@ -29,7 +29,8 @@ class TaskCellRenderer extends JLabel implements ListCellRenderer {
 		JLabel renderer = (JLabel) defaultRenderer.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
 		if (value.getClass().equals(String.class)) {
 			// FIXME Font voor < new > shizzle aanpassen
-			renderer.setFont(list.getFont());
+			Font f = list.getFont();
+			renderer.setFont(new Font(f.getName(),f.getStyle() | Font.ITALIC, f.getSize()));
 		} else {
 			t = (Taak) value;
 
