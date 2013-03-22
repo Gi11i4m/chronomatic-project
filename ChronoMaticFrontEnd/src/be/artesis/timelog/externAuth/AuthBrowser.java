@@ -69,9 +69,9 @@ public class AuthBrowser {
         
         webEngine.load(Url);
         
-        webEngine.javaScriptEnabledProperty();
-        Document doc = webEngine.getDocument();
-        System.out.println(doc.getLocalName());
+        //webEngine.javaScriptEnabledProperty();
+        //Document doc = webEngine.getDocument();
+        //System.out.println(doc.getLocalName());
         
         webEngine.locationProperty().addListener(new ChangeListener<String>() {
             @Override
@@ -79,11 +79,15 @@ public class AuthBrowser {
                 SwingUtilities.invokeLater(new Runnable() {
                     @Override public void run() {
                         String url = webEngine.getLocation();
+                        if(url != null) {
+                        	System.out.println("piet");
+                        }
+                        
                         
                         //Google
                         if(url != null && url.startsWith("https://www.google.be/oauth2callback")) {
                         	System.out.println(url.substring(42));
-                        	try {
+                        	/*try {
 								URL i = new URL(url);
 								i.getQuery();
 								System.out.println(i);
@@ -92,7 +96,7 @@ public class AuthBrowser {
 							} catch (MalformedURLException e) {
 								// TODO Auto-generated catch block
 								e.printStackTrace();
-							}
+							}*/
                             loginDialog.loginExtern(url.substring(70), "Google");
                             //exit(); 
                         }

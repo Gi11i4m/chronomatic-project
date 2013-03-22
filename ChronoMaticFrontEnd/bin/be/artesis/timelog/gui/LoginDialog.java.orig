@@ -56,10 +56,8 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
-import org.eclipse.wb.swing.FocusTraversalOnArray;
-import java.awt.Component;
 
-public class LoginDialog extends javax.swing.JFrame implements ActionListener {
+public class LoginDialog extends javax.swing.JDialog implements ActionListener {
 	@SuppressWarnings("unchecked")
 	private static final long serialVersionUID = 1L;
 	private boolean result;
@@ -71,7 +69,8 @@ public class LoginDialog extends javax.swing.JFrame implements ActionListener {
 	private Container pane;
 	private JFXPanel basisPanel;
 	private JFXPanel browserPanel;
-	private JPanel newUserPanel;
+	private final String BASISPANEL = "Basis";
+	private final String BROWSERPANEL = "Browser";
 
 	private JTextField usernameJTextField;
 	private JPasswordField passwordJPasswordField;
@@ -88,10 +87,11 @@ public class LoginDialog extends javax.swing.JFrame implements ActionListener {
 	private JButton linkedinJButton;
 	JLabel googleIconJLabel;
 
-	public LoginDialog(java.awt.Frame parent, Validator validator) {
+	public LoginDialog(java.awt.Frame parent, boolean modal, Validator validator) {
+		super(parent, modal);
 		setResizable(false);
 		this.parent = parent;
-		setDefaultCloseOperation(LoginDialog.DISPOSE_ON_CLOSE);
+		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 		this.validator = validator;
 		result = false;
 		this.setTitle("Login");
@@ -103,25 +103,13 @@ public class LoginDialog extends javax.swing.JFrame implements ActionListener {
 		final int x = (screenSize.width - this.getWidth()) / 2;
 		final int y = (screenSize.height - this.getHeight()) / 2;
 		this.setLocation(x, y);
-		
-		pane = getContentPane();
-		layout = new CardLayout();
-		pane.setBackground(Color.WHITE);
-		pane.setLayout(layout);
-
-		basisPanel = new JFXPanel();
-		browserPanel = new JFXPanel();
-		newUserPanel = new NewUserDialog(this);
-		pane.add(basisPanel, "BASISPANEL");
-		pane.add(browserPanel, "BROWSERPANEL");
-		pane.add(newUserPanel, "NEWUSERPANEL");
 
 		initComponents();
 
-		this.displayTab("BASISPANEL");
+		this.displayTab(BASISPANEL);
 	}
 
-	public void displayTab(String name) {
+	private void displayTab(String name) {
 		layout.show(pane, name);
 	}
 
@@ -141,17 +129,20 @@ public class LoginDialog extends javax.swing.JFrame implements ActionListener {
 			}
 
 			String email = GetUserInfo.request(accessToken, social);
+<<<<<<< HEAD
+			System.out.println(email);
+=======
 
+>>>>>>> 0461c66ba78bd58258f86852ac322b62c27d1655
 			// bestaat gebruiker al?
-			if (CheckExistingUsernames.check(email)) {
-				Inserter.CreateUserExtern("", "", email, "");
-			}
+			//if (CheckExistingUsernames.check(email)) {
+				//Inserter.CreateUserExtern("", "", email, "");
+			//}
 			//System.out.println(email);
 
 			if (validator.loginExtern(email)) {
 				loadUserData();
 				result = true;
-				parent.setVisible(true);
 				this.dispose();
 			} else {
 				JOptionPane.showMessageDialog(this, "Login failed");
@@ -164,28 +155,27 @@ public class LoginDialog extends javax.swing.JFrame implements ActionListener {
 
 	public void login() {
 		try {
-            if (usernameJTextField.getText().equals("")) {
-                
-                    UserInterface.setUser(new Gebruiker("Flebus", "Gilliam", "Gi11i4m", "gi11i4m@gmail.com")); // tijdelijke user
-                    
-						UserInterface.getUser().addOpdrachtgever(new Opdrachtgever("Flebus", "Gilliam", "Mot-art", "blabla", "0475", 456));
-					
-                    UserInterface.getUser().addOpdrachtgever(new Opdrachtgever("Schouten", "Girmi", "Artesis", "bla", "0478", 457));
-                    UserInterface.getUser().addProject(new Project("Test project 1", 456, 1343059472, 1453059472));
-                    UserInterface.getUser().addProject(new Project("Test project 2", 457, 1243059472, 1553059472));
-                    UserInterface.getUser().getProjects().get(1).addTaak(new Taak("Test taak", 1343059472, 1453059472, ""));
+			if (usernameJTextField.getText().equals("")) {
 
-                result = true;
-                this.dispose();
-                
-            } else if (validator.login(usernameJTextField.getText(), new String(passwordJPasswordField.getPassword()))) {
-            	loadUserData();
-                result = true;
-                this.dispose();
-                parent.setVisible(true);
-            } else {
+				UserInterface.setUser(new Gebruiker("Flebus", "Gilliam", "Gi11i4m", "gi11i4m@gmail.com")); // tijdelijke user
 
-            }
+				UserInterface.getUser().addOpdrachtgever(new Opdrachtgever("Flebus", "Gilliam", "Mot-art", "blabla", "0475", 456));
+
+				UserInterface.getUser().addOpdrachtgever(new Opdrachtgever("Schouten", "Girmi", "Artesis", "bla", "0478", 457));
+				UserInterface.getUser().addProject(new Project("Test project 1", 456, 1343059472, 1453059472));
+				UserInterface.getUser().addProject(new Project("Test project 2", 457, 1243059472, 1553059472));
+				UserInterface.getUser().getProjects().get(1).addTaak(new Taak("Test taak", 1343059472, 1453059472, ""));
+
+				result = true;
+				this.dispose();
+
+			} else if (validator.login(usernameJTextField.getText(), new String(passwordJPasswordField.getPassword()))) {
+				loadUserData();
+				result = true;
+				this.dispose();
+			} else {
+
+			}
 			if (usernameJTextField.getText().equals("")) {
 
 				UserInterface.setUser(new Gebruiker("Flebus", "Gilliam", "Gi11i4m", "gi11i4m@gmail.com")); // tijdelijke user
@@ -201,7 +191,6 @@ public class LoginDialog extends javax.swing.JFrame implements ActionListener {
 				loadUserData();
 				result = true;
 				this.dispose();
-				
 			} else {
 				JOptionPane.showMessageDialog(this, "Login failed");
 			}
@@ -245,19 +234,31 @@ public class LoginDialog extends javax.swing.JFrame implements ActionListener {
 
 	private void initComponents() {
 
-		
+		pane = getContentPane();
+		layout = new CardLayout();
+		pane.setBackground(Color.WHITE);
+		pane.setLayout(layout);
+
+		// basisPanel.setLayout(null);
+
+		basisPanel = new JFXPanel();
+		browserPanel = new JFXPanel();
+		pane.add(basisPanel, BASISPANEL);
+		pane.add(browserPanel, BROWSERPANEL);
 
 		JFXPanel loading = new JFXPanel();
 		pane.add(loading, "loading");
-		
-		
 
-		/*ImageIcon loadingGif = new ImageIcon();
+		ImageIcon loadingGif = new ImageIcon();
+<<<<<<< HEAD
 		loadingGif = new ImageIcon(Toolkit.getDefaultToolkit().getImage(
 				getClass().getResource("/be/artesis/timelog/gui/icons/loading.gif")));
+=======
+		loadingGif = new ImageIcon(Toolkit.getDefaultToolkit().getImage(getClass().getResource("/be/artesis/timelog/gui/icons/loading.gif")));
+>>>>>>> 0461c66ba78bd58258f86852ac322b62c27d1655
 		JLabel loadingJLabel = new JLabel(loadingGif);
 		loadingJLabel.setBounds(431, 124, 200, 200);
-		browserPanel.add(loadingJLabel);*/
+		loading.add(loadingJLabel);
 		
 		ImageIcon googleIcon = new ImageIcon(Toolkit.getDefaultToolkit().getImage(
 				getClass().getResource("/be/artesis/timelog/gui/icons/google.png")));
@@ -343,17 +344,15 @@ public class LoginDialog extends javax.swing.JFrame implements ActionListener {
 		basisPanel.add(microsoftJButton);
 		basisPanel.add(twitterJButton);
 		basisPanel.add(linkedinJButton);
-		basisPanel.setFocusTraversalPolicy(new FocusTraversalOnArray(new Component[]{usernameJTextField, passwordJPasswordField, aanmeldenButton, googleJButton, facebookJButton, microsoftJButton, twitterJButton, linkedinJButton, newAccountJLabel}));
 		browserPanel.add(browserGoBackJButton);
 
 		// Action listeners
 		try {
 			aanmeldenButton.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent evt) {
-					login();
 
 					//Thread voor het loading gifke
-					/*Thread loginLoadingThread = new Thread() {
+					Thread loginLoadingThread = new Thread() {
 						public void run() {
 							SwingUtilities.invokeLater(new Runnable() {
 								public void run() {
@@ -362,11 +361,8 @@ public class LoginDialog extends javax.swing.JFrame implements ActionListener {
 							});
 							login();
 						}
-					};*/
-					
-					//loginLoadingThread.start();
-					
-					//parent.setVisible(true);
+					};
+					loginLoadingThread.start();
 				}
 			});
 		} catch (Exception e) {
@@ -379,13 +375,7 @@ public class LoginDialog extends javax.swing.JFrame implements ActionListener {
 		browserGoBackJButton.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
 				Platform.exit();
-				displayTab("BASISPANEL");
-			}
-		});
-
-		newAccountJLabel.addMouseListener(new java.awt.event.MouseAdapter() {
-			public void mouseClicked(java.awt.event.MouseEvent evt) {
-				displayTab("NEWUSERPANEL");
+				displayTab(BASISPANEL);
 			}
 		});
 
@@ -394,6 +384,7 @@ public class LoginDialog extends javax.swing.JFrame implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent evt) {
 
+<<<<<<< HEAD
 		JButton btn = (JButton) evt.getSource();
 
         switch (btn.getName()) {
@@ -416,9 +407,36 @@ public class LoginDialog extends javax.swing.JFrame implements ActionListener {
 	}
 	
 	private void loginProviderJButtonClicked() {
+=======
+		switch (evt.getActionCommand()) {
+		case "Google":
+			social = new Google();
+			break;
+		case "Facebook":
+			social = new Facebook();
+			break;
+		case "Microsoft":
+			social = new Microsoft();
+			break;
+		case "Twitter":
+			social = new Twitter();
+			break;
+		case "Linkedin":
+			social = new Linkedin();
+			break;
+		default:
+			social = new Google();
+			break;
+		}
+
+		loginProviderJButtonClicked(evt);
+	}
+
+	private void loginProviderJButtonClicked(ActionEvent evt) {
+>>>>>>> 0461c66ba78bd58258f86852ac322b62c27d1655
 		AuthBrowser browser = new AuthBrowser(this, social);
 		browser.buildUrl();
 		browser.initBrowser(browserPanel);
-		this.displayTab("BROWSERPANEL");
+		this.displayTab(BROWSERPANEL);
 	}
 }

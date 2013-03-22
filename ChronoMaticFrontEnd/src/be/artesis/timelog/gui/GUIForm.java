@@ -2,7 +2,9 @@ package be.artesis.timelog.gui;
 
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Dimension;
 import java.awt.SystemColor;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusAdapter;
@@ -65,11 +67,16 @@ public class GUIForm extends javax.swing.JFrame {
 	final String NEWTASKITEM = "< New task >";
 	final String NEWPROJECTITEM = "< New project >";
 
-	public GUIForm() {
-		validator = Validator.getInstance();
-		login = new LoginDialog(this, true, validator);
-		login.setVisible(true);
+	public GUIForm(Validator validator) {
+		this.validator = validator;
 		initComponents();
+		
+		// set form in center
+		final Toolkit toolkit = Toolkit.getDefaultToolkit();
+		final Dimension screenSize = toolkit.getScreenSize();
+		final int x = (screenSize.width - this.getWidth()) / 2;
+		final int y = (screenSize.height - this.getHeight()) / 2;
+		this.setLocation(x, y);
 	}
 
 	/* Begin gegenereerde code */
