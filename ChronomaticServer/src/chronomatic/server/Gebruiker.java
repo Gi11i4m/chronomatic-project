@@ -15,6 +15,7 @@ import org.json.ResultsetConverter;
 
 import chronomatic.database.Database;
 import chronomatic.database.DatabaseContainer;
+import chronomatic.email.Mailer;
 
 @Path("gebruiker/")
 public class Gebruiker {
@@ -34,7 +35,7 @@ public class Gebruiker {
 				
 				rs.previous();
 				JSONArray returnObject = ResultsetConverter.convert(rs);
-				
+
 				return returnObject.toString();
 			}
 			else { 
@@ -132,6 +133,9 @@ public class Gebruiker {
 		
 		try {
 			returnObject.put("result", Database.executeNullQuery(con, query));
+			
+			//Mailer.sendmail();
+			
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -155,6 +159,9 @@ public class Gebruiker {
 		
 		try {
 			returnObject.put("result", Database.executeNullQuery(con, query));
+			
+			Mailer.sendmail();
+			
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
