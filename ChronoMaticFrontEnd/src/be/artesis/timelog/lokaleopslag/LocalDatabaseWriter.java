@@ -3,6 +3,8 @@ package be.artesis.timelog.lokaleopslag;
 import java.io.FileWriter;
 import java.io.IOException;
 
+import javax.swing.JOptionPane;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -36,10 +38,11 @@ public class LocalDatabaseWriter {
 			
 			JSONObject jProject = new JSONObject();
 			
+			jProject.put("id", project.getId());
 			jProject.put("naam", project.getNaam());
 			jProject.put("beginDatum", project.getBegindatum());
 			jProject.put("eindDatum", project.getEinddatum());
-			jProject.put("opdrachtgeverId",opdrachtgeverId);
+			jProject.put("linkId",opdrachtgeverId);
 			
 			JSONArray jArr = (JSONArray) jObj.get(PROJECT);
 			jArr.put(jProject);
@@ -49,14 +52,17 @@ public class LocalDatabaseWriter {
 			schrijfweg(jProject);
 		
 		}
-		public void schrijfTaak(Taak taak) throws JSONException, IOException{
+		public void schrijfTaak(Taak taak, int projectID) throws JSONException, IOException{
 			
 			JSONObject jTaak = new JSONObject();
+			
+			jTaak.put("id", taak.getId());
 			jTaak.put("naam", taak.getNaam());
 			jTaak.put("beginDatum", taak.getBegindatum());
 			jTaak.put("eindDatum", taak.getGeschatteEinddatum());
 			jTaak.put("commentaar", taak.getCommentaar());
 			jTaak.put("completed", taak.getCompleted());
+			jTaak.put("linkId", projectID);
 			
 			schrijfweg(jTaak);
 			
@@ -67,10 +73,12 @@ public class LocalDatabaseWriter {
 			////
 			
 			JSONObject jTijd = new JSONObject();
+			
+			jTijd.put("id", tijd.getId());
 			jTijd.put("beginTijd", tijd.getBeginTijd());
 			jTijd.put("eindTijd", tijd.getEindTijd());
 			jTijd.put("ispauze", tijd.isPauze());
-			jTijd.put("taakid", taakid);
+			jTijd.put("linkId", taakid);
 			
 			schrijfweg(jTijd);
 			
@@ -88,6 +96,7 @@ public class LocalDatabaseWriter {
 			
 			JSONObject jOdrachtgever = new JSONObject();
 			
+			jOdrachtgever.put("id", opdrachtgever.getID());
 			jOdrachtgever.put("bedrijfsnaam", opdrachtgever.getBedrijfsnaam());
 			jOdrachtgever.put("voornaam", opdrachtgever.getVoornaam());
 			jOdrachtgever.put("naam", opdrachtgever.getNaam());
@@ -136,7 +145,7 @@ public class LocalDatabaseWriter {
 			
 			schrijfweg(collection);
 			
-			System.out.println(collection);
+			//System.out.println(collection);
 		}
 
 	
