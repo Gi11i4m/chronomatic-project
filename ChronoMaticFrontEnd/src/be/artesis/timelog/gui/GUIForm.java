@@ -376,7 +376,40 @@ public class GUIForm extends javax.swing.JFrame {
 		taskFieldsJPanel.setBackground(Color.DARK_GRAY);
 		taskFieldsJPanel.setBounds(275, 40, 399, 400);
 		tasksJPanel.add(taskFieldsJPanel);
-		taskFieldsJPanel.setLayout(new FormLayout(new ColumnSpec[] { FormFactory.UNRELATED_GAP_COLSPEC, ColumnSpec.decode("56px"), FormFactory.UNRELATED_GAP_COLSPEC, ColumnSpec.decode("1px"), FormFactory.LABEL_COMPONENT_GAP_COLSPEC, ColumnSpec.decode("110px"), FormFactory.DEFAULT_COLSPEC, FormFactory.RELATED_GAP_COLSPEC, ColumnSpec.decode("55px"), ColumnSpec.decode("51px"), FormFactory.RELATED_GAP_COLSPEC, ColumnSpec.decode("max(27dlu;default)"), FormFactory.RELATED_GAP_COLSPEC, ColumnSpec.decode("max(15dlu;default)"), }, new RowSpec[] { FormFactory.UNRELATED_GAP_ROWSPEC, RowSpec.decode("20px"), FormFactory.RELATED_GAP_ROWSPEC, RowSpec.decode("20px:grow"), FormFactory.RELATED_GAP_ROWSPEC, RowSpec.decode("20px:grow"), RowSpec.decode("38px"), RowSpec.decode("51px"), FormFactory.UNRELATED_GAP_ROWSPEC, RowSpec.decode("51px"), FormFactory.RELATED_GAP_ROWSPEC, RowSpec.decode("37px"), FormFactory.UNRELATED_GAP_ROWSPEC, RowSpec.decode("23px"), FormFactory.UNRELATED_GAP_ROWSPEC, FormFactory.DEFAULT_ROWSPEC, FormFactory.UNRELATED_GAP_ROWSPEC, RowSpec.decode("41px"), }));
+		taskFieldsJPanel.setLayout(new FormLayout(new ColumnSpec[] {
+				FormFactory.UNRELATED_GAP_COLSPEC,
+				ColumnSpec.decode("56px"),
+				FormFactory.UNRELATED_GAP_COLSPEC,
+				ColumnSpec.decode("1px"),
+				FormFactory.LABEL_COMPONENT_GAP_COLSPEC,
+				ColumnSpec.decode("110px:grow"),
+				FormFactory.DEFAULT_COLSPEC,
+				FormFactory.RELATED_GAP_COLSPEC,
+				ColumnSpec.decode("55px"),
+				ColumnSpec.decode("51px"),
+				FormFactory.RELATED_GAP_COLSPEC,
+				ColumnSpec.decode("max(27dlu;default)"),
+				FormFactory.RELATED_GAP_COLSPEC,
+				ColumnSpec.decode("max(15dlu;default)"),},
+			new RowSpec[] {
+				FormFactory.UNRELATED_GAP_ROWSPEC,
+				RowSpec.decode("20px"),
+				FormFactory.RELATED_GAP_ROWSPEC,
+				RowSpec.decode("20px:grow"),
+				FormFactory.RELATED_GAP_ROWSPEC,
+				RowSpec.decode("20px:grow"),
+				RowSpec.decode("38px"),
+				RowSpec.decode("51px"),
+				FormFactory.UNRELATED_GAP_ROWSPEC,
+				RowSpec.decode("51px"),
+				FormFactory.RELATED_GAP_ROWSPEC,
+				RowSpec.decode("37px"),
+				FormFactory.UNRELATED_GAP_ROWSPEC,
+				RowSpec.decode("23px"),
+				FormFactory.UNRELATED_GAP_ROWSPEC,
+				FormFactory.DEFAULT_ROWSPEC,
+				FormFactory.UNRELATED_GAP_ROWSPEC,
+				RowSpec.decode("41px"),}));
 
 		label_5 = new JLabel();
 		label_5.setText("Name");
@@ -390,7 +423,7 @@ public class GUIForm extends javax.swing.JFrame {
 				editFieldsFocused(e);
 			}
 		});
-		taskFieldsJPanel.add(taskNameJTextField, "4, 2, 9, 1, fill, top");
+		taskFieldsJPanel.add(taskNameJTextField, "6, 2, 7, 1, fill, top");
 
 		label_6 = new JLabel();
 		label_6.setText("Start date");
@@ -399,7 +432,7 @@ public class GUIForm extends javax.swing.JFrame {
 
 		taskStartDateChooser = new JDateChooser();
 		taskStartDateChooser.setDateFormatString("dd/MM/yyyy");
-		taskFieldsJPanel.add(taskStartDateChooser, "4, 4, 3, 1, fill, center");
+		taskFieldsJPanel.add(taskStartDateChooser, "6, 4, fill, center");
 
 		label_7 = new JLabel();
 		label_7.setText("Completed");
@@ -423,7 +456,7 @@ public class GUIForm extends javax.swing.JFrame {
 
 		taskEndDateChooser = new JDateChooser();
 		taskEndDateChooser.setDateFormatString("dd/MM/yyyy");
-		taskFieldsJPanel.add(taskEndDateChooser, "4, 6, 3, 1, fill, center");
+		taskFieldsJPanel.add(taskEndDateChooser, "6, 6, fill, center");
 
 		label_9 = new JLabel();
 		label_9.setText("Comment");
@@ -435,23 +468,30 @@ public class GUIForm extends javax.swing.JFrame {
 		lblWorked.setForeground(Color.WHITE);
 		taskFieldsJPanel.add(lblWorked, "2, 10, 3, 1, fill, top");
 
-		taskTotalTimeCompJLabel = new JLabel();
-		taskTotalTimeCompJLabel.setToolTipText("");
-		taskTotalTimeCompJLabel.setForeground(SystemColor.menu);
-		taskTotalTimeCompJLabel.setBackground(Color.LIGHT_GRAY);
-		taskFieldsJPanel.add(taskTotalTimeCompJLabel, "6, 14, 8, 1, fill, fill");
-
 		saveTaskJButton = new JButton();
 		saveTaskJButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				saveTask();
 			}
 		});
-
-		taskTotalPauseCompJLabel = new JLabel();
-		taskTotalPauseCompJLabel.setForeground(SystemColor.menu);
-		taskTotalPauseCompJLabel.setBackground(Color.LIGHT_GRAY);
-		taskFieldsJPanel.add(taskTotalPauseCompJLabel, "6, 16, 8, 1, fill, fill");
+		
+		taskTotalWorkedJLabel = new JLabel("Total worked");
+		taskTotalWorkedJLabel.setForeground(Color.WHITE);
+		taskFieldsJPanel.add(taskTotalWorkedJLabel, "2, 14, 2, 1, left, default");
+		
+		taskTotalWorkedJTextField = new JTextField();
+		taskTotalWorkedJTextField.setEditable(false);
+		taskFieldsJPanel.add(taskTotalWorkedJTextField, "6, 14, 3, 1, fill, default");
+		taskTotalWorkedJTextField.setColumns(10);
+		
+		lblTotalPaused = new JLabel("Total paused");
+		lblTotalPaused.setForeground(Color.WHITE);
+		taskFieldsJPanel.add(lblTotalPaused, "2, 16, 2, 1, left, default");
+		
+		taskTotalPauseJTextField = new JTextField();
+		taskTotalPauseJTextField.setEditable(false);
+		taskFieldsJPanel.add(taskTotalPauseJTextField, "6, 16, 3, 1, fill, default");
+		taskTotalPauseJTextField.setColumns(10);
 		saveTaskJButton.setText("Save");
 		saveTaskJButton.setEnabled(false);
 		taskFieldsJPanel.add(saveTaskJButton, "2, 18, 11, 1, fill, top");
@@ -463,10 +503,10 @@ public class GUIForm extends javax.swing.JFrame {
 				editFieldsFocused(e);
 			}
 		});
-		taskFieldsJPanel.add(taskCommentJTextArea, "4, 8, 9, 1, fill, fill");
+		taskFieldsJPanel.add(taskCommentJTextArea, "6, 8, 7, 1, fill, fill");
 
 		workedTimeJList = new JList();
-		taskFieldsJPanel.add(workedTimeJList, "5, 10, 8, 3, fill, fill");
+		taskFieldsJPanel.add(workedTimeJList, "6, 10, 7, 3, fill, fill");
 		clientsJPanel = new javax.swing.JPanel();
 		clientsJLabel = new javax.swing.JLabel();
 		jScrollPane5 = new javax.swing.JScrollPane();
@@ -743,9 +783,6 @@ public class GUIForm extends javax.swing.JFrame {
 				JOptionPane.showMessageDialog(this, "Task added!");
 				refreshTasksList(UserInterface.getCurrentProject(), tasksJList);
 			} else {
-				System.out.println(startdate);
-				System.out.println(UserInterface.getProject(tasksJList.getSelectedIndex()).getEinddatum());
-				System.out.println(startdate <= UserInterface.getProject(tasksJList.getSelectedIndex()).getEinddatum());
 				UserInterface.saveTask(tasksJList.getSelectedIndex(), name, startdate, enddate, comment, completed);
 				JOptionPane.showMessageDialog(this, "Task edited!");
 				refreshTasksList(UserInterface.getCurrentProject(), tasksJList);
@@ -990,8 +1027,8 @@ public class GUIForm extends javax.swing.JFrame {
 			}
 
 			workedTimeJList.setModel(listmodel);
-			taskTotalTimeCompJLabel.setText("Total worked : " + Clock.longTimeToString(t.getTotaleWerktijd(), false));
-			taskTotalPauseCompJLabel.setText("Total paused : " + Clock.longTimeToString(t.getTotalePauze(), false));
+			taskTotalWorkedJTextField.setText(Clock.longTimeToString(t.getTotaleWerktijd(), false));
+			taskTotalPauseJTextField.setText(Clock.longTimeToString(t.getTotalePauze(), false));
 		}
 	}
 
@@ -1110,6 +1147,7 @@ public class GUIForm extends javax.swing.JFrame {
 				for (Opdrachtgever o : UserInterface.getClients()) {
 					listmodel.addElement(o);
 				}
+				listmodel.addElement(NEWCLIENTITEM);
 				projectClientsJComboBox.setModel(listmodel);
 				projectClientsJComboBox.setSelectedItem(null);
 				saveProjectJButton.setText("Save [new]");
@@ -1227,8 +1265,6 @@ public class GUIForm extends javax.swing.JFrame {
 	private JLabel label_8;
 	private JLabel label_9;
 	private JLabel lblWorked;
-	private JLabel taskTotalTimeCompJLabel;
-	private JLabel taskTotalPauseCompJLabel;
 	private JButton saveTaskJButton;
 	private JTextArea taskCommentJTextArea;
 	private JList workedTimeJList;
@@ -1256,4 +1292,8 @@ public class GUIForm extends javax.swing.JFrame {
 	private JButton exportJButton;
 	private JComboBox projectClientsJComboBox;
 	private JList clientsJList;
+	private JTextField taskTotalWorkedJTextField;
+	private JTextField taskTotalPauseJTextField;
+	private JLabel taskTotalWorkedJLabel;
+	private JLabel lblTotalPaused;
 }
