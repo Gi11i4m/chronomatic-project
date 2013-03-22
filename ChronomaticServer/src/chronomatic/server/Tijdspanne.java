@@ -59,22 +59,26 @@ public class Tijdspanne {
 		int userID = Authentication.getUserId(sessionKey);
 		
 		String query = "INSERT INTO tijdspanne(begin_uur, eind_uur, pauze, taken_ID) VALUES(" + beginUur + ", " + eindUur + "," + pauze + "," + taakID + ")";
-		System.out.println(query);
-		try { 
+		System.out.println(query);	
+		
+		JSONArray returnObject = new JSONArray();
+		
+		try{
 			if(userID > 0) { 
-				if(Database.executeNullQuery(con, query))
-					return "[{\"success\":true}]";
-				else 
-					return "[{\"success\":false,\"error\":\"Invalid taskID\"}]";
+				ResultSet rs = Database.executeGetQuery(con,query);
+				System.out.println(rs);
+				returnObject = ResultsetConverter.convert(rs);
 			}
-			else { 
-				return "[{\"success\":false,\"error\":\"Session is invalid\"}]";
+			else{ 
+				JSONObject error = new JSONObject();
+				error.put("error","Session is not valid");
+				returnObject.put(error);
 			}
 		}
 		catch(Exception e) { 
 			e.printStackTrace();
 		}
-		return "[{\"success\":false,\"error\":\"Invalid parameters\"}]";
+		return returnObject.toString();
 	}
 	
 	@GET 

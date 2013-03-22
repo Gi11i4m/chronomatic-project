@@ -5,13 +5,10 @@ import java.net.MalformedURLException;
 import java.text.ParseException;
 import java.util.ArrayList;
 
-import javax.swing.JOptionPane;
-
 import org.json.JSONException;
 
-import be.artesis.timelog.clock.Clock;
 import be.artesis.timelog.controller.Deleter;
-import be.artesis.timelog.controller.Inserter;
+import be.artesis.timelog.controller.InserterLocal;
 import be.artesis.timelog.controller.Updater;
 import be.artesis.timelog.model.Validator;
 import be.artesis.timelog.model.WebserviceException;
@@ -118,7 +115,7 @@ public class UserInterface {
 		client.setTelefoonnummer(telefoonnummer);
 		user.addOpdrachtgever(client);
 		try {
-			client.setID(Inserter.inputOpdrachtgever(validator.getSessionKey(), client));
+			client.setID(InserterLocal.inputOpdrachtgever(client));
 		} catch (JSONException | IOException | WebserviceException e) {
 			user.removeOpdrachtgever(client);
 			e.printStackTrace(); 
@@ -149,7 +146,7 @@ public class UserInterface {
         p.setOpdrachtgeverId(opdrachtgeverID);
         UserInterface.getUser().addProject(p);
         try {
-			p.setId(Inserter.inputProject(validator.getSessionKey(), p, opdrachtgeverID));
+			p.setId(InserterLocal.inputProject(p, opdrachtgeverID));
 		} catch (IOException | WebserviceException| JSONException e) {
 			user.removeProject(p);
 			e.printStackTrace();
@@ -183,7 +180,7 @@ public class UserInterface {
         int pid = UserInterface.getCurrentProject().getId();
         getCurrentProject().addTaak(t);
         try {
-			t.setId((Inserter.inputTaak(validator.getSessionKey(), t, pid)));
+			t.setId((InserterLocal.inputTaak( t, pid)));
 		} catch (IOException | WebserviceException | JSONException e) {
 			getCurrentProject().removeTaak(t);
 			e.printStackTrace();
@@ -206,12 +203,12 @@ public class UserInterface {
 	}
     
 	public static Tijdspanne saveNewTimespan(long start, long stop, Taak t, boolean isPause)
-			throws DataInputException, IOException, WebserviceException{
+			throws DataInputException, IOException, WebserviceException, JSONException{
 		Tijdspanne ts = new Tijdspanne(start, stop);
 		ts.setPauze(isPause);
 		t.addBestedeTijd(ts);
 		try {
-			Inserter.inputTijdSpanne(validator.getSessionKey(), ts, t.getID());
+			ts.setID(InserterLocal.inputTijdSpanne( ts, t.getID()));
 		} catch (IOException | WebserviceException e) {
 			t.removeBestedeTijd(ts);
 			e.printStackTrace();

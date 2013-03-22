@@ -1,7 +1,7 @@
 package be.artesis.timelog.gui;
 
 import be.artesis.timelog.clock.*;
-import be.artesis.timelog.controller.Inserter;
+import be.artesis.timelog.controller.InserterLocal;
 import be.artesis.timelog.model.Validator;
 import be.artesis.timelog.model.WebserviceException;
 import be.artesis.timelog.view.DataInputException;
@@ -19,6 +19,8 @@ import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.SwingConstants;
+
+import org.json.JSONException;
 
 /**
  * @author Gilliam
@@ -138,7 +140,7 @@ public class WorkDialog extends javax.swing.JDialog {
 				}
                 resetClockForm();
             }
-        } catch (IOException | WebserviceException | DataInputException ex) {
+        } catch (IOException | WebserviceException | DataInputException | JSONException ex) {
             JOptionPane.showMessageDialog(this, ex.getMessage());
         }
     }

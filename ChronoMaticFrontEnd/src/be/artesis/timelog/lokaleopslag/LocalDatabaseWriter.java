@@ -10,22 +10,20 @@ import org.json.JSONObject;
 import be.artesis.timelog.view.*;
 
 public class LocalDatabaseWriter {
-		private static final String URL = "c:\\Users\\Yolan\\Desktop\\";
-		private static final String OPDRACHTGEVER = "opdrachtgever"; 
-		private static final String PROJECT = "project";
-		private static final String TAAK = "taak";
-		private static final String TIJDSPANNE = "tijdspanne";
-		
+		public static final String URL = "c:\\Users\\Yolan\\Desktop\\";
+		public static final String OPDRACHTGEVER = "opdrachtgever"; 
+		public static final String PROJECT = "project";
+		public static final String TAAK = "taak";
+		public static final String TIJDSPANNE = "tijdspanne";		
 		
 		private String filePath;
-		
+				
 		public LocalDatabaseWriter(Commando c){
 			filePath = URL + c + ".txt";
 			
 		}
-		
-			
-		public void schrijfProject(Project project) throws JSONException, IOException{	
+					
+		public void schrijfProject(Project project, int opdrachtgeverId) throws JSONException, IOException{	
 			
 			System.out.println(LocalDatabaseReader.LeesBestand(filePath));
 			if(LocalDatabaseReader.LeesBestand(filePath) == null){
@@ -41,6 +39,7 @@ public class LocalDatabaseWriter {
 			jProject.put("naam", project.getNaam());
 			jProject.put("beginDatum", project.getBegindatum());
 			jProject.put("eindDatum", project.getEinddatum());
+			jProject.put("opdrachtgeverId",opdrachtgeverId);
 			
 			JSONArray jArr = (JSONArray) jObj.get(PROJECT);
 			jArr.put(jProject);
@@ -57,18 +56,21 @@ public class LocalDatabaseWriter {
 			jTaak.put("beginDatum", taak.getBegindatum());
 			jTaak.put("eindDatum", taak.getGeschatteEinddatum());
 			jTaak.put("commentaar", taak.getCommentaar());
+			jTaak.put("completed", taak.getCompleted());
 			
 			schrijfweg(jTaak);
 			
 			//JSONArray taakarray = new JSONArray();
 			//taakarray.put(gegtaak);
 		}
-		public void schrijfTijdspannne(Tijdspanne tijd) throws JSONException, IOException{
+		public void schrijfTijdspannne(Tijdspanne tijd, int taakid) throws JSONException, IOException{
 			////
 			
 			JSONObject jTijd = new JSONObject();
 			jTijd.put("beginTijd", tijd.getBeginTijd());
 			jTijd.put("eindTijd", tijd.getEindTijd());
+			jTijd.put("ispauze", tijd.isPauze());
+			jTijd.put("taakid", taakid);
 			
 			schrijfweg(jTijd);
 			

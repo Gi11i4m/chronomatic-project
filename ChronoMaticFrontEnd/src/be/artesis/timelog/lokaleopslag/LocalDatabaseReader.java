@@ -21,11 +21,12 @@ public class LocalDatabaseReader {
 		String sCurrentLine;
 
 		sCurrentLine = br.readLine();
-		System.out.println(sCurrentLine);
+		//System.out.println(sCurrentLine);
 					
-		System.out.println();
+		//System.out.println();
 		JSONObject jObj = new JSONObject(sCurrentLine);
 		 
+		br.close();
 		
 		return jObj;
 	}

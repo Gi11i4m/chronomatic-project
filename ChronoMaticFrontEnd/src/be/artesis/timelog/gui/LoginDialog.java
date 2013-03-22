@@ -8,7 +8,8 @@ import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 
-import be.artesis.timelog.controller.Inserter;
+import be.artesis.timelog.controller.InserterLocal;
+import be.artesis.timelog.controller.InserterServer;
 import be.artesis.timelog.externAuth.*;
 import be.artesis.timelog.model.CheckExistingUsernames;
 import be.artesis.timelog.model.CreatorFromJSON;
@@ -128,7 +129,7 @@ public class LoginDialog extends javax.swing.JDialog implements ActionListener {
 			
 			// bestaat gebruiker al?
 			if (CheckExistingUsernames.check(email)) {
-				Inserter.CreateUserExtern("", "", email, "");
+				InserterServer.CreateUserExtern("", "", email, "");
 			}
 			//System.out.println(email);
 			

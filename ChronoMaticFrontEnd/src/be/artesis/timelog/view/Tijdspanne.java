@@ -46,6 +46,10 @@ public class Tijdspanne {
     public int getId() {
         return id;
     }
+    
+    public void setID(int id){
+    	this.id = id;
+    }
 
     public long getBeginTijd() {
         return beginTijd;
