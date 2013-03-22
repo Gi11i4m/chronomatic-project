@@ -174,19 +174,19 @@ public class GUIForm extends javax.swing.JFrame {
 		homeJPanel.add(homeFieldsJPanel);
 		homeFieldsJPanel.setLayout(null);
 
-		label_10 = new JLabel();
-		label_10.setText("Projects");
-		label_10.setForeground(new Color(0, 153, 153));
-		label_10.setFont(new Font("Tw Cen MT", Font.BOLD, 14));
-		label_10.setBounds(10, 11, 157, 16);
-		homeFieldsJPanel.add(label_10);
+		homeProjectsJLabel = new JLabel();
+		homeProjectsJLabel.setText("Projects");
+		homeProjectsJLabel.setForeground(new Color(0, 153, 153));
+		homeProjectsJLabel.setFont(new Font("Tw Cen MT", Font.BOLD, 14));
+		homeProjectsJLabel.setBounds(10, 11, 157, 16);
+		homeFieldsJPanel.add(homeProjectsJLabel);
 
-		label_11 = new JLabel();
-		label_11.setText("Tasks");
-		label_11.setForeground(new Color(0, 153, 153));
-		label_11.setFont(new Font("Tw Cen MT", Font.BOLD, 14));
-		label_11.setBounds(177, 11, 159, 16);
-		homeFieldsJPanel.add(label_11);
+		homeTaskJLabel = new JLabel();
+		homeTaskJLabel.setText("Tasks");
+		homeTaskJLabel.setForeground(new Color(0, 153, 153));
+		homeTaskJLabel.setFont(new Font("Tw Cen MT", Font.BOLD, 14));
+		homeTaskJLabel.setBounds(177, 11, 159, 16);
+		homeFieldsJPanel.add(homeTaskJLabel);
 
 		scrollPane = new JScrollPane();
 		scrollPane.setBounds(11, 34, 155, 302);
@@ -964,16 +964,20 @@ public class GUIForm extends javax.swing.JFrame {
 	// Load info from PROJECT with index parameter
 	private void loadProjectInfo(int index) {
 		if (index != -1) {
-			Project p = UserInterface.getProjects().get(index);
+			Project p = UserInterface.getProject(index);
 			projectNameJTextField.setText(p.getNaam());
 			projectStartDateChooser.setDate(new Date(p.getBegindatum() * 1000));
 			projectEndDateChooser.setDate(new Date(p.getEinddatum() * 1000));
 			DefaultComboBoxModel listmodel = new DefaultComboBoxModel();
+			Opdrachtgever og = null;
 		    for(Opdrachtgever o : UserInterface.getClients()){
+		    	if (o.getID() == p.getOpdrachtgeverId()) {
+					og = o;
+				}
 		    	listmodel.addElement(o);
 		    }    
 		    projectClientsJComboBox.setModel(listmodel);     
-		    projectClientsJComboBox.setSelectedIndex(p.getOpdrachtgeverId());
+		    projectClientsJComboBox.setSelectedItem(og);
 		    
 			refreshTasksList(p, projectTasksJList);
 			percentageCompleteJProgressBar.setValue((int) (((Project) projectsJList.getSelectedValue()).getPercentageComplete() * 100));
@@ -1064,6 +1068,8 @@ public class GUIForm extends javax.swing.JFrame {
 				((JCheckBox) c).setSelected(false);
 			} else if (c instanceof JDateChooser) {
 				((JDateChooser) c).setDate(new Date());
+			} else if (c instanceof JComboBox){
+				((JComboBox) c).setModel(new DefaultComboBoxModel());
 			}
 		}
 	}
@@ -1111,6 +1117,12 @@ public class GUIForm extends javax.swing.JFrame {
 		if (projectsJList.getSelectedIndex() != -1) {
 			if (projectsJList.getSelectedValue().equals(NEWPROJECTITEM)) {
 				clearFieldsOnPanel(projectFieldsJPanel);
+				DefaultComboBoxModel listmodel = new DefaultComboBoxModel();
+			    for(Opdrachtgever o : UserInterface.getClients()){
+			    	listmodel.addElement(o);
+			    }
+			    projectClientsJComboBox.setModel(listmodel);
+			    projectClientsJComboBox.setSelectedItem(null);
 				saveProjectJButton.setText("Save [new]");
 			} else {
 				loadProjectInfo(projectsJList.getSelectedIndex());
@@ -1253,8 +1265,8 @@ public class GUIForm extends javax.swing.JFrame {
 	private JDateChooser projectEndDateChooser;
 	private JPanel homeFieldsJPanel;
 	private JList homeProjectsJList;
-	private JLabel label_10;
-	private JLabel label_11;
+	private JLabel homeProjectsJLabel;
+	private JLabel homeTaskJLabel;
 	private JList homeTasksJList;
 	private JScrollPane scrollPane;
 	private JScrollPane scrollPane_1;
