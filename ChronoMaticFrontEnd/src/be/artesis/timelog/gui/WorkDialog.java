@@ -141,7 +141,7 @@ public class WorkDialog extends javax.swing.JDialog {
 				}
 				resetClockForm();
 			}
-		} catch (IOException | WebserviceException | DataInputException ex) {
+		} catch (IOException | WebserviceException | DataInputException | JSONException ex) {
 			JOptionPane.showMessageDialog(this, ex.getMessage());
 		}
 	}

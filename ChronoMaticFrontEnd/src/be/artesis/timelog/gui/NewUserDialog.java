@@ -3,6 +3,7 @@ package be.artesis.timelog.gui;
 import java.awt.BorderLayout;
 
 import be.artesis.timelog.controller.InserterLocal;
+import be.artesis.timelog.controller.InserterServer;
 import be.artesis.timelog.model.CheckExistingUsernames;
 import be.artesis.timelog.view.DataControle;
 import be.artesis.timelog.view.DataInputException;
@@ -123,7 +124,7 @@ public class NewUserDialog extends javax.swing.JPanel {
             	throw new DataInputException("Username already exists");
 				
 			}
-            Inserter.CreateUser(firstName, name, username, email, password);
+            InserterServer.CreateUser(firstName, name, username, email, password);
             // 
             //}
             if (!password.equals(repeatPassword)) {

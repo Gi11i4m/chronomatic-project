@@ -12,11 +12,13 @@ import org.json.JSONObject;
 import be.artesis.timelog.view.*;
 
 public class LocalDatabaseWriter {
+	//hier aant troubleshooten. Het opslaan en opvragen van shit van begin tot eind door de lokale db
+	
 		public static final String URL = "c:\\Users\\Yolan\\Desktop\\";
 		public static final String OPDRACHTGEVER = "opdrachtgever"; 
-		public static final String PROJECT = "project";
-		public static final String TAAK = "taak";
-		public static final String TIJDSPANNE = "tijdspanne";		
+		public static final String PROJECT = JVelden.PROJECTEN.toString().toLowerCase();
+		public static final String TAAK = JVelden.TAKEN.toString().toLowerCase();
+		public static final String TIJDSPANNE = JVelden.TIJDSPANNES.toString().toLowerCase();		
 		
 		private String filePath;
 				
@@ -27,7 +29,7 @@ public class LocalDatabaseWriter {
 					
 		public void schrijfProject(Project project, int opdrachtgeverId) throws JSONException, IOException{	
 			
-			System.out.println(LocalDatabaseReader.LeesBestand(filePath));
+			//System.out.println(LocalDatabaseReader.LeesBestand(filePath));
 			if(LocalDatabaseReader.LeesBestand(filePath) == null){
 				
 				makeDatabase();
@@ -53,6 +55,10 @@ public class LocalDatabaseWriter {
 		
 		}
 		public void schrijfTaak(Taak taak, int projectID) throws JSONException, IOException{
+			if(LocalDatabaseReader.LeesBestand(filePath) == null){
+				
+				makeDatabase();
+			}
 			
 			JSONObject jTaak = new JSONObject();
 			
@@ -70,7 +76,10 @@ public class LocalDatabaseWriter {
 			//taakarray.put(gegtaak);
 		}
 		public void schrijfTijdspannne(Tijdspanne tijd, int taakid) throws JSONException, IOException{
-			////
+			if(LocalDatabaseReader.LeesBestand(filePath) == null){
+				
+				makeDatabase();
+			}
 			
 			JSONObject jTijd = new JSONObject();
 			
@@ -123,7 +132,7 @@ public class LocalDatabaseWriter {
 		 			
 		}
 		
-		private void makeDatabase() throws JSONException, IOException{
+		public void makeDatabase() throws JSONException, IOException{
 						
 			JSONArray jarOpdrachtgevers = new JSONArray();
 			JSONArray jarProjecten = new JSONArray();

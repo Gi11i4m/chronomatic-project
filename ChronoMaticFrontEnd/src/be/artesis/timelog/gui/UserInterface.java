@@ -146,7 +146,7 @@ public class UserInterface {
         p.setOpdrachtgeverId(opdrachtgeverId);
         UserInterface.getUser().addProject(p);
         try {
-			p.setId(InserterLocal.inputProject(p, opdrachtgeverID));
+			p.setId(InserterLocal.inputProject(p, opdrachtgeverId));
 		} catch (IOException | WebserviceException| JSONException e) {
 			user.removeProject(p);
 			e.printStackTrace();

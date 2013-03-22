@@ -30,7 +30,7 @@ public class TestDB {
 		}
 		*/
 		
-		try {
+		/*try {
 			LocalDatabaseWriter lbcw = new LocalDatabaseWriter(Commando.DELETE);
 			
 			Opdrachtgever opdrachtgever = new Opdrachtgever("Possy","phil","Artesis","possy@artisis.awesome","123456789",12);
@@ -43,8 +43,17 @@ public class TestDB {
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		}*/
+		LocalDatabaseWriter wr = new LocalDatabaseWriter(Commando.INSERT);
+		try {
+			wr.makeDatabase();
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
-		
 		
 	}
 
