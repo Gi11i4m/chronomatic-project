@@ -26,6 +26,7 @@ import javax.swing.GroupLayout.Alignment;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
@@ -60,6 +61,8 @@ import com.jgoodies.forms.layout.RowSpec;
 import com.toedter.calendar.JDateChooser;
 import javax.swing.JComboBox;
 import javax.swing.SwingConstants;
+import javax.swing.tree.DefaultTreeModel;
+import javax.swing.tree.DefaultMutableTreeNode;
 
 /**
  * @author Gilliam
@@ -654,12 +657,21 @@ public class GUIForm extends javax.swing.JFrame {
 		importExportTabbedPane.setForegroundAt(0, Color.WHITE);
 		exportJPanel.setLayout(null);
 
-		JTree exportTree = new JTree();
+		exportTree = new JTree();
+		exportTree.setModel(new DefaultTreeModel(new DefaultMutableTreeNode("Tasks to export show here") {
+			{
+			}
+		}));
 		exportJScrollPane = new JScrollPane(exportTree);
 		exportJScrollPane.setBounds(10, 11, 320, 347);
 		exportJPanel.add(exportJScrollPane);
 
 		exportJButton = new JButton("Export");
+		exportJButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				exportButtonClicked(arg0);
+			}
+		});
 		exportJButton.setBounds(10, 369, 320, 21);
 		exportJPanel.add(exportJButton);
 		importExportTabbedPane.setBackgroundAt(0, Color.DARK_GRAY);
@@ -672,7 +684,11 @@ public class GUIForm extends javax.swing.JFrame {
 		importExportTabbedPane.setBackgroundAt(1, Color.DARK_GRAY);
 		importJPanel.setLayout(null);
 
-		JTree importTree = new JTree();
+		importTree = new JTree();
+		importTree.setModel(new DefaultTreeModel(new DefaultMutableTreeNode("Projects to import show here") {
+			{
+			}
+		}));
 		importJScrollPane = new JScrollPane(importTree);
 		importJScrollPane.setBounds(10, 11, 320, 347);
 		importJPanel.add(importJScrollPane);
@@ -950,18 +966,21 @@ public class GUIForm extends javax.swing.JFrame {
 	}
 
 	// Refresh import (/ export?) tree view
-	private void refreshTreeView(JTree tree) {
+	private void refreshExportTreeView(JTree tree) {
 		ArrayList projects = UserInterface.getProjects();
 		Object rootNodes[] = new Object[projects.size()];
 
 		Vector projectVector = null;
 		CheckBoxNode projectOptions[] = new CheckBoxNode[projects.size()];
+
 		for (int i = 0; i < projects.size(); i++) {
 			Project p = ((ArrayList<Project>) projects).get(i);
+			projectOptions[i] = new CheckBoxNode(p.getNaam(), false);
 
 			CheckBoxNode taskOptions[] = new CheckBoxNode[p.getTaken().size()];
 			for (int j = 0; j < p.getTaken().size(); j++) {
-
+				Taak t = p.getTaken().get(j);
+				taskOptions[j] = new CheckBoxNode(t.getNaam(), false);
 			}
 
 			projectVector = new NamedVector(p.getNaam(), taskOptions);
@@ -970,11 +989,6 @@ public class GUIForm extends javax.swing.JFrame {
 
 		Vector rootVector = new NamedVector("Root", rootNodes);
 		tree = new JTree(rootVector);
-
-		CheckBoxNode accessibilityOptions[] = { new CheckBoxNode("Move system caret with focus/selection changes", false), new CheckBoxNode("Always expand alt text for images", true) };
-		CheckBoxNode browsingOptions[] = { new CheckBoxNode("Notify when downloads complete", true), new CheckBoxNode("Disable script debugging", true), new CheckBoxNode("Use AutoComplete", true), new CheckBoxNode("Browse in a new process", false) };
-		Vector accessVector = new NamedVector("Accessibility", accessibilityOptions);
-		Vector browseVector = new NamedVector("Browsing", browsingOptions);
 
 		CheckBoxNodeRenderer renderer = new CheckBoxNodeRenderer();
 		tree.setCellRenderer(renderer);
@@ -1177,6 +1191,10 @@ public class GUIForm extends javax.swing.JFrame {
 		}
 	}
 
+	private void exportButtonClicked(ActionEvent arg0) {
+		refreshExportTreeView(exportTree);
+	}
+
 	private void setCurrentProjectHomeJList(KeyEvent arg0) {
 		if (arg0.getKeyCode() == KeyEvent.VK_ENTER) {
 			setCurrentProjectGUI(homeProjectsJList.getSelectedIndex());
@@ -1292,8 +1310,13 @@ public class GUIForm extends javax.swing.JFrame {
 	private JButton exportJButton;
 	private JComboBox projectClientsJComboBox;
 	private JList clientsJList;
+<<<<<<< HEAD
 	private JTextField taskTotalWorkedJTextField;
 	private JTextField taskTotalPauseJTextField;
 	private JLabel taskTotalWorkedJLabel;
 	private JLabel lblTotalPaused;
+=======
+	private JTree exportTree;
+	private JTree importTree;
+>>>>>>> 8d13f548b01ed4ee36130412f613a2d0453a70fd
 }
