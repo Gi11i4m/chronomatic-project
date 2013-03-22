@@ -3,6 +3,7 @@ package be.artesis.timelog.gui;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.SystemColor;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
@@ -13,6 +14,7 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.io.IOException;
 import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.Vector;
@@ -33,6 +35,7 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.JTree;
 import javax.swing.LayoutStyle.ComponentPlacement;
+import javax.swing.SwingConstants;
 import javax.swing.border.BevelBorder;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
@@ -74,7 +77,7 @@ public class GUIForm extends javax.swing.JFrame {
 	public GUIForm(Validator validator) {
 		this.validator = validator;
 		initComponents();
-		
+
 		// set form in center
 		final Toolkit toolkit = Toolkit.getDefaultToolkit();
 		final Dimension screenSize = toolkit.getScreenSize();
@@ -472,8 +475,6 @@ public class GUIForm extends javax.swing.JFrame {
 		clientsJPanel = new javax.swing.JPanel();
 		clientsJLabel = new javax.swing.JLabel();
 		jScrollPane5 = new javax.swing.JScrollPane();
-		clientsJList = new javax.swing.JList();
-		clientsJList.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
 		removeClientJButton = new javax.swing.JButton();
 
 		clientsJPanel.setBackground(Color.GRAY);
@@ -481,24 +482,6 @@ public class GUIForm extends javax.swing.JFrame {
 		clientsJLabel.setFont(new java.awt.Font("Tw Cen MT", 1, 14));
 		clientsJLabel.setForeground(new java.awt.Color(255, 255, 255));
 		clientsJLabel.setText("Clients");
-
-		clientsJList.setModel(new javax.swing.AbstractListModel() {
-			String[] strings = {};
-
-			public int getSize() {
-				return strings.length;
-			}
-
-			public Object getElementAt(int i) {
-				return strings[i];
-			}
-		});
-		clientsJList.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
-			public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
-				clientsJListValueChanged(evt);
-			}
-		});
-		jScrollPane5.setViewportView(clientsJList);
 
 		removeClientJButton.setText("Remove client");
 		removeClientJButton.setEnabled(false);
@@ -513,8 +496,12 @@ public class GUIForm extends javax.swing.JFrame {
 		clientFieldsJPanel.setBackground(Color.DARK_GRAY);
 
 		javax.swing.GroupLayout clientsJPanelLayout = new javax.swing.GroupLayout(clientsJPanel);
-		clientsJPanelLayout.setHorizontalGroup(clientsJPanelLayout.createParallelGroup(Alignment.LEADING).addGroup(clientsJPanelLayout.createSequentialGroup().addContainerGap().addGroup(clientsJPanelLayout.createParallelGroup(Alignment.LEADING).addGroup(clientsJPanelLayout.createSequentialGroup().addGroup(clientsJPanelLayout.createParallelGroup(Alignment.LEADING, false).addComponent(jScrollPane5, GroupLayout.DEFAULT_SIZE, 197, Short.MAX_VALUE).addComponent(removeClientJButton, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)).addPreferredGap(ComponentPlacement.RELATED, 143, Short.MAX_VALUE).addComponent(clientFieldsJPanel, GroupLayout.PREFERRED_SIZE, 324, GroupLayout.PREFERRED_SIZE)).addComponent(clientsJLabel)).addContainerGap()));
-		clientsJPanelLayout.setVerticalGroup(clientsJPanelLayout.createParallelGroup(Alignment.TRAILING).addGroup(clientsJPanelLayout.createSequentialGroup().addGroup(clientsJPanelLayout.createParallelGroup(Alignment.TRAILING).addGroup(Alignment.LEADING, clientsJPanelLayout.createSequentialGroup().addGap(33).addComponent(clientFieldsJPanel, GroupLayout.DEFAULT_SIZE, 378, Short.MAX_VALUE)).addGroup(clientsJPanelLayout.createSequentialGroup().addContainerGap().addComponent(clientsJLabel).addPreferredGap(ComponentPlacement.RELATED).addComponent(jScrollPane5, GroupLayout.DEFAULT_SIZE, 336, Short.MAX_VALUE))).addPreferredGap(ComponentPlacement.RELATED).addComponent(removeClientJButton, GroupLayout.PREFERRED_SIZE, 23, GroupLayout.PREFERRED_SIZE).addContainerGap()));
+		clientsJPanelLayout.setHorizontalGroup(clientsJPanelLayout.createParallelGroup(Alignment.LEADING).addGroup(clientsJPanelLayout.createSequentialGroup().addContainerGap().addGroup(clientsJPanelLayout.createParallelGroup(Alignment.LEADING).addGroup(clientsJPanelLayout.createSequentialGroup().addGroup(clientsJPanelLayout.createParallelGroup(Alignment.LEADING).addComponent(removeClientJButton).addComponent(jScrollPane5, GroupLayout.PREFERRED_SIZE, 245, GroupLayout.PREFERRED_SIZE)).addPreferredGap(ComponentPlacement.RELATED, 95, Short.MAX_VALUE).addComponent(clientFieldsJPanel, GroupLayout.PREFERRED_SIZE, 324, GroupLayout.PREFERRED_SIZE)).addComponent(clientsJLabel)).addContainerGap()));
+		clientsJPanelLayout.setVerticalGroup(clientsJPanelLayout.createParallelGroup(Alignment.TRAILING).addGroup(clientsJPanelLayout.createSequentialGroup().addGroup(clientsJPanelLayout.createParallelGroup(Alignment.LEADING).addGroup(clientsJPanelLayout.createSequentialGroup().addGap(33).addComponent(clientFieldsJPanel, GroupLayout.DEFAULT_SIZE, 378, Short.MAX_VALUE)).addGroup(clientsJPanelLayout.createSequentialGroup().addContainerGap().addComponent(clientsJLabel).addPreferredGap(ComponentPlacement.RELATED).addComponent(jScrollPane5, GroupLayout.DEFAULT_SIZE, 378, Short.MAX_VALUE))).addPreferredGap(ComponentPlacement.RELATED).addComponent(removeClientJButton, GroupLayout.PREFERRED_SIZE, 23, GroupLayout.PREFERRED_SIZE).addContainerGap()));
+
+		clientsJList = new JList();
+		clientsJList.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
+		jScrollPane5.setViewportView(clientsJList);
 		clientFieldsJPanel.setLayout(new FormLayout(new ColumnSpec[] { FormFactory.UNRELATED_GAP_COLSPEC, ColumnSpec.decode("79px"), ColumnSpec.decode("220px"), }, new RowSpec[] { FormFactory.RELATED_GAP_ROWSPEC, RowSpec.decode("20px"), FormFactory.LINE_GAP_ROWSPEC, RowSpec.decode("20px"), FormFactory.LINE_GAP_ROWSPEC, RowSpec.decode("20px"), FormFactory.LINE_GAP_ROWSPEC, RowSpec.decode("20px"), FormFactory.LINE_GAP_ROWSPEC, RowSpec.decode("20px"), RowSpec.decode("192px"), RowSpec.decode("17px"), FormFactory.RELATED_GAP_ROWSPEC, FormFactory.DEFAULT_ROWSPEC, }));
 
 		JLabel label = new JLabel();
@@ -615,7 +602,7 @@ public class GUIForm extends javax.swing.JFrame {
 		JTabbedPane.addTab("", new ImageIcon(GUIForm.class.getResource("/be/artesis/timelog/gui/icons/ImportExportNeonIcon.png")), importExportJPanel, "Import / Export");
 		importExportJPanel.setLayout(null);
 
-		importExportTabbedPane = new JTabbedPane(JTabbedPane.TOP);
+		importExportTabbedPane = new JTabbedPane(SwingConstants.TOP);
 		importExportTabbedPane.setForeground(Color.GRAY);
 		importExportTabbedPane.setBorder(null);
 		importExportTabbedPane.setBackground(Color.GRAY);
@@ -629,7 +616,8 @@ public class GUIForm extends javax.swing.JFrame {
 		importExportTabbedPane.setForegroundAt(0, Color.WHITE);
 		exportJPanel.setLayout(null);
 
-		exportJScrollPane = new JScrollPane();
+		JTree exportTree = new JTree();
+		exportJScrollPane = new JScrollPane(exportTree);
 		exportJScrollPane.setBounds(10, 11, 320, 347);
 		exportJPanel.add(exportJScrollPane);
 
@@ -646,20 +634,8 @@ public class GUIForm extends javax.swing.JFrame {
 		importExportTabbedPane.setBackgroundAt(1, Color.DARK_GRAY);
 		importJPanel.setLayout(null);
 
-		CheckBoxNode accessibilityOptions[] = { new CheckBoxNode("Move system caret with focus/selection changes", false), new CheckBoxNode("Always expand alt text for images", true) };
-		CheckBoxNode browsingOptions[] = { new CheckBoxNode("Notify when downloads complete", true), new CheckBoxNode("Disable script debugging", true), new CheckBoxNode("Use AutoComplete", true), new CheckBoxNode("Browse in a new process", false) };
-		Vector accessVector = new NamedVector("Accessibility", accessibilityOptions);
-		Vector browseVector = new NamedVector("Browsing", browsingOptions);
-		Object rootNodes[] = { accessVector, browseVector };
-		Vector rootVector = new NamedVector("Root", rootNodes);
-		JTree tree = new JTree(rootVector);
-
-		CheckBoxNodeRenderer renderer = new CheckBoxNodeRenderer();
-		tree.setCellRenderer(renderer);
-
-		tree.setCellEditor(new CheckBoxNodeEditor(tree));
-		tree.setEditable(true);
-		importJScrollPane = new JScrollPane(tree);
+		JTree importTree = new JTree();
+		importJScrollPane = new JScrollPane(importTree);
 		importJScrollPane.setBounds(10, 11, 320, 347);
 		importJPanel.add(importJScrollPane);
 
@@ -732,8 +708,8 @@ public class GUIForm extends javax.swing.JFrame {
 	private void saveProject() {
 		try {
 			String name = nameJTextField.getText();
-			long startdate = projectStartDateChooser.getDate().getTime()/1000;
-			long enddate = projectEndDateChooser.getDate().getTime()/1000;
+			long startdate = projectStartDateChooser.getDate().getTime() / 1000;
+			long enddate = projectEndDateChooser.getDate().getTime() / 1000;
 			int opdrachtgeverID = 0; // FIXME int halen uit selectie uit dropdownbox
 
 			if (projectsJList.getSelectedValue().equals(NEWPROJECTITEM)) {
@@ -759,8 +735,8 @@ public class GUIForm extends javax.swing.JFrame {
 	private void saveTask() {
 		try {
 			String name = taskNameJTextField.getText();
-			long startdate = taskStartDateChooser.getDate().getTime()/1000;
-			long enddate = taskEndDateChooser.getDate().getTime()/1000;
+			long startdate = taskStartDateChooser.getDate().getTime() / 1000;
+			long enddate = taskEndDateChooser.getDate().getTime() / 1000;
 			String comment = taskCommentJTextArea.getText();
 			boolean completed = taskCompletedJCheckBox.isSelected();
 
@@ -938,6 +914,40 @@ public class GUIForm extends javax.swing.JFrame {
 		}
 	}
 
+	// Refresh import (/ export?) tree view
+	private void refreshTreeView(JTree tree) {
+		ArrayList projects = UserInterface.getProjects();
+		Object rootNodes[] = new Object[projects.size()];
+
+		Vector projectVector = null;
+		CheckBoxNode projectOptions[] = new CheckBoxNode[projects.size()];
+		for (int i = 0; i < projects.size(); i++) {
+			Project p = ((ArrayList<Project>) projects).get(i);
+
+			CheckBoxNode taskOptions[] = new CheckBoxNode[p.getTaken().size()];
+			for (Taak t : p.getTaken()) {
+
+			}
+
+			projectVector = new NamedVector(p.getNaam(), taskOptions);
+			rootNodes[i] = projectVector;
+		}
+
+		Vector rootVector = new NamedVector("Root", rootNodes);
+		tree = new JTree(rootVector);
+
+		CheckBoxNode accessibilityOptions[] = { new CheckBoxNode("Move system caret with focus/selection changes", false), new CheckBoxNode("Always expand alt text for images", true) };
+		CheckBoxNode browsingOptions[] = { new CheckBoxNode("Notify when downloads complete", true), new CheckBoxNode("Disable script debugging", true), new CheckBoxNode("Use AutoComplete", true), new CheckBoxNode("Browse in a new process", false) };
+		Vector accessVector = new NamedVector("Accessibility", accessibilityOptions);
+		Vector browseVector = new NamedVector("Browsing", browsingOptions);
+
+		CheckBoxNodeRenderer renderer = new CheckBoxNodeRenderer();
+		tree.setCellRenderer(renderer);
+
+		tree.setCellEditor(new CheckBoxNodeEditor(tree));
+		tree.setEditable(true);
+	}
+
 	// ================================================================================
 	// Loading methods
 	// ================================================================================
@@ -1102,6 +1112,7 @@ public class GUIForm extends javax.swing.JFrame {
 
 	private void guiOpened(java.awt.event.WindowEvent evt) {
 		ingelogdJLabel.setText(UserInterface.getUser().getVolledigeNaam());
+		ingelogdJLabel.setForeground(Color.GREEN);
 		refreshProjectsList(projectsJList, homeProjectsJList);
 		refreshClientsList(clientsJList);
 	}
@@ -1109,19 +1120,6 @@ public class GUIForm extends javax.swing.JFrame {
 	// Event handlers for all the edit fields
 	private void editFieldsFocused(java.awt.event.FocusEvent evt) {
 		toggleButtonStates();
-	}
-
-	private void clientsJListValueChanged(javax.swing.event.ListSelectionEvent evt) {
-		if (clientsJList.getSelectedIndex() != -1) {
-			if (clientsJList.getSelectedValue().equals(NEWCLIENTITEM)) {
-				clearFieldsOnPanel(clientFieldsJPanel);
-				saveClientJButton.setText("Save [new]");
-			} else {
-				loadClientInfo(clientsJList.getSelectedIndex());
-				saveClientJButton.setText("Save");
-			}
-			toggleButtonStates();
-		}
 	}
 
 	private void homeProjectListValueChanged(ListSelectionEvent evt) {
@@ -1169,7 +1167,6 @@ public class GUIForm extends javax.swing.JFrame {
 	private javax.swing.JLabel clientJLabel;
 	private javax.swing.JLabel clientcompJLabel1;
 	private javax.swing.JLabel clientsJLabel;
-	private javax.swing.JList clientsJList;
 	private javax.swing.JPanel clientsJPanel;
 	private javax.swing.JLabel clockJLabel;
 	private javax.swing.JLabel currentProjectJLabel;
@@ -1247,4 +1244,5 @@ public class GUIForm extends javax.swing.JFrame {
 	private JButton importJButton;
 	private JScrollPane exportJScrollPane;
 	private JButton exportJButton;
+	private JList clientsJList;
 }

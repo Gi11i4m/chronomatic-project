@@ -10,6 +10,9 @@ public class CheckBoxNode {
 		this.selected = selected;
 	}
 
+	public CheckBoxNode() {		
+	}
+
 	public boolean isSelected() {
 		return selected;
 	}
