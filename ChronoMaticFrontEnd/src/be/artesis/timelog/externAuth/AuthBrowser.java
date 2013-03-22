@@ -69,9 +69,9 @@ public class AuthBrowser {
         
         webEngine.load(Url);
         
-        webEngine.javaScriptEnabledProperty();
-        Document doc = webEngine.getDocument();
-        System.out.println(doc.getLocalName());
+//        webEngine.javaScriptEnabledProperty();
+//        Document doc = webEngine.getDocument();
+//        System.out.println(doc.getLocalName());
         
         webEngine.locationProperty().addListener(new ChangeListener<String>() {
             @Override
