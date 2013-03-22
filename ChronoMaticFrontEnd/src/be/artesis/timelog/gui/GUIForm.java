@@ -1,12 +1,17 @@
 package be.artesis.timelog.gui;
 
+import groovyjarjarantlr.collections.impl.Vector;
+
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Font;
 import java.awt.SystemColor;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.io.IOException;
 import java.text.ParseException;
 import java.util.Date;
@@ -15,19 +20,28 @@ import java.util.Iterator;
 import javax.swing.DefaultListModel;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTabbedPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.border.BevelBorder;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 
 import org.json.JSONException;
 
+import be.artesis.timelog.checkboxtree.CheckBoxNode;
+import be.artesis.timelog.checkboxtree.CheckBoxNodeEditor;
+import be.artesis.timelog.checkboxtree.CheckBoxNodeRenderer;
+import be.artesis.timelog.checkboxtree.NamedVector;
 import be.artesis.timelog.clock.Clock;
 import be.artesis.timelog.model.Validator;
 import be.artesis.timelog.model.WebserviceException;
@@ -42,12 +56,6 @@ import com.jgoodies.forms.layout.ColumnSpec;
 import com.jgoodies.forms.layout.FormLayout;
 import com.jgoodies.forms.layout.RowSpec;
 import com.toedter.calendar.JDateChooser;
-import javax.swing.JScrollPane;
-import java.awt.Font;
-import javax.swing.event.ListSelectionListener;
-import javax.swing.event.ListSelectionEvent;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
 
 /**
  * @author Gilliam
@@ -130,7 +138,7 @@ public class GUIForm extends javax.swing.JFrame {
 		JTabbedPane.setTabPlacement(javax.swing.JTabbedPane.LEFT);
 		JTabbedPane.setName("tabContainer");
 
-		homeJPanel.setBackground(new java.awt.Color(153, 153, 153));
+		homeJPanel.setBackground(Color.GRAY);
 		homeJPanel.setForeground(new java.awt.Color(65, 152, 134));
 
 		homeJLabel.setFont(new java.awt.Font("Tw Cen MT", 1, 14));
@@ -201,7 +209,7 @@ public class GUIForm extends javax.swing.JFrame {
 		homeTasksJList.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
 		scrollPane_1.setViewportView(homeTasksJList);
 
-		projectsJPanel.setBackground(new java.awt.Color(153, 153, 153));
+		projectsJPanel.setBackground(Color.GRAY);
 
 		projectsJLabel.setFont(new java.awt.Font("Tw Cen MT", 1, 14));
 		projectsJLabel.setForeground(new java.awt.Color(255, 255, 255));
@@ -333,7 +341,7 @@ public class GUIForm extends javax.swing.JFrame {
 		projectsJPanel.add(projectFieldsJPanel);
 		projectsJPanel.add(projectsJLabel);
 
-		tasksJPanel.setBackground(new java.awt.Color(153, 153, 153));
+		tasksJPanel.setBackground(Color.GRAY);
 
 		tasksJLabel.setFont(new java.awt.Font("Tw Cen MT", 1, 14));
 		tasksJLabel.setForeground(new java.awt.Color(255, 255, 255));
@@ -465,7 +473,7 @@ public class GUIForm extends javax.swing.JFrame {
 		clientsJList.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
 		removeClientJButton = new javax.swing.JButton();
 
-		clientsJPanel.setBackground(new java.awt.Color(153, 153, 153));
+		clientsJPanel.setBackground(Color.GRAY);
 
 		clientsJLabel.setFont(new java.awt.Font("Tw Cen MT", 1, 14));
 		clientsJLabel.setForeground(new java.awt.Color(255, 255, 255));
@@ -589,7 +597,7 @@ public class GUIForm extends javax.swing.JFrame {
 
 		JTabbedPane.addTab("", new javax.swing.ImageIcon(getClass().getResource("/be/artesis/timelog/gui/icons/ClientsNeonIcon.png")), clientsJPanel, "Clients");
 
-		scheduleJPanel.setBackground(new java.awt.Color(153, 153, 153));
+		scheduleJPanel.setBackground(Color.GRAY);
 
 		scheduleJLabel.setFont(new java.awt.Font("Tw Cen MT", 1, 14));
 		scheduleJLabel.setForeground(new java.awt.Color(255, 255, 255));
@@ -599,7 +607,65 @@ public class GUIForm extends javax.swing.JFrame {
 		scheduleJPanel.setLayout(null);
 		scheduleJPanel.add(scheduleJLabel);
 
-		optionsJPanel.setBackground(new java.awt.Color(153, 153, 153));
+		importExportJPanel = new JPanel();
+		importExportJPanel.setBackground(Color.GRAY);
+		JTabbedPane.addTab("", new ImageIcon(GUIForm.class.getResource("/be/artesis/timelog/gui/icons/ImportExportNeonIcon.png")), importExportJPanel, "Import / Export");
+		importExportJPanel.setLayout(null);
+
+		importExportTabbedPane = new JTabbedPane(JTabbedPane.TOP);
+		importExportTabbedPane.setForeground(Color.GRAY);
+		importExportTabbedPane.setBorder(null);
+		importExportTabbedPane.setBackground(Color.GRAY);
+		importExportTabbedPane.setBounds(10, 11, 664, 429);
+		importExportJPanel.add(importExportTabbedPane);
+
+		exportJPanel = new JPanel();
+		exportJPanel.setBackground(Color.DARK_GRAY);
+		exportJPanel.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
+		importExportTabbedPane.addTab("Export", null, exportJPanel, "Export your tasks here");
+		importExportTabbedPane.setForegroundAt(0, Color.WHITE);
+		exportJPanel.setLayout(null);
+
+		exportJScrollPane = new JScrollPane();
+		exportJScrollPane.setBounds(10, 11, 320, 347);
+		exportJPanel.add(exportJScrollPane);
+
+		exportJButton = new JButton("Export");
+		exportJButton.setBounds(10, 369, 320, 21);
+		exportJPanel.add(exportJButton);
+		importExportTabbedPane.setBackgroundAt(0, Color.DARK_GRAY);
+
+		importJPanel = new JPanel();
+		importJPanel.setBackground(Color.DARK_GRAY);
+		importJPanel.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
+		importExportTabbedPane.addTab("Import", null, importJPanel, "Import tasks here");
+		importExportTabbedPane.setForegroundAt(1, Color.WHITE);
+		importExportTabbedPane.setBackgroundAt(1, Color.DARK_GRAY);
+		importJPanel.setLayout(null);
+
+		// Yolan, hier is voorbeeldcode
+		CheckBoxNode accessibilityOptions[] = { new CheckBoxNode("Move system caret with focus/selection changes", false), new CheckBoxNode("Always expand alt text for images", true) };
+		CheckBoxNode browsingOptions[] = { new CheckBoxNode("Notify when downloads complete", true), new CheckBoxNode("Disable script debugging", true), new CheckBoxNode("Use AutoComplete", true), new CheckBoxNode("Browse in a new process", false) };
+		Vector accessVector = new NamedVector("Accessibility", accessibilityOptions);
+		Vector browseVector = new NamedVector("Browsing", browsingOptions);
+		Object rootNodes[] = { accessVector, browseVector };
+		Vector rootVector = new NamedVector("Root", rootNodes);
+		JTree tree = new JTree(rootVector);
+
+		CheckBoxNodeRenderer renderer = new CheckBoxNodeRenderer();
+		tree.setCellRenderer(renderer);
+
+		tree.setCellEditor(new CheckBoxNodeEditor(tree));
+		tree.setEditable(true);
+		importJScrollPane = new JScrollPane();
+		importJScrollPane.setBounds(10, 11, 320, 347);
+		importJPanel.add(importJScrollPane);
+
+		importJButton = new JButton("Import");
+		importJButton.setBounds(10, 369, 320, 21);
+		importJPanel.add(importJButton);
+
+		optionsJPanel.setBackground(Color.GRAY);
 
 		settingsJLabel.setFont(new java.awt.Font("Tw Cen MT", 1, 14));
 		settingsJLabel.setForeground(new java.awt.Color(255, 255, 255));
@@ -1169,4 +1235,12 @@ public class GUIForm extends javax.swing.JFrame {
 	private JList homeTasksJList;
 	private JScrollPane scrollPane;
 	private JScrollPane scrollPane_1;
+	private JPanel importExportJPanel;
+	private JTabbedPane importExportTabbedPane;
+	private JPanel importJPanel;
+	private JPanel exportJPanel;
+	private JScrollPane importJScrollPane;
+	private JButton importJButton;
+	private JScrollPane exportJScrollPane;
+	private JButton exportJButton;
 }
