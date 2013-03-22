@@ -79,10 +79,6 @@ public class AuthBrowser {
                 SwingUtilities.invokeLater(new Runnable() {
                     @Override public void run() {
                         String url = webEngine.getLocation();
-                        if(url != null) {
-                        	System.out.println("piet");
-                        }
-                        
                         
                         //Google
                         if(url != null && url.startsWith("https://www.google.be/oauth2callback")) {
