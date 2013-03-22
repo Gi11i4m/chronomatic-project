@@ -6,7 +6,7 @@ package be.artesis.timelog.gui;
 public class Main {
 
     public static void main(String args[]) {
-        GUIForm gui = new GUIForm();
+        GUIForm gui = new GUIForm();        
         if (gui.login.getResult()) {
             gui.setLocationRelativeTo(null);
             gui.setVisible(true);

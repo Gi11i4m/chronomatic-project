@@ -2,6 +2,7 @@
 *.class
 *.db
 *.log
+*.orig
 DatabaseContainer.java
 
 # Package Files #
