@@ -2,8 +2,9 @@ package be.artesis.timelog.gui;
 
 import java.awt.Color;
 import java.awt.Component;
-import java.awt.Font;
+import java.awt.Dimension;
 import java.awt.SystemColor;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusAdapter;
@@ -70,11 +71,16 @@ public class GUIForm extends javax.swing.JFrame {
 	final String NEWTASKITEM = "< New task >";
 	final String NEWPROJECTITEM = "< New project >";
 
-	public GUIForm() {
-		validator = Validator.getInstance();
-		login = new LoginDialog(this, true, validator);
-		login.setVisible(true);
+	public GUIForm(Validator validator) {
+		this.validator = validator;
 		initComponents();
+		
+		// set form in center
+		final Toolkit toolkit = Toolkit.getDefaultToolkit();
+		final Dimension screenSize = toolkit.getScreenSize();
+		final int x = (screenSize.width - this.getWidth()) / 2;
+		final int y = (screenSize.height - this.getHeight()) / 2;
+		this.setLocation(x, y);
 	}
 
 	/* Begin gegenereerde code */
@@ -726,8 +732,8 @@ public class GUIForm extends javax.swing.JFrame {
 	private void saveProject() {
 		try {
 			String name = nameJTextField.getText();
-			long startdate = projectStartDateChooser.getDate().getTime();
-			long enddate = projectEndDateChooser.getDate().getTime();
+			long startdate = projectStartDateChooser.getDate().getTime()/1000;
+			long enddate = projectEndDateChooser.getDate().getTime()/1000;
 			int opdrachtgeverID = 0; // FIXME int halen uit selectie uit dropdownbox
 
 			if (projectsJList.getSelectedValue().equals(NEWPROJECTITEM)) {
@@ -753,8 +759,8 @@ public class GUIForm extends javax.swing.JFrame {
 	private void saveTask() {
 		try {
 			String name = taskNameJTextField.getText();
-			long startdate = taskStartDateChooser.getDate().getTime();
-			long enddate = taskEndDateChooser.getDate().getTime();
+			long startdate = taskStartDateChooser.getDate().getTime()/1000;
+			long enddate = taskEndDateChooser.getDate().getTime()/1000;
 			String comment = taskCommentJTextArea.getText();
 			boolean completed = taskCompletedJCheckBox.isSelected();
 
@@ -763,6 +769,9 @@ public class GUIForm extends javax.swing.JFrame {
 				JOptionPane.showMessageDialog(this, "Task added!");
 				refreshTasksList(UserInterface.getCurrentProject(), tasksJList);
 			} else {
+				System.out.println(startdate);
+				System.out.println(UserInterface.getProject(tasksJList.getSelectedIndex()).getEinddatum());
+				System.out.println(startdate <= UserInterface.getProject(tasksJList.getSelectedIndex()).getEinddatum());
 				UserInterface.saveTask(tasksJList.getSelectedIndex(), name, startdate, enddate, comment, completed);
 				JOptionPane.showMessageDialog(this, "Task edited!");
 				refreshTasksList(UserInterface.getCurrentProject(), tasksJList);
@@ -1071,8 +1080,7 @@ public class GUIForm extends javax.swing.JFrame {
 			refreshProjectsList(projectsJList, homeProjectsJList);
 			refreshTasksList(UserInterface.getCurrentProject(), tasksJList);
 			clearFieldsOnPanel(taskFieldsJPanel);
-			// FIXME takenlijst selected index op -1 na setten van curr. project
-			tasksJList.setSelectedIndex(-1);
+			tasksJList.clearSelection();
 		} catch (GUIException ex) {
 			ex.printStackTrace();
 			JOptionPane.showMessageDialog(this, ex.getMessage());
