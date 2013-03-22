@@ -1,5 +1,8 @@
 package be.artesis.timelog.checkboxtree;
 
+import java.awt.Component;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.awt.event.MouseEvent;
 import java.util.EventObject;
 
@@ -11,6 +14,7 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreeCellEditor;
 import javax.swing.tree.TreePath;
 
+@SuppressWarnings("serial")
 public class CheckBoxNodeEditor extends AbstractCellEditor implements TreeCellEditor {
 
 	CheckBoxNodeRenderer renderer = new CheckBoxNodeRenderer();
@@ -27,6 +31,25 @@ public class CheckBoxNodeEditor extends AbstractCellEditor implements TreeCellEd
 		JCheckBox checkbox = renderer.getLeafRenderer();
 		CheckBoxNode checkBoxNode = new CheckBoxNode(checkbox.getText(), checkbox.isSelected());
 		return checkBoxNode;
+	}
+	
+	public Component getTreeCellEditorComponent(JTree tree, Object value, boolean selected, boolean expanded, boolean leaf, int row) {
+
+		Component editor = renderer.getTreeCellRendererComponent(tree, value, true, expanded, leaf, row, true);
+
+		// editor always selected / focused
+		ItemListener itemListener = new ItemListener() {
+			public void itemStateChanged(ItemEvent itemEvent) {
+				if (stopCellEditing()) {
+					fireEditingStopped();
+				}
+			}
+		};
+		if (editor instanceof JCheckBox) {
+			((JCheckBox) editor).addItemListener(itemListener);
+		}
+
+		return editor;
 	}
 
 	public boolean isCellEditable(EventObject event) {
@@ -45,3 +68,4 @@ public class CheckBoxNodeEditor extends AbstractCellEditor implements TreeCellEd
 		}
 		return returnValue;
 	}
+}

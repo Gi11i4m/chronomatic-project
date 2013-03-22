@@ -7,7 +7,7 @@ public class Twitter extends SocialMedia {
 	private final String redirectUrl = "http://www.twitter.com/#";
 	private final String scope = "https://www.googleapis.com/auth/userinfo.email";
 	private final String responseType = "code";
-	private final String authorizeTokenUrl = "https://api.twitter.com/oauth/authorize";
+	private final String authorizeTokenUrl = "https://api.twitter.com/oauth/authenticate?";
 	private final String accesTokenUrl = "https://api.twitter.com/oauth/request_token";
 	private final String userInfoUrl = "https://api.twitter.com/oauth/";
 	

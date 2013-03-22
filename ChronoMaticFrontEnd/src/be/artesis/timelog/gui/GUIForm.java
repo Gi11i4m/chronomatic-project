@@ -1,11 +1,10 @@
 package be.artesis.timelog.gui;
 
-import groovyjarjarantlr.collections.impl.Vector;
-
 import java.awt.Color;
 import java.awt.Component;
-import java.awt.Font;
+import java.awt.Dimension;
 import java.awt.SystemColor;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusAdapter;
@@ -16,6 +15,7 @@ import java.io.IOException;
 import java.text.ParseException;
 import java.util.Date;
 import java.util.Iterator;
+import java.util.Vector;
 
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListModel;
@@ -32,6 +32,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.JTree;
 import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.border.BevelBorder;
 import javax.swing.event.ListSelectionEvent;
@@ -39,10 +40,7 @@ import javax.swing.event.ListSelectionListener;
 
 import org.json.JSONException;
 
-import be.artesis.timelog.checkboxtree.CheckBoxNode;
-import be.artesis.timelog.checkboxtree.CheckBoxNodeEditor;
-import be.artesis.timelog.checkboxtree.CheckBoxNodeRenderer;
-import be.artesis.timelog.checkboxtree.NamedVector;
+import be.artesis.timelog.checkboxtree.*;
 import be.artesis.timelog.clock.Clock;
 import be.artesis.timelog.model.Validator;
 import be.artesis.timelog.model.WebserviceException;
@@ -76,11 +74,16 @@ public class GUIForm extends javax.swing.JFrame {
 	final String NEWTASKITEM = "< New task >";
 	final String NEWPROJECTITEM = "< New project >";
 
-	public GUIForm() {
-		validator = Validator.getInstance();
-		login = new LoginDialog(this, true, validator);
-		login.setVisible(true);
+	public GUIForm(Validator validator) {
+		this.validator = validator;
 		initComponents();
+		
+		// set form in center
+		final Toolkit toolkit = Toolkit.getDefaultToolkit();
+		final Dimension screenSize = toolkit.getScreenSize();
+		final int x = (screenSize.width - this.getWidth()) / 2;
+		final int y = (screenSize.height - this.getHeight()) / 2;
+		this.setLocation(x, y);
 	}
 
 	/* Begin gegenereerde code */
@@ -530,7 +533,7 @@ public class GUIForm extends javax.swing.JFrame {
 		javax.swing.GroupLayout clientsJPanelLayout = new javax.swing.GroupLayout(clientsJPanel);
 		clientsJPanelLayout.setHorizontalGroup(clientsJPanelLayout.createParallelGroup(Alignment.LEADING).addGroup(clientsJPanelLayout.createSequentialGroup().addContainerGap().addGroup(clientsJPanelLayout.createParallelGroup(Alignment.LEADING).addGroup(clientsJPanelLayout.createSequentialGroup().addGroup(clientsJPanelLayout.createParallelGroup(Alignment.LEADING, false).addComponent(jScrollPane5, GroupLayout.DEFAULT_SIZE, 197, Short.MAX_VALUE).addComponent(removeClientJButton, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)).addPreferredGap(ComponentPlacement.RELATED, 143, Short.MAX_VALUE).addComponent(clientFieldsJPanel, GroupLayout.PREFERRED_SIZE, 324, GroupLayout.PREFERRED_SIZE)).addComponent(clientsJLabel)).addContainerGap()));
 		clientsJPanelLayout.setVerticalGroup(clientsJPanelLayout.createParallelGroup(Alignment.TRAILING).addGroup(clientsJPanelLayout.createSequentialGroup().addGroup(clientsJPanelLayout.createParallelGroup(Alignment.TRAILING).addGroup(Alignment.LEADING, clientsJPanelLayout.createSequentialGroup().addGap(33).addComponent(clientFieldsJPanel, GroupLayout.DEFAULT_SIZE, 378, Short.MAX_VALUE)).addGroup(clientsJPanelLayout.createSequentialGroup().addContainerGap().addComponent(clientsJLabel).addPreferredGap(ComponentPlacement.RELATED).addComponent(jScrollPane5, GroupLayout.DEFAULT_SIZE, 336, Short.MAX_VALUE))).addPreferredGap(ComponentPlacement.RELATED).addComponent(removeClientJButton, GroupLayout.PREFERRED_SIZE, 23, GroupLayout.PREFERRED_SIZE).addContainerGap()));
-		clientFieldsJPanel.setLayout(new FormLayout(new ColumnSpec[] { FormFactory.UNRELATED_GAP_COLSPEC, ColumnSpec.decode("79px"), ColumnSpec.decode("225px"), }, new RowSpec[] { FormFactory.RELATED_GAP_ROWSPEC, RowSpec.decode("20px"), FormFactory.LINE_GAP_ROWSPEC, RowSpec.decode("20px"), FormFactory.LINE_GAP_ROWSPEC, RowSpec.decode("20px"), FormFactory.LINE_GAP_ROWSPEC, RowSpec.decode("20px"), FormFactory.LINE_GAP_ROWSPEC, RowSpec.decode("20px"), RowSpec.decode("192px"), RowSpec.decode("17px"), FormFactory.RELATED_GAP_ROWSPEC, FormFactory.DEFAULT_ROWSPEC, }));
+		clientFieldsJPanel.setLayout(new FormLayout(new ColumnSpec[] { FormFactory.UNRELATED_GAP_COLSPEC, ColumnSpec.decode("79px"), ColumnSpec.decode("220px"), }, new RowSpec[] { FormFactory.RELATED_GAP_ROWSPEC, RowSpec.decode("20px"), FormFactory.LINE_GAP_ROWSPEC, RowSpec.decode("20px"), FormFactory.LINE_GAP_ROWSPEC, RowSpec.decode("20px"), FormFactory.LINE_GAP_ROWSPEC, RowSpec.decode("20px"), FormFactory.LINE_GAP_ROWSPEC, RowSpec.decode("20px"), RowSpec.decode("192px"), RowSpec.decode("17px"), FormFactory.RELATED_GAP_ROWSPEC, FormFactory.DEFAULT_ROWSPEC, }));
 
 		JLabel label = new JLabel();
 		label.setText("Name");
@@ -661,7 +664,6 @@ public class GUIForm extends javax.swing.JFrame {
 		importExportTabbedPane.setBackgroundAt(1, Color.DARK_GRAY);
 		importJPanel.setLayout(null);
 
-		// Yolan, hier is voorbeeldcode
 		CheckBoxNode accessibilityOptions[] = { new CheckBoxNode("Move system caret with focus/selection changes", false), new CheckBoxNode("Always expand alt text for images", true) };
 		CheckBoxNode browsingOptions[] = { new CheckBoxNode("Notify when downloads complete", true), new CheckBoxNode("Disable script debugging", true), new CheckBoxNode("Use AutoComplete", true), new CheckBoxNode("Browse in a new process", false) };
 		Vector accessVector = new NamedVector("Accessibility", accessibilityOptions);
@@ -675,7 +677,7 @@ public class GUIForm extends javax.swing.JFrame {
 
 		tree.setCellEditor(new CheckBoxNodeEditor(tree));
 		tree.setEditable(true);
-		importJScrollPane = new JScrollPane();
+		importJScrollPane = new JScrollPane(tree);
 		importJScrollPane.setBounds(10, 11, 320, 347);
 		importJPanel.add(importJScrollPane);
 

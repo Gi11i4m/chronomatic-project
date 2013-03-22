@@ -1,24 +1,28 @@
 package be.artesis.timelog.gui;
 
+import java.awt.BorderLayout;
+
 import be.artesis.timelog.controller.Inserter;
 import be.artesis.timelog.view.DataControle;
 import be.artesis.timelog.view.DataInputException;
 import javax.swing.JOptionPane;
+import org.eclipse.wb.swing.FocusTraversalOnArray;
+import java.awt.Component;
 
 /**
  *
  * @author Gilliam
  */
-public class NewUserDialog extends javax.swing.JDialog {
+public class NewUserDialog extends javax.swing.JPanel {
 
     /**
      * Creates new form NewUserDialog
      * @param parent
      * @param modal
      */
-    public NewUserDialog(java.awt.Frame parent, boolean modal) {
-        super(parent, modal);
-        setLocationRelativeTo(parent);
+	LoginDialog parent;
+    public NewUserDialog(LoginDialog parent) {
+    	this.parent = parent;
         initComponents();
     }
 
@@ -30,12 +34,12 @@ public class NewUserDialog extends javax.swing.JDialog {
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
+    	this.setLayout(null);
 
         firstNameJLabel = new javax.swing.JLabel();
         nameJLabel = new javax.swing.JLabel();
         usernameJLabel = new javax.swing.JLabel();
         emailJLabel = new javax.swing.JLabel();
-        emailJTextField = new javax.swing.JTextField();
         usernameJTextField = new javax.swing.JTextField();
         nameJTextField = new javax.swing.JTextField();
         firstNameJTextField = new javax.swing.JTextField();
@@ -44,115 +48,59 @@ public class NewUserDialog extends javax.swing.JDialog {
         passwordRepeatJLabel = new javax.swing.JLabel();
         passwordJPasswordField = new javax.swing.JPasswordField();
         passwordRepeatJPasswordField = new javax.swing.JPasswordField();
-        passwordStrengthJLabel = new javax.swing.JLabel();
+        passwordStrengthJLabel = new javax.swing.JLabel("");
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setTitle("New user");
-        setResizable(false);
-
-        firstNameJLabel.setText("First name");
-
-        nameJLabel.setText("Name");
-
-        usernameJLabel.setText("Username");
-
+        firstNameJLabel.setText("Voornaam");
+        nameJLabel.setText("Naam");
+        usernameJLabel.setText("Gebruikersnaam");
         emailJLabel.setText("Email");
-
-        registerJButton.setText("Register");
+        registerJButton.setText("Registreer");
         registerJButton.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 registerJButtonClicked(evt);
             }
         });
 
-        passwordJLabel.setText("Password");
-
-        passwordRepeatJLabel.setText("Repeat password");
-
+        passwordJLabel.setText("Paswoord");
+        passwordRepeatJLabel.setText("Herhaal paswoord");
         passwordJPasswordField.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 passwordJPasswordFieldKeyReleased(evt);
             }
         });
-
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(usernameJLabel)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(nameJLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addGap(108, 108, 108)))
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(nameJTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 156, Short.MAX_VALUE)
-                            .addComponent(usernameJTextField)))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(firstNameJLabel)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(firstNameJTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 156, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(passwordRepeatJLabel)
-                            .addComponent(emailJLabel))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(passwordStrengthJLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 156, Short.MAX_VALUE)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                .addComponent(emailJTextField, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 156, Short.MAX_VALUE)
-                                .addComponent(passwordRepeatJPasswordField, javax.swing.GroupLayout.Alignment.TRAILING)
-                                .addComponent(passwordJPasswordField, javax.swing.GroupLayout.Alignment.TRAILING))))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(passwordJLabel)
-                        .addGap(0, 0, Short.MAX_VALUE)))
-                .addContainerGap())
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(62, Short.MAX_VALUE)
-                .addComponent(registerJButton, javax.swing.GroupLayout.PREFERRED_SIZE, 208, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(64, 64, 64))
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(22, 22, 22)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(firstNameJTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(firstNameJLabel))
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(nameJTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(nameJLabel))
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(usernameJTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(usernameJLabel))
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(passwordJPasswordField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(passwordJLabel))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(passwordRepeatJPasswordField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(passwordRepeatJLabel))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(passwordStrengthJLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 18, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 26, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(emailJTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(emailJLabel))
-                .addGap(18, 18, 18)
-                .addComponent(registerJButton, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(19, 19, 19))
-        );
-
-        pack();
-    }// </editor-fold>//GEN-END:initComponents
+        
+        this.add(firstNameJLabel);
+        this.add(nameJLabel);
+        this.add(usernameJLabel);
+        this.emailJTextField = new javax.swing.JTextField();
+        this.add(emailJTextField);
+        this.add(emailJLabel);
+        this.add(usernameJTextField);
+        this.add(nameJTextField);
+        this.add(firstNameJTextField);
+        this.add(registerJButton);
+        this.add(passwordJLabel);
+        this.add(passwordRepeatJLabel);
+        this.add(passwordJPasswordField);
+        this.add(passwordRepeatJPasswordField);
+        this.add(passwordStrengthJLabel);
+        
+        this.firstNameJLabel.setBounds(48,74,112,25);
+        this.nameJLabel.setBounds(48,179,112,25);
+        this.usernameJLabel.setBounds(370,74,112,25);
+        this.emailJTextField.setBounds(48,331,200,25);
+        this.emailJLabel.setBounds(48,283,112,25);
+        this.usernameJTextField.setBounds(370,112,200,25);
+        this.nameJTextField.setBounds(48,217,200,25);
+        this.firstNameJTextField.setBounds(48,112,200,25);
+        this.registerJButton.setBounds(48,436,200,25);
+        this.passwordJLabel.setBounds(370,179,112,25);
+        this.passwordRepeatJLabel.setBounds(370,283,112,25);
+        this.passwordJPasswordField.setBounds(370,217,200,25);
+        this.passwordRepeatJPasswordField.setBounds(370,331,200,25);
+        this.passwordStrengthJLabel.setBounds(458,397,112,25);
+        setFocusTraversalPolicy(new FocusTraversalOnArray(new Component[]{firstNameJTextField, nameJTextField, emailJTextField, usernameJTextField, passwordJPasswordField, registerJButton, passwordRepeatJPasswordField}));
+    }
 
     private void registerJButtonClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_registerJButtonClicked
         // maak een nieuwe gebruiker aan aan de hand van volgende velden:
@@ -183,11 +131,12 @@ public class NewUserDialog extends javax.swing.JDialog {
             Inserter.CreateUser(name, firstName, username, password, email);
             
             JOptionPane.showMessageDialog(this, "Your account has been created!");
-            dispose();
+            
+            parent.displayTab("BASISPANEL");
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(this, ex.getMessage());
         }
-    }//GEN-LAST:event_registerJButtonClicked
+    }
 
     private void passwordJPasswordFieldKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_passwordJPasswordFieldKeyReleased
         passwordStrengthJLabel.setText("Strength: " + DataControle.passwoordSterkte(passwordJPasswordField.getPassword()));

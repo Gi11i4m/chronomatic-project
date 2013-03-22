@@ -56,8 +56,10 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
+import org.eclipse.wb.swing.FocusTraversalOnArray;
+import java.awt.Component;
 
-public class LoginDialog extends javax.swing.JDialog implements ActionListener {
+public class LoginDialog extends javax.swing.JFrame implements ActionListener {
 	@SuppressWarnings("unchecked")
 	private static final long serialVersionUID = 1L;
 	private boolean result;
@@ -69,8 +71,7 @@ public class LoginDialog extends javax.swing.JDialog implements ActionListener {
 	private Container pane;
 	private JFXPanel basisPanel;
 	private JFXPanel browserPanel;
-	private final String BASISPANEL = "Basis";
-	private final String BROWSERPANEL = "Browser";
+	private JPanel newUserPanel;
 
 	private JTextField usernameJTextField;
 	private JPasswordField passwordJPasswordField;
@@ -87,11 +88,10 @@ public class LoginDialog extends javax.swing.JDialog implements ActionListener {
 	private JButton linkedinJButton;
 	JLabel googleIconJLabel;
 
-	public LoginDialog(java.awt.Frame parent, boolean modal, Validator validator) {
-		super(parent, modal);
+	public LoginDialog(java.awt.Frame parent, Validator validator) {
 		setResizable(false);
 		this.parent = parent;
-		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+		setDefaultCloseOperation(LoginDialog.DISPOSE_ON_CLOSE);
 		this.validator = validator;
 		result = false;
 		this.setTitle("Login");
@@ -103,13 +103,25 @@ public class LoginDialog extends javax.swing.JDialog implements ActionListener {
 		final int x = (screenSize.width - this.getWidth()) / 2;
 		final int y = (screenSize.height - this.getHeight()) / 2;
 		this.setLocation(x, y);
+		
+		pane = getContentPane();
+		layout = new CardLayout();
+		pane.setBackground(Color.WHITE);
+		pane.setLayout(layout);
+
+		basisPanel = new JFXPanel();
+		browserPanel = new JFXPanel();
+		newUserPanel = new NewUserDialog(this);
+		pane.add(basisPanel, "BASISPANEL");
+		pane.add(browserPanel, "BROWSERPANEL");
+		pane.add(newUserPanel, "NEWUSERPANEL");
 
 		initComponents();
 
-		this.displayTab(BASISPANEL);
+		this.displayTab("BASISPANEL");
 	}
 
-	private void displayTab(String name) {
+	public void displayTab(String name) {
 		layout.show(pane, name);
 	}
 
@@ -139,6 +151,7 @@ public class LoginDialog extends javax.swing.JDialog implements ActionListener {
 			if (validator.loginExtern(email)) {
 				loadUserData();
 				result = true;
+				parent.setVisible(true);
 				this.dispose();
 			} else {
 				JOptionPane.showMessageDialog(this, "Login failed");
@@ -169,6 +182,7 @@ public class LoginDialog extends javax.swing.JDialog implements ActionListener {
             	loadUserData();
                 result = true;
                 this.dispose();
+                parent.setVisible(true);
             } else {
 
             }
@@ -187,6 +201,7 @@ public class LoginDialog extends javax.swing.JDialog implements ActionListener {
 				loadUserData();
 				result = true;
 				this.dispose();
+				
 			} else {
 				JOptionPane.showMessageDialog(this, "Login failed");
 			}
@@ -230,27 +245,19 @@ public class LoginDialog extends javax.swing.JDialog implements ActionListener {
 
 	private void initComponents() {
 
-		pane = getContentPane();
-		layout = new CardLayout();
-		pane.setBackground(Color.WHITE);
-		pane.setLayout(layout);
-
-		// basisPanel.setLayout(null);
-
-		basisPanel = new JFXPanel();
-		browserPanel = new JFXPanel();
-		pane.add(basisPanel, BASISPANEL);
-		pane.add(browserPanel, BROWSERPANEL);
+		
 
 		JFXPanel loading = new JFXPanel();
 		pane.add(loading, "loading");
+		
+		
 
-		ImageIcon loadingGif = new ImageIcon();
+		/*ImageIcon loadingGif = new ImageIcon();
 		loadingGif = new ImageIcon(Toolkit.getDefaultToolkit().getImage(
 				getClass().getResource("/be/artesis/timelog/gui/icons/loading.gif")));
 		JLabel loadingJLabel = new JLabel(loadingGif);
 		loadingJLabel.setBounds(431, 124, 200, 200);
-		loading.add(loadingJLabel);
+		browserPanel.add(loadingJLabel);*/
 		
 		ImageIcon googleIcon = new ImageIcon(Toolkit.getDefaultToolkit().getImage(
 				getClass().getResource("/be/artesis/timelog/gui/icons/google.png")));
@@ -336,15 +343,17 @@ public class LoginDialog extends javax.swing.JDialog implements ActionListener {
 		basisPanel.add(microsoftJButton);
 		basisPanel.add(twitterJButton);
 		basisPanel.add(linkedinJButton);
+		basisPanel.setFocusTraversalPolicy(new FocusTraversalOnArray(new Component[]{usernameJTextField, passwordJPasswordField, aanmeldenButton, googleJButton, facebookJButton, microsoftJButton, twitterJButton, linkedinJButton, newAccountJLabel}));
 		browserPanel.add(browserGoBackJButton);
 
 		// Action listeners
 		try {
 			aanmeldenButton.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent evt) {
+					login();
 
 					//Thread voor het loading gifke
-					Thread loginLoadingThread = new Thread() {
+					/*Thread loginLoadingThread = new Thread() {
 						public void run() {
 							SwingUtilities.invokeLater(new Runnable() {
 								public void run() {
@@ -353,8 +362,11 @@ public class LoginDialog extends javax.swing.JDialog implements ActionListener {
 							});
 							login();
 						}
-					};
-					loginLoadingThread.start();
+					};*/
+					
+					//loginLoadingThread.start();
+					
+					//parent.setVisible(true);
 				}
 			});
 		} catch (Exception e) {
@@ -367,7 +379,13 @@ public class LoginDialog extends javax.swing.JDialog implements ActionListener {
 		browserGoBackJButton.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
 				Platform.exit();
-				displayTab(BASISPANEL);
+				displayTab("BASISPANEL");
+			}
+		});
+
+		newAccountJLabel.addMouseListener(new java.awt.event.MouseAdapter() {
+			public void mouseClicked(java.awt.event.MouseEvent evt) {
+				displayTab("NEWUSERPANEL");
 			}
 		});
 
@@ -401,6 +419,6 @@ public class LoginDialog extends javax.swing.JDialog implements ActionListener {
 		AuthBrowser browser = new AuthBrowser(this, social);
 		browser.buildUrl();
 		browser.initBrowser(browserPanel);
-		this.displayTab(BROWSERPANEL);
+		this.displayTab("BROWSERPANEL");
 	}
 }

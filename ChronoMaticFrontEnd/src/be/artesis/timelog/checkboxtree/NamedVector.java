@@ -5,7 +5,6 @@ import java.util.Vector;
 @SuppressWarnings({ "unchecked", "serial", "rawtypes" })
 public class NamedVector extends Vector {
 	String name;
-
 	public NamedVector(String name) {
 		this.name = name;
 	}
