@@ -264,30 +264,7 @@ public class GUIForm extends javax.swing.JFrame {
 				projectsJListValueChanged(evt);
 			}
 		});
-		projectFieldsJPanel.setLayout(new FormLayout(new ColumnSpec[] {
-				FormFactory.UNRELATED_GAP_COLSPEC,
-				ColumnSpec.decode("65px"),
-				FormFactory.LABEL_COMPONENT_GAP_COLSPEC,
-				ColumnSpec.decode("max(53dlu;default):grow"),
-				FormFactory.RELATED_GAP_COLSPEC,
-				ColumnSpec.decode("123px"),
-				FormFactory.RELATED_GAP_COLSPEC,
-				FormFactory.DEFAULT_COLSPEC,},
-			new RowSpec[] {
-				FormFactory.UNRELATED_GAP_ROWSPEC,
-				RowSpec.decode("20px"),
-				FormFactory.LINE_GAP_ROWSPEC,
-				FormFactory.PREF_ROWSPEC,
-				FormFactory.LINE_GAP_ROWSPEC,
-				FormFactory.PREF_ROWSPEC,
-				FormFactory.RELATED_GAP_ROWSPEC,
-				RowSpec.decode("96px"),
-				FormFactory.UNRELATED_GAP_ROWSPEC,
-				RowSpec.decode("20px"),
-				FormFactory.LINE_GAP_ROWSPEC,
-				RowSpec.decode("21px"),
-				RowSpec.decode("60px"),
-				RowSpec.decode("23px"),}));
+		projectFieldsJPanel.setLayout(new FormLayout(new ColumnSpec[] { FormFactory.UNRELATED_GAP_COLSPEC, ColumnSpec.decode("65px"), FormFactory.LABEL_COMPONENT_GAP_COLSPEC, ColumnSpec.decode("max(53dlu;default):grow"), FormFactory.RELATED_GAP_COLSPEC, ColumnSpec.decode("123px"), FormFactory.RELATED_GAP_COLSPEC, FormFactory.DEFAULT_COLSPEC, }, new RowSpec[] { FormFactory.UNRELATED_GAP_ROWSPEC, RowSpec.decode("20px"), FormFactory.LINE_GAP_ROWSPEC, FormFactory.PREF_ROWSPEC, FormFactory.LINE_GAP_ROWSPEC, FormFactory.PREF_ROWSPEC, FormFactory.RELATED_GAP_ROWSPEC, RowSpec.decode("96px"), FormFactory.UNRELATED_GAP_ROWSPEC, RowSpec.decode("20px"), FormFactory.LINE_GAP_ROWSPEC, RowSpec.decode("21px"), RowSpec.decode("60px"), RowSpec.decode("23px"), }));
 		namecompJLabel = new javax.swing.JLabel();
 		projectFieldsJPanel.add(namecompJLabel, "2, 2, left, center");
 
@@ -329,7 +306,7 @@ public class GUIForm extends javax.swing.JFrame {
 
 		taskscompJLabel.setForeground(new java.awt.Color(255, 255, 255));
 		taskscompJLabel.setText("Tasks");
-		
+
 		projectClientsJComboBox = new JComboBox();
 		projectFieldsJPanel.add(projectClientsJComboBox, "4, 10, 3, 1, fill, default");
 		percentageCompleteJProgressBar = new javax.swing.JProgressBar();
@@ -519,6 +496,9 @@ public class GUIForm extends javax.swing.JFrame {
 
 		clientsJList = new JList();
 		clientsJList.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
+		jScrollPane5.setViewportView(clientsJList);
+
+		clientsJList = new JList();
 		jScrollPane5.setViewportView(clientsJList);
 		clientFieldsJPanel.setLayout(new FormLayout(new ColumnSpec[] { FormFactory.UNRELATED_GAP_COLSPEC, ColumnSpec.decode("79px"), ColumnSpec.decode("220px"), }, new RowSpec[] { FormFactory.RELATED_GAP_ROWSPEC, RowSpec.decode("20px"), FormFactory.LINE_GAP_ROWSPEC, RowSpec.decode("20px"), FormFactory.LINE_GAP_ROWSPEC, RowSpec.decode("20px"), FormFactory.LINE_GAP_ROWSPEC, RowSpec.decode("20px"), FormFactory.LINE_GAP_ROWSPEC, RowSpec.decode("20px"), RowSpec.decode("192px"), RowSpec.decode("17px"), FormFactory.RELATED_GAP_ROWSPEC, FormFactory.DEFAULT_ROWSPEC, }));
 
@@ -726,8 +706,8 @@ public class GUIForm extends javax.swing.JFrame {
 	private void saveProject() {
 		try {
 			String name = projectNameJTextField.getText();
-			long startdate = projectStartDateChooser.getDate().getTime()/1000;
-			long enddate = projectEndDateChooser.getDate().getTime()/1000;
+			long startdate = projectStartDateChooser.getDate().getTime() / 1000;
+			long enddate = projectEndDateChooser.getDate().getTime() / 1000;
 			int opdrachtgeverID = 0; // FIXME int halen uit selectie uit dropdownbox
 
 			if (projectsJList.getSelectedValue().equals(NEWPROJECTITEM)) {
@@ -943,7 +923,7 @@ public class GUIForm extends javax.swing.JFrame {
 			Project p = ((ArrayList<Project>) projects).get(i);
 
 			CheckBoxNode taskOptions[] = new CheckBoxNode[p.getTaken().size()];
-			for (Taak t : p.getTaken()) {
+			for (int j = 0; j < p.getTaken().size(); j++) {
 
 			}
 
@@ -979,15 +959,15 @@ public class GUIForm extends javax.swing.JFrame {
 			projectEndDateChooser.setDate(new Date(p.getEinddatum() * 1000));
 			DefaultComboBoxModel listmodel = new DefaultComboBoxModel();
 			Opdrachtgever og = null;
-		    for(Opdrachtgever o : UserInterface.getClients()){
-		    	if (o.getID() == p.getOpdrachtgeverId()) {
+			for (Opdrachtgever o : UserInterface.getClients()) {
+				if (o.getID() == p.getOpdrachtgeverId()) {
 					og = o;
 				}
-		    	listmodel.addElement(o);
-		    }    
-		    projectClientsJComboBox.setModel(listmodel);     
-		    projectClientsJComboBox.setSelectedItem(og);
-		    
+				listmodel.addElement(o);
+			}
+			projectClientsJComboBox.setModel(listmodel);
+			projectClientsJComboBox.setSelectedItem(og);
+
 			refreshTasksList(p, projectTasksJList);
 			percentageCompleteJProgressBar.setValue((int) (((Project) projectsJList.getSelectedValue()).getPercentageComplete() * 100));
 		}
@@ -1077,7 +1057,7 @@ public class GUIForm extends javax.swing.JFrame {
 				((JCheckBox) c).setSelected(false);
 			} else if (c instanceof JDateChooser) {
 				((JDateChooser) c).setDate(new Date());
-			} else if (c instanceof JComboBox){
+			} else if (c instanceof JComboBox) {
 				((JComboBox) c).setModel(new DefaultComboBoxModel());
 			}
 		}
@@ -1127,11 +1107,11 @@ public class GUIForm extends javax.swing.JFrame {
 			if (projectsJList.getSelectedValue().equals(NEWPROJECTITEM)) {
 				clearFieldsOnPanel(projectFieldsJPanel);
 				DefaultComboBoxModel listmodel = new DefaultComboBoxModel();
-			    for(Opdrachtgever o : UserInterface.getClients()){
-			    	listmodel.addElement(o);
-			    }
-			    projectClientsJComboBox.setModel(listmodel);
-			    projectClientsJComboBox.setSelectedItem(null);
+				for (Opdrachtgever o : UserInterface.getClients()) {
+					listmodel.addElement(o);
+				}
+				projectClientsJComboBox.setModel(listmodel);
+				projectClientsJComboBox.setSelectedItem(null);
 				saveProjectJButton.setText("Save [new]");
 			} else {
 				loadProjectInfo(projectsJList.getSelectedIndex());
@@ -1275,4 +1255,5 @@ public class GUIForm extends javax.swing.JFrame {
 	private JScrollPane exportJScrollPane;
 	private JButton exportJButton;
 	private JComboBox projectClientsJComboBox;
+	private JList clientsJList;
 }
