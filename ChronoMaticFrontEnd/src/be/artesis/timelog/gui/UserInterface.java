@@ -84,9 +84,9 @@ public class UserInterface {
     	return user.getOpdrachtgevers();
     }
     
-    //public static Opdrachtgever getClient(Project p) throws DataInputException{
-    //	return getClient(p.getOpdrachtgeverId());
-    //}
+    public static Opdrachtgever getProjectClient(int projectindex) throws DataInputException{
+    	return getClient(getProject(projectindex).getOpdrachtgeverId());
+    }
     
     public static Opdrachtgever getClient(int index) throws DataInputException{
     	return user.getOpdrachtgever(index);

@@ -17,6 +17,7 @@ import java.text.ParseException;
 import java.util.Date;
 import java.util.Iterator;
 
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListModel;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
@@ -56,6 +57,8 @@ import com.jgoodies.forms.layout.ColumnSpec;
 import com.jgoodies.forms.layout.FormLayout;
 import com.jgoodies.forms.layout.RowSpec;
 import com.toedter.calendar.JDateChooser;
+import javax.swing.JComboBox;
+import javax.swing.SwingConstants;
 
 /**
  * @author Gilliam
@@ -86,7 +89,7 @@ public class GUIForm extends javax.swing.JFrame {
 		JTabbedPane = new javax.swing.JTabbedPane();
 		homeJPanel = new javax.swing.JPanel();
 		homeJLabel = new javax.swing.JLabel();
-		homeJLabel.setBounds(10, 11, 34, 16);
+		homeJLabel.setBounds(10, 11, 62, 16);
 		workJButton = new javax.swing.JButton();
 		workJButton.setBounds(10, 33, 664, 42);
 		projectsJPanel = new javax.swing.JPanel();
@@ -171,14 +174,14 @@ public class GUIForm extends javax.swing.JFrame {
 		label_10.setText("Projects");
 		label_10.setForeground(new Color(0, 153, 153));
 		label_10.setFont(new Font("Tw Cen MT", Font.BOLD, 14));
-		label_10.setBounds(10, 11, 44, 16);
+		label_10.setBounds(10, 11, 157, 16);
 		homeFieldsJPanel.add(label_10);
 
 		label_11 = new JLabel();
 		label_11.setText("Tasks");
 		label_11.setForeground(new Color(0, 153, 153));
 		label_11.setFont(new Font("Tw Cen MT", Font.BOLD, 14));
-		label_11.setBounds(177, 11, 33, 16);
+		label_11.setBounds(177, 11, 159, 16);
 		homeFieldsJPanel.add(label_11);
 
 		scrollPane = new JScrollPane();
@@ -255,14 +258,37 @@ public class GUIForm extends javax.swing.JFrame {
 				projectsJListValueChanged(evt);
 			}
 		});
-		projectFieldsJPanel.setLayout(new FormLayout(new ColumnSpec[] { FormFactory.UNRELATED_GAP_COLSPEC, ColumnSpec.decode("65px"), FormFactory.LABEL_COMPONENT_GAP_COLSPEC, ColumnSpec.decode("max(53dlu;default)"), FormFactory.RELATED_GAP_COLSPEC, ColumnSpec.decode("123px"), FormFactory.RELATED_GAP_COLSPEC, FormFactory.DEFAULT_COLSPEC, }, new RowSpec[] { FormFactory.UNRELATED_GAP_ROWSPEC, RowSpec.decode("20px"), FormFactory.LINE_GAP_ROWSPEC, FormFactory.PREF_ROWSPEC, FormFactory.LINE_GAP_ROWSPEC, FormFactory.PREF_ROWSPEC, FormFactory.RELATED_GAP_ROWSPEC, RowSpec.decode("96px"), FormFactory.UNRELATED_GAP_ROWSPEC, RowSpec.decode("20px"), FormFactory.LINE_GAP_ROWSPEC, RowSpec.decode("21px"), RowSpec.decode("60px"), RowSpec.decode("23px"), }));
+		projectFieldsJPanel.setLayout(new FormLayout(new ColumnSpec[] {
+				FormFactory.UNRELATED_GAP_COLSPEC,
+				ColumnSpec.decode("65px"),
+				FormFactory.LABEL_COMPONENT_GAP_COLSPEC,
+				ColumnSpec.decode("max(53dlu;default):grow"),
+				FormFactory.RELATED_GAP_COLSPEC,
+				ColumnSpec.decode("123px"),
+				FormFactory.RELATED_GAP_COLSPEC,
+				FormFactory.DEFAULT_COLSPEC,},
+			new RowSpec[] {
+				FormFactory.UNRELATED_GAP_ROWSPEC,
+				RowSpec.decode("20px"),
+				FormFactory.LINE_GAP_ROWSPEC,
+				FormFactory.PREF_ROWSPEC,
+				FormFactory.LINE_GAP_ROWSPEC,
+				FormFactory.PREF_ROWSPEC,
+				FormFactory.RELATED_GAP_ROWSPEC,
+				RowSpec.decode("96px"),
+				FormFactory.UNRELATED_GAP_ROWSPEC,
+				RowSpec.decode("20px"),
+				FormFactory.LINE_GAP_ROWSPEC,
+				RowSpec.decode("21px"),
+				RowSpec.decode("60px"),
+				RowSpec.decode("23px"),}));
 		namecompJLabel = new javax.swing.JLabel();
 		projectFieldsJPanel.add(namecompJLabel, "2, 2, left, center");
 
 		namecompJLabel.setForeground(new java.awt.Color(255, 255, 255));
 		namecompJLabel.setText("Naam");
-		nameJTextField = new javax.swing.JTextField();
-		projectFieldsJPanel.add(nameJTextField, "4, 2, 3, 1, fill, top");
+		projectNameJTextField = new javax.swing.JTextField();
+		projectFieldsJPanel.add(projectNameJTextField, "4, 2, 3, 1, fill, top");
 		startdatecompJLabel = new javax.swing.JLabel();
 		projectFieldsJPanel.add(startdatecompJLabel, "2, 4, 2, 1, left, center");
 
@@ -292,22 +318,14 @@ public class GUIForm extends javax.swing.JFrame {
 
 		clientcompJLabel1.setForeground(new java.awt.Color(255, 255, 255));
 		clientcompJLabel1.setText("Client");
-		clientJLabel = new javax.swing.JLabel();
-		projectFieldsJPanel.add(clientJLabel, "4, 10, 3, 1, fill, top");
-
-		clientJLabel.setBackground(new java.awt.Color(204, 255, 255));
-		clientJLabel.setForeground(new java.awt.Color(255, 255, 255));
-		clientJLabel.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
-		clientJLabel.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-		clientJLabel.setMaximumSize(null);
-		clientJLabel.setMinimumSize(new java.awt.Dimension(34, 20));
-		clientJLabel.setName("");
-		clientJLabel.setPreferredSize(new java.awt.Dimension(34, 20));
 		taskscompJLabel = new javax.swing.JLabel();
 		projectFieldsJPanel.add(taskscompJLabel, "2, 8, left, top");
 
 		taskscompJLabel.setForeground(new java.awt.Color(255, 255, 255));
 		taskscompJLabel.setText("Tasks");
+		
+		projectClientsJComboBox = new JComboBox();
+		projectFieldsJPanel.add(projectClientsJComboBox, "4, 10, 3, 1, fill, default");
 		percentageCompleteJProgressBar = new javax.swing.JProgressBar();
 		projectFieldsJPanel.add(percentageCompleteJProgressBar, "4, 12, 3, 1, fill, fill");
 		percentageCompletecompJLabel = new javax.swing.JLabel();
@@ -326,7 +344,7 @@ public class GUIForm extends javax.swing.JFrame {
 			}
 		});
 
-		nameJTextField.addFocusListener(new java.awt.event.FocusAdapter() {
+		projectNameJTextField.addFocusListener(new java.awt.event.FocusAdapter() {
 			public void focusGained(java.awt.event.FocusEvent evt) {
 				editFieldsFocused(evt);
 			}
@@ -729,7 +747,7 @@ public class GUIForm extends javax.swing.JFrame {
 	// Save PROJECT
 	private void saveProject() {
 		try {
-			String name = nameJTextField.getText();
+			String name = projectNameJTextField.getText();
 			long startdate = projectStartDateChooser.getDate().getTime()/1000;
 			long enddate = projectEndDateChooser.getDate().getTime()/1000;
 			int opdrachtgeverID = 0; // FIXME int halen uit selectie uit dropdownbox
@@ -944,15 +962,16 @@ public class GUIForm extends javax.swing.JFrame {
 	private void loadProjectInfo(int index) {
 		if (index != -1) {
 			Project p = UserInterface.getProjects().get(index);
-			nameJTextField.setText(p.getNaam());
+			projectNameJTextField.setText(p.getNaam());
 			projectStartDateChooser.setDate(new Date(p.getBegindatum() * 1000));
 			projectEndDateChooser.setDate(new Date(p.getEinddatum() * 1000));
-			try {
-				clientJLabel.setText(UserInterface.getClient(p.getOpdrachtgeverId()).toString());
-			} catch (DataInputException ex) {
-				ex.printStackTrace();
-				JOptionPane.showMessageDialog(this, ex.getMessage());
-			}
+			DefaultComboBoxModel listmodel = new DefaultComboBoxModel();
+		    for(Opdrachtgever o : UserInterface.getClients()){
+		    	listmodel.addElement(o);
+		    }    
+		    projectClientsJComboBox.setModel(listmodel);     
+		    projectClientsJComboBox.setSelectedIndex(p.getOpdrachtgeverId());
+		    
 			refreshTasksList(p, projectTasksJList);
 			percentageCompleteJProgressBar.setValue((int) (((Project) projectsJList.getSelectedValue()).getPercentageComplete() * 100));
 		}
@@ -1164,7 +1183,6 @@ public class GUIForm extends javax.swing.JFrame {
 	}
 
 	private javax.swing.JTabbedPane JTabbedPane;
-	private javax.swing.JLabel clientJLabel;
 	private javax.swing.JLabel clientcompJLabel1;
 	private javax.swing.JLabel clientsJLabel;
 	private javax.swing.JList clientsJList;
@@ -1180,7 +1198,7 @@ public class GUIForm extends javax.swing.JFrame {
 	private javax.swing.JScrollPane jScrollPane1;
 	private javax.swing.JScrollPane jScrollPane3;
 	private javax.swing.JScrollPane jScrollPane5;
-	private javax.swing.JTextField nameJTextField;
+	private javax.swing.JTextField projectNameJTextField;
 	private javax.swing.JLabel namecompJLabel;
 	private javax.swing.JPanel optionsJPanel;
 	private javax.swing.JProgressBar percentageCompleteJProgressBar;
@@ -1245,4 +1263,5 @@ public class GUIForm extends javax.swing.JFrame {
 	private JButton importJButton;
 	private JScrollPane exportJScrollPane;
 	private JButton exportJButton;
+	private JComboBox projectClientsJComboBox;
 }
