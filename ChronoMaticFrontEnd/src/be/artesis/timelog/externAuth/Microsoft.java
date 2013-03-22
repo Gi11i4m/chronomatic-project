@@ -11,7 +11,7 @@ public class Microsoft extends SocialMedia {
 	private String responseType = "code";
 	private String authorizeTokenUrl = "https://login.live.com/oauth20_authorize.srf?";
 	private String accesTokenUrl = "https://login.live.com/oauth20_token.srf?";
-	private String userInfoUrl = "https://apis.live.net/v5.0/me/contacts?";
+	private String userInfoUrl = "https://apis.live.net/v5.0/me/?";
 	
 	public String getClientID() {
 		return clientID;
@@ -43,5 +43,9 @@ public class Microsoft extends SocialMedia {
 
 	public String getUserInfoUrl() {
 		return userInfoUrl;
+	}
+	
+	public String toString() {
+		return "microsoft";
 	}
 }

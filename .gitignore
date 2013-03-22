@@ -2,6 +2,8 @@
 *.class
 *.db
 *.log
+*.orig
+DatabaseContainer.java
 
 # Package Files #
 *.war
@@ -10,5 +12,4 @@
 # Directories #
 /ChronoMaticFrontEnd/nbproject/private/
 /ChronoMaticFrontEnd/build/
-/Frontend classes/.settings/
 /ChronoMaticFrontEnd/dist/

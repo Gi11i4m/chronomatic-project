@@ -7,7 +7,7 @@ public class Linkedin extends SocialMedia {
 	private final String clientID = "ug9otjgvfn3c";
 	private final String clientSecret = "oxJcsAhL1NQTjQ8U";
 	private final String redirectUrl = "http://www.linkedin.com/chronomatic";
-	private final String scope = "r_fullprofile%20r_emailaddress%20r_network";
+	private final String scope = "r_emailaddress";
 	private final String responseType = "code";
 	private final String authorizeTokenUrl = "https://www.linkedin.com/uas/oauth2/authorization?";
 	private final String accesTokenUrl = "https://www.linkedin.com/uas/oauth2/accessToken?";
@@ -48,5 +48,9 @@ public class Linkedin extends SocialMedia {
 
 	public String getUserInfoUrl() {
 		return userInfoUrl;
+	}
+	
+	public String toString() {
+		return "linkedin";
 	}
 }

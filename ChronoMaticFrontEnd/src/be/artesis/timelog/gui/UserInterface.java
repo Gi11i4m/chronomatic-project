@@ -81,9 +81,9 @@ public class UserInterface {
     	return user.getOpdrachtgevers();
     }
     
-    //public static Opdrachtgever getClient(Project p) throws DataInputException{
-    //	return getClient(p.getOpdrachtgeverId());
-    //}
+    public static Opdrachtgever getProjectClient(int projectindex) throws DataInputException{
+    	return getClient(getProject(projectindex).getOpdrachtgeverId());
+    }
     
     public static Opdrachtgever getClient(int index) throws DataInputException{
     	return user.getOpdrachtgever(index);
@@ -137,13 +137,13 @@ public class UserInterface {
         getClients().set(index, c);
 	}
 	
-	public static Project saveNewProject(String naam, String begindatum, String einddatum, int opdrachtgeverID)
+	public static Project saveNewProject(String naam, long begindatum, long einddatum, int opdrachtgeverId)
 			throws DataInputException, ParseException, IOException, WebserviceException, JSONException{
 		Project p = new Project();
         p.setNaam(naam);
         p.setBegindatum(begindatum);
         p.setEinddatum(einddatum);
-        p.setOpdrachtgeverId(opdrachtgeverID);
+        p.setOpdrachtgeverId(opdrachtgeverId);
         UserInterface.getUser().addProject(p);
         try {
 			p.setId(InserterLocal.inputProject(p, opdrachtgeverID));
@@ -155,18 +155,19 @@ public class UserInterface {
 		return p;
 	}
 	
-	public static void saveProject(int index, String naam, String begindatum, String einddatum)
+	public static void saveProject(int index, String naam, long begindatum, long einddatum, int opdrachtgeverId)
 			throws DataInputException, MalformedURLException, IOException, WebserviceException, ParseException{
 		Project p = (Project) getProject(index).clone();
         p.setNaam(naam);
         p.setBegindatum(begindatum);
         p.setEinddatum(einddatum);
-        // Past opdrachtgeverwaarden aan in database
+        p.setOpdrachtgeverId(opdrachtgeverId);
+        // Past projectwaarden aan in database
         Updater.updateProject(validator.getSessionKey(), p);;
         getProjects().set(index, p);
 	}
 	
-	public static Taak saveNewTask(String name, String startdate, String enddate, String comment, boolean completed)
+	public static Taak saveNewTask(String name, long startdate, long enddate, String comment, boolean completed)
 			throws DataInputException, ParseException, GUIException, IOException, WebserviceException, JSONException{
         Taak t = new Taak();
         t.setNaam(name);
@@ -189,7 +190,7 @@ public class UserInterface {
         return t;
 	}
 	
-	public static void saveTask(int index, String name, String startdate, String enddate, String comment, boolean completed)
+	public static void saveTask(int index, String name, long startdate, long enddate, String comment, boolean completed)
 			throws GUIException, DataInputException, ParseException, MalformedURLException, IOException, WebserviceException{	
 		Taak t = (Taak) getCurrentTasks().get(index).clone();
         t.setNaam(name);

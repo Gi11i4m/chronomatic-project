@@ -29,6 +29,7 @@ import java.net.MalformedURLException;
 
 import javax.swing.JOptionPane;
 import org.json.JSONException;
+import org.xml.sax.SAXException;
 //
 import java.awt.Dimension;
 import java.awt.Point;
@@ -42,6 +43,9 @@ import javafx.scene.web.WebView;
 import javax.swing.*;
 
 import javax.swing.JPanel;
+import javax.swing.border.Border;
+import javax.xml.parsers.ParserConfigurationException;
+
 import java.awt.CardLayout;
 import java.awt.Container;
 import java.awt.event.ActionEvent;
@@ -51,9 +55,12 @@ import java.awt.Font;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
+import org.eclipse.wb.swing.FocusTraversalOnArray;
+import java.awt.Component;
 
-public class LoginDialog extends javax.swing.JDialog implements ActionListener {
+public class LoginDialog extends javax.swing.JFrame implements ActionListener {
 	@SuppressWarnings("unchecked")
 	private static final long serialVersionUID = 1L;
 	private boolean result;
@@ -65,8 +72,7 @@ public class LoginDialog extends javax.swing.JDialog implements ActionListener {
 	private Container pane;
 	private JFXPanel basisPanel;
 	private JFXPanel browserPanel;
-	private final String BASISPANEL = "Basis";
-	private final String BROWSERPANEL = "Browser";
+	private JPanel newUserPanel;
 
 	private JTextField usernameJTextField;
 	private JPasswordField passwordJPasswordField;
@@ -74,19 +80,19 @@ public class LoginDialog extends javax.swing.JDialog implements ActionListener {
 	private JLabel paswoordJLabel;
 	private JButton aanmeldenButton;
 	private JLabel newAccountJLabel;
-	private JLabel thirdPartyJLabel;
+	private JLabel socialMediaJLabel;
 	private JButton googleJButton;
 	private JButton facebookJButton;
 	private JButton browserGoBackJButton;
 	private JButton microsoftJButton;
 	private JButton twitterJButton;
 	private JButton linkedinJButton;
+	JLabel googleIconJLabel;
 
-	public LoginDialog(java.awt.Frame parent, boolean modal, Validator validator) {
-		super(parent, modal);
+	public LoginDialog(java.awt.Frame parent, Validator validator) {
 		setResizable(false);
 		this.parent = parent;
-		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+		setDefaultCloseOperation(LoginDialog.DISPOSE_ON_CLOSE);
 		this.validator = validator;
 		result = false;
 		this.setTitle("Login");
@@ -98,13 +104,25 @@ public class LoginDialog extends javax.swing.JDialog implements ActionListener {
 		final int x = (screenSize.width - this.getWidth()) / 2;
 		final int y = (screenSize.height - this.getHeight()) / 2;
 		this.setLocation(x, y);
+		
+		pane = getContentPane();
+		layout = new CardLayout();
+		pane.setBackground(Color.WHITE);
+		pane.setLayout(layout);
+
+		basisPanel = new JFXPanel();
+		browserPanel = new JFXPanel();
+		newUserPanel = new NewUserDialog(this);
+		pane.add(basisPanel, "BASISPANEL");
+		pane.add(browserPanel, "BROWSERPANEL");
+		pane.add(newUserPanel, "NEWUSERPANEL");
 
 		initComponents();
 
-		this.displayTab(BASISPANEL);
+		this.displayTab("BASISPANEL");
 	}
 
-	private void displayTab(String name) {
+	public void displayTab(String name) {
 		layout.show(pane, name);
 	}
 
@@ -115,8 +133,6 @@ public class LoginDialog extends javax.swing.JDialog implements ActionListener {
 	public void setResult(boolean result) {
 		this.result = result;
 	}
-	
-	
 
 	public void loginExtern(String accessToken, String provider) {
 		try {
@@ -124,24 +140,25 @@ public class LoginDialog extends javax.swing.JDialog implements ActionListener {
 			if (!provider.equals("Facebook")) {
 				accessToken = AccessToken.request(accessToken, social);
 			}
-			
+
 			String email = GetUserInfo.request(accessToken, social);
-			
-			// bestaat gebruiker al?
+
+			// als gebruiker nog niet bestaat..
 			if (CheckExistingUsernames.check(email)) {
 				InserterServer.CreateUserExtern("", "", email, "");
 			}
 			//System.out.println(email);
-			
+
 			if (validator.loginExtern(email)) {
 				loadUserData();
 				result = true;
+				parent.setVisible(true);
 				this.dispose();
 			} else {
 				JOptionPane.showMessageDialog(this, "Login failed");
 			}
 
-		} catch (IOException | JSONException | WebserviceException e) {
+		} catch (IOException | JSONException | WebserviceException | ParserConfigurationException | SAXException e) {
 			e.printStackTrace();
 		}
 	}
@@ -166,96 +183,53 @@ public class LoginDialog extends javax.swing.JDialog implements ActionListener {
             	loadUserData();
                 result = true;
                 this.dispose();
+                parent.setVisible(true);
             } else {
 
             }
 			if (usernameJTextField.getText().equals("")) {
 
-					UserInterface.setUser(new Gebruiker("Flebus", "Gilliam",
-							"Gi11i4m", "gi11i4m@gmail.com")); // tijdelijke user
-					UserInterface.getUser().addOpdrachtgever(
-							new Opdrachtgever("Flebus", "Gilliam", "Mot-art",
-									"blabla", "0475", 456));
-					UserInterface.getUser().addOpdrachtgever(
-							new Opdrachtgever("Schouten", "Girmi", "Artesis",
-									"bla", "0478", 457));
-					UserInterface.getUser().addProject(
-							new Project("Test project 1", 456, 1343059472,
-									1453059472));
-					UserInterface.getUser().addProject(
-							new Project("Test project 2", 457, 1243059472,
-									1553059472));
-					UserInterface
-							.getUser()
-							.getProjects()
-							.get(1)
-							.addTaak(
-									new Taak("Test taak", 1343059472,
-											1453059472, ""));
+				UserInterface.setUser(new Gebruiker("Flebus", "Gilliam", "Gi11i4m", "gi11i4m@gmail.com")); // tijdelijke user
+				UserInterface.getUser().addOpdrachtgever(new Opdrachtgever("Flebus", "Gilliam", "Mot-art", "blabla", "0475", 456));
+				UserInterface.getUser().addOpdrachtgever(new Opdrachtgever("Schouten", "Girmi", "Artesis", "bla", "0478", 457));
+				UserInterface.getUser().addProject(new Project("Test project 1", 456, 1343059472, 1453059472));
+				UserInterface.getUser().addProject(new Project("Test project 2", 457, 1243059472, 1553059472));
+				UserInterface.getUser().getProjects().get(1).addTaak(new Taak("Test taak", 1343059472, 1453059472, ""));
 				result = true;
 				this.dispose();
 
-			} else if (validator.login(usernameJTextField.getText(),
-					new String(passwordJPasswordField.getPassword()))) {
+			} else if (validator.login(usernameJTextField.getText(), new String(passwordJPasswordField.getPassword()))) {
 				loadUserData();
 				result = true;
 				this.dispose();
+				
 			} else {
 				JOptionPane.showMessageDialog(this, "Login failed");
 			}
-			
+
 		} catch (DataInputException | HeadlessException | IOException | JSONException | WebserviceException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
+			JOptionPane.showMessageDialog(this, "Error connecting to server");
+			this.dispose();
 		}
 
 	}
 
 	private void loadUserData() {
 		try {
-			UserInterface.setUser(CreatorFromJSON.createGebruiker(validator
-					.getSessionKey()));
-			UserInterface.getUser().setProjects(
-					CreatorFromJSON.createProjecten(validator.getSessionKey()));
-			UserInterface.getUser().setOpdrachtgevers(
-					CreatorFromJSON.createOpdrachtgevers(validator
-							.getSessionKey()));
+			UserInterface.setUser(CreatorFromJSON.createGebruiker(validator.getSessionKey()));
+			UserInterface.getUser().setProjects(CreatorFromJSON.createProjecten(validator.getSessionKey()));
+			UserInterface.getUser().setOpdrachtgevers(CreatorFromJSON.createOpdrachtgevers(validator.getSessionKey()));
 
 			for (int i = 0; i < UserInterface.getUser().getProjects().size(); i++) {
-				UserInterface
-						.getUser()
-						.getProject(i)
-						.setTaken(
-								CreatorFromJSON.createTaken(
-										validator.getSessionKey(),
-										UserInterface.getUser().getProject(i)
-												.getId()));
+				UserInterface.getUser().getProject(i).setTaken(CreatorFromJSON.createTaken(validator.getSessionKey(), UserInterface.getUser().getProject(i).getId()));
 			}
 
 			for (int i = 0; i < UserInterface.getUser().getProjects().size(); i++) {
 				// System.out.println("project: "+UserControl.getUser().getProject(i));
-				for (int j = 0; j < UserInterface.getUser().getProject(i)
-						.getTaken().size(); j++) {
-					UserInterface
-							.getUser()
-							.getProject(i)
-							.getTaak(j)
-							.setGewerkteTijd(
-									CreatorFromJSON.createTijdspannes(
-											validator.getSessionKey(),
-											UserInterface.getUser()
-													.getProject(i).getTaak(j)
-													.getID(), false));
-					UserInterface
-							.getUser()
-							.getProject(i)
-							.getTaak(j)
-							.setGewerkteTijd(
-									CreatorFromJSON.createTijdspannes(
-											validator.getSessionKey(),
-											UserInterface.getUser()
-													.getProject(i).getTaak(j)
-													.getID(), true));
+				for (int j = 0; j < UserInterface.getUser().getProject(i).getTaken().size(); j++) {
+					UserInterface.getUser().getProject(i).getTaak(j).setGewerkteTijd(CreatorFromJSON.createTijdspannes(validator.getSessionKey(), UserInterface.getUser().getProject(i).getTaak(j).getID(), false));
+					UserInterface.getUser().getProject(i).getTaak(j).setGewerkteTijd(CreatorFromJSON.createTijdspannes(validator.getSessionKey(), UserInterface.getUser().getProject(i).getTaak(j).getID(), true));
 					// System.out.println("taak "
 					// +UserControl.getUser().getProject(i).getTaak(j).getID()+
 					// ": " + UserControl.getUser().getProject(i).getTaak(j));
@@ -272,28 +246,31 @@ public class LoginDialog extends javax.swing.JDialog implements ActionListener {
 
 	private void initComponents() {
 
-		pane = getContentPane();
-		layout = new CardLayout();
-		pane.setBackground(Color.WHITE);
-		pane.setLayout(layout);
-
-		// basisPanel.setLayout(null);
-
-		basisPanel = new JFXPanel();
-		browserPanel = new JFXPanel();
-		pane.add(basisPanel, BASISPANEL);
-		pane.add(browserPanel, BROWSERPANEL);
+		
 
 		JFXPanel loading = new JFXPanel();
 		pane.add(loading, "loading");
+		
+		
 
-		ImageIcon loadingGif = new ImageIcon();
+		/*ImageIcon loadingGif = new ImageIcon();
 		loadingGif = new ImageIcon(Toolkit.getDefaultToolkit().getImage(
-				getClass().getResource(
-						"/be/artesis/timelog/gui/icons/loading.gif")));
+				getClass().getResource("/be/artesis/timelog/gui/icons/loading.gif")));
 		JLabel loadingJLabel = new JLabel(loadingGif);
 		loadingJLabel.setBounds(431, 124, 200, 200);
-		loading.add(loadingJLabel);
+		browserPanel.add(loadingJLabel);*/
+		
+		ImageIcon googleIcon = new ImageIcon(Toolkit.getDefaultToolkit().getImage(
+				getClass().getResource("/be/artesis/timelog/gui/icons/google.png")));
+		ImageIcon facebookIcon = new ImageIcon(Toolkit.getDefaultToolkit().getImage(
+				getClass().getResource("/be/artesis/timelog/gui/icons/facebook.png")));
+		ImageIcon microsoftIcon = new ImageIcon(Toolkit.getDefaultToolkit().getImage(
+				getClass().getResource("/be/artesis/timelog/gui/icons/microsoft.png")));
+		ImageIcon twitterIcon = new ImageIcon(Toolkit.getDefaultToolkit().getImage(
+				getClass().getResource("/be/artesis/timelog/gui/icons/twitter.png")));
+		ImageIcon linkedinIcon = new ImageIcon(Toolkit.getDefaultToolkit().getImage(
+				getClass().getResource("/be/artesis/timelog/gui/icons/linkedin.png")));
+
 
 		// initialize fields
 		usernameJLabel = new JLabel("Gebruikersnaam:");
@@ -308,33 +285,51 @@ public class LoginDialog extends javax.swing.JDialog implements ActionListener {
 		passwordJPasswordField.setBounds(31, 256, 247, 22);
 		newAccountJLabel = new JLabel("Of maak een account aan");
 		newAccountJLabel.setBounds(140, 331, 160, 16);
-		thirdPartyJLabel = new JLabel("Of meld u aan bij");
-		thirdPartyJLabel.setBounds(464, 125, 118, 16);
+		socialMediaJLabel = new JLabel("Of meld u aan bij");
+		socialMediaJLabel.setBounds(464, 125, 130, 20);
+		
 		browserGoBackJButton = new JButton("Aanmelden met een andere account");
-		googleJButton = new JButton("Google");
-		googleJButton.setBounds(493, 175, 107, 25);
-		facebookJButton = new JButton("Facebook");
-		facebookJButton.setBounds(493, 228, 107, 25);
-		microsoftJButton = new JButton("Microsoft");
-		microsoftJButton.setBounds(493, 281, 107, 25);
-		twitterJButton = new JButton("Twitter");
-		twitterJButton.setBounds(493, 334, 107, 25);
-		linkedinJButton = new JButton("LinkedIn");
-		linkedinJButton.setBounds(400, 287, 107, 25);
+		googleJButton = new JButton(googleIcon);
+		googleJButton.setBounds(493, 175, 48, 48);
+		googleJButton.setName("google");
+		facebookJButton = new JButton(facebookIcon);
+		facebookJButton.setBounds(493, 228, 48, 48);
+		facebookJButton.setName("facebook");
+		microsoftJButton = new JButton(microsoftIcon);
+		microsoftJButton.setBounds(493, 281, 48, 48);
+		microsoftJButton.setName("microsoft");
+		twitterJButton = new JButton(twitterIcon);
+		twitterJButton.setBounds(493, 334, 48, 48);
+		twitterJButton.setName("twitter");
+		linkedinJButton = new JButton(linkedinIcon);
+		linkedinJButton.setBounds(493, 387, 48, 48);
+		linkedinJButton.setName("linkedin");
+		
+		// Backgrounds socialmedia buttons
+		googleJButton.setBackground(Color.WHITE);
+		facebookJButton.setBackground(Color.WHITE);
+		microsoftJButton.setBackground(Color.WHITE);
+		twitterJButton.setBackground(Color.WHITE);
+		linkedinJButton.setBackground(Color.WHITE);
+		
+		linkedinJButton.setIcon(linkedinIcon);
+		linkedinJButton.setName("linkedin");
 
 		// set label fonts
+		socialMediaJLabel.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		usernameJLabel.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		paswoordJLabel.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		browserGoBackJButton.setBounds(0, 462, 240, 25);
 
 		usernameJTextField.setColumns(10);
-		
+
 		// set action listener
 		googleJButton.addActionListener(this);
 		facebookJButton.addActionListener(this);
 		microsoftJButton.addActionListener(this);
 		twitterJButton.addActionListener(this);
 		linkedinJButton.addActionListener(this);
+
 
 		// add to panel
 		basisPanel.add(usernameJLabel);
@@ -343,21 +338,23 @@ public class LoginDialog extends javax.swing.JDialog implements ActionListener {
 		basisPanel.add(usernameJTextField);
 		basisPanel.add(passwordJPasswordField);
 		basisPanel.add(newAccountJLabel);
-		basisPanel.add(thirdPartyJLabel);
+		basisPanel.add(socialMediaJLabel);
 		basisPanel.add(googleJButton);
 		basisPanel.add(facebookJButton);
 		basisPanel.add(microsoftJButton);
 		basisPanel.add(twitterJButton);
 		basisPanel.add(linkedinJButton);
+		basisPanel.setFocusTraversalPolicy(new FocusTraversalOnArray(new Component[]{usernameJTextField, passwordJPasswordField, aanmeldenButton, googleJButton, facebookJButton, microsoftJButton, twitterJButton, linkedinJButton, newAccountJLabel}));
 		browserPanel.add(browserGoBackJButton);
 
 		// Action listeners
 		try {
 			aanmeldenButton.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent evt) {
-	
-					 //Thread voor het loading gifke
-					Thread loginLoadingThread = new Thread() {
+					login();
+
+					//Thread voor het loading gifke
+					/*Thread loginLoadingThread = new Thread() {
 						public void run() {
 							SwingUtilities.invokeLater(new Runnable() {
 								public void run() {
@@ -366,57 +363,63 @@ public class LoginDialog extends javax.swing.JDialog implements ActionListener {
 							});
 							login();
 						}
-					};
-					loginLoadingThread.start();
+					};*/
+					
+					//loginLoadingThread.start();
+					
+					//parent.setVisible(true);
 				}
 			});
-		}
-		catch (Exception e) {
+		} catch (Exception e) {
 
 			e.printStackTrace();
-		}
-		finally {
+		} finally {
 			//JOptionPane.showMessageDialog(this, "Login mislukt");			
 		}
-		
-		
 
-		browserGoBackJButton
-				.addActionListener(new java.awt.event.ActionListener() {
-					public void actionPerformed(java.awt.event.ActionEvent evt) {
-						Platform.exit();
-						displayTab(BASISPANEL);
-					}
+		browserGoBackJButton.addActionListener(new java.awt.event.ActionListener() {
+			public void actionPerformed(java.awt.event.ActionEvent evt) {
+				Platform.exit();
+				displayTab("BASISPANEL");
+			}
 		});
-		
-		
+
+		newAccountJLabel.addMouseListener(new java.awt.event.MouseAdapter() {
+			public void mouseClicked(java.awt.event.MouseEvent evt) {
+				displayTab("NEWUSERPANEL");
+			}
+		});
+
 	}
-	
+
 	@Override
 	public void actionPerformed(ActionEvent evt) {
 
-        switch (evt.getActionCommand()) {
-            case "Google":  social = new Google();
+		JButton btn = (JButton) evt.getSource();
+
+        switch (btn.getName()) {
+            case "google":  social = new Google();
                      break;
-            case "Facebook":  social = new Facebook();
+            case "facebook":  social = new Facebook();
                      break;
-            case "Microsoft":  social = new Microsoft();
+            case "microsoft":  social = new Microsoft();
                      break;
-            case "Twitter":  social = new Twitter();
+            case "twitter":  social = new Twitter();
                      break;
-            case "Linkedin":  social = new Linkedin();
+            case "linkedin":  social = new Linkedin();
                      break;
             default: social = new Google();
                      break;
         }
+        this.displayTab("loading");
         
-        loginProviderJButtonClicked(evt);
+        loginProviderJButtonClicked();
 	}
 	
-	private void loginProviderJButtonClicked(ActionEvent evt) {
+	private void loginProviderJButtonClicked() {
 		AuthBrowser browser = new AuthBrowser(this, social);
 		browser.buildUrl();
 		browser.initBrowser(browserPanel);
-		this.displayTab(BROWSERPANEL);
+		this.displayTab("BROWSERPANEL");
 	}
 }
