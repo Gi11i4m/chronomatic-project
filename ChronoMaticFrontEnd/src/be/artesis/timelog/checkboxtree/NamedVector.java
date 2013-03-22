@@ -17,6 +17,6 @@ public class NamedVector extends Vector {
 	}
 
 	public String toString() {
-		return "[" + name + "]";
+		return "Project : " + name;
 	}
 }
