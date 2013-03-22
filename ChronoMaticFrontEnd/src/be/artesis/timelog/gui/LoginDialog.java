@@ -142,10 +142,10 @@ public class LoginDialog extends javax.swing.JFrame implements ActionListener {
 
 			String email = GetUserInfo.request(accessToken, social);
 
-			// bestaat gebruiker al?
-			//if (CheckExistingUsernames.check(email)) {
-				Inserter.CreateUserExtern("x", "x", email, "x");
-			//}
+			// als gebruiker nog niet bestaat..
+			if (CheckExistingUsernames.check(email)) {
+				Inserter.CreateUserExtern(" ", " ", email, " ");
+			}
 			//System.out.println(email);
 
 			if (validator.loginExtern(email)) {

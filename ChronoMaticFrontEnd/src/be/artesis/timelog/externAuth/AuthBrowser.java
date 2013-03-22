@@ -79,10 +79,10 @@ public class AuthBrowser {
                 SwingUtilities.invokeLater(new Runnable() {
                     @Override public void run() {
                         String url = webEngine.getLocation();
-                        
+
                         //Google
                         if(url != null && url.startsWith("https://www.google.be/oauth2callback")) {
-                        	System.out.println(url.substring(42));
+                        	//System.out.println(url.substring(42));
                         	/*try {
 								URL i = new URL(url);
 								i.getQuery();
@@ -94,25 +94,25 @@ public class AuthBrowser {
 								e.printStackTrace();
 							}*/
                             loginDialog.loginExtern(url.substring(70), "Google");
-                            //exit(); 
+                            exit(); 
                         }
                         //Linkedin
                         if(url != null && url.startsWith("http://www.linkedin.com/chronomatic?code=")) {
                         	//System.out.println(url.substring(41,156));
                             loginDialog.loginExtern(url.substring(41,156), "Linkedin");
-                            //exit(); 
+                            exit(); 
                         }
                         //Facebook
                         if(url != null && url.startsWith("https://www.facebook.com/connect/login_success.html")) {
                         	//System.out.println(url.substring(65, 195));
                             loginDialog.loginExtern(url.substring(65), "Facebook");
-                            //exit(); 
+                            exit(); 
                         }
                         //Micosoft
                         if(url != null && url.startsWith("http://www.dvl-sanitair.be/")) {
                         	//System.out.println(url.substring(33,69));
                             loginDialog.loginExtern(url.substring(33, 69), "Microsoft");
-                            //exit(); 
+                            exit(); 
                         }
                     }
                 });
@@ -131,7 +131,7 @@ public class AuthBrowser {
                     @Override 
                     public void run() {
                         //System.err.println( "exit/invokeLater/run" );
-                        loginDialog.dispose();
+                        //loginDialog.dispose();
                     }
                 });
             }

@@ -3,6 +3,7 @@ package be.artesis.timelog.gui;
 import java.awt.BorderLayout;
 
 import be.artesis.timelog.controller.Inserter;
+import be.artesis.timelog.model.CheckExistingUsernames;
 import be.artesis.timelog.view.DataControle;
 import be.artesis.timelog.view.DataInputException;
 import javax.swing.JOptionPane;
@@ -118,8 +119,12 @@ public class NewUserDialog extends javax.swing.JPanel {
                 throw new DataInputException("Username contains illegal characters");
             }
             //check of username al bestaat
-            //if(!DataControle.naamBestaat(null, name)){
-            //  throw new DataInputException("Username already exists");
+            if (CheckExistingUsernames.check(email)) {
+            	throw new DataInputException("Username already exists");
+				
+			}
+            Inserter.CreateUser(firstName, name, username, email, password);
+            // 
             //}
             if (!password.equals(repeatPassword)) {
                 throw new DataInputException("Passwords do not match");
