@@ -3,6 +3,7 @@ package be.artesis.timelog.view;
 import be.artesis.timelog.clock.Clock;
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 
 public class Taak implements Cloneable {
@@ -149,6 +150,10 @@ public class Taak implements Cloneable {
         return totaleTijd;
     }
 
+    public void setTotaleTijd(Tijdspanne[] t){
+    	totaleTijd = new ArrayList(Arrays.asList(t));
+    }
+    
     public ArrayList<Tijdspanne> getGewerkteTijd(){
     	ArrayList<Tijdspanne> gewerkt = new ArrayList<Tijdspanne>();
     	for (Tijdspanne ts : totaleTijd) {
@@ -201,6 +206,10 @@ public class Taak implements Cloneable {
             throw new DataInputException("Timespan out of task bounds");
         }
     }
+    
+    public void addTotaleTijd(Tijdspanne[] t) {
+        Collections.addAll(this.totaleTijd, t);
+    }
 
     public boolean removeBestedeTijd(Tijdspanne t) {
         return totaleTijd.remove(t);
@@ -241,10 +250,6 @@ public class Taak implements Cloneable {
         return diff < 0;
     }
 
-    public void setGewerkteTijd(Tijdspanne[] t) {
-        Collections.addAll(this.totaleTijd, t);
-    }
-
     @Override
     public String toString() {
         return naam;
@@ -254,6 +259,7 @@ public class Taak implements Cloneable {
     public Object clone(){
         Taak t = new Taak(this.naam, this.begindatum, this.geschatteEinddatum, this.commentaar, this.id);
         t.setCompleted(this.getCompleted());
+        t.totaleTijd = this.totaleTijd;
         return t;
     }
 }
