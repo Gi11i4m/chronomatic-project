@@ -762,9 +762,14 @@ public class GUIForm extends javax.swing.JFrame {
 	private void saveProject() {
 		try {
 			String name = projectNameJTextField.getText();
+			//FIXME misschien nullPointerException van dateChooser wrappen in custom exception?
 			long startdate = projectStartDateChooser.getDate().getTime() / 1000;
 			long enddate = projectEndDateChooser.getDate().getTime() / 1000;
-			int opdrachtgeverID = 0; // FIXME int halen uit selectie uit dropdownbox
+			if(projectClientsJComboBox.getSelectedIndex() == -1 || projectClientsJComboBox.getSelectedItem().equals(NEWCLIENTITEM)){
+				throw new DataInputException("Select or create a client first");
+			}
+			Opdrachtgever o = (Opdrachtgever) projectClientsJComboBox.getSelectedItem();
+			int opdrachtgeverID =  o.getID();
 
 			if (projectsJList.getSelectedValue().equals(NEWPROJECTITEM)) {
 				UserInterface.saveNewProject(name, startdate, enddate, opdrachtgeverID);
@@ -777,9 +782,11 @@ public class GUIForm extends javax.swing.JFrame {
 			ex.printStackTrace();
 			JOptionPane.showMessageDialog(this, ex.getMessage());
 		} catch (NullPointerException ex) {
+			//vangt invalid date van dateChooser op dmv op nullPointerException te checken
 			ex.printStackTrace();
 			JOptionPane.showMessageDialog(this, "Please choose a valid date");
 		} finally {
+			//FIXME zorgen dat bij DataInputException door geen client de velden niet gereset worden
 			refreshProjectsList(projectsJList, homeProjectsJList);
 			toggleButtonStates();
 		}
@@ -827,6 +834,7 @@ public class GUIForm extends javax.swing.JFrame {
 			if (clientsJList.getSelectedValue().equals(NEWCLIENTITEM)) {
 				UserInterface.saveNewClient(naam, voornaam, bedrijfsnaam, email, telefoonnummer);
 				JOptionPane.showMessageDialog(this, "Client added!");
+				//FIXME clientJCombox op project-tab refreshen (of het volledige project tab-refreshen?)
 			} else {
 				UserInterface.saveClient(clientsJList.getSelectedIndex(), voornaam, voornaam, bedrijfsnaam, email, telefoonnummer);
 				JOptionPane.showMessageDialog(this, "Client edited!");
@@ -850,8 +858,9 @@ public class GUIForm extends javax.swing.JFrame {
 		if (result == JOptionPane.YES_OPTION) {
 			try {
 				UserInterface.removeProject((Project) projectsJList.getSelectedValue());
-				refreshProjectsList(projectsJList, homeProjectsJList);
 				JOptionPane.showMessageDialog(this, "Project removed!");
+				//FIXME indien currentProject verwijderd, setCurrentProjectGUI(-1);
+				refreshProjectsList(projectsJList, homeProjectsJList);
 			} catch (IOException | WebserviceException ex) {
 				ex.printStackTrace();
 				JOptionPane.showMessageDialog(this, ex.getMessage());
@@ -961,6 +970,7 @@ public class GUIForm extends javax.swing.JFrame {
 			} else {
 				list.setModel(listmodel);
 			}
+			list.setCellRenderer(new ClientCellRenderder());
 			list.setSelectedIndex(selectedIndex);
 		}
 	}
@@ -1037,7 +1047,9 @@ public class GUIForm extends javax.swing.JFrame {
 
 			for (Iterator<Tijdspanne> it = t.getTotaleTijd().iterator(); it.hasNext();) {
 				Tijdspanne ts = it.next();
-				listmodel.addElement(ts);
+				if (!ts.isPauze()) {
+					listmodel.addElement(ts);
+				}
 			}
 
 			workedTimeJList.setModel(listmodel);
@@ -1065,18 +1077,8 @@ public class GUIForm extends javax.swing.JFrame {
 	private void workClicked(java.awt.event.MouseEvent evt) {
 		try {
 			Project p = UserInterface.getCurrentProject();
-			if (p.getTaken().isEmpty()) {
-				throw new GUIException("Current project contains no tasks");
-			}
-			boolean taskAvailable = false;
-			for (Taak t : p.getTaken()) {
-				if (!t.overTijd()) {
-					taskAvailable = true;
-					break;
-				}
-			}
-			if (!taskAvailable) {
-				throw new GUIException("Current project contains no running tasks");
+			if (!p.tasksAvailable()) {
+				throw new GUIException("Current project contains no available tasks");
 			}
 			setVisible(false);
 			WorkDialog work = new WorkDialog(this, true, validator);
@@ -1107,7 +1109,7 @@ public class GUIForm extends javax.swing.JFrame {
 			} else if (c instanceof JCheckBox) {
 				((JCheckBox) c).setSelected(false);
 			} else if (c instanceof JDateChooser) {
-				((JDateChooser) c).setDate(new Date());
+				((JDateChooser) c).setDate(null);
 			} else if (c instanceof JComboBox) {
 				((JComboBox) c).setModel(new DefaultComboBoxModel());
 			}
@@ -1139,6 +1141,7 @@ public class GUIForm extends javax.swing.JFrame {
 
 	private void setCurrentProjectGUI(int index) {
 		try {
+			//FIXME als currentProject verwijdert wordt moet index op -1 geset worden, maar dan throwt dit een error
 			UserInterface.setCurrentProjectIndex(index);
 			currentProjectJLabel.setText("Current project: " + UserInterface.getCurrentProject().getNaam());
 			saveTaskJButton.setText("Save to " + UserInterface.getCurrentProject().getNaam());
@@ -1202,12 +1205,21 @@ public class GUIForm extends javax.swing.JFrame {
 	}
 
 	private void taskJListValueChanged(ListSelectionEvent arg0) {
-		try {
-			loadTaskInfo(((JList) arg0.getSource()).getSelectedIndex());
-			toggleButtonStates();
-		} catch (GUIException e) {
-			e.printStackTrace();
-			JOptionPane.showMessageDialog(this, e.getMessage());
+		if (tasksJList.getSelectedIndex() != -1) {
+			if (tasksJList.getSelectedValue().equals(NEWTASKITEM)) {
+				clearFieldsOnPanel(taskFieldsJPanel);
+				saveTaskJButton.setText("Save [new]");
+			} else {
+				try {
+					loadTaskInfo(((JList) arg0.getSource()).getSelectedIndex());
+					toggleButtonStates();
+				} catch (GUIException e) {
+					e.printStackTrace();
+					JOptionPane.showMessageDialog(this, e.getMessage());
+				} finally {
+					saveTaskJButton.setText("Save");
+				}
+			}
 		}
 	}
 
@@ -1310,13 +1322,10 @@ public class GUIForm extends javax.swing.JFrame {
 	private JButton exportJButton;
 	private JComboBox projectClientsJComboBox;
 	private JList clientsJList;
-<<<<<<< HEAD
 	private JTextField taskTotalWorkedJTextField;
 	private JTextField taskTotalPauseJTextField;
 	private JLabel taskTotalWorkedJLabel;
 	private JLabel lblTotalPaused;
-=======
 	private JTree exportTree;
 	private JTree importTree;
->>>>>>> 8d13f548b01ed4ee36130412f613a2d0453a70fd
 }

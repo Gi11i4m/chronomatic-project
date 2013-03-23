@@ -185,6 +185,18 @@ public class Project implements Cloneable{
     // Extra
     //================================================================================
 
+    public boolean tasksAvailable(){
+    	if (taken.isEmpty()) {
+			return false;
+		}
+		for (Taak t : taken) {
+			if (!t.overTijd()) {
+				return true;
+			}
+		}
+		return false;
+    }
+    
     @Override
     public String toString() {
         return naam;

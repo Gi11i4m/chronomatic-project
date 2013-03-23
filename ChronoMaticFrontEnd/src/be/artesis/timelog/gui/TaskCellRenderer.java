@@ -27,22 +27,20 @@ class TaskCellRenderer extends JLabel implements ListCellRenderer {
      public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus)
  {
 		JLabel renderer = (JLabel) defaultRenderer.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+		Font f = list.getFont();
 		if (value.getClass().equals(String.class)) {
-			// FIXME Font voor < new > shizzle aanpassen
-			Font f = list.getFont();
 			renderer.setFont(new Font(f.getName(),f.getStyle() | Font.ITALIC, f.getSize()));
 		} else {
 			t = (Taak) value;
 
 			if (t.getCompleted()) {
-				Font f = new Font("tahoma", Font.BOLD, 11);
 				Map attributes = f.getAttributes();
 				attributes.put(TextAttribute.STRIKETHROUGH, TextAttribute.STRIKETHROUGH_ON);
 				Font font = new Font(attributes);
-
 				renderer.setFont(font);
 			} else if (t.overTijd()) {
 				renderer.setForeground(Color.red);
+				//FIXME icon implementeren?
 				// renderer.setIcon(null);
 			}
 		}
