@@ -177,9 +177,10 @@ public class UserInterface {
         t.setBegindatum(startdate);
         t.setGeschatteEinddatum(enddate);
         if ("".equals(comment)) {
-			comment = " ";
-		}
-        t.setCommentaar(comment);
+        	comment = " ";
+        }
+		t.setCommentaar(comment);
+        t.setCompleted(completed);
         //Send to Database
         int pid = UserInterface.getCurrentProject().getId();
         getCurrentProject().addTaak(t);

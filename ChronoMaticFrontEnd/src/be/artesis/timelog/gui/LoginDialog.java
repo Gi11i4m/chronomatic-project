@@ -225,14 +225,14 @@ public class LoginDialog extends javax.swing.JFrame implements ActionListener {
 			UserInterface.getUser().setOpdrachtgevers(CreatorFromJSON.createOpdrachtgevers(validator.getSessionKey()));
 
 			for (int i = 0; i < UserInterface.getUser().getProjects().size(); i++) {
-				UserInterface.getUser().getProject(i).setTaken(CreatorFromJSON.createTaken(validator.getSessionKey(), UserInterface.getUser().getProject(i).getId()));
+				UserInterface.getUser().getProject(i).addTaken(CreatorFromJSON.createTaken(validator.getSessionKey(), UserInterface.getUser().getProject(i).getId()));
 			}
 
 			for (int i = 0; i < UserInterface.getUser().getProjects().size(); i++) {
 				// System.out.println("project: "+UserControl.getUser().getProject(i));
 				for (int j = 0; j < UserInterface.getUser().getProject(i).getTaken().size(); j++) {
-					UserInterface.getUser().getProject(i).getTaak(j).setGewerkteTijd(CreatorFromJSON.createTijdspannes(validator.getSessionKey(), UserInterface.getUser().getProject(i).getTaak(j).getID(), false));
-					UserInterface.getUser().getProject(i).getTaak(j).setGewerkteTijd(CreatorFromJSON.createTijdspannes(validator.getSessionKey(), UserInterface.getUser().getProject(i).getTaak(j).getID(), true));
+					UserInterface.getUser().getProject(i).getTaak(j).addTotaleTijd(CreatorFromJSON.createTijdspannes(validator.getSessionKey(), UserInterface.getUser().getProject(i).getTaak(j).getID(), false));
+					UserInterface.getUser().getProject(i).getTaak(j).addTotaleTijd(CreatorFromJSON.createTijdspannes(validator.getSessionKey(), UserInterface.getUser().getProject(i).getTaak(j).getID(), true));
 					// System.out.println("taak "
 					// +UserControl.getUser().getProject(i).getTaak(j).getID()+
 					// ": " + UserControl.getUser().getProject(i).getTaak(j));
