@@ -74,7 +74,7 @@ public class GUIForm extends javax.swing.JFrame {
 	// Properties
 	// ================================================================================
 
-	LoginDialog login;
+	LoginForm login;
 	Validator validator;
 	final String NEWCLIENTITEM = "< New client >";
 	final String NEWTASKITEM = "< New task >";

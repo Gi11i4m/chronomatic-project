@@ -30,7 +30,7 @@ public class AccessToken {
         conn.setRequestMethod("POST");
         conn.setDoOutput(true);
         conn.setRequestProperty("Content-Type","application/x-www-form-urlencoded");
-        //conn.setRequestProperty("Content-Length", Integer.toString(params.toString().length())); // blijkbaar ni nodig
+        //conn.setRequestProperty("Content-Length", Integer.toString(params.toString().length())); // blijkbaar toch niet nodig
         conn.connect();
 
 

@@ -33,11 +33,11 @@ public class AuthBrowser {
 	private WebView webView;
 	private final int BROWSERWIDTH = 714;
 	private final int BROWSERHEIGHT = 487;
-	private LoginDialog loginDialog;
+	private LoginForm loginDialog;
 	private String Url;
 	private SocialMedia social;
 	
-	public AuthBrowser(final LoginDialog loginDialog, SocialMedia social) {
+	public AuthBrowser(final LoginForm loginDialog, SocialMedia social) {
     	this.social = social;
     	this.loginDialog = loginDialog;
 	}
