@@ -86,7 +86,11 @@ public class LoginDialog extends javax.swing.JFrame implements ActionListener {
 	private JButton microsoftJButton;
 	private JButton twitterJButton;
 	private JButton linkedinJButton;
-	JLabel googleIconJLabel;
+	private ImageIcon googleIcon;
+	private ImageIcon facebookIcon;
+	private ImageIcon microsoftIcon;
+	private ImageIcon twitterIcon;
+	private ImageIcon linkedinIcon;
 
 	public LoginDialog(java.awt.Frame parent, Validator validator) {
 		setResizable(false);
@@ -259,15 +263,17 @@ public class LoginDialog extends javax.swing.JFrame implements ActionListener {
 		loadingJLabel.setBounds(431, 124, 200, 200);
 		browserPanel.add(loadingJLabel);*/
 		
-		ImageIcon googleIcon = new ImageIcon(Toolkit.getDefaultToolkit().getImage(
+		
+		
+		googleIcon = new ImageIcon(Toolkit.getDefaultToolkit().getImage(
 				getClass().getResource("/be/artesis/timelog/gui/icons/google.png")));
-		ImageIcon facebookIcon = new ImageIcon(Toolkit.getDefaultToolkit().getImage(
+		facebookIcon = new ImageIcon(Toolkit.getDefaultToolkit().getImage(
 				getClass().getResource("/be/artesis/timelog/gui/icons/facebook.png")));
-		ImageIcon microsoftIcon = new ImageIcon(Toolkit.getDefaultToolkit().getImage(
+		microsoftIcon = new ImageIcon(Toolkit.getDefaultToolkit().getImage(
 				getClass().getResource("/be/artesis/timelog/gui/icons/microsoft.png")));
-		ImageIcon twitterIcon = new ImageIcon(Toolkit.getDefaultToolkit().getImage(
+		twitterIcon = new ImageIcon(Toolkit.getDefaultToolkit().getImage(
 				getClass().getResource("/be/artesis/timelog/gui/icons/twitter.png")));
-		ImageIcon linkedinIcon = new ImageIcon(Toolkit.getDefaultToolkit().getImage(
+		linkedinIcon = new ImageIcon(Toolkit.getDefaultToolkit().getImage(
 				getClass().getResource("/be/artesis/timelog/gui/icons/linkedin.png")));
 
 
