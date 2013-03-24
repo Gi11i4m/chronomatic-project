@@ -20,9 +20,9 @@ import org.xml.sax.SAXException;
 
 public class GetUserInfo {
 
-	public static String request(String token, SocialMedia social) throws IOException, JSONException, ParserConfigurationException, SAXException {
+	public static JSONObject request(String token, SocialMedia social) throws IOException, JSONException, ParserConfigurationException, SAXException {
 		URL url;
-		String returnString = null;
+		JSONObject returnObject = new JSONObject();
 		
 		StringBuilder params = new StringBuilder();
 		params.append(social.getUserInfoUrl());
@@ -46,28 +46,44 @@ public class GetUserInfo {
 	    }
 	    br.close();
 	    
-	    System.out.println(inputData);
 	    //inputData = inputData.replace(" ","");
 	    JSONObject requestedJson; 
 	    
+	    // Linkedin XML parser
 	    if(social.toString().equals("linkedin")) {
 	    	DocumentBuilderFactory docBuilderFactory = DocumentBuilderFactory.newInstance();
 	        DocumentBuilder docBuilder = docBuilderFactory.newDocumentBuilder();
 	        Document doc = docBuilder.parse (new InputSource(new StringReader(inputData)));
 	        doc.getDocumentElement ().normalize ();
-	        returnString = doc.getElementsByTagName("email-address").item(0).getTextContent();
+	        returnObject.put("email",doc.getElementsByTagName("email-address").item(0).getTextContent());
+	        returnObject.put("voornaam", " ");
+	    	returnObject.put("naam", " ");
 	    }
 	    
+	    //Microsofts manier om json door te sturen
 	    else if(social.toString().equals("microsoft")) {
 	    	requestedJson = new JSONObject(inputData);
-	    	JSONObject obj = requestedJson.getJSONObject("emails");
-	    	returnString = obj.getString("account");
+	    	JSONObject tempJSONObject = requestedJson.getJSONObject("emails");
+
+	    	returnObject.put("email",tempJSONObject.getString("account"));
+	    	returnObject.put("voornaam", requestedJson.get("first_name"));
+	    	returnObject.put("naam", requestedJson.get("last_name"));
 	    }
-	    else {
+	    else if(social.toString().equals("google")) {
 	    	requestedJson = new JSONObject(inputData);
-	    	returnString = requestedJson.getString("email");
+	    	
+	    	returnObject.put("email",requestedJson.getString("email"));
+	    	returnObject.put("voornaam", requestedJson.get("given_name"));
+	    	returnObject.put("naam", requestedJson.get("family_name"));
+	    }
+	    
+	    else if(social.toString().equals("facebook")) {
+	    	requestedJson = new JSONObject(inputData);
+	    	returnObject.put("email",requestedJson.getString("email"));
+	    	returnObject.put("voornaam", requestedJson.get("first_name"));
+	    	returnObject.put("naam", requestedJson.get("last_name"));
 	    }
 
-	    return returnString;
+	    return returnObject;
 	}
 }

@@ -134,8 +134,6 @@ public class Gebruiker {
 		try {
 			returnObject.put("result", Database.executeNullQuery(con, query));
 			
-			//Mailer.sendmail();
-			
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -147,20 +145,18 @@ public class Gebruiker {
 	
 	// Create user met externe auth
 	@GET
-	@Path("createExtern/{naam}/{voornaam}/{gebruikersnaam}/{email}")
+	@Path("createExtern/{naam}/{voornaam}/{email}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public String create(@PathParam("naam") String naam,@PathParam("voornaam") String voornaam,@PathParam("gebruikersnaam") String gebruikersnaam,@PathParam("email") String email) 
+	public String create(@PathParam("naam") String naam,@PathParam("voornaam") String voornaam,@PathParam("email") String email) 
 	{
 		Connection con = DatabaseContainer.getConnection();
 		
-		String query = "INSERT INTO gebruikers (naam,voornaam,gebruikersnaam,email) VALUES ('"+naam+"','"+ voornaam +"','"+gebruikersnaam+"','" + email + "')";
+		String query = "INSERT INTO gebruikers (naam,voornaam,gebruikersnaam,email) VALUES ('"+naam+"','"+ voornaam +"',' ','"+email+"')";
 		
 		JSONObject returnObject = new JSONObject();
 		
 		try {
 			returnObject.put("result", Database.executeNullQuery(con, query));
-			
-			Mailer.sendmail();
 			
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block

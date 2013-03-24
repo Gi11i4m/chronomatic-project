@@ -11,7 +11,7 @@ public class Linkedin extends SocialMedia {
 	private final String responseType = "code";
 	private final String authorizeTokenUrl = "https://www.linkedin.com/uas/oauth2/authorization?";
 	private final String accesTokenUrl = "https://www.linkedin.com/uas/oauth2/accessToken?";
-	private final String userInfoUrl = "https://api.linkedin.com/v1/people/~/email-address?oauth2_";
+	private final String userInfoUrl = "https://api.linkedin.com/v1/people/~?oauth2_";
 	private final String state = "DCEEFWF45453sdffef424";
 	
 	public String getState() {

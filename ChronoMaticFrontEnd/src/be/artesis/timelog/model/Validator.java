@@ -58,9 +58,9 @@ public class Validator
                 }
 	}
 	
-	public boolean loginExtern(String gebruikersnaam) throws IOException, JSONException, WebserviceException{
+	public boolean loginExtern(String email) throws IOException, JSONException, WebserviceException{
 			  
-        JSONObject jObject = Connection.getObject("auth/loginExtern/" + gebruikersnaam);
+        JSONObject jObject = Connection.getObject("auth/loginExtern/" + email);
 
         if(jObject.has("error")){
          throw new WebserviceException("Failed : HTTP error code : "

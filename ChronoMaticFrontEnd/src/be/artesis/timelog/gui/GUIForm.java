@@ -83,13 +83,6 @@ public class GUIForm extends javax.swing.JFrame {
 	public GUIForm(Validator validator) {
 		this.validator = validator;
 		initComponents();
-
-		// set form in center
-		final Toolkit toolkit = Toolkit.getDefaultToolkit();
-		final Dimension screenSize = toolkit.getScreenSize();
-		final int x = (screenSize.width - this.getWidth()) / 2;
-		final int y = (screenSize.height - this.getHeight()) / 2;
-		this.setLocation(x, y);
 	}
 
 	/* Begin gegenereerde code */
@@ -748,6 +741,13 @@ public class GUIForm extends javax.swing.JFrame {
 		layout.setHorizontalGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addComponent(headerJPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE).addComponent(JTabbedPane));
 		layout.setVerticalGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGroup(layout.createSequentialGroup().addComponent(headerJPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE).addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED).addComponent(JTabbedPane)));
 		pack();
+		
+		// set form in center
+		final Toolkit toolkit = Toolkit.getDefaultToolkit();
+		final Dimension screenSize = toolkit.getScreenSize();
+		final int x = (screenSize.width - this.getWidth()) / 2;
+		final int y = (screenSize.height - this.getHeight()) / 2;
+		this.setLocation(x, y);
 	}
 
 	/* Einde gegenereerde code */

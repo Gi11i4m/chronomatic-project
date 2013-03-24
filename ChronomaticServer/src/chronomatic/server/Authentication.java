@@ -90,14 +90,14 @@ public class Authentication {
 	// Login via 3rd party provider
 	
 	@GET
-	@Path("loginExtern/{username}")
+	@Path("loginExtern/{email}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public String loginExtern(@PathParam("username") String username) {
+	public String loginExtern(@PathParam("email") String email) {
 		Connection con = DatabaseContainer.getConnection();
 		JSONObject returnObject = new JSONObject();
 		ResultSet rs = null;
 		
-		String query = "SELECT ID,gebruikersnaam FROM gebruikers WHERE gebruikersnaam = '" + username + "'";
+		String query = "SELECT ID,email FROM gebruikers WHERE email = '" + email + "'";
 		try{
 			rs = Database.executeQuery(con, query); 
 
