@@ -372,40 +372,7 @@ public class GUIForm extends javax.swing.JFrame {
 		taskFieldsJPanel.setBackground(Color.DARK_GRAY);
 		taskFieldsJPanel.setBounds(275, 40, 399, 400);
 		tasksJPanel.add(taskFieldsJPanel);
-		taskFieldsJPanel.setLayout(new FormLayout(new ColumnSpec[] {
-				FormFactory.UNRELATED_GAP_COLSPEC,
-				ColumnSpec.decode("56px"),
-				FormFactory.UNRELATED_GAP_COLSPEC,
-				ColumnSpec.decode("1px"),
-				FormFactory.LABEL_COMPONENT_GAP_COLSPEC,
-				ColumnSpec.decode("110px:grow"),
-				FormFactory.DEFAULT_COLSPEC,
-				FormFactory.RELATED_GAP_COLSPEC,
-				ColumnSpec.decode("55px"),
-				ColumnSpec.decode("51px"),
-				FormFactory.RELATED_GAP_COLSPEC,
-				ColumnSpec.decode("max(27dlu;default)"),
-				FormFactory.RELATED_GAP_COLSPEC,
-				ColumnSpec.decode("max(15dlu;default)"),},
-			new RowSpec[] {
-				FormFactory.UNRELATED_GAP_ROWSPEC,
-				RowSpec.decode("20px"),
-				FormFactory.RELATED_GAP_ROWSPEC,
-				RowSpec.decode("20px:grow"),
-				FormFactory.RELATED_GAP_ROWSPEC,
-				RowSpec.decode("20px:grow"),
-				RowSpec.decode("38px"),
-				RowSpec.decode("51px"),
-				FormFactory.UNRELATED_GAP_ROWSPEC,
-				RowSpec.decode("51px"),
-				FormFactory.RELATED_GAP_ROWSPEC,
-				RowSpec.decode("37px"),
-				FormFactory.UNRELATED_GAP_ROWSPEC,
-				RowSpec.decode("23px"),
-				FormFactory.UNRELATED_GAP_ROWSPEC,
-				FormFactory.DEFAULT_ROWSPEC,
-				FormFactory.UNRELATED_GAP_ROWSPEC,
-				RowSpec.decode("41px"),}));
+		taskFieldsJPanel.setLayout(new FormLayout(new ColumnSpec[] { FormFactory.UNRELATED_GAP_COLSPEC, ColumnSpec.decode("56px"), FormFactory.UNRELATED_GAP_COLSPEC, ColumnSpec.decode("1px"), FormFactory.LABEL_COMPONENT_GAP_COLSPEC, ColumnSpec.decode("110px:grow"), FormFactory.DEFAULT_COLSPEC, FormFactory.RELATED_GAP_COLSPEC, ColumnSpec.decode("55px"), ColumnSpec.decode("51px"), FormFactory.RELATED_GAP_COLSPEC, ColumnSpec.decode("max(27dlu;default)"), FormFactory.RELATED_GAP_COLSPEC, ColumnSpec.decode("max(15dlu;default)"), }, new RowSpec[] { FormFactory.UNRELATED_GAP_ROWSPEC, RowSpec.decode("20px"), FormFactory.RELATED_GAP_ROWSPEC, RowSpec.decode("20px:grow"), FormFactory.RELATED_GAP_ROWSPEC, RowSpec.decode("20px:grow"), RowSpec.decode("38px"), RowSpec.decode("51px"), FormFactory.UNRELATED_GAP_ROWSPEC, RowSpec.decode("51px"), FormFactory.RELATED_GAP_ROWSPEC, RowSpec.decode("37px"), FormFactory.UNRELATED_GAP_ROWSPEC, RowSpec.decode("23px"), FormFactory.UNRELATED_GAP_ROWSPEC, FormFactory.DEFAULT_ROWSPEC, FormFactory.UNRELATED_GAP_ROWSPEC, RowSpec.decode("41px"), }));
 
 		label_5 = new JLabel();
 		label_5.setText("Name");
@@ -470,20 +437,20 @@ public class GUIForm extends javax.swing.JFrame {
 				saveTask();
 			}
 		});
-		
+
 		taskTotalWorkedJLabel = new JLabel("Total worked");
 		taskTotalWorkedJLabel.setForeground(Color.WHITE);
 		taskFieldsJPanel.add(taskTotalWorkedJLabel, "2, 14, 2, 1, left, default");
-		
+
 		taskTotalWorkedJTextField = new JTextField();
 		taskTotalWorkedJTextField.setEditable(false);
 		taskFieldsJPanel.add(taskTotalWorkedJTextField, "6, 14, 3, 1, fill, default");
 		taskTotalWorkedJTextField.setColumns(10);
-		
+
 		lblTotalPaused = new JLabel("Total paused");
 		lblTotalPaused.setForeground(Color.WHITE);
 		taskFieldsJPanel.add(lblTotalPaused, "2, 16, 2, 1, left, default");
-		
+
 		taskTotalPauseJTextField = new JTextField();
 		taskTotalPauseJTextField.setEditable(false);
 		taskFieldsJPanel.add(taskTotalPauseJTextField, "6, 16, 3, 1, fill, default");
@@ -741,7 +708,7 @@ public class GUIForm extends javax.swing.JFrame {
 		layout.setHorizontalGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addComponent(headerJPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE).addComponent(JTabbedPane));
 		layout.setVerticalGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGroup(layout.createSequentialGroup().addComponent(headerJPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE).addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED).addComponent(JTabbedPane)));
 		pack();
-		
+
 		// set form in center
 		final Toolkit toolkit = Toolkit.getDefaultToolkit();
 		final Dimension screenSize = toolkit.getScreenSize();
@@ -765,11 +732,11 @@ public class GUIForm extends javax.swing.JFrame {
 			//FIXME misschien nullPointerException van dateChooser wrappen in custom exception?
 			long startdate = projectStartDateChooser.getDate().getTime() / 1000;
 			long enddate = projectEndDateChooser.getDate().getTime() / 1000;
-			if(projectClientsJComboBox.getSelectedIndex() == -1 || projectClientsJComboBox.getSelectedItem().equals(NEWCLIENTITEM)){
+			if (projectClientsJComboBox.getSelectedIndex() == -1 || projectClientsJComboBox.getSelectedItem().equals(NEWCLIENTITEM)) {
 				throw new DataInputException("Select or create a client first");
 			}
 			Opdrachtgever o = (Opdrachtgever) projectClientsJComboBox.getSelectedItem();
-			int opdrachtgeverID =  o.getID();
+			int opdrachtgeverID = o.getID();
 
 			if (projectsJList.getSelectedValue().equals(NEWPROJECTITEM)) {
 				UserInterface.saveNewProject(name, startdate, enddate, opdrachtgeverID);
@@ -985,19 +952,19 @@ public class GUIForm extends javax.swing.JFrame {
 
 		for (int i = 0; i < projects.size(); i++) {
 			Project p = ((ArrayList<Project>) projects).get(i);
-			projectOptions[i] = new CheckBoxNode(p.getNaam(), false);
+			projectOptions[i] = new CheckBoxNode(p, false);
 
 			CheckBoxNode taskOptions[] = new CheckBoxNode[p.getTaken().size()];
 			for (int j = 0; j < p.getTaken().size(); j++) {
 				Taak t = p.getTaken().get(j);
-				taskOptions[j] = new CheckBoxNode(t.getNaam(), false);
+				taskOptions[j] = new CheckBoxNode(t, false);
 			}
 
-			projectVector = new NamedVector(p.getNaam(), taskOptions);
+			projectVector = new NamedVector(p, taskOptions);
 			rootNodes[i] = projectVector;
 		}
 
-		Vector rootVector = new NamedVector("Root", rootNodes);
+		Vector rootVector = new NamedVector(new Project(), rootNodes);
 		tree = new JTree(rootVector);
 
 		CheckBoxNodeRenderer renderer = new CheckBoxNodeRenderer();
