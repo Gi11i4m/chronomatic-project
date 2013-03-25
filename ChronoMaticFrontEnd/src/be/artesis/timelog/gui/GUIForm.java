@@ -4,7 +4,6 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
-import java.awt.SystemColor;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -26,7 +25,7 @@ import javax.swing.GroupLayout.Alignment;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
-import javax.swing.JFrame;
+import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
@@ -41,10 +40,15 @@ import javax.swing.SwingConstants;
 import javax.swing.border.BevelBorder;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.DefaultTreeModel;
 
 import org.json.JSONException;
 
-import be.artesis.timelog.checkboxtree.*;
+import be.artesis.timelog.checkboxtree.CheckBoxNode;
+import be.artesis.timelog.checkboxtree.CheckBoxNodeEditor;
+import be.artesis.timelog.checkboxtree.CheckBoxNodeRenderer;
+import be.artesis.timelog.checkboxtree.NamedVector;
 import be.artesis.timelog.clock.Clock;
 import be.artesis.timelog.model.Validator;
 import be.artesis.timelog.model.WebserviceException;
@@ -59,11 +63,6 @@ import com.jgoodies.forms.layout.ColumnSpec;
 import com.jgoodies.forms.layout.FormLayout;
 import com.jgoodies.forms.layout.RowSpec;
 import com.toedter.calendar.JDateChooser;
-import javax.swing.JComboBox;
-import javax.swing.SwingConstants;
-import javax.swing.tree.DefaultTreeModel;
-import javax.swing.tree.DefaultMutableTreeNode;
-import javax.swing.JPasswordField;
 
 /**
  * @author Gilliam
@@ -945,8 +944,7 @@ public class GUIForm extends javax.swing.JFrame {
 	}
 
 	// Refresh import (/ export?) tree view
-	private void refreshExportTreeView(JTree tree) {
-		ArrayList projects = UserInterface.getProjects();
+	private void refreshTreeView(JTree tree, ArrayList projects) {
 		Object rootNodes[] = new Object[projects.size()];
 
 		Vector projectVector = null;
@@ -1166,7 +1164,7 @@ public class GUIForm extends javax.swing.JFrame {
 	}
 
 	private void exportButtonClicked(ActionEvent arg0) {
-		refreshExportTreeView(exportTree);
+
 	}
 
 	private void setCurrentProjectHomeJList(KeyEvent arg0) {
