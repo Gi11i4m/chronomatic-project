@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.HeadlessException;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -26,6 +27,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
+import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
@@ -42,6 +44,9 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
+import javax.swing.tree.TreeNode;
+
+import net.fortuna.ical4j.model.ValidationException;
 
 import org.json.JSONException;
 
@@ -50,6 +55,7 @@ import be.artesis.timelog.checkboxtree.CheckBoxNodeEditor;
 import be.artesis.timelog.checkboxtree.CheckBoxNodeRenderer;
 import be.artesis.timelog.checkboxtree.NamedVector;
 import be.artesis.timelog.clock.Clock;
+import be.artesis.timelog.ics.IcsExporteren;
 import be.artesis.timelog.model.Validator;
 import be.artesis.timelog.model.WebserviceException;
 import be.artesis.timelog.view.DataInputException;
@@ -68,6 +74,8 @@ import javax.swing.SwingConstants;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.AbstractListModel;
+import java.awt.SystemColor;
+import javax.swing.UIManager;
 
 /**
  * @author Gilliam
@@ -201,9 +209,7 @@ public class GUIForm extends javax.swing.JFrame {
 		homeProjectsJList.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyPressed(KeyEvent arg0) {
-				if (arg0.getKeyCode() == KeyEvent.VK_ENTER) {
-					setCurrentProjectGUI(homeProjectsJList.getSelectedIndex());
-				}
+				setCurrentProjectWithEnter(arg0);
 			}
 		});
 		homeProjectsJList.addListSelectionListener(new ListSelectionListener() {
@@ -244,16 +250,11 @@ public class GUIForm extends javax.swing.JFrame {
 				removeProject();
 			}
 		});
-
-		projectFieldsJPanel = new JPanel();
-		projectFieldsJPanel.setBounds(340, 33, 334, 336);
-		projectFieldsJPanel.setBackground(Color.DARK_GRAY);
-		projectFieldsJPanel.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
 		projectsJList = new javax.swing.JList();
 		projectsJList.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyPressed(KeyEvent arg0) {
-				setCurrentProjectJList(arg0);
+				setCurrentProjectWithEnter(arg0);
 			}
 		});
 		jScrollPane1.setViewportView(projectsJList);
@@ -275,48 +276,58 @@ public class GUIForm extends javax.swing.JFrame {
 				projectsJListValueChanged(evt);
 			}
 		});
-		projectFieldsJPanel.setLayout(new FormLayout(new ColumnSpec[] { FormFactory.UNRELATED_GAP_COLSPEC, ColumnSpec.decode("65px"), FormFactory.LABEL_COMPONENT_GAP_COLSPEC, ColumnSpec.decode("max(53dlu;default):grow"), FormFactory.RELATED_GAP_COLSPEC, ColumnSpec.decode("123px"), FormFactory.RELATED_GAP_COLSPEC, FormFactory.DEFAULT_COLSPEC, }, new RowSpec[] { FormFactory.UNRELATED_GAP_ROWSPEC, RowSpec.decode("20px"), FormFactory.LINE_GAP_ROWSPEC, FormFactory.PREF_ROWSPEC, FormFactory.LINE_GAP_ROWSPEC, FormFactory.PREF_ROWSPEC, FormFactory.RELATED_GAP_ROWSPEC, RowSpec.decode("96px"), FormFactory.UNRELATED_GAP_ROWSPEC, RowSpec.decode("20px"), FormFactory.LINE_GAP_ROWSPEC, RowSpec.decode("21px"), RowSpec.decode("60px"), RowSpec.decode("23px"), }));
+
+		contentJTabbedPane.addTab("", new javax.swing.ImageIcon(getClass().getResource("/be/artesis/timelog/gui/icons/ProjectsNeonIcon.png")), projectsJPanel, "Projects");
+		projectsJPanel.setLayout(null);
+		projectsJPanel.add(removeProjectJButton);
+		projectsJPanel.add(setCurrentProjectJButton);
+		projectsJPanel.add(jScrollPane1);
+		projectsJPanel.add(filler2);
+		projectsJPanel.add(projectsJLabel);
+
+		projectFieldsJPanel = new JPanel();
+		projectFieldsJPanel.setBorder(null);
+		projectFieldsJPanel.setBackground(Color.GRAY);
+		projectFieldsJPanel.setBounds(224, 33, 450, 407);
+		projectsJPanel.add(projectFieldsJPanel);
+		projectFieldsJPanel.setLayout(null);
+
+		projectEditFieldsJPanel = new JPanel();
+		projectEditFieldsJPanel.setBounds(112, 0, 338, 175);
+		projectFieldsJPanel.add(projectEditFieldsJPanel);
+		projectEditFieldsJPanel.setBackground(Color.DARK_GRAY);
+		projectEditFieldsJPanel.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
+		projectEditFieldsJPanel.setLayout(new FormLayout(new ColumnSpec[] { FormFactory.UNRELATED_GAP_COLSPEC, ColumnSpec.decode("65px"), FormFactory.LABEL_COMPONENT_GAP_COLSPEC, ColumnSpec.decode("max(53dlu;default):grow"), FormFactory.RELATED_GAP_COLSPEC, ColumnSpec.decode("123px"), FormFactory.RELATED_GAP_COLSPEC, FormFactory.DEFAULT_COLSPEC, }, new RowSpec[] { FormFactory.UNRELATED_GAP_ROWSPEC, RowSpec.decode("20px"), FormFactory.LINE_GAP_ROWSPEC, FormFactory.PREF_ROWSPEC, FormFactory.LINE_GAP_ROWSPEC, FormFactory.PREF_ROWSPEC, FormFactory.UNRELATED_GAP_ROWSPEC, RowSpec.decode("20px"), FormFactory.LINE_GAP_ROWSPEC, RowSpec.decode("21px"), RowSpec.decode("23px"), }));
 		namecompJLabel = new javax.swing.JLabel();
-		projectFieldsJPanel.add(namecompJLabel, "2, 2, left, center");
+		projectEditFieldsJPanel.add(namecompJLabel, "2, 2, left, center");
 
 		namecompJLabel.setForeground(new java.awt.Color(255, 255, 255));
 		namecompJLabel.setText("Naam");
 		projectNameJTextField = new javax.swing.JTextField();
-		projectFieldsJPanel.add(projectNameJTextField, "4, 2, 3, 1, fill, top");
+		projectEditFieldsJPanel.add(projectNameJTextField, "4, 2, 3, 1, fill, top");
 		startdatecompJLabel = new javax.swing.JLabel();
-		projectFieldsJPanel.add(startdatecompJLabel, "2, 4, 2, 1, left, center");
+		projectEditFieldsJPanel.add(startdatecompJLabel, "2, 4, 2, 1, left, center");
 
 		startdatecompJLabel.setForeground(new java.awt.Color(255, 255, 255));
 		startdatecompJLabel.setText("Start date");
 
 		projectStartDateChooser = new JDateChooser();
 		projectStartDateChooser.setDateFormatString("dd/MM/yyyy");
-		projectFieldsJPanel.add(projectStartDateChooser, "4, 4, fill, fill");
+		projectEditFieldsJPanel.add(projectStartDateChooser, "4, 4, fill, fill");
 		enddatecompJLabel1 = new javax.swing.JLabel();
-		projectFieldsJPanel.add(enddatecompJLabel1, "2, 6, 2, 1, left, center");
+		projectEditFieldsJPanel.add(enddatecompJLabel1, "2, 6, 2, 1, left, center");
 
 		enddatecompJLabel1.setForeground(new java.awt.Color(255, 255, 255));
 		enddatecompJLabel1.setText("End date");
 
 		projectEndDateChooser = new JDateChooser();
 		projectEndDateChooser.setDateFormatString("dd/MM/yyyy");
-		projectFieldsJPanel.add(projectEndDateChooser, "4, 6, fill, fill");
-
-		projectTasksJList = new JList();
-		projectTasksJList.setEnabled(false);
-		projectTasksJList.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
-		projectTasksJList.setBackground(Color.LIGHT_GRAY);
-		projectFieldsJPanel.add(projectTasksJList, "4, 8, 3, 1, fill, fill");
+		projectEditFieldsJPanel.add(projectEndDateChooser, "4, 6, fill, fill");
 		clientcompJLabel1 = new javax.swing.JLabel();
-		projectFieldsJPanel.add(clientcompJLabel1, "2, 10, left, top");
+		projectEditFieldsJPanel.add(clientcompJLabel1, "2, 8, left, top");
 
 		clientcompJLabel1.setForeground(new java.awt.Color(255, 255, 255));
 		clientcompJLabel1.setText("Client");
-		taskscompJLabel = new javax.swing.JLabel();
-		projectFieldsJPanel.add(taskscompJLabel, "2, 8, left, top");
-
-		taskscompJLabel.setForeground(new java.awt.Color(255, 255, 255));
-		taskscompJLabel.setText("Tasks");
 
 		projectClientsJComboBox = new JComboBox();
 		projectClientsJComboBox.addActionListener(new ActionListener() {
@@ -324,19 +335,34 @@ public class GUIForm extends javax.swing.JFrame {
 				clientsJComboBoxValueChanged(arg0);
 			}
 		});
-		projectFieldsJPanel.add(projectClientsJComboBox, "4, 10, 3, 1, fill, default");
-		percentageCompleteJProgressBar = new javax.swing.JProgressBar();
-		projectFieldsJPanel.add(percentageCompleteJProgressBar, "4, 12, 3, 1, fill, fill");
-		percentageCompletecompJLabel = new javax.swing.JLabel();
-		projectFieldsJPanel.add(percentageCompletecompJLabel, "2, 12, fill, fill");
-
-		percentageCompletecompJLabel.setForeground(new java.awt.Color(255, 255, 255));
-		percentageCompletecompJLabel.setText("Complete");
+		projectEditFieldsJPanel.add(projectClientsJComboBox, "4, 8, 3, 1, fill, default");
 		saveProjectJButton = new javax.swing.JButton();
-		projectFieldsJPanel.add(saveProjectJButton, "2, 14, 5, 1, fill, top");
+		projectEditFieldsJPanel.add(saveProjectJButton, "2, 11, 5, 1, fill, top");
 
 		saveProjectJButton.setText("Save");
 		saveProjectJButton.setEnabled(false);
+
+		projectTasksJList = new JList();
+		projectTasksJList.setBounds(187, 218, 263, 96);
+		projectFieldsJPanel.add(projectTasksJList);
+		projectTasksJList.setEnabled(false);
+		projectTasksJList.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
+		projectTasksJList.setBackground(Color.LIGHT_GRAY);
+		taskscompJLabel = new javax.swing.JLabel();
+		taskscompJLabel.setBounds(112, 221, 65, 14);
+		projectFieldsJPanel.add(taskscompJLabel);
+
+		taskscompJLabel.setForeground(new java.awt.Color(255, 255, 255));
+		taskscompJLabel.setText("Tasks");
+		percentageCompleteJProgressBar = new javax.swing.JProgressBar();
+		percentageCompleteJProgressBar.setBounds(187, 186, 263, 21);
+		projectFieldsJPanel.add(percentageCompleteJProgressBar);
+		percentageCompletecompJLabel = new javax.swing.JLabel();
+		percentageCompletecompJLabel.setBounds(112, 186, 65, 21);
+		projectFieldsJPanel.add(percentageCompletecompJLabel);
+
+		percentageCompletecompJLabel.setForeground(new java.awt.Color(255, 255, 255));
+		percentageCompletecompJLabel.setText("Complete");
 		saveProjectJButton.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
 				saveProject();
@@ -348,15 +374,6 @@ public class GUIForm extends javax.swing.JFrame {
 				editFieldsFocused(evt);
 			}
 		});
-
-		contentJTabbedPane.addTab("", new javax.swing.ImageIcon(getClass().getResource("/be/artesis/timelog/gui/icons/ProjectsNeonIcon.png")), projectsJPanel, "Projects");
-		projectsJPanel.setLayout(null);
-		projectsJPanel.add(removeProjectJButton);
-		projectsJPanel.add(setCurrentProjectJButton);
-		projectsJPanel.add(jScrollPane1);
-		projectsJPanel.add(filler2);
-		projectsJPanel.add(projectFieldsJPanel);
-		projectsJPanel.add(projectsJLabel);
 
 		tasksJPanel.setBackground(Color.GRAY);
 
@@ -379,10 +396,12 @@ public class GUIForm extends javax.swing.JFrame {
 
 		tasksJList = new JList();
 		tasksJList.setModel(new AbstractListModel() {
-			String[] values = new String[] {"Select a current project first!"};
+			String[] values = new String[] { "Select a current project first!" };
+
 			public int getSize() {
 				return values.length;
 			}
+
 			public Object getElementAt(int index) {
 				return values[index];
 			}
@@ -768,7 +787,7 @@ public class GUIForm extends javax.swing.JFrame {
 			} catch (NullPointerException e) {
 				throw new DataInputException("Please choose a valid date");
 			}
-			if(projectClientsJComboBox.getSelectedIndex() == -1 || projectClientsJComboBox.getSelectedItem().equals(NEWCLIENTITEM)){
+			if (projectClientsJComboBox.getSelectedIndex() == -1 || projectClientsJComboBox.getSelectedItem().equals(NEWCLIENTITEM)) {
 				throw new DataInputException("Select or create a client first");
 			}
 			Opdrachtgever o = (Opdrachtgever) projectClientsJComboBox.getSelectedItem();
@@ -833,9 +852,9 @@ public class GUIForm extends javax.swing.JFrame {
 				Opdrachtgever o = UserInterface.saveNewClient(naam, voornaam, bedrijfsnaam, email, telefoonnummer);
 				JOptionPane.showMessageDialog(this, "Client added!");
 				if (projectsJList.getSelectedIndex() == -1 || projectsJList.getSelectedValue().equals(NEWPROJECTITEM)) {
-					refreshJClientsComboBox(null, projectClientsJComboBox);
-				} else{
-					refreshJClientsComboBox((Project) projectsJList.getSelectedValue(), projectClientsJComboBox);
+					refreshClientsComboBox(null, projectClientsJComboBox);
+				} else {
+					refreshClientsComboBox((Project) projectsJList.getSelectedValue(), projectClientsJComboBox);
 				}
 				if (creatingProject) {
 					contentJTabbedPane.setSelectedIndex(1);
@@ -864,7 +883,7 @@ public class GUIForm extends javax.swing.JFrame {
 		try {
 			if (UserInterface.getCurrentProjectIndex() != -1 && projectsJList.getSelectedValue() == UserInterface.getCurrentProject()) {
 				JOptionPane.showMessageDialog(this, "Can't remove current project");
-			}else {
+			} else {
 				int result = JOptionPane.showConfirmDialog(this, "Are you sure you want to delete this project?", null, JOptionPane.YES_NO_OPTION);
 				if (result == JOptionPane.YES_OPTION) {
 					try {
@@ -875,7 +894,7 @@ public class GUIForm extends javax.swing.JFrame {
 						ex.printStackTrace();
 						JOptionPane.showMessageDialog(this, ex.getMessage());
 					} finally {
-						clearFieldsOnPanel(projectFieldsJPanel);
+						clearFieldsOnPanel(projectEditFieldsJPanel);
 						toggleButtonStates();
 					}
 				}
@@ -943,6 +962,7 @@ public class GUIForm extends javax.swing.JFrame {
 			list.setCellRenderer(new ProjectCellRenderer());
 			list.setSelectedIndex(selectedIndex);
 		}
+		refreshTreeView(exportTree, UserInterface.getProjects());
 	}
 
 	// Refresh all TASK lists
@@ -965,6 +985,7 @@ public class GUIForm extends javax.swing.JFrame {
 			list.setCellRenderer(new TaskCellRenderer());
 			list.setSelectedIndex(selectedIndex);
 		}
+		refreshTreeView(exportTree, UserInterface.getProjects());
 	}
 
 	// Refresh all CLIENT lists
@@ -988,8 +1009,8 @@ public class GUIForm extends javax.swing.JFrame {
 			list.setSelectedIndex(selectedIndex);
 		}
 	}
-	
-	private void refreshJClientsComboBox(Project p, JComboBox... boxes){
+
+	private void refreshClientsComboBox(Project p, JComboBox... boxes) {
 		for (JComboBox box : boxes) {
 			DefaultComboBoxModel listmodel = new DefaultComboBoxModel();
 			Opdrachtgever og = null;
@@ -1007,6 +1028,9 @@ public class GUIForm extends javax.swing.JFrame {
 
 	// Refresh import (/ export?) tree view
 	private void refreshTreeView(JTree tree, ArrayList projects) {
+		//TreeNode root = new TreeNode();
+		//DefaultTreeModel treeModel = new DefaultTreeModel(, true)
+
 		Object rootNodes[] = new Object[projects.size()];
 
 		Vector projectVector = null;
@@ -1034,8 +1058,6 @@ public class GUIForm extends javax.swing.JFrame {
 
 		tree.setCellEditor(new CheckBoxNodeEditor(tree));
 		tree.setEditable(true);
-
-		exportTree.setModel(tree.getModel());
 	}
 
 	// ================================================================================
@@ -1049,8 +1071,8 @@ public class GUIForm extends javax.swing.JFrame {
 			projectNameJTextField.setText(p.getNaam());
 			projectStartDateChooser.setDate(new Date(p.getBegindatum() * 1000));
 			projectEndDateChooser.setDate(new Date(p.getEinddatum() * 1000));
-			
-			refreshJClientsComboBox(p, projectClientsJComboBox);
+
+			refreshClientsComboBox(p, projectClientsJComboBox);
 			refreshTasksList(p, projectTasksJList);
 			percentageCompleteJProgressBar.setValue((int) (((Project) projectsJList.getSelectedValue()).getPercentageComplete() * 100));
 		}
@@ -1122,7 +1144,9 @@ public class GUIForm extends javax.swing.JFrame {
 	private void clearFieldsOnPanel(JPanel panel) {
 		Component[] clientPanelComps = panel.getComponents();
 		for (Component c : clientPanelComps) {
-			if (c instanceof JTextField) {
+			if (c instanceof JPanel) {
+				clearFieldsOnPanel((JPanel) c);
+			} else if (c instanceof JTextField) {
 				((JTextField) c).setText(null);
 			} else if (c instanceof JList) {
 				((JList) c).setModel(new DefaultListModel());
@@ -1170,7 +1194,6 @@ public class GUIForm extends javax.swing.JFrame {
 			projectsJList.setSelectedIndex(index);
 			refreshProjectsList(projectsJList, homeProjectsJList);
 			refreshTasksList(UserInterface.getCurrentProject(), tasksJList);
-			refreshTreeView(exportTree, UserInterface.getProjects());
 			clearFieldsOnPanel(taskFieldsJPanel);
 			tasksJList.clearSelection();
 		} catch (GUIException ex) {
@@ -1178,8 +1201,8 @@ public class GUIForm extends javax.swing.JFrame {
 			JOptionPane.showMessageDialog(this, ex.getMessage());
 		}
 	}
-	
-	private void clientsJListValueChanged(ListSelectionEvent arg0){
+
+	private void clientsJListValueChanged(ListSelectionEvent arg0) {
 		if (clientsJList.getSelectedIndex() != -1) {
 			if (clientsJList.getSelectedValue().equals(NEWCLIENTITEM)) {
 				clearFieldsOnPanel(clientFieldsJPanel);
@@ -1191,12 +1214,12 @@ public class GUIForm extends javax.swing.JFrame {
 			toggleButtonStates();
 		}
 	}
-	
+
 	private void projectsJListValueChanged(javax.swing.event.ListSelectionEvent evt) {
 		if (projectsJList.getSelectedIndex() != -1) {
 			if (projectsJList.getSelectedValue().equals(NEWPROJECTITEM)) {
-				clearFieldsOnPanel(projectFieldsJPanel);
-				refreshJClientsComboBox(null, projectClientsJComboBox);
+				clearFieldsOnPanel(projectEditFieldsJPanel);
+				refreshClientsComboBox(null, projectClientsJComboBox);
 				saveProjectJButton.setText("Save [new]");
 			} else {
 				loadProjectInfo(projectsJList.getSelectedIndex());
@@ -1212,6 +1235,7 @@ public class GUIForm extends javax.swing.JFrame {
 		ingelogdJLabel.setForeground(Color.GREEN);
 		refreshProjectsList(projectsJList, homeProjectsJList);
 		refreshClientsList(clientsJList);
+		refreshTreeView(exportTree, UserInterface.getProjects());
 	}
 
 	// Event handlers for all the edit fields
@@ -1227,7 +1251,20 @@ public class GUIForm extends javax.swing.JFrame {
 	}
 
 	private void exportButtonClicked(ActionEvent arg0) {
-
+		JFileChooser fileChooser = new JFileChooser();
+		fileChooser.showDialog(this, "Export");
+		ArrayList<Taak> toExport = new ArrayList();
+		Taak[] t = new Taak[toExport.size()];
+		for (Object o : exportTree.getSelectionPaths()) {
+			if (o instanceof Taak)
+				toExport.add((Taak) o);
+		}
+		try {
+			IcsExporteren.export(toExport.toArray(t), fileChooser.getSelectedFile().toPath().toString());
+		} catch (IOException | ValidationException e) {
+			e.printStackTrace();
+			JOptionPane.showMessageDialog(this, e.getMessage());
+		}
 	}
 
 	private void taskJListValueChanged(ListSelectionEvent arg0) {
@@ -1248,8 +1285,8 @@ public class GUIForm extends javax.swing.JFrame {
 			}
 		}
 	}
-	
-	private void clientsJComboBoxValueChanged(ActionEvent arg0){
+
+	private void clientsJComboBoxValueChanged(ActionEvent arg0) {
 		JComboBox combobox = (JComboBox) arg0.getSource();
 		if (combobox.getSelectedIndex() != -1) {
 			if (combobox.getSelectedItem().getClass().equals(String.class)) {
@@ -1257,6 +1294,12 @@ public class GUIForm extends javax.swing.JFrame {
 				contentJTabbedPane.setSelectedIndex(3);
 				clientsJList.setSelectedValue(NEWCLIENTITEM, true);
 			}
+		}
+	}
+
+	private void setCurrentProjectWithEnter(KeyEvent arg0) {
+		if (arg0.getKeyCode() == KeyEvent.VK_ENTER) {
+			setCurrentProjectGUI(((JList) arg0.getSource()).getSelectedIndex());
 		}
 	}
 
@@ -1316,7 +1359,7 @@ public class GUIForm extends javax.swing.JFrame {
 	private JButton saveTaskJButton;
 	private JTextArea taskCommentJTextArea;
 	private JList workedTimeJList;
-	private JPanel projectFieldsJPanel;
+	private JPanel projectEditFieldsJPanel;
 	private JList tasksJList;
 	private JList projectTasksJList;
 	private JDateChooser taskStartDateChooser;
@@ -1346,4 +1389,5 @@ public class GUIForm extends javax.swing.JFrame {
 	private JLabel lblTotalPaused;
 	private JTree exportTree;
 	private JTree importTree;
+	private JPanel projectFieldsJPanel;
 }
