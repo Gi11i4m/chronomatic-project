@@ -12,7 +12,7 @@ import be.artesis.timelog.view.Tijdspanne;
 import java.io.IOException;
 import java.net.MalformedURLException;
 
-public class Updater {
+public class UpdaterServer {
 
 	public static void updateGebruiker(String sessionKey, Gebruiker gebruiker) throws MalformedURLException, IOException, WebserviceException{
 		Connection.execute("gebruiker/update/" + sessionKey + "/" + gebruiker.getNaam() + "/" + gebruiker.getVoornaam() + "/" + gebruiker.getGebruikersnaam() + "/" +gebruiker.getEmail());

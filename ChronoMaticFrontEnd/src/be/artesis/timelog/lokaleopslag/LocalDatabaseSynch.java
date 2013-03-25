@@ -49,7 +49,7 @@ public class LocalDatabaseSynch {
 		
 	}
 	
-	private  void synchJarr(JVelden jVeld, JSONArray jarr, JSONArray jarrLager) throws MalformedURLException, JSONException, IOException, WebserviceException{
+	private void synchJarr(JVelden jVeld, JSONArray jarr, JSONArray jarrLager) throws MalformedURLException, JSONException, IOException, WebserviceException{
 		System.out.println("jarrlength:" + jarr.length());
 		for(int i = 0 ; i < jarr.length();i++){	
 			System.out.println("i=" + i);
@@ -91,11 +91,11 @@ public class LocalDatabaseSynch {
 	}	
 	
 	private  int synchProject(JSONObject jProject) throws MalformedURLException, IOException, WebserviceException, JSONException{
-		return InserterServer.inputProject(v.getSessionKey(), jProject.getString("naam"), jProject.getLong("begindatum"), jProject.getLong("einddatum"), jProject.getInt("linkId"));
+		return InserterServer.inputProject(v.getSessionKey(), jProject.getString("naam"), jProject.getLong("beginDatum"), jProject.getLong("eindDatum"), jProject.getInt("linkId"));
 	}
 	
 	private  int synchTaak(JSONObject jTaak) throws MalformedURLException, IOException, WebserviceException, JSONException {
-		return InserterServer.inputTaak(v.getSessionKey(), jTaak.getString("naam"), jTaak.getLong("begindatum"), jTaak.getLong("geschatteEinddatum"), jTaak.getString("commentaar"), jTaak.getBoolean("completed"), jTaak.getInt("linkId"));
+		return InserterServer.inputTaak(v.getSessionKey(), jTaak.getString("naam"), jTaak.getLong("beginDatum"), jTaak.getLong("eindDatum"), jTaak.getString("commentaar"), jTaak.getBoolean("completed"), jTaak.getInt("linkId"));
 	}
 	private  int synchTijdspanne(JSONObject jTijdspanne) throws MalformedURLException, IOException, WebserviceException, JSONException {
 		return InserterServer.inputTijdSpanne(v.getSessionKey(), jTijdspanne.getLong("beginTijd"), jTijdspanne.getLong("eindTijd"), jTijdspanne.getBoolean("isPauze"), jTijdspanne.getInt("linkId"));

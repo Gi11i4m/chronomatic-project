@@ -9,7 +9,7 @@ import org.json.JSONException;
 
 import be.artesis.timelog.controller.Deleter;
 import be.artesis.timelog.controller.InserterLocal;
-import be.artesis.timelog.controller.Updater;
+import be.artesis.timelog.controller.UpdaterLocal;
 import be.artesis.timelog.model.Validator;
 import be.artesis.timelog.model.WebserviceException;
 import be.artesis.timelog.view.*;
@@ -133,7 +133,7 @@ public class UserInterface {
         c.setEmail(email);
         c.setTelefoonnummer(telefoonnummer);
         // Past opdrachtgeverwaarden aan in database
-        Updater.updateOpdrachtgever(validator.getSessionKey(), c);
+        UpdaterLocal.updateOpdrachtgever(validator.getSessionKey(), c);
         getClients().set(index, c);
 	}
 	
@@ -163,7 +163,7 @@ public class UserInterface {
         p.setEinddatum(einddatum);
         p.setOpdrachtgeverId(opdrachtgeverId);
         // Past projectwaarden aan in database
-        Updater.updateProject(validator.getSessionKey(), p);;
+        UpdaterLocal.updateProject(validator.getSessionKey(), p);;
         getProjects().set(index, p);
 	}
 	
@@ -200,7 +200,7 @@ public class UserInterface {
         t.setCommentaar(comment);
         t.setCompleted(completed);
         // Taakwaarden worden aangepast in database
-        Updater.updateTaak(validator.getSessionKey(), t);
+        UpdaterLocal.updateTaak(validator.getSessionKey(), t);
         getCurrentTasks().set(index, t);
 	}
     
@@ -229,7 +229,7 @@ public class UserInterface {
 		ts.setPauze(isPause);
 		
 		t.getTotaleTijd().set(i, ts);
-		Updater.updateTijdspanne(validator.getSessionKey(), ts);
+		UpdaterLocal.updateTijdspanne(validator.getSessionKey(), ts);
 	}
 
     //================================================================================

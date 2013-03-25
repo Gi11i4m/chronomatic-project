@@ -22,6 +22,11 @@ public class InserterServer {
 	}
 
 	public static int inputProject(String sessionKey,String naam, long begindatum, long einddatum, int opdrachtGeverID) throws MalformedURLException, IOException, WebserviceException, JSONException {            
+		System.out.println("naam: " +naam);
+		System.out.println("begindat: " +begindatum);
+		System.out.println("einddat: "+einddatum);
+		System.out.println("opdr: "+opdrachtGeverID);
+		
 		JSONObject key = Connection.getObject("project/create/" + sessionKey + "/" + naam + "/" + begindatum + "/" + einddatum + "/" + opdrachtGeverID);
 		return key.getInt("GENERATED_KEY");
     }
