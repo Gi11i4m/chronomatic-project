@@ -37,8 +37,7 @@ public class Validator
         
 		JSONObject jObject = Connection.getObject("auth/login/" + gebruikersnaam+ "/"+ paswoord);
         if(jObject.has("error")){
-         throw new WebserviceException("Failed : HTTP error code : "
-                                + jObject.getString("error"));
+         throw new WebserviceException("Failed : HTTP error code : " + jObject.getString("error"));
 
         }else if(jObject.getString("key") != ""){
                 setSessionKey(jObject.getString("key"));
@@ -54,14 +53,13 @@ public class Validator
         JSONObject jObject = Connection.getObject("auth/loginExtern/" + email);
 
         if(jObject.has("error")){
-         throw new WebserviceException("Failed : HTTP error code : "
-                                + jObject.getString("error"));
+        	throw new WebserviceException("Failed : HTTP error code : " + jObject.getString("error"));
 
-        }else if(jObject.getString("key") != ""){
-                setSessionKey(jObject.getString("key"));
-                return true;
+        } else if(jObject.getString("key") != "") {
+            setSessionKey(jObject.getString("key"));
+            return true;
 
-        }else{
+        } else {
            return false; 
         }
 }
@@ -69,15 +67,11 @@ public class Validator
 	public boolean valideerSessie() throws IOException, JSONException{
 
 		boolean returnBool = false;
-
 						
 		JSONObject jObject = Connection.getObject("auth/check/" + sessionKey );
 		   	   // JSONArray to JSONObject
-
-	   	returnBool = jObject.getBoolean("success");
-
 		
-
+	   	returnBool = jObject.getBoolean("success");
 
 		return returnBool;
 	}
