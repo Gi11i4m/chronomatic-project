@@ -198,11 +198,6 @@ public class LoginForm extends javax.swing.JFrame implements ActionListener {
                 
             } else if (validator.login(usernameJTextField.getText(), paswoord )) {
             	loadUserData();
-            	
-            	if(saveUserCheckBox.isSelected()) {
-        			saveUserCredentials();
-        		}
-            	
             	this.dispose();
             	try {
                     Thread.sleep(5000);
@@ -212,7 +207,7 @@ public class LoginForm extends javax.swing.JFrame implements ActionListener {
             } else {
 
             }
-		} catch (DataInputException | HeadlessException | IOException | JSONException | WebserviceException | NoSuchAlgorithmException | IllegalArgumentException | IllegalAccessException | InvocationTargetException e) {
+		} catch (DataInputException | HeadlessException | IOException | JSONException | WebserviceException | NoSuchAlgorithmException e) {
 			e.printStackTrace();
 			JOptionPane.showMessageDialog(this, "Error connecting to server");
 			this.dispose();
