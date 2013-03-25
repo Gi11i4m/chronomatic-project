@@ -133,9 +133,9 @@ public class WorkDialog extends javax.swing.JDialog {
 				t.setPauze(true);
 				pause.add(t);
 			} else {
-				UserInterface.saveNewTimespan(start, stop, currentTask, false);
+				UserInterface.createTimespan(start, stop, currentTask, false);
 				for (Tijdspanne p : pause) {
-					UserInterface.saveNewTimespan(p.getBeginTijd(), p.getEindTijd(), currentTask, true);
+					UserInterface.createTimespan(p.getBeginTijd(), p.getEindTijd(), currentTask, true);
 				}
 				resetClockForm();
 			}

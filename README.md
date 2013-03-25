@@ -19,7 +19,6 @@ TODO Client:
 	- Logindialog (spinner) laten zien tot logindialog is geladen
 
 	- Dialogbox voor gegevens indien extern account
-	- saveShizzle -> updateShizzle, saveNewShizzle -> createShizzle of insertShizzle
 
 	- Help tab? Eerste x openen, help dialog
 	- Event handlers (bv. list) combineren

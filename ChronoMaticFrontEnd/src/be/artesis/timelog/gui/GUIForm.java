@@ -13,6 +13,7 @@ import java.awt.event.FocusEvent;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
@@ -247,7 +248,7 @@ public class GUIForm extends javax.swing.JFrame {
 		removeProjectJButton.setEnabled(false);
 		removeProjectJButton.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
-				removeProject();
+				deleteProject();
 			}
 		});
 		projectsJList = new javax.swing.JList();
@@ -365,7 +366,32 @@ public class GUIForm extends javax.swing.JFrame {
 		percentageCompletecompJLabel.setText("Complete");
 		saveProjectJButton.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
-				saveProject();
+				try {
+					String name = projectNameJTextField.getText();
+					long startdate;
+					long enddate;
+					try {
+						startdate = projectStartDateChooser.getDate().getTime() / 1000;
+						enddate = projectEndDateChooser.getDate().getTime() / 1000;
+					} catch (NullPointerException e) {
+						throw new DataInputException("Please choose a valid date");
+					}
+					if (projectClientsJComboBox.getSelectedIndex() == -1 || projectClientsJComboBox.getSelectedItem().equals(NEWCLIENTITEM)) {
+						throw new DataInputException("Select or create a client first");
+					}
+					Opdrachtgever o = (Opdrachtgever) projectClientsJComboBox.getSelectedItem();
+					int opdrachtgeverID = o.getID();
+
+					if (projectsJList.getSelectedValue().equals(NEWPROJECTITEM)) {
+						createProject(name, startdate, enddate, opdrachtgeverID);
+					} else {
+						updateProject(name, startdate, enddate, opdrachtgeverID);
+					}
+				} catch (DataInputException e) {
+					JOptionPane.showMessageDialog(GUIForm.this, e.getMessage());
+					e.printStackTrace();
+				}
+				toggleButtonStates();
 			}
 		});
 
@@ -385,7 +411,7 @@ public class GUIForm extends javax.swing.JFrame {
 		removeTaskJButton.setEnabled(false);
 		removeTaskJButton.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
-				removeTask();
+				deleteTask();
 			}
 		});
 
@@ -482,9 +508,28 @@ public class GUIForm extends javax.swing.JFrame {
 		saveTaskJButton = new JButton();
 		saveTaskJButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				saveTask();
+				try {
+					String name = taskNameJTextField.getText();
+					String comment = taskCommentJTextArea.getText();
+					boolean completed = taskCompletedJCheckBox.isSelected();
+					long startdate = taskStartDateChooser.getDate().getTime() / 1000;
+					long enddate = taskEndDateChooser.getDate().getTime() / 1000;
+					
+					if (tasksJList.getSelectedValue().equals(NEWTASKITEM)) {
+						createTask(name, startdate, enddate, comment, completed);
+					}
+					else {
+						updateTask(name, startdate, enddate, comment, completed);
+					}
+				} catch (NullPointerException ex) {
+					ex.printStackTrace();
+					JOptionPane.showMessageDialog(GUIForm.this, "Please choose a valid date");
+				} finally {
+					toggleButtonStates();
+					loadProjectInfo(projectsJList.getSelectedIndex());
+				}
 			}
-		});
+			});
 
 		taskTotalWorkedJLabel = new JLabel("Total worked");
 		taskTotalWorkedJLabel.setForeground(Color.WHITE);
@@ -533,7 +578,7 @@ public class GUIForm extends javax.swing.JFrame {
 		removeClientJButton.setEnabled(false);
 		removeClientJButton.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
-				removeClient();
+				deleteClient();
 			}
 		});
 
@@ -627,7 +672,18 @@ public class GUIForm extends javax.swing.JFrame {
 		saveClientJButton = new JButton();
 		saveClientJButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				saveClient();
+				String naam = clientNameJTextField.getText();
+				String voornaam = clientFirstNameJTextField.getText();
+				String bedrijfsnaam = clientCompanyJTextField.getText();
+				String email = clientEmailJTextField.getText();
+				String telefoonnummer = clientPhoneNumberJTextField.getText();
+
+				if (clientsJList.getSelectedValue().equals(NEWCLIENTITEM)) {
+					createClient(naam, voornaam, bedrijfsnaam, email, telefoonnummer);
+				} else {
+					updateClient(naam, voornaam, bedrijfsnaam, email, telefoonnummer);
+				}
+				toggleButtonStates();
 			}
 		});
 		saveClientJButton.setText("Save");
@@ -775,102 +831,86 @@ public class GUIForm extends javax.swing.JFrame {
 	// Save / Edit methods
 	// ================================================================================
 
-	// Save PROJECT
-	private void saveProject() {
+	// Create new project
+	private void createProject(String name, long startdate, long enddate, int opdrachtgeverID) {
 		try {
-			String name = projectNameJTextField.getText();
-			long startdate;
-			long enddate;
-			try {
-				startdate = projectStartDateChooser.getDate().getTime() / 1000;
-				enddate = projectEndDateChooser.getDate().getTime() / 1000;
-			} catch (NullPointerException e) {
-				throw new DataInputException("Please choose a valid date");
-			}
-			if (projectClientsJComboBox.getSelectedIndex() == -1 || projectClientsJComboBox.getSelectedItem().equals(NEWCLIENTITEM)) {
-				throw new DataInputException("Select or create a client first");
-			}
-			Opdrachtgever o = (Opdrachtgever) projectClientsJComboBox.getSelectedItem();
-			int opdrachtgeverID = o.getID();
-
-			if (projectsJList.getSelectedValue().equals(NEWPROJECTITEM)) {
-				UserInterface.saveNewProject(name, startdate, enddate, opdrachtgeverID);
-				JOptionPane.showMessageDialog(this, "Project added!");
-			} else {
-				UserInterface.saveProject(projectsJList.getSelectedIndex(), name, startdate, enddate, opdrachtgeverID);
-				JOptionPane.showMessageDialog(this, "Project edited!");
-			}
+			UserInterface.createProject(name, startdate, enddate, opdrachtgeverID);
+			JOptionPane.showMessageDialog(this, "Project added!");
 			refreshProjectsList(projectsJList, homeProjectsJList);
-		} catch (DataInputException | IOException | WebserviceException | JSONException | ParseException ex) {
-			ex.printStackTrace();
-			JOptionPane.showMessageDialog(this, ex.getMessage());
-		} finally {
-			toggleButtonStates();
+		} catch (DataInputException | ParseException | IOException | WebserviceException | JSONException e) {
+			JOptionPane.showMessageDialog(this, e.getMessage());
+			e.printStackTrace();
+		}
+	}
+	
+	// Update existing project
+	private void updateProject(String name, long startdate, long enddate, int opdrachtgeverID){
+		try {
+			UserInterface.updateProject(projectsJList.getSelectedIndex(), name, startdate, enddate, opdrachtgeverID);
+			JOptionPane.showMessageDialog(this, "Project edited!");
+			refreshProjectsList(projectsJList, homeProjectsJList);;
+		} catch (DataInputException | IOException | WebserviceException | ParseException e) {
+			JOptionPane.showMessageDialog(this, e.getMessage());
+			e.printStackTrace();
 		}
 	}
 
-	// Save TASK
-	private void saveTask() {
+	// Create new task
+	private void createTask(String name, long startdate, long enddate, String comment, boolean completed){
 		try {
-			String name = taskNameJTextField.getText();
-			long startdate = taskStartDateChooser.getDate().getTime() / 1000;
-			long enddate = taskEndDateChooser.getDate().getTime() / 1000;
-			String comment = taskCommentJTextArea.getText();
-			boolean completed = taskCompletedJCheckBox.isSelected();
-
-			if (tasksJList.getSelectedValue().equals(NEWTASKITEM)) {
-				UserInterface.saveNewTask(name, startdate, enddate, comment, completed);
-				JOptionPane.showMessageDialog(this, "Task added!");
-				refreshTasksList(UserInterface.getCurrentProject(), tasksJList);
-			} else {
-				UserInterface.saveTask(tasksJList.getSelectedIndex(), name, startdate, enddate, comment, completed);
-				JOptionPane.showMessageDialog(this, "Task edited!");
-				refreshTasksList(UserInterface.getCurrentProject(), tasksJList);
-			}
-		} catch (GUIException | DataInputException | JSONException | ParseException | IOException | WebserviceException ex) {
-			ex.printStackTrace();
-			JOptionPane.showMessageDialog(this, ex.getMessage());
-		} catch (NullPointerException ex) {
-			ex.printStackTrace();
-			JOptionPane.showMessageDialog(this, "Please choose a valid date");
-		} finally {
-			toggleButtonStates();
-			loadProjectInfo(projectsJList.getSelectedIndex());
+			UserInterface.createTask(name, startdate, enddate, comment, completed);
+			JOptionPane.showMessageDialog(this, "Task added!");
+			refreshTasksList(UserInterface.getCurrentProject(), tasksJList);
+		} catch (DataInputException | ParseException | GUIException | IOException | WebserviceException | JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	// Update existing task
+	private void updateTask(String name, long startdate, long enddate, String comment, boolean completed){
+		try {
+			UserInterface.updateTask(tasksJList.getSelectedIndex(), name, startdate, enddate, comment, completed);
+			JOptionPane.showMessageDialog(this, "Task edited!");
+			refreshTasksList(UserInterface.getCurrentProject(), tasksJList);
+		} catch (GUIException | DataInputException | ParseException | IOException | WebserviceException e) {
+			JOptionPane.showMessageDialog(this, e.getMessage());
+			e.printStackTrace();
 		}
 	}
 
-	// Save CLIENT
-	private void saveClient() {
-		String naam = clientNameJTextField.getText();
-		String voornaam = clientFirstNameJTextField.getText();
-		String bedrijfsnaam = clientCompanyJTextField.getText();
-		String email = clientEmailJTextField.getText();
-		String telefoonnummer = clientPhoneNumberJTextField.getText();
-
+	// Create new client
+	private void createClient(String naam, String voornaam, String bedrijfsnaam, String email, String telefoonnummer) {
+		Opdrachtgever o = null;
 		try {
-			if (clientsJList.getSelectedValue().equals(NEWCLIENTITEM)) {
-				Opdrachtgever o = UserInterface.saveNewClient(naam, voornaam, bedrijfsnaam, email, telefoonnummer);
-				JOptionPane.showMessageDialog(this, "Client added!");
-				if (projectsJList.getSelectedIndex() == -1 || projectsJList.getSelectedValue().equals(NEWPROJECTITEM)) {
-					refreshClientsComboBox(null, projectClientsJComboBox);
-				} else {
-					refreshClientsComboBox((Project) projectsJList.getSelectedValue(), projectClientsJComboBox);
-				}
-				if (creatingProject) {
-					contentJTabbedPane.setSelectedIndex(1);
-					projectClientsJComboBox.setSelectedItem(o);
-					creatingProject = false;
-				}
+			o = UserInterface.createClient(naam, voornaam, bedrijfsnaam, email, telefoonnummer);
+			JOptionPane.showMessageDialog(this, "Client added!");
+			if (projectsJList.getSelectedValue().equals(NEWPROJECTITEM)) {
+				refreshJClientsComboBox(null, projectClientsJComboBox);
 			} else {
-				UserInterface.saveClient(clientsJList.getSelectedIndex(), voornaam, voornaam, bedrijfsnaam, email, telefoonnummer);
-				JOptionPane.showMessageDialog(this, "Client edited!");
+				refreshJClientsComboBox((Project) projectsJList.getSelectedValue(), projectClientsJComboBox);
 			}
 			refreshClientsList(clientsJList);
-		} catch (DataInputException | IOException | WebserviceException | JSONException ex) {
-			ex.printStackTrace();
-			JOptionPane.showMessageDialog(this, ex.getMessage());
-		} finally {
-			toggleButtonStates();
+			if (creatingProject) {
+				contentJTabbedPane.setSelectedIndex(1);
+				projectClientsJComboBox.setSelectedItem(o);
+				creatingProject = false;
+			}
+		} catch (DataInputException | JSONException | IOException | WebserviceException e) {
+			JOptionPane.showMessageDialog(this, e.getMessage());
+			e.printStackTrace();
+		}
+	}
+
+	// Update existing client
+	private void updateClient(String naam, String voornaam, String bedrijfsnaam, String email, String telefoonnummer) {
+		try {
+			UserInterface.updateClient(clientsJList.getSelectedIndex(), voornaam, voornaam, bedrijfsnaam, email, telefoonnummer);
+			JOptionPane.showMessageDialog(this, "Client edited!");
+			refreshClientsList(clientsJList);
+		} catch (DataInputException | IOException | WebserviceException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 	}
 
@@ -879,7 +919,7 @@ public class GUIForm extends javax.swing.JFrame {
 	// ================================================================================
 
 	// Remove PROJECT
-	private void removeProject() {
+	private void deleteProject() {
 		try {
 			if (UserInterface.getCurrentProjectIndex() != -1 && projectsJList.getSelectedValue() == UserInterface.getCurrentProject()) {
 				JOptionPane.showMessageDialog(this, "Can't remove current project");
@@ -887,7 +927,7 @@ public class GUIForm extends javax.swing.JFrame {
 				int result = JOptionPane.showConfirmDialog(this, "Are you sure you want to delete this project?", null, JOptionPane.YES_NO_OPTION);
 				if (result == JOptionPane.YES_OPTION) {
 					try {
-						UserInterface.removeProject((Project) projectsJList.getSelectedValue());
+						UserInterface.deleteProject((Project) projectsJList.getSelectedValue());
 						JOptionPane.showMessageDialog(this, "Project removed!");
 						refreshProjectsList(projectsJList, homeProjectsJList);
 					} catch (IOException | WebserviceException ex) {
@@ -896,20 +936,22 @@ public class GUIForm extends javax.swing.JFrame {
 					} finally {
 						clearFieldsOnPanel(projectEditFieldsJPanel);
 						toggleButtonStates();
+						selectNewItem(projectsJList, tasksJList);
 					}
 				}
 			}
-		} catch (HeadlessException | GUIException e) {
+		} catch (GUIException e) {
 			e.printStackTrace();
 		}
 	}
 
 	// Remove TASK
-	private void removeTask() {
+	private void deleteTask() {
 		int result = JOptionPane.showConfirmDialog(this, "Are you sure you want to delete this task?", null, JOptionPane.YES_NO_OPTION);
 		if (result == JOptionPane.YES_OPTION) {
 			try {
-				UserInterface.removeTask((Taak) tasksJList.getSelectedValue());
+				UserInterface.deleteTask((Taak) tasksJList.getSelectedValue());
+				selectNewItem(tasksJList);
 				JOptionPane.showMessageDialog(this, "Task removed!");
 			} catch (GUIException | IOException | WebserviceException ex) {
 				ex.printStackTrace();
@@ -922,14 +964,15 @@ public class GUIForm extends javax.swing.JFrame {
 	}
 
 	// Remove CLIENT
-	private void removeClient() {
+	private void deleteClient() {
 		int result = JOptionPane.showConfirmDialog(this, "Are you sure you want to delete this client?", null, JOptionPane.YES_NO_OPTION);
 		if (result == JOptionPane.YES_OPTION) {
 			try {
-				UserInterface.removeClient((Opdrachtgever) clientsJList.getSelectedValue());
+				UserInterface.deleteClient((Opdrachtgever) clientsJList.getSelectedValue());
 				refreshClientsList(clientsJList);
 				clearFieldsOnPanel(clientFieldsJPanel);
 				toggleButtonStates();
+				selectNewItem(clientsJList);
 				JOptionPane.showMessageDialog(this, "Client removed!");
 			} catch (GUIException | IOException | WebserviceException ex) {
 				ex.printStackTrace();
@@ -1195,7 +1238,7 @@ public class GUIForm extends javax.swing.JFrame {
 			refreshProjectsList(projectsJList, homeProjectsJList);
 			refreshTasksList(UserInterface.getCurrentProject(), tasksJList);
 			clearFieldsOnPanel(taskFieldsJPanel);
-			tasksJList.clearSelection();
+			selectNewItem(tasksJList);
 		} catch (GUIException ex) {
 			ex.printStackTrace();
 			JOptionPane.showMessageDialog(this, ex.getMessage());
@@ -1235,6 +1278,15 @@ public class GUIForm extends javax.swing.JFrame {
 		ingelogdJLabel.setForeground(Color.GREEN);
 		refreshProjectsList(projectsJList, homeProjectsJList);
 		refreshClientsList(clientsJList);
+		selectNewItem(projectsJList, tasksJList, clientsJList);
+	}
+
+	// sets selected item to < new ... >
+	private void selectNewItem(JList... lists) {
+		for (JList list : lists) {
+			list.setSelectedIndex(list.getModel().getSize() - 1);
+			list.ensureIndexIsVisible(list.getSelectedIndex());
+		}
 		refreshTreeView(exportTree, UserInterface.getProjects());
 	}
 
@@ -1292,7 +1344,7 @@ public class GUIForm extends javax.swing.JFrame {
 			if (combobox.getSelectedItem().getClass().equals(String.class)) {
 				creatingProject = true;
 				contentJTabbedPane.setSelectedIndex(3);
-				clientsJList.setSelectedValue(NEWCLIENTITEM, true);
+				selectNewItem(clientsJList);
 			}
 		}
 	}
