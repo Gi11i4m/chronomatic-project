@@ -78,9 +78,9 @@ public class Taak {
 	}
 	
 	@GET
-	@Path("update/{sessionKey}/{beginTijd}/{estimatedEnd}/{commentaar}/{taakID}/{voltooid}")
+	@Path("update/{sessionKey}/{naam}/{beginTijd}/{estimatedEnd}/{commentaar}/{taakID}/{voltooid}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public String updateTaak(@PathParam("sessionKey") String sessionKey,@PathParam("beginTijd") int beginTijd, @PathParam("estimatedEnd") int estimatedEnd, @PathParam("commentaar") String commentaar,@PathParam("voltooid") boolean voltooid, @PathParam("taakID") int taakID) {
+	public String updateTaak(@PathParam("sessionKey") String sessionKey,@PathParam("beginTijd") int beginTijd, @PathParam("naam") String naam, @PathParam("estimatedEnd") int estimatedEnd, @PathParam("commentaar") String commentaar, @PathParam("taakID") int taakID,@PathParam("voltooid") boolean voltooid) {
 		
 		Connection con = DatabaseContainer.getConnection();
 		int userID = Authentication.getUserId(sessionKey);
@@ -88,7 +88,7 @@ public class Taak {
 		try {
 			if(userID > 0) { 
 				// Conditionele query
-				String query = "UPDATE taken AS T, projecten AS P SET T.begin_tijd = "+beginTijd+", T.verwacht_eind = "+estimatedEnd+", T.commentaar = '"+commentaar+"', T.voltooid = "+voltooid+" WHERE T.ID = "+taakID+" AND P.ID = T.projecten_ID AND P.gebruikers_ID = "+userID;
+				String query = "UPDATE taken AS T SET T.naam = '"+naam+"',T.begin_tijd = "+beginTijd+", T.verwacht_eind = "+estimatedEnd+", T.commentaar = '"+commentaar+"', T.voltooid = "+voltooid+" WHERE T.ID = "+taakID+"";
 				System.out.println(query);
 				if(Database.executeNullQuery(con,query))
 					return "[{\"success\":true}]";
@@ -115,7 +115,7 @@ public class Taak {
 		
 		try {
 			if(userID > 0) { 
-				String query = "DELETE FROM taken WHERE ID = " + taakID + " AND (SELECT COUNT(P.ID) FROM projecten AS P INNER JOIN taken AS T ON T.ID = " + taakID + " AND T.projecten_ID = T.ID AND P.gebruikers_ID = " + userID + ") > 0";
+				String query = "DELETE FROM taken WHERE ID = " + taakID + "";
 				if(Database.executeNullQuery(con,query))
 					return "[{\"success\":true}]";
 				else 
