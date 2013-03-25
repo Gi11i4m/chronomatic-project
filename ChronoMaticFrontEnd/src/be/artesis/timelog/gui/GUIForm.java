@@ -862,7 +862,7 @@ public class GUIForm extends javax.swing.JFrame {
 			JOptionPane.showMessageDialog(this, "Task added!");
 			refreshTasksList(UserInterface.getCurrentProject(), tasksJList);
 		} catch (DataInputException | ParseException | GUIException | IOException | WebserviceException | JSONException e) {
-			// TODO Auto-generated catch block
+			JOptionPane.showMessageDialog(this, e.getMessage());
 			e.printStackTrace();
 		}
 	}
@@ -886,9 +886,9 @@ public class GUIForm extends javax.swing.JFrame {
 			o = UserInterface.createClient(naam, voornaam, bedrijfsnaam, email, telefoonnummer);
 			JOptionPane.showMessageDialog(this, "Client added!");
 			if (projectsJList.getSelectedValue().equals(NEWPROJECTITEM)) {
-				refreshJClientsComboBox(null, projectClientsJComboBox);
+				refreshClientsComboBox(null, projectClientsJComboBox);
 			} else {
-				refreshJClientsComboBox((Project) projectsJList.getSelectedValue(), projectClientsJComboBox);
+				refreshClientsComboBox((Project) projectsJList.getSelectedValue(), projectClientsJComboBox);
 			}
 			refreshClientsList(clientsJList);
 			if (creatingProject) {

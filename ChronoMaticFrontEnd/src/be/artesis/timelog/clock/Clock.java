@@ -80,7 +80,7 @@ public class Clock {
         return System.currentTimeMillis() / 1000;
     }
 
-    //formaat yyyy/mm/dd hh:mm:ss
+    //formaat dd/mm/yyyy - hh:mm:ss
     public static String timestampToString(long unixTimeStamp) {
         Timestamp t = new Timestamp(unixTimeStamp * 1000);
         Calendar c = GregorianCalendar.getInstance();
