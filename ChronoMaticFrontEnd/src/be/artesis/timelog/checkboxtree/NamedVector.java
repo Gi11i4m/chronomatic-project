@@ -2,24 +2,22 @@ package be.artesis.timelog.checkboxtree;
 
 import java.util.Vector;
 
-import be.artesis.timelog.view.Project;
-
 @SuppressWarnings({ "unchecked", "serial", "rawtypes" })
 public class NamedVector extends Vector {
-	Project project;
+	String text;
 	
-	public NamedVector(Project project) {
-		this.project = project;
+	public NamedVector(String text) {
+		this.text = text;
 	}
 
-	public NamedVector(Project project, Object elements[]) {
-		this.project = project;
+	public NamedVector(String text, Object elements[]) {
+		this.text = text;
 		for (int i = 0, n = elements.length; i < n; i++) {
 			add(elements[i]);
 		}
 	}
 
 	public String toString() {
-		return "Project : " + project.getNaam();
+		return text;
 	}
 }

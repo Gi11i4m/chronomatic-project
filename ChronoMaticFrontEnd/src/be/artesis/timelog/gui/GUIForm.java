@@ -63,6 +63,7 @@ import javax.swing.JComboBox;
 import javax.swing.SwingConstants;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.JPasswordField;
 
 /**
  * @author Gilliam
@@ -616,15 +617,16 @@ public class GUIForm extends javax.swing.JFrame {
 		importExportTabbedPane.addTab("Export", null, exportJPanel, "Export your tasks here");
 		importExportTabbedPane.setForegroundAt(0, Color.WHITE);
 		exportJPanel.setLayout(null);
+		exportJScrollPane = new JScrollPane();
+		exportJScrollPane.setBounds(10, 11, 320, 347);
+		exportJPanel.add(exportJScrollPane);
 
 		exportTree = new JTree();
+		exportJScrollPane.setViewportView(exportTree);
 		exportTree.setModel(new DefaultTreeModel(new DefaultMutableTreeNode("Tasks to export show here") {
 			{
 			}
 		}));
-		exportJScrollPane = new JScrollPane(exportTree);
-		exportJScrollPane.setBounds(10, 11, 320, 347);
-		exportJPanel.add(exportJScrollPane);
 
 		exportJButton = new JButton("Export");
 		exportJButton.addActionListener(new ActionListener() {
@@ -632,7 +634,7 @@ public class GUIForm extends javax.swing.JFrame {
 				exportButtonClicked(arg0);
 			}
 		});
-		exportJButton.setBounds(10, 369, 320, 21);
+		exportJButton.setBounds(10, 367, 320, 23);
 		exportJPanel.add(exportJButton);
 		importExportTabbedPane.setBackgroundAt(0, Color.DARK_GRAY);
 
@@ -654,7 +656,7 @@ public class GUIForm extends javax.swing.JFrame {
 		importJPanel.add(importJScrollPane);
 
 		importJButton = new JButton("Import");
-		importJButton.setBounds(10, 369, 320, 21);
+		importJButton.setBounds(10, 367, 320, 23);
 		importJPanel.add(importJButton);
 
 		optionsJPanel.setBackground(Color.GRAY);
@@ -952,19 +954,19 @@ public class GUIForm extends javax.swing.JFrame {
 
 		for (int i = 0; i < projects.size(); i++) {
 			Project p = ((ArrayList<Project>) projects).get(i);
-			projectOptions[i] = new CheckBoxNode(p, false);
+			projectOptions[i] = new CheckBoxNode(p.getNaam(), false);
 
 			CheckBoxNode taskOptions[] = new CheckBoxNode[p.getTaken().size()];
 			for (int j = 0; j < p.getTaken().size(); j++) {
 				Taak t = p.getTaken().get(j);
-				taskOptions[j] = new CheckBoxNode(t, false);
+				taskOptions[j] = new CheckBoxNode(t.getNaam(), false);
 			}
 
-			projectVector = new NamedVector(p, taskOptions);
+			projectVector = new NamedVector(p.getNaam(), taskOptions);
 			rootNodes[i] = projectVector;
 		}
 
-		Vector rootVector = new NamedVector(new Project(), rootNodes);
+		Vector rootVector = new NamedVector("Root", rootNodes);
 		tree = new JTree(rootVector);
 
 		CheckBoxNodeRenderer renderer = new CheckBoxNodeRenderer();
@@ -972,6 +974,10 @@ public class GUIForm extends javax.swing.JFrame {
 
 		tree.setCellEditor(new CheckBoxNodeEditor(tree));
 		tree.setEditable(true);
+
+		JFrame f = new JFrame();
+		f.getContentPane().add(tree);
+		f.setVisible(true);
 	}
 
 	// ================================================================================
