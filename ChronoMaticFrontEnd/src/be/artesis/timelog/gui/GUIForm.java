@@ -29,6 +29,7 @@ import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
@@ -514,11 +515,10 @@ public class GUIForm extends javax.swing.JFrame {
 					boolean completed = taskCompletedJCheckBox.isSelected();
 					long startdate = taskStartDateChooser.getDate().getTime() / 1000;
 					long enddate = taskEndDateChooser.getDate().getTime() / 1000;
-					
+
 					if (tasksJList.getSelectedValue().equals(NEWTASKITEM)) {
 						createTask(name, startdate, enddate, comment, completed);
-					}
-					else {
+					} else {
 						updateTask(name, startdate, enddate, comment, completed);
 					}
 				} catch (NullPointerException ex) {
@@ -529,7 +529,7 @@ public class GUIForm extends javax.swing.JFrame {
 					loadProjectInfo(projectsJList.getSelectedIndex());
 				}
 			}
-			});
+		});
 
 		taskTotalWorkedJLabel = new JLabel("Total worked");
 		taskTotalWorkedJLabel.setForeground(Color.WHITE);
@@ -842,13 +842,14 @@ public class GUIForm extends javax.swing.JFrame {
 			e.printStackTrace();
 		}
 	}
-	
+
 	// Update existing project
-	private void updateProject(String name, long startdate, long enddate, int opdrachtgeverID){
+	private void updateProject(String name, long startdate, long enddate, int opdrachtgeverID) {
 		try {
 			UserInterface.updateProject(projectsJList.getSelectedIndex(), name, startdate, enddate, opdrachtgeverID);
 			JOptionPane.showMessageDialog(this, "Project edited!");
-			refreshProjectsList(projectsJList, homeProjectsJList);;
+			refreshProjectsList(projectsJList, homeProjectsJList);
+			;
 		} catch (DataInputException | IOException | WebserviceException | ParseException e) {
 			JOptionPane.showMessageDialog(this, e.getMessage());
 			e.printStackTrace();
@@ -856,7 +857,7 @@ public class GUIForm extends javax.swing.JFrame {
 	}
 
 	// Create new task
-	private void createTask(String name, long startdate, long enddate, String comment, boolean completed){
+	private void createTask(String name, long startdate, long enddate, String comment, boolean completed) {
 		try {
 			UserInterface.createTask(name, startdate, enddate, comment, completed);
 			JOptionPane.showMessageDialog(this, "Task added!");
@@ -866,9 +867,9 @@ public class GUIForm extends javax.swing.JFrame {
 			e.printStackTrace();
 		}
 	}
-	
+
 	// Update existing task
-	private void updateTask(String name, long startdate, long enddate, String comment, boolean completed){
+	private void updateTask(String name, long startdate, long enddate, String comment, boolean completed) {
 		try {
 			UserInterface.updateTask(tasksJList.getSelectedIndex(), name, startdate, enddate, comment, completed);
 			JOptionPane.showMessageDialog(this, "Task edited!");
@@ -1054,6 +1055,7 @@ public class GUIForm extends javax.swing.JFrame {
 		}
 	}
 
+	// Refresh CLIENTS combobox
 	private void refreshClientsComboBox(Project p, JComboBox... boxes) {
 		for (JComboBox box : boxes) {
 			DefaultComboBoxModel listmodel = new DefaultComboBoxModel();
@@ -1070,38 +1072,19 @@ public class GUIForm extends javax.swing.JFrame {
 		}
 	}
 
-	// Refresh import (/ export?) tree view
+	// Refresh IMPORT / EXPORT treeview
 	private void refreshTreeView(JTree tree, ArrayList projects) {
-		//TreeNode root = new TreeNode();
-		//DefaultTreeModel treeModel = new DefaultTreeModel(, true)
 
-		Object rootNodes[] = new Object[projects.size()];
-
-		Vector projectVector = null;
-		CheckBoxNode projectOptions[] = new CheckBoxNode[projects.size()];
-
+		DefaultMutableTreeNode top = new DefaultMutableTreeNode("Tasks");
 		for (int i = 0; i < projects.size(); i++) {
 			Project p = ((ArrayList<Project>) projects).get(i);
-			projectOptions[i] = new CheckBoxNode(p.getNaam(), false);
-
-			CheckBoxNode taskOptions[] = new CheckBoxNode[p.getTaken().size()];
 			for (int j = 0; j < p.getTaken().size(); j++) {
 				Taak t = p.getTaken().get(j);
-				taskOptions[j] = new CheckBoxNode(t.getNaam(), false);
+				top.add(new DefaultMutableTreeNode(t, false));
 			}
-
-			projectVector = new NamedVector(p.getNaam(), taskOptions);
-			rootNodes[i] = projectVector;
 		}
-
-		Vector rootVector = new NamedVector("Projects", rootNodes);
-		tree = new JTree(rootVector);
-
-		CheckBoxNodeRenderer renderer = new CheckBoxNodeRenderer();
-		tree.setCellRenderer(renderer);
-
-		tree.setCellEditor(new CheckBoxNodeEditor(tree));
-		tree.setEditable(true);
+		tree = new JTree(top);
+		exportJScrollPane = new JScrollPane(tree);
 	}
 
 	// ================================================================================
