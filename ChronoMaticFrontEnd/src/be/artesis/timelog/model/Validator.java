@@ -36,7 +36,8 @@ public class Validator
 	public boolean login(String gebruikersnaam, String paswoord) throws IOException, JSONException, WebserviceException, NoSuchAlgorithmException{
         
 		MD5Generator MD5 = new MD5Generator();
-		JSONObject jObject = Connection.getObject("auth/login/" + gebruikersnaam+ "/"+ MD5.gen(paswoord));
+		JSONObject jObject = Connection.getObject("auth/login/" + gebruikersnaam+ "/"+ paswoord);
+		System.out.println(MD5.gen(paswoord));
         
         
         if(jObject.has("error")){

@@ -166,7 +166,19 @@ public class LoginForm extends javax.swing.JFrame implements ActionListener {
 	}
 
 	public void login() {
+		//String paswoord = null;
 		try {
+			//Gewoon
+			//if(passwordJPasswordField.isEnabled()) {
+				//paswoord = new String(passwordJPasswordField.getPassword());
+			//}
+			//Uit register
+			/*else {
+				paswoord = WinRegistry.readString (
+					    WinRegistry.HKEY_CURRENT_USER,
+						   "SOFTWARE\\ChronoMatic",
+						   "password");*/
+			//}
             if (usernameJTextField.getText().equals("")) {
                 
                     UserInterface.setUser(new Gebruiker("Flebus", "Gilliam", "Gi11i4m", "gi11i4m@gmail.com")); // tijdelijke user
@@ -179,13 +191,16 @@ public class LoginForm extends javax.swing.JFrame implements ActionListener {
                     UserInterface.getUser().getProjects().get(1).addTaak(new Taak("Test taak", 1343059472, 1453059472, ""));
                 this.dispose();
                 
-            } else if (validator.login(usernameJTextField.getText(), new String(passwordJPasswordField.getPassword()))) {
+            } else if (validator.login(usernameJTextField.getText(), new String(passwordJPasswordField.getPassword()) )) {
             	loadUserData();
             	
-            	if(saveUserCheckBox.isSelected()) {
+            	/*if(saveUserCheckBox.isSelected()) {
         			saveUserCredentials();
         		}
-            	
+            	else {
+            		//WinRegistry.deleteKey(WinRegistry.HKEY_CURRENT_USER, "SOFTWARE\\ChronoMatic");
+            	}
+            	*/
             	this.dispose();
             	/*try {
                     Thread.sleep(5000);
@@ -260,8 +275,8 @@ public class LoginForm extends javax.swing.JFrame implements ActionListener {
 		usernameJLabel = new JLabel("Gebruikersnaam:");
 		paswoordJLabel = new JLabel("Wachtwoord:");
 		aanmeldenButton = new JButton("Aanmelden");
-		usernameJTextField = new JTextField("p");
-		passwordJPasswordField = new JPasswordField("p");
+		usernameJTextField = new JTextField();
+		passwordJPasswordField = new JPasswordField();
 		newAccountJLabel = new JLabel("Of maak een account aan");
 		socialMediaJLabel = new JLabel("Of meld u aan bij");
 		browserGoBackJButton = new JButton("Aanmelden met een andere account");
@@ -372,15 +387,20 @@ public class LoginForm extends javax.swing.JFrame implements ActionListener {
 			}
 		});
 		
+		// Vul de user data in uit register
 		try {
-			usernameJTextField.setText(WinRegistry.readString (
+			String username = WinRegistry.readString (
 				    WinRegistry.HKEY_CURRENT_USER,
 				   "SOFTWARE\\ChronoMatic",
-				   "username"));
-			passwordJPasswordField.setText(WinRegistry.readString (
-				    WinRegistry.HKEY_CURRENT_USER,
-				   "SOFTWARE\\ChronoMatic",
-				   "password"));
+				   "username");
+			
+			if(username != null) {
+				usernameJTextField.setText(username);
+				saveUserCheckBox.setSelected(true);
+				//passwordJPasswordField.setEnabled(false);
+				passwordJPasswordField.setText("00000000");
+				
+			}
 		} catch (IllegalArgumentException | IllegalAccessException | InvocationTargetException e) {
 			e.printStackTrace();
 		}
