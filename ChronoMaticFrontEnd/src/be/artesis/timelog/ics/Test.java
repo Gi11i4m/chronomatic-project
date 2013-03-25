@@ -39,7 +39,7 @@ public abstract class Test {
 		try {
 			System.out.println("import: ");
 			
-			ArrayList<Taak> taken = IcsImporteren.importeren("C:\\Users\\Yolan\\Desktop\\mijnIcs.ics");
+			ArrayList<Taak> taken = IcsImporteren.importTasks("C:\\Users\\Yolan\\Desktop\\mijnIcs.ics");
 			System.out.println(taken);
 			for(Taak taak: taken){
 				System.out.println("begin datum:  " +taak.getBegindatum());

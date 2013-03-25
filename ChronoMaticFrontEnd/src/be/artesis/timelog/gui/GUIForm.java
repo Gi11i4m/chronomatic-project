@@ -202,7 +202,9 @@ public class GUIForm extends javax.swing.JFrame {
 		homeProjectsJList.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyPressed(KeyEvent arg0) {
-				setCurrentProjectJList(arg0);
+				if (arg0.getKeyCode() == KeyEvent.VK_ENTER) {
+					setCurrentProjectGUI(homeProjectsJList.getSelectedIndex());
+				}
 			}
 		});
 		homeProjectsJList.addListSelectionListener(new ListSelectionListener() {
@@ -1136,7 +1138,7 @@ public class GUIForm extends javax.swing.JFrame {
 	}
 
 	// ================================================================================
-	// Other methods (nakijken)
+	// Other methods, FIXME nakijken
 	// ================================================================================
 
 	private void workClicked(java.awt.event.MouseEvent evt) {
@@ -1181,6 +1183,7 @@ public class GUIForm extends javax.swing.JFrame {
 		}
 	}
 
+	// FIXME methode maken met 2 parameters en overal waar deze aangeroepen wordt de juiste parameters meegeven
 	// Change button states (enabled / disabled) looking at selected indexes
 	private void toggleButtonStates() {
 		boolean taskSelected = tasksJList.getSelectedIndex() != -1;
@@ -1212,6 +1215,7 @@ public class GUIForm extends javax.swing.JFrame {
 			projectsJList.setSelectedIndex(index);
 			refreshProjectsList(projectsJList, homeProjectsJList);
 			refreshTasksList(UserInterface.getCurrentProject(), tasksJList);
+			refreshTreeView(exportTree, UserInterface.getProjects());
 			clearFieldsOnPanel(taskFieldsJPanel);
 			selectNewItem(tasksJList);
 		} catch (GUIException ex) {
@@ -1247,6 +1251,7 @@ public class GUIForm extends javax.swing.JFrame {
 		}
 	}
 
+	// Initialiseer statusvelden (linksboven) en project en client lijsten
 	private void guiOpened(java.awt.event.WindowEvent evt) {
 		ingelogdJLabel.setText(UserInterface.getUser().getVolledigeNaam());
 		ingelogdJLabel.setForeground(Color.GREEN);
@@ -1268,6 +1273,7 @@ public class GUIForm extends javax.swing.JFrame {
 		toggleButtonStates();
 	}
 
+	// FIXME, samenvoegen met andere listvaluechanged event handlers
 	private void homeProjectListValueChanged(ListSelectionEvent evt) {
 		if (homeProjectsJList.getSelectedIndex() != -1) {
 			refreshTasksList((Project) homeProjectsJList.getSelectedValue(), homeTasksJList);
@@ -1276,13 +1282,6 @@ public class GUIForm extends javax.swing.JFrame {
 
 	private void exportButtonClicked(ActionEvent arg0) {
 
-	}
-
-	private void setCurrentProjectJList(KeyEvent arg0) {
-		JList list = (JList) arg0.getSource();
-		if (arg0.getKeyCode() == KeyEvent.VK_ENTER) {
-			setCurrentProjectGUI(list.getSelectedIndex());
-		}
 	}
 
 	private void taskJListValueChanged(ListSelectionEvent arg0) {
