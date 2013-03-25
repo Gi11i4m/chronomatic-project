@@ -951,6 +951,7 @@ public class GUIForm extends javax.swing.JFrame {
 		if (result == JOptionPane.YES_OPTION) {
 			try {
 				UserInterface.deleteTask((Taak) tasksJList.getSelectedValue());
+				refreshTasksList(UserInterface.getCurrentProject(), tasksJList);
 				selectNewItem(tasksJList);
 				JOptionPane.showMessageDialog(this, "Task removed!");
 			} catch (GUIException | IOException | WebserviceException ex) {
