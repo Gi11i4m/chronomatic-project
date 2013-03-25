@@ -17,19 +17,27 @@ import org.w3c.dom.Document;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 
+
+import java.util.Set;
+import javafx.application.Application;
+import javafx.collections.ListChangeListener;
+import javafx.collections.ListChangeListener.Change;
+import javafx.scene.*;
+import javafx.scene.web.WebView;
+import javafx.stage.Stage;
 public class AuthBrowser {
 	
 	private WebEngine webEngine;
 	private Group group;
 	private Scene scene;
 	private WebView webView;
-	private final int BROWSERWIDTH = 720;
-	private final int BROWSERHEIGHT = 490;
-	private LoginDialog loginDialog;
+	private final int BROWSERWIDTH = 714;
+	private final int BROWSERHEIGHT = 487;
+	private LoginForm loginDialog;
 	private String Url;
 	private SocialMedia social;
 	
-	public AuthBrowser(final LoginDialog loginDialog, SocialMedia social) {
+	public AuthBrowser(final LoginForm loginDialog, SocialMedia social) {
     	this.social = social;
     	this.loginDialog = loginDialog;
 	}
@@ -57,16 +65,15 @@ public class AuthBrowser {
         });
     }
 	
-	private void startBrowser(final JFXPanel BrowserPanel) {
+	private void startBrowser(final JFXPanel browserPanel) {
         group = new Group();
         scene = new Scene(group);
-        BrowserPanel.setScene(scene);
+        browserPanel.setScene(scene);
         webView = new WebView();
         group.getChildren().add(webView);
-        //webView.setMinSize(720, 500);
+        webView.setMinSize(BROWSERWIDTH, BROWSERHEIGHT);
         webView.setMaxSize(BROWSERWIDTH, BROWSERHEIGHT);
         webEngine = webView.getEngine();
-        
         webEngine.load(Url);
         
         //webEngine.javaScriptEnabledProperty();
@@ -93,25 +100,25 @@ public class AuthBrowser {
 								// TODO Auto-generated catch block
 								e.printStackTrace();
 							}*/
-                            loginDialog.loginExtern(url.substring(70), "Google");
+                            loginDialog.loginExtern(url.substring(70));
                             exit(); 
                         }
                         //Linkedin
                         if(url != null && url.startsWith("http://www.linkedin.com/chronomatic?code=")) {
                         	//System.out.println(url.substring(41,156));
-                            loginDialog.loginExtern(url.substring(41,156), "Linkedin");
+                            loginDialog.loginExtern(url.substring(41,156));
                             exit(); 
                         }
                         //Facebook
                         if(url != null && url.startsWith("https://www.facebook.com/connect/login_success.html")) {
-                        	//System.out.println(url.substring(65, 195));
-                            loginDialog.loginExtern(url.substring(65), "Facebook");
+                        	//System.out.println(url.substring(65));
+                            loginDialog.loginExtern(url.substring(65));
                             exit(); 
                         }
                         //Micosoft
                         if(url != null && url.startsWith("http://www.dvl-sanitair.be/")) {
                         	//System.out.println(url.substring(33,69));
-                            loginDialog.loginExtern(url.substring(33, 69), "Microsoft");
+                            loginDialog.loginExtern(url.substring(33, 69));
                             exit(); 
                         }
                     }

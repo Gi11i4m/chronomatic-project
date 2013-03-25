@@ -7,7 +7,7 @@ public class Google extends SocialMedia {
 	private final String clientID = "131195431047.apps.googleusercontent.com";
 	private final String clientSecret = "N2CHWpyn35OdOE1KqU_lXNx6";
 	private final String redirectUrl = "https://www.google.be/oauth2callback";
-	private final String scope = "https://www.googleapis.com/auth/userinfo.email";
+	private final String scope = "https://www.googleapis.com/auth/userinfo.email+https://www.googleapis.com/auth/userinfo.profile";
 	private final String responseType = "code";
 	private final String authorizeTokenUrl = "https://accounts.google.com/o/oauth2/auth?";
 	private final String accesTokenUrl = "https://accounts.google.com/o/oauth2/token";

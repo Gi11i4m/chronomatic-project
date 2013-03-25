@@ -4,7 +4,10 @@ import java.awt.BorderLayout;
 
 import be.artesis.timelog.controller.InserterLocal;
 import be.artesis.timelog.controller.InserterServer;
-import be.artesis.timelog.model.CheckExistingUsernames;
+
+import be.artesis.timelog.controller.Inserter;
+import be.artesis.timelog.model.ExistingUsernames;
+import be.artesis.timelog.secure.MD5Generator;
 import be.artesis.timelog.view.DataControle;
 import be.artesis.timelog.view.DataInputException;
 import javax.swing.JOptionPane;
@@ -15,15 +18,15 @@ import java.awt.Component;
  *
  * @author Gilliam
  */
-public class NewUserDialog extends javax.swing.JPanel {
+public class NewUserPanel extends javax.swing.JPanel {
 
     /**
      * Creates new form NewUserDialog
      * @param parent
      * @param modal
      */
-	LoginDialog parent;
-    public NewUserDialog(LoginDialog parent) {
+	LoginForm parent;
+    public NewUserPanel(LoginForm parent) {
     	this.parent = parent;
         initComponents();
     }
@@ -104,7 +107,7 @@ public class NewUserDialog extends javax.swing.JPanel {
         setFocusTraversalPolicy(new FocusTraversalOnArray(new Component[]{firstNameJTextField, nameJTextField, emailJTextField, usernameJTextField, passwordJPasswordField, registerJButton, passwordRepeatJPasswordField}));
     }
 
-    private void registerJButtonClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_registerJButtonClicked
+    private void registerJButtonClicked(java.awt.event.MouseEvent evt) {
         // maak een nieuwe gebruiker aan aan de hand van volgende velden:
         try {
             String firstName = firstNameJTextField.getText();
@@ -113,14 +116,17 @@ public class NewUserDialog extends javax.swing.JPanel {
             String email = emailJTextField.getText();
             String password = new String(passwordJPasswordField.getPassword());
             String repeatPassword = new String(passwordRepeatJPasswordField.getPassword());
+            
             if (!DataControle.persoonNaamCorrect(firstName) || !DataControle.persoonNaamCorrect(name)) {
                 throw new DataInputException("Name contains illegal charaters");
             }
+            
             if(!DataControle.naamCorrect(username)){
                 throw new DataInputException("Username contains illegal characters");
             }
+            
             //check of username al bestaat
-            if (CheckExistingUsernames.check(email)) {
+            if (!ExistingUsernames.check(username)) {
             	throw new DataInputException("Username already exists");
 				
 			}
@@ -130,12 +136,13 @@ public class NewUserDialog extends javax.swing.JPanel {
             if (!password.equals(repeatPassword)) {
                 throw new DataInputException("Passwords do not match");
             }
+            
             if (!DataControle.emailCorrect(email)) {
                 throw new DataInputException("Wrong email format");
             }
-            
-            InserterServer.CreateUser(name, firstName, username, password, email);
-            
+            MD5Generator MD = new MD5Generator();
+            Inserter.CreateUser(name, firstName, username, MD.gen(password), email);
+            System.out.println(password);
             JOptionPane.showMessageDialog(this, "Your account has been created!");
             
             parent.displayTab("BASISPANEL");
@@ -144,11 +151,10 @@ public class NewUserDialog extends javax.swing.JPanel {
         }
     }
 
-    private void passwordJPasswordFieldKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_passwordJPasswordFieldKeyReleased
+    private void passwordJPasswordFieldKeyReleased(java.awt.event.KeyEvent evt) {
         passwordStrengthJLabel.setText("Strength: " + DataControle.passwoordSterkte(passwordJPasswordField.getPassword()));
-    }//GEN-LAST:event_passwordJPasswordFieldKeyReleased
+    }
 
-    // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel emailJLabel;
     private javax.swing.JTextField emailJTextField;
     private javax.swing.JLabel firstNameJLabel;
@@ -163,5 +169,4 @@ public class NewUserDialog extends javax.swing.JPanel {
     private javax.swing.JButton registerJButton;
     private javax.swing.JLabel usernameJLabel;
     private javax.swing.JTextField usernameJTextField;
-    // End of variables declaration//GEN-END:variables
 }

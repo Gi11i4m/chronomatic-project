@@ -11,7 +11,7 @@ public class Facebook extends SocialMedia {
 	private final String responseType = "token";
 	private final String authorizeTokenUrl = "https://www.facebook.com/dialog/oauth?";
 	private final String accesTokenUrl = "";
-	private final String userInfoUrl = "https://graph.facebook.com/me?fields=email&";
+	private final String userInfoUrl = "https://graph.facebook.com/me?fields=first_name,last_name,email&";
 	
 	public String getClientID() {
 		return clientID;

@@ -10,13 +10,7 @@ public class Main {
     public static void main(String args[]) {
     	Validator validator = Validator.getInstance();
         GUIForm gui = new GUIForm(validator);
-        LoginDialog login = new LoginDialog(gui, validator);
+        LoginForm login = new LoginForm(gui, validator);
         login.setVisible(true);
-       /* if (login.getResult()) {
-            gui.setLocationRelativeTo(login);
-            gui.setVisible(true);
-        } else {
-            gui.dispose();
-        }*/
     }
 }

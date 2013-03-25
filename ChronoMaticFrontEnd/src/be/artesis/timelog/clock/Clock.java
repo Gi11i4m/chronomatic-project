@@ -46,7 +46,7 @@ public class Clock {
             stopTime = generateUnixTimestamp();
             return stopTime;
         } else {
-            throw new ClockException("Clock is not running or pauzed");
+            throw new ClockException("Clock is not running");
         }
     }
 

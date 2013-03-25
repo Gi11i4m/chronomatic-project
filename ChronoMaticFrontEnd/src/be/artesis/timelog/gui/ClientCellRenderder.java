@@ -34,7 +34,7 @@ public class ClientCellRenderder extends JLabel implements ListCellRenderer {
 			try {
 				if (o.getID() == UserInterface.getCurrentProject().getOpdrachtgeverId()) {
 					// FIXME andere kleur?
-					renderer.setForeground(Color.getHSBColor(255, 0.83f, 0.83f));
+					renderer.setForeground(new Color(25, 97, 252));
 				}
 			} catch (GUIException ex) {
 				// Dit moet leeg zijn

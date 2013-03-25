@@ -335,27 +335,28 @@ public class WorkDialog extends javax.swing.JDialog {
 		} else if (clock.isPaused()) {
 			try {
 				pauseStop = clock.pauseToggle();
+
+				getContentPane().setBackground(Color.DARK_GRAY);
+				startPauseJButton.setText("Pause");
+
+				saveTimeSpan(pauseStart, pauseStop, true);
+				this.setTitle("Total paused: " + Clock.longTimeToString(totalPause, false));
 			} catch (ClockException ex) {
 				JOptionPane.showMessageDialog(this, ex.getMessage());
 			}
-
-			getContentPane().setBackground(Color.DARK_GRAY);
-			startPauseJButton.setText("Pause");
-
-			saveTimeSpan(pauseStart, pauseStop, true);
-			this.setTitle("Total paused: " + Clock.longTimeToString(totalPause, false));
 
 		} else {
 			try {
 				pauseStart = clock.pauseToggle();
+
+				getContentPane().setBackground(Color.LIGHT_GRAY);
+				startPauseJButton.setText("Resume");
+				this.setTitle("Total worked: " + Clock.longTimeToString(clock.getRuntime() - totalPause, false));
 			} catch (ClockException ex) {
 				JOptionPane.showMessageDialog(this, ex.getMessage());
 			}
-
-			getContentPane().setBackground(Color.LIGHT_GRAY);
-			startPauseJButton.setText("Resume");
-			this.setTitle("Total worked: " + Clock.longTimeToString(clock.getRuntime() - totalPause, false));
 		}
+		updateClockAction();
 	}//GEN-LAST:event_startPauseJButtonMouseClicked
 
 	//Bevestingen (en opslaan indien nodig) voor het venster afsluiten

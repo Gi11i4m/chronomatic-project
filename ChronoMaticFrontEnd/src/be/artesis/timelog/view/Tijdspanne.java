@@ -9,9 +9,9 @@ public class Tijdspanne {
     //================================================================================
 	
     private long beginTijd;
-    private long eindTijd;
-    private boolean pauze;  
+    private long eindTijd;  
     private int id;
+    private boolean pauze;
 
     //================================================================================
     // Constructor 

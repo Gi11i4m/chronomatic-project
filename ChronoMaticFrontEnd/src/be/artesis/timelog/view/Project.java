@@ -3,6 +3,7 @@ package be.artesis.timelog.view;
 import be.artesis.timelog.clock.Clock;
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 
 public class Project implements Cloneable{
@@ -68,7 +69,15 @@ public class Project implements Cloneable{
     public ArrayList<Taak> getTaken() {
         return taken;
     }
-
+    
+    public void setTaken(Taak[] t){
+    	taken = new ArrayList(Arrays.asList(t));
+    }
+    
+    public Taak getTaak(int index){
+        return taken.get(index);
+    }    
+    
     public long getBegindatum() {
         return begindatum;
     }
@@ -173,18 +182,26 @@ public class Project implements Cloneable{
         return percent;
     }
     
-    public void setTaken(Taak[] taken) {
+    public void addTaken(Taak[] taken) {
         Collections.addAll(this.taken, taken);
     }
-    
-    public Taak getTaak(int index){
-        return taken.get(index);
-    }    
     
     //================================================================================
     // Extra
     //================================================================================
 
+    public boolean tasksAvailable(){
+    	if (taken.isEmpty()) {
+			return false;
+		}
+		for (Taak t : taken) {
+			if (!t.overTijd()) {
+				return true;
+			}
+		}
+		return false;
+    }
+    
     @Override
     public String toString() {
         return naam;
@@ -193,6 +210,7 @@ public class Project implements Cloneable{
     @Override
     public Object clone(){
         Project p = new Project(this.naam, this.opdrachtgeverId, this.begindatum, this.einddatum, this.id);
+        p.taken = this.taken;
         return p;
     }
 }

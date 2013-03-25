@@ -27,6 +27,7 @@ public class Updater {
 	}
 	// FIXME Indien dit niet lukt, effe checken hoe het enkele commits terug was en aanpassen
 	public static void updateTaak(String sessionKey, Taak taak) throws MalformedURLException, IOException, WebserviceException {
+		System.out.println("task/update/" + sessionKey + "/" + taak.getNaam() + "/" + taak.getBegindatum()+ "/" + taak.getGeschatteEinddatum() + "/" + taak.getCommentaar() + "/" + taak.getID() + "/" + taak.getCompleted());
 		Connection.execute("task/update/" + sessionKey + "/" + taak.getNaam() + "/" + taak.getBegindatum()+ "/" + taak.getGeschatteEinddatum() + "/" + taak.getCommentaar() + "/" + taak.getID() + "/" + taak.getCompleted());
     }
 	public static void updateTijdspanne(String sessionKey, Tijdspanne tijdspanne) throws IOException, WebserviceException{		 
