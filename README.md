@@ -29,3 +29,4 @@ TODO Client:
 
 	- Help tab? Eerste x openen, help dialog
 	- Event handlers (bv. list) combineren
+	test

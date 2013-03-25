@@ -12,16 +12,6 @@ import java.lang.reflect.InvocationTargetException;
 
 public class Voorbeeld_registry {
 
-	/**
-	 * @param args
-	 * @throws NoSuchAlgorithmException 
-	 * @throws InvocationTargetException 
-	 * @throws IllegalAccessException 
-	 * @throws IllegalArgumentException 
-	 * @throws IOException 
-	 * @throws CertificateException 
-	 * @throws KeyStoreException 
-	 */
 	public static void pain() throws NoSuchAlgorithmException, IllegalArgumentException, IllegalAccessException, InvocationTargetException, CertificateException, IOException, KeyStoreException {
 	
 		
