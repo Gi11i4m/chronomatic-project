@@ -975,9 +975,8 @@ public class GUIForm extends javax.swing.JFrame {
 		tree.setCellEditor(new CheckBoxNodeEditor(tree));
 		tree.setEditable(true);
 
-		JFrame f = new JFrame();
-		f.getContentPane().add(tree);
-		f.setVisible(true);
+		exportJScrollPane.invalidate();
+		exportJScrollPane.add(tree);
 	}
 
 	// ================================================================================
