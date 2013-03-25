@@ -966,7 +966,7 @@ public class GUIForm extends javax.swing.JFrame {
 			rootNodes[i] = projectVector;
 		}
 
-		Vector rootVector = new NamedVector("Root", rootNodes);
+		Vector rootVector = new NamedVector("Projects", rootNodes);
 		tree = new JTree(rootVector);
 
 		CheckBoxNodeRenderer renderer = new CheckBoxNodeRenderer();
@@ -975,8 +975,7 @@ public class GUIForm extends javax.swing.JFrame {
 		tree.setCellEditor(new CheckBoxNodeEditor(tree));
 		tree.setEditable(true);
 
-		exportJScrollPane.invalidate();
-		exportJScrollPane.add(tree);
+		exportTree.setModel(tree.getModel());
 	}
 
 	// ================================================================================
