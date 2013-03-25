@@ -26,10 +26,10 @@ public class MD5Generator {
         
         String pass = sb.toString();
         // Maak MD5 1000 maal, recursief
-        while (index < 1000) {
+       /* while (index < 1000) {
         	index++;
         	return gen(pass);
-        }
+        }*/
         return pass;
 	}
 
