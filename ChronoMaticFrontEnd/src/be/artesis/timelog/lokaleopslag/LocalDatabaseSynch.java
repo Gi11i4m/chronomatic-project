@@ -36,10 +36,10 @@ public class LocalDatabaseSynch {
 	public  void synch(Commando c) throws JSONException, IOException, WebserviceException{
 		JSONObject file = LocalDatabaseReader.LeesBestand( LocalDatabaseWriter.URL+ c +".txt");
 		
-		jarrOpdrachtgevers = file.getJSONArray(LocalDatabaseWriter.OPDRACHTGEVER);
-		jarrProjecten =  file.getJSONArray(LocalDatabaseWriter.PROJECT);		
-		jarrTaken = file.getJSONArray(LocalDatabaseWriter.TAAK);
-		jarrTijdspannes = file.getJSONArray(LocalDatabaseWriter.TIJDSPANNE);
+		jarrOpdrachtgevers = file.getJSONArray(JVelden.OPDRACHTGEVERS.toString().toLowerCase());
+		jarrProjecten =  file.getJSONArray(JVelden.PROJECTEN.toString().toLowerCase());		
+		jarrTaken = file.getJSONArray(JVelden.TAKEN.toString().toLowerCase());
+		jarrTijdspannes = file.getJSONArray(JVelden.TIJDSPANNES.toString().toLowerCase());
 		
 		synchJarr(JVelden.OPDRACHTGEVERS, jarrOpdrachtgevers, jarrProjecten);
 		synchJarr(JVelden.PROJECTEN,jarrProjecten,jarrTaken);

@@ -15,10 +15,10 @@ public class LocalDatabaseWriter {
 	//hier aant troubleshooten. Het opslaan en opvragen van shit van begin tot eind door de lokale db
 	
 		public static final String URL = "c:\\Users\\Yolan\\Desktop\\";
-		public static final String OPDRACHTGEVER = "opdrachtgever"; 
-		public static final String PROJECT = JVelden.PROJECTEN.toString().toLowerCase();
-		public static final String TAAK = JVelden.TAKEN.toString().toLowerCase();
-		public static final String TIJDSPANNE = JVelden.TIJDSPANNES.toString().toLowerCase();		
+		//public static final String OPDRACHTGEVER = "opdrachtgever"; 
+		//public static final String PROJECT = JVelden.PROJECTEN.toString().toLowerCase();
+		//public static final String TAAK = JVelden.TAKEN.toString().toLowerCase();
+		//public static final String TIJDSPANNE = JVelden.TIJDSPANNES.toString().toLowerCase();		
 		
 		private String filePath;
 				
@@ -46,12 +46,12 @@ public class LocalDatabaseWriter {
 			jProject.put("eindDatum", project.getEinddatum());
 			jProject.put("linkId",opdrachtgeverId);
 			
-			JSONArray jArr = (JSONArray) jObj.get(PROJECT);
+			JSONArray jArr = (JSONArray) jObj.get(JVelden.PROJECTEN.toString().toLowerCase());
 			jArr.put(jProject);
 			
-			jObj.put(PROJECT, jArr);
+			jObj.put(JVelden.PROJECTEN.toString().toLowerCase(), jArr);
 			
-			schrijfweg(jProject);
+			schrijfweg(voegToe(jProject,JVelden.PROJECTEN));
 		
 		}
 		public void schrijfTaak(Taak taak, int projectID) throws JSONException, IOException{
@@ -70,7 +70,7 @@ public class LocalDatabaseWriter {
 			jTaak.put("completed", taak.getCompleted());
 			jTaak.put("linkId", projectID);
 			
-			schrijfweg(jTaak);
+			schrijfweg(voegToe(jTaak,JVelden.TAKEN));
 			
 			//JSONArray taakarray = new JSONArray();
 			//taakarray.put(gegtaak);
@@ -89,7 +89,7 @@ public class LocalDatabaseWriter {
 			jTijd.put("ispauze", tijd.isPauze());
 			jTijd.put("linkId", taakid);
 			
-			schrijfweg(jTijd);
+			schrijfweg(voegToe(jTijd,JVelden.TIJDSPANNES));
 			
 			//JSONArray tijdarray = new JSONArray();
 			//tijdarray.put(gegtijd);
@@ -97,29 +97,34 @@ public class LocalDatabaseWriter {
 		}
 		
 		public void schrijfOpdrachtgever(Opdrachtgever opdrachtgever) throws JSONException, IOException {
-			System.out.println(LocalDatabaseReader.LeesBestand(filePath));
+			//System.out.println(LocalDatabaseReader.LeesBestand(filePath));
 			if(LocalDatabaseReader.LeesBestand(filePath) == null){
 				
 				makeDatabase();
 			}
 			
-			JSONObject jOdrachtgever = new JSONObject();
+			JSONObject jOpdrachtgever = new JSONObject();
 			
-			jOdrachtgever.put("id", opdrachtgever.getID());
-			jOdrachtgever.put("bedrijfsnaam", opdrachtgever.getBedrijfsnaam());
-			jOdrachtgever.put("voornaam", opdrachtgever.getVoornaam());
-			jOdrachtgever.put("naam", opdrachtgever.getNaam());
-			jOdrachtgever.put("email", opdrachtgever.getEmail());						
-			jOdrachtgever.put("telefoonnummer", opdrachtgever.getTelefoonnummer());
+			jOpdrachtgever.put("id", opdrachtgever.getID());
+			jOpdrachtgever.put("bedrijfsnaam", opdrachtgever.getBedrijfsnaam());
+			jOpdrachtgever.put("voornaam", opdrachtgever.getVoornaam());
+			jOpdrachtgever.put("naam", opdrachtgever.getNaam());
+			jOpdrachtgever.put("email", opdrachtgever.getEmail());						
+			jOpdrachtgever.put("telefoonnummer", opdrachtgever.getTelefoonnummer());
+						
+			
+			schrijfweg(voegToe(jOpdrachtgever,JVelden.OPDRACHTGEVERS));
+		}
+		private JSONObject voegToe(JSONObject jInsert,JVelden veld) throws JSONException, IOException{
 			
 			JSONObject jObj = LocalDatabaseReader.LeesBestand(filePath);
 			
-			JSONArray jArr = (JSONArray) jObj.get(OPDRACHTGEVER);
-			jArr.put(jOdrachtgever);
+			JSONArray jArr = (JSONArray) jObj.get(veld.toString().toLowerCase());
+			jArr.put(jInsert);
 			
-			jObj.put(OPDRACHTGEVER, jArr);
+			jObj.put(veld.toString().toLowerCase(), jArr);
 			
-			schrijfweg(jObj);
+			return jObj;					
 		}
 		
 			
@@ -147,10 +152,10 @@ public class LocalDatabaseWriter {
 			
 			
 			JSONObject collection = new JSONObject();
-			collection.put(OPDRACHTGEVER ,jarOpdrachtgevers );
-			collection.put(PROJECT , jarProjecten );
-			collection.put(TAAK,jarTaken );
-			collection.put(TIJDSPANNE,jarTijdspannes );
+			collection.put(JVelden.OPDRACHTGEVERS.toString().toLowerCase() ,jarOpdrachtgevers );
+			collection.put(JVelden.PROJECTEN.toString().toLowerCase() , jarProjecten );
+			collection.put(JVelden.TAKEN.toString().toLowerCase(),jarTaken );
+			collection.put(JVelden.TIJDSPANNES.toString().toLowerCase(),jarTijdspannes );
 			
 			schrijfweg(collection);
 			
