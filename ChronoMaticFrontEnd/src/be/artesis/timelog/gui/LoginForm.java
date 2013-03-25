@@ -14,6 +14,7 @@ import be.artesis.timelog.model.ExistingUsernames;
 import be.artesis.timelog.model.CreatorFromJSON;
 import be.artesis.timelog.model.Validator;
 import be.artesis.timelog.model.WebserviceException;
+import be.artesis.timelog.secure.MD5Generator;
 import be.artesis.timelog.secure.WinRegistry;
 import be.artesis.timelog.view.DataInputException;
 import be.artesis.timelog.view.Gebruiker;
@@ -27,6 +28,7 @@ import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.net.ConnectException;
 import java.net.MalformedURLException;
+import java.security.NoSuchAlgorithmException;
 
 import javax.swing.JOptionPane;
 import org.json.JSONException;
@@ -186,25 +188,7 @@ public class LoginForm extends javax.swing.JFrame implements ActionListener {
             } else {
 
             }
-			if (usernameJTextField.getText().equals("")) {
-
-				UserInterface.setUser(new Gebruiker("Flebus", "Gilliam", "Gi11i4m", "gi11i4m@gmail.com")); // tijdelijke user
-				UserInterface.getUser().addOpdrachtgever(new Opdrachtgever("Flebus", "Gilliam", "Mot-art", "blabla", "0475", 456));
-				UserInterface.getUser().addOpdrachtgever(new Opdrachtgever("Schouten", "Girmi", "Artesis", "bla", "0478", 457));
-				UserInterface.getUser().addProject(new Project("Test project 1", 456, 1343059472, 1453059472));
-				UserInterface.getUser().addProject(new Project("Test project 2", 457, 1243059472, 1553059472));
-				UserInterface.getUser().getProjects().get(1).addTaak(new Taak("Test taak", 1343059472, 1453059472, ""));
-				this.dispose();
-
-			} else if (validator.login(usernameJTextField.getText(), new String(passwordJPasswordField.getPassword()))) {
-				loadUserData();
-				this.dispose();
-				
-			} else {
-				JOptionPane.showMessageDialog(this, "Login failed");
-			}
-
-		} catch (DataInputException | HeadlessException | IOException | JSONException | WebserviceException e) {
+		} catch (DataInputException | HeadlessException | IOException | JSONException | WebserviceException | NoSuchAlgorithmException e) {
 			e.printStackTrace();
 			JOptionPane.showMessageDialog(this, "Error connecting to server");
 			this.dispose();

@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 
 import be.artesis.timelog.controller.Inserter;
 import be.artesis.timelog.model.ExistingUsernames;
+import be.artesis.timelog.secure.MD5Generator;
 import be.artesis.timelog.view.DataControle;
 import be.artesis.timelog.view.DataInputException;
 import javax.swing.JOptionPane;
@@ -103,7 +104,7 @@ public class NewUserPanel extends javax.swing.JPanel {
         setFocusTraversalPolicy(new FocusTraversalOnArray(new Component[]{firstNameJTextField, nameJTextField, emailJTextField, usernameJTextField, passwordJPasswordField, registerJButton, passwordRepeatJPasswordField}));
     }
 
-    private void registerJButtonClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_registerJButtonClicked
+    private void registerJButtonClicked(java.awt.event.MouseEvent evt) {
         // maak een nieuwe gebruiker aan aan de hand van volgende velden:
         try {
             String firstName = firstNameJTextField.getText();
@@ -122,7 +123,7 @@ public class NewUserPanel extends javax.swing.JPanel {
             }
             
             //check of username al bestaat
-            if (ExistingUsernames.check(email)) {
+            if (!ExistingUsernames.check(username)) {
             	throw new DataInputException("Username already exists");
 				
 			}
@@ -134,9 +135,9 @@ public class NewUserPanel extends javax.swing.JPanel {
             if (!DataControle.emailCorrect(email)) {
                 throw new DataInputException("Wrong email format");
             }
-            
-            Inserter.CreateUser(name, firstName, username, password, email);
-            
+            MD5Generator gen = new MD5Generator();
+            Inserter.CreateUser(name, firstName, username, gen.gen(password), email);
+            System.out.println(password);
             JOptionPane.showMessageDialog(this, "Your account has been created!");
             
             parent.displayTab("BASISPANEL");
@@ -145,11 +146,10 @@ public class NewUserPanel extends javax.swing.JPanel {
         }
     }
 
-    private void passwordJPasswordFieldKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_passwordJPasswordFieldKeyReleased
+    private void passwordJPasswordFieldKeyReleased(java.awt.event.KeyEvent evt) {
         passwordStrengthJLabel.setText("Strength: " + DataControle.passwoordSterkte(passwordJPasswordField.getPassword()));
-    }//GEN-LAST:event_passwordJPasswordFieldKeyReleased
+    }
 
-    // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel emailJLabel;
     private javax.swing.JTextField emailJTextField;
     private javax.swing.JLabel firstNameJLabel;
@@ -164,5 +164,4 @@ public class NewUserPanel extends javax.swing.JPanel {
     private javax.swing.JButton registerJButton;
     private javax.swing.JLabel usernameJLabel;
     private javax.swing.JTextField usernameJTextField;
-    // End of variables declaration//GEN-END:variables
 }

@@ -4,20 +4,34 @@ import java.security.NoSuchAlgorithmException;
 
 
 public class MD5Generator {
-
-	public static String gen(String pass) throws NoSuchAlgorithmException {
-		final String secret = "|@@#[{{^^ии45646 44.4654f 4r-CHRONOMATIC-e4f8r7щ$^,;:=:;,&й''' '''и--@#^!846^{и {!{!и";
+	
+	private int index;
+	
+	public MD5Generator() {
+		index = 0;
+	}
+	
+	
+	public String gen(String paswoord) throws NoSuchAlgorithmException {
+		
+		final String secret = "|@#[{^и644.4654f 4r-CHRONOMATIC-e4f8r7щ$^,;:='и--@#^!846^{и !{!и";
+		paswoord += secret;
 		MessageDigest digest = java.security.MessageDigest.getInstance("MD5");
-		pass += secret;
-		digest.update(pass.getBytes());
+		digest.update(paswoord.getBytes());
 		byte[] hash = digest.digest();
 		
-		StringBuffer sb = new StringBuffer();
+		StringBuilder sb = new StringBuilder();
         for (int i = 0; i < hash.length; ++i) {
           sb.append(Integer.toHexString((hash[i] & 0xFF) | 0x100).substring(1,3));
         }
         
-        return sb.toString();
+        String pass = sb.toString();
+        // Maak MD5 1000 maal, recursief
+        while (index < 1000) {
+        	index++;
+        	return gen(pass);
+        }
+        return pass;
 	}
 
 }

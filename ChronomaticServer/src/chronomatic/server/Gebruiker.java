@@ -40,8 +40,10 @@ public class Gebruiker {
 			}
 			else { 
 				// Geen projecten
-				JSONObject error = new JSONObject();
-				error.put("error","Geen projecten");
+				JSONArray error = new JSONArray();
+				JSONObject obj = new JSONObject();
+				obj.put("najam", "piet");
+				error.put(obj);
 				
 				return error.toString();
 			}

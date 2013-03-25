@@ -37,13 +37,13 @@ public class CreatorFromJSON
 		//Project project =  new Project(Jproject.getString("naam"),Jproject.getString("startdatum"),Jproject.getString("einddatum"))
 
 
-
                         int i = 0;
                     for(JSONObject Jobject: Jproject)
                         {
                         // tijdelijk in comment om programma te kunnen runnen
+
                         project[i++] =  new Project(Jobject.getString("naam"), Jobject.getInt("opdrachtgevers_ID"), Jobject.getLong("start_datum"),Jobject.getLong("eind_datum"), Jobject.getInt("ID"));
-                        }
+                    	}
 
 		return project;
 	}
