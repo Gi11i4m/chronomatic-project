@@ -99,10 +99,15 @@ public class Clock {
     }
 
     //formaat dd/mm/yyyy
-    //FIXME deprecated methods
     public static String timestampToDateString(long unixTimeStamp) {
         Timestamp t = new Timestamp(unixTimeStamp * 1000);
-        return df.format(t.getDate()) + "/" + df.format(t.getMonth() + 1) + "/" + (t.getYear() + 1900);
+        Calendar c = GregorianCalendar.getInstance();
+        c.setTime(t);
+        
+        int day = c.get(Calendar.DAY_OF_MONTH);
+        int month = c.get(Calendar.MONTH) +1;
+        int year = c.get(Calendar.YEAR);
+        return df.format(day) + "/" + df.format(month) + "/" + (year);
     }
 
     //input formaat dd/mm/yyyy

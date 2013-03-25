@@ -44,7 +44,7 @@ public class Validator
 		this.sessionKey = sessionKey;
 	}
 	
-	public boolean login(String gebruikersnaam, String paswoord) throws IOException, JSONException, WebserviceException, NoSuchAlgorithmException{
+	public boolean login(String gebruikersnaam, String paswoord) throws IOException, JSONException, WebserviceException{
         
 		MD5Generator MD5 = new MD5Generator();
 		//JSONObject jObject = Connection.getObject("auth/login/" + gebruikersnaam+ "/"+ MD5.gen(paswoord));
