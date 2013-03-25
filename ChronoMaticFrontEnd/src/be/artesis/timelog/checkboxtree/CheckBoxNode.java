@@ -1,16 +1,23 @@
 package be.artesis.timelog.checkboxtree;
 
+import be.artesis.timelog.view.Project;
+import be.artesis.timelog.view.Taak;
+
 public class CheckBoxNode {
-	String text;
+	Taak taak;
 
 	boolean selected;
 
-	public CheckBoxNode(String text, boolean selected) {
-		this.text = text;
+	public CheckBoxNode(Taak taak, boolean selected) {
+		this.taak = taak;
 		this.selected = selected;
 	}
 
 	public CheckBoxNode() {		
+	}
+
+	public CheckBoxNode(Project p, boolean selected2) {
+		// TODO Auto-generated constructor stub
 	}
 
 	public boolean isSelected() {
@@ -22,14 +29,14 @@ public class CheckBoxNode {
 	}
 
 	public String getText() {
-		return text;
+		return taak.getNaam();
 	}
 
-	public void setText(String newValue) {
-		text = newValue;
+	public void setText(Taak newTask) {
+		taak = newTask;
 	}
 
 	public String toString() {
-		return getClass().getName() + "[" + text + "/" + selected + "]";
+		return getClass().getName() + "Taak : " + taak.getNaam() + "/" + selected;
 	}
 }
