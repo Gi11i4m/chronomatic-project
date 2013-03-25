@@ -166,19 +166,19 @@ public class LoginForm extends javax.swing.JFrame implements ActionListener {
 	}
 
 	public void login() {
-		//String paswoord = null;
+		String paswoord = null;
 		try {
 			//Gewoon
-			//if(passwordJPasswordField.isEnabled()) {
-				//paswoord = new String(passwordJPasswordField.getPassword());
-			//}
+			if(passwordJPasswordField.isEnabled()) {
+				paswoord = new String(passwordJPasswordField.getPassword());
+			}
 			//Uit register
-			/*else {
+			else {
 				paswoord = WinRegistry.readString (
 					    WinRegistry.HKEY_CURRENT_USER,
 						   "SOFTWARE\\ChronoMatic",
-						   "password");*/
-			//}
+						   "password");
+			}
             if (usernameJTextField.getText().equals("")) {
                 
                     UserInterface.setUser(new Gebruiker("Flebus", "Gilliam", "Gi11i4m", "gi11i4m@gmail.com")); // tijdelijke user
@@ -191,7 +191,7 @@ public class LoginForm extends javax.swing.JFrame implements ActionListener {
                     UserInterface.getUser().getProjects().get(1).addTaak(new Taak("Test taak", 1343059472, 1453059472, ""));
                 this.dispose();
                 
-            } else if (validator.login(usernameJTextField.getText(), new String(passwordJPasswordField.getPassword()) )) {
+            } else if (validator.login(usernameJTextField.getText(), paswoord )) {
             	loadUserData();
             	
             	/*if(saveUserCheckBox.isSelected()) {
@@ -210,7 +210,7 @@ public class LoginForm extends javax.swing.JFrame implements ActionListener {
             } else {
 
             }
-		} catch (DataInputException | HeadlessException | IOException | JSONException | WebserviceException | NoSuchAlgorithmException | IllegalArgumentException e) {
+		} catch (DataInputException | HeadlessException | IOException | JSONException | WebserviceException | NoSuchAlgorithmException | IllegalArgumentException | IllegalAccessException | InvocationTargetException e) {
 			e.printStackTrace();
 			JOptionPane.showMessageDialog(this, "Error connecting to server");
 			this.dispose();
