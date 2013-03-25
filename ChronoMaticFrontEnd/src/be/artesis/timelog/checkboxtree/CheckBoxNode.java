@@ -1,15 +1,15 @@
 package be.artesis.timelog.checkboxtree;
 
+
 public class CheckBoxNode {
 	String text;
-
-	boolean selected;
+	boolean selected;	
 
 	public CheckBoxNode(String text, boolean selected) {
 		this.text = text;
 		this.selected = selected;
 	}
-
+	
 	public CheckBoxNode() {		
 	}
 
@@ -28,8 +28,8 @@ public class CheckBoxNode {
 	public void setText(String newValue) {
 		text = newValue;
 	}
-
-	public String toString() {
-		return getClass().getName() + "[" + text + "/" + selected + "]";
+	
+	public String toString() {	
+		return text;
 	}
 }

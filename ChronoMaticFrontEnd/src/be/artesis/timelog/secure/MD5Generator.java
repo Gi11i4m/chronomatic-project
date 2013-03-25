@@ -11,7 +11,6 @@ public class MD5Generator {
 		index = 0;
 	}
 	
-	
 	public String gen(String paswoord) throws NoSuchAlgorithmException {
 		
 		final String secret = "|@#[{^è644.4654f 4r-CHRONOMATIC-e4f8r7ù$^,;:='è--@#^!846^{è !{!è";
@@ -27,10 +26,10 @@ public class MD5Generator {
         
         String pass = sb.toString();
         // Maak MD5 1000 maal, recursief
-        while (index < 1000) {
+       /* while (index < 1000) {
         	index++;
         	return gen(pass);
-        }
+        }*/
         return pass;
 	}
 

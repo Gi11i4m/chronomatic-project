@@ -1,14 +1,7 @@
 package be.artesis.timelog.model;
 
-import java.io.BufferedReader;
-
 import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.ProtocolException;
 import java.security.NoSuchAlgorithmException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -31,10 +24,6 @@ public class Validator
 		}
 		return uniqueInstance;
 	}
-	public String ValideerGebruiker(String username , String paswoord){
-
-		return "";
-	}
 
 	public String getSessionKey() {
 		return sessionKey;
@@ -47,10 +36,8 @@ public class Validator
 	public boolean login(String gebruikersnaam, String paswoord) throws IOException, JSONException, WebserviceException{
         
 		MD5Generator MD5 = new MD5Generator();
-		//JSONObject jObject = Connection.getObject("auth/login/" + gebruikersnaam+ "/"+ MD5.gen(paswoord));
-		JSONObject jObject = Connection.getObject("auth/login/" + gebruikersnaam+ "/"+ paswoord);
-        
-        
+		JSONObject jObject = Connection.getObject("auth/login/" + gebruikersnaam+ "/"+ MD5.gen(paswoord));
+        System.out.println(MD5.gen(paswoord));
         if(jObject.has("error")){
          throw new WebserviceException("Failed : HTTP error code : "
                                 + jObject.getString("error"));

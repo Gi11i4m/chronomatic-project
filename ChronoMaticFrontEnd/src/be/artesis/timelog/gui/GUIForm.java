@@ -396,40 +396,7 @@ public class GUIForm extends javax.swing.JFrame {
 		taskFieldsJPanel.setBackground(Color.DARK_GRAY);
 		taskFieldsJPanel.setBounds(275, 40, 399, 400);
 		tasksJPanel.add(taskFieldsJPanel);
-		taskFieldsJPanel.setLayout(new FormLayout(new ColumnSpec[] {
-				FormFactory.UNRELATED_GAP_COLSPEC,
-				ColumnSpec.decode("56px"),
-				FormFactory.UNRELATED_GAP_COLSPEC,
-				ColumnSpec.decode("1px"),
-				FormFactory.LABEL_COMPONENT_GAP_COLSPEC,
-				ColumnSpec.decode("110px:grow"),
-				FormFactory.DEFAULT_COLSPEC,
-				FormFactory.RELATED_GAP_COLSPEC,
-				ColumnSpec.decode("55px"),
-				ColumnSpec.decode("51px"),
-				FormFactory.RELATED_GAP_COLSPEC,
-				ColumnSpec.decode("max(27dlu;default)"),
-				FormFactory.RELATED_GAP_COLSPEC,
-				ColumnSpec.decode("max(15dlu;default)"),},
-			new RowSpec[] {
-				FormFactory.UNRELATED_GAP_ROWSPEC,
-				RowSpec.decode("20px"),
-				FormFactory.RELATED_GAP_ROWSPEC,
-				RowSpec.decode("20px:grow"),
-				FormFactory.RELATED_GAP_ROWSPEC,
-				RowSpec.decode("20px:grow"),
-				RowSpec.decode("38px"),
-				RowSpec.decode("51px"),
-				FormFactory.UNRELATED_GAP_ROWSPEC,
-				RowSpec.decode("51px"),
-				FormFactory.RELATED_GAP_ROWSPEC,
-				RowSpec.decode("37px"),
-				FormFactory.UNRELATED_GAP_ROWSPEC,
-				RowSpec.decode("23px"),
-				FormFactory.UNRELATED_GAP_ROWSPEC,
-				FormFactory.DEFAULT_ROWSPEC,
-				FormFactory.UNRELATED_GAP_ROWSPEC,
-				RowSpec.decode("41px"),}));
+		taskFieldsJPanel.setLayout(new FormLayout(new ColumnSpec[] { FormFactory.UNRELATED_GAP_COLSPEC, ColumnSpec.decode("56px"), FormFactory.UNRELATED_GAP_COLSPEC, ColumnSpec.decode("1px"), FormFactory.LABEL_COMPONENT_GAP_COLSPEC, ColumnSpec.decode("110px:grow"), FormFactory.DEFAULT_COLSPEC, FormFactory.RELATED_GAP_COLSPEC, ColumnSpec.decode("55px"), ColumnSpec.decode("51px"), FormFactory.RELATED_GAP_COLSPEC, ColumnSpec.decode("max(27dlu;default)"), FormFactory.RELATED_GAP_COLSPEC, ColumnSpec.decode("max(15dlu;default)"), }, new RowSpec[] { FormFactory.UNRELATED_GAP_ROWSPEC, RowSpec.decode("20px"), FormFactory.RELATED_GAP_ROWSPEC, RowSpec.decode("20px:grow"), FormFactory.RELATED_GAP_ROWSPEC, RowSpec.decode("20px:grow"), RowSpec.decode("38px"), RowSpec.decode("51px"), FormFactory.UNRELATED_GAP_ROWSPEC, RowSpec.decode("51px"), FormFactory.RELATED_GAP_ROWSPEC, RowSpec.decode("37px"), FormFactory.UNRELATED_GAP_ROWSPEC, RowSpec.decode("23px"), FormFactory.UNRELATED_GAP_ROWSPEC, FormFactory.DEFAULT_ROWSPEC, FormFactory.UNRELATED_GAP_ROWSPEC, RowSpec.decode("41px"), }));
 
 		label_5 = new JLabel();
 		label_5.setText("Name");
@@ -494,20 +461,20 @@ public class GUIForm extends javax.swing.JFrame {
 				saveTask();
 			}
 		});
-		
+
 		taskTotalWorkedJLabel = new JLabel("Total worked");
 		taskTotalWorkedJLabel.setForeground(Color.WHITE);
 		taskFieldsJPanel.add(taskTotalWorkedJLabel, "2, 14, 2, 1, left, default");
-		
+
 		taskTotalWorkedJTextField = new JTextField();
 		taskTotalWorkedJTextField.setEditable(false);
 		taskFieldsJPanel.add(taskTotalWorkedJTextField, "6, 14, 3, 1, fill, default");
 		taskTotalWorkedJTextField.setColumns(10);
-		
+
 		lblTotalPaused = new JLabel("Total paused");
 		lblTotalPaused.setForeground(Color.WHITE);
 		taskFieldsJPanel.add(lblTotalPaused, "2, 16, 2, 1, left, default");
-		
+
 		taskTotalPauseJTextField = new JTextField();
 		taskTotalPauseJTextField.setEditable(false);
 		taskFieldsJPanel.add(taskTotalPauseJTextField, "6, 16, 3, 1, fill, default");
@@ -674,15 +641,16 @@ public class GUIForm extends javax.swing.JFrame {
 		importExportTabbedPane.addTab("Export", null, exportJPanel, "Export your tasks here");
 		importExportTabbedPane.setForegroundAt(0, Color.WHITE);
 		exportJPanel.setLayout(null);
+		exportJScrollPane = new JScrollPane();
+		exportJScrollPane.setBounds(10, 11, 320, 347);
+		exportJPanel.add(exportJScrollPane);
 
 		exportTree = new JTree();
+		exportJScrollPane.setViewportView(exportTree);
 		exportTree.setModel(new DefaultTreeModel(new DefaultMutableTreeNode("Tasks to export show here") {
 			{
 			}
 		}));
-		exportJScrollPane = new JScrollPane(exportTree);
-		exportJScrollPane.setBounds(10, 11, 320, 347);
-		exportJPanel.add(exportJScrollPane);
 
 		exportJButton = new JButton("Export");
 		exportJButton.addActionListener(new ActionListener() {
@@ -690,7 +658,7 @@ public class GUIForm extends javax.swing.JFrame {
 				exportButtonClicked(arg0);
 			}
 		});
-		exportJButton.setBounds(10, 369, 320, 21);
+		exportJButton.setBounds(10, 367, 320, 23);
 		exportJPanel.add(exportJButton);
 		importExportTabbedPane.setBackgroundAt(0, Color.DARK_GRAY);
 
@@ -712,7 +680,7 @@ public class GUIForm extends javax.swing.JFrame {
 		importJPanel.add(importJScrollPane);
 
 		importJButton = new JButton("Import");
-		importJButton.setBounds(10, 369, 320, 21);
+		importJButton.setBounds(10, 367, 320, 23);
 		importJPanel.add(importJButton);
 
 		optionsJPanel.setBackground(Color.GRAY);
@@ -766,7 +734,7 @@ public class GUIForm extends javax.swing.JFrame {
 		layout.setHorizontalGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addComponent(headerJPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE).addComponent(contentJTabbedPane));
 		layout.setVerticalGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGroup(layout.createSequentialGroup().addComponent(headerJPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE).addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED).addComponent(contentJTabbedPane)));
 		pack();
-		
+
 		// set form in center
 		final Toolkit toolkit = Toolkit.getDefaultToolkit();
 		final Dimension screenSize = toolkit.getScreenSize();
@@ -799,7 +767,7 @@ public class GUIForm extends javax.swing.JFrame {
 				throw new DataInputException("Select or create a client first");
 			}
 			Opdrachtgever o = (Opdrachtgever) projectClientsJComboBox.getSelectedItem();
-			int opdrachtgeverID =  o.getID();
+			int opdrachtgeverID = o.getID();
 
 			if (projectsJList.getSelectedValue().equals(NEWPROJECTITEM)) {
 				UserInterface.saveNewProject(name, startdate, enddate, opdrachtgeverID);
@@ -1054,7 +1022,7 @@ public class GUIForm extends javax.swing.JFrame {
 			rootNodes[i] = projectVector;
 		}
 
-		Vector rootVector = new NamedVector("Root", rootNodes);
+		Vector rootVector = new NamedVector("Projects", rootNodes);
 		tree = new JTree(rootVector);
 
 		CheckBoxNodeRenderer renderer = new CheckBoxNodeRenderer();
@@ -1062,6 +1030,8 @@ public class GUIForm extends javax.swing.JFrame {
 
 		tree.setCellEditor(new CheckBoxNodeEditor(tree));
 		tree.setEditable(true);
+
+		exportTree.setModel(tree.getModel());
 	}
 
 	// ================================================================================
