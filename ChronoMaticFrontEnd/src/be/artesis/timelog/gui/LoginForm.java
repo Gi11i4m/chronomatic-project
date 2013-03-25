@@ -138,6 +138,7 @@ public class LoginForm extends javax.swing.JFrame implements ActionListener {
 
 	public void loginExtern(String accessToken) {
 		try {
+			MD5Generator MD5 = new MD5Generator();
 			// Facebook moet geen Access token aanvragen, de rest wel
 			if (!social.toString().equals("facebook")) {
 				accessToken = AccessToken.request(accessToken, social);
@@ -168,17 +169,21 @@ public class LoginForm extends javax.swing.JFrame implements ActionListener {
 	public void login() {
 		String paswoord = null;
 		try {
+			MD5Generator MD5 = new MD5Generator();
 			//Gewoon
 			if(passwordJPasswordField.isEnabled()) {
-				paswoord = new String(passwordJPasswordField.getPassword());
+				paswoord = MD5.gen(new String(passwordJPasswordField.getPassword()));
 			}
+			
 			//Uit register
-			else {
+			else if(!passwordJPasswordField.isEnabled()) {
 				paswoord = WinRegistry.readString (
 					    WinRegistry.HKEY_CURRENT_USER,
 						   "SOFTWARE\\ChronoMatic",
 						   "password");
 			}
+			
+			System.out.println(usernameJTextField.getText()+" | "+ paswoord);
             if (usernameJTextField.getText().equals("")) {
                 
                     UserInterface.setUser(new Gebruiker("Flebus", "Gilliam", "Gi11i4m", "gi11i4m@gmail.com")); // tijdelijke user
@@ -194,18 +199,15 @@ public class LoginForm extends javax.swing.JFrame implements ActionListener {
             } else if (validator.login(usernameJTextField.getText(), paswoord )) {
             	loadUserData();
             	
-            	/*if(saveUserCheckBox.isSelected()) {
+            	if(saveUserCheckBox.isSelected()) {
         			saveUserCredentials();
         		}
-            	else {
-            		//WinRegistry.deleteKey(WinRegistry.HKEY_CURRENT_USER, "SOFTWARE\\ChronoMatic");
-            	}
-            	*/
+            	
             	this.dispose();
-            	/*try {
+            	try {
                     Thread.sleep(5000);
                 } catch (InterruptedException ignore) {}
-                */
+                
                 parent.setVisible(true);
             } else {
 
@@ -397,7 +399,7 @@ public class LoginForm extends javax.swing.JFrame implements ActionListener {
 			if(username != null) {
 				usernameJTextField.setText(username);
 				saveUserCheckBox.setSelected(true);
-				//passwordJPasswordField.setEnabled(false);
+				passwordJPasswordField.setEnabled(false);
 				passwordJPasswordField.setText("00000000");
 				
 			}
@@ -405,7 +407,23 @@ public class LoginForm extends javax.swing.JFrame implements ActionListener {
 			e.printStackTrace();
 		}
 		
-		
+		saveUserCheckBox.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				// TODO Auto-generated method stub
+				if(!saveUserCheckBox.isSelected()) {
+					try {
+						WinRegistry.deleteKey(WinRegistry.HKEY_CURRENT_USER, "SOFTWARE\\ChronoMatic");
+						passwordJPasswordField.setEnabled(true);
+						passwordJPasswordField.setText("");
+					} catch (IllegalArgumentException | IllegalAccessException
+							| InvocationTargetException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}
+			}});
 
 	}
 	
