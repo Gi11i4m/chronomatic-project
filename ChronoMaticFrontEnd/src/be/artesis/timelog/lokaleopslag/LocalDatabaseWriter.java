@@ -86,7 +86,7 @@ public class LocalDatabaseWriter {
 			jTijd.put("id", tijd.getId());
 			jTijd.put("beginTijd", tijd.getBeginTijd());
 			jTijd.put("eindTijd", tijd.getEindTijd());
-			jTijd.put("ispauze", tijd.isPauze());
+			jTijd.put("isPauze", tijd.isPauze());
 			jTijd.put("linkId", taakid);
 			
 			schrijfweg(voegToe(jTijd,JVelden.TIJDSPANNES));

@@ -14,6 +14,8 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreeCellEditor;
 import javax.swing.tree.TreePath;
 
+import be.artesis.timelog.view.Taak;
+
 @SuppressWarnings("serial")
 public class CheckBoxNodeEditor extends AbstractCellEditor implements TreeCellEditor {
 
@@ -29,7 +31,8 @@ public class CheckBoxNodeEditor extends AbstractCellEditor implements TreeCellEd
 
 	public Object getCellEditorValue() {
 		JCheckBox checkbox = renderer.getLeafRenderer();
-		CheckBoxNode checkBoxNode = new CheckBoxNode(checkbox.getText(), checkbox.isSelected());
+		Taak taak = new Taak();
+		CheckBoxNode checkBoxNode = new CheckBoxNode(taak , checkbox.isSelected());
 		return checkBoxNode;
 	}
 	

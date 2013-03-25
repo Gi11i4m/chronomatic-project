@@ -12,8 +12,8 @@ public class InserterServer {
         Connection.execute("gebruiker/create/" + naam + "/" + voornaam + "/" + gebruikersnaam + "/" + password + "/" +  email);
 	}
 	
-	public static void CreateUserExtern(String naam, String voornaam, String gebruikersnaam, String email) throws MalformedURLException, IOException, WebserviceException {
-        Connection.execute("gebruiker/createExtern/" + naam + "/" + voornaam + "/" + gebruikersnaam + "/" + email);
+	public static void CreateUserExtern(String naam, String voornaam, String email) throws MalformedURLException, IOException, WebserviceException {
+        Connection.execute("gebruiker/createExtern/" + naam + "/" + voornaam + "/" + email);
 	}
 
 	public static int inputTijdSpanne(String sessionKey,long beginTijd, long eindTijd, boolean isPauze, int taakID) throws MalformedURLException, IOException, WebserviceException, JSONException {

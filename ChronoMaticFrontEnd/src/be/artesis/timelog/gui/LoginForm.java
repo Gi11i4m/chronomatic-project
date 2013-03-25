@@ -150,7 +150,7 @@ public class LoginForm extends javax.swing.JFrame implements ActionListener {
 
 			// als gebruiker nog niet bestaat..
 			if (ExistingUsernames.check(email)) {
-				Inserter.CreateUserExtern(userInfoJSONObj.getString("naam"), userInfoJSONObj.getString("voornaam"), email);
+				InserterServer.CreateUserExtern(userInfoJSONObj.getString("naam"), userInfoJSONObj.getString("voornaam"), email);
 			}
 
 			if (validator.loginExtern(email)) {

@@ -5,7 +5,7 @@ import java.awt.BorderLayout;
 import be.artesis.timelog.controller.InserterLocal;
 import be.artesis.timelog.controller.InserterServer;
 
-import be.artesis.timelog.controller.Inserter;
+
 import be.artesis.timelog.model.ExistingUsernames;
 import be.artesis.timelog.secure.MD5Generator;
 import be.artesis.timelog.view.DataControle;
@@ -141,7 +141,7 @@ public class NewUserPanel extends javax.swing.JPanel {
                 throw new DataInputException("Wrong email format");
             }
             MD5Generator MD = new MD5Generator();
-            Inserter.CreateUser(name, firstName, username, MD.gen(password), email);
+            InserterServer.CreateUser(name, firstName, username, MD.gen(password), email);
             System.out.println(password);
             JOptionPane.showMessageDialog(this, "Your account has been created!");
             

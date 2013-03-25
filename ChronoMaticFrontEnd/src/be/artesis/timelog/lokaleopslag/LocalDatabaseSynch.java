@@ -41,21 +41,24 @@ public class LocalDatabaseSynch {
 		jarrTaken = file.getJSONArray(JVelden.TAKEN.toString().toLowerCase());
 		jarrTijdspannes = file.getJSONArray(JVelden.TIJDSPANNES.toString().toLowerCase());
 		
-		synchJarr(JVelden.OPDRACHTGEVERS, jarrOpdrachtgevers, jarrProjecten);
-		synchJarr(JVelden.PROJECTEN,jarrProjecten,jarrTaken);
-		synchJarr(JVelden.TAKEN, jarrTaken, jarrTijdspannes);
-		synchJarr(JVelden.TIJDSPANNES, jarrTijdspannes, null);
+		if (!jarrOpdrachtgevers.isNull(0)){synchJarr(JVelden.OPDRACHTGEVERS, jarrOpdrachtgevers, jarrProjecten);}
+		if (!jarrProjecten.isNull(0)){synchJarr(JVelden.PROJECTEN,jarrProjecten,jarrTaken);}
+		if (!jarrTaken.isNull(0)){synchJarr(JVelden.TAKEN, jarrTaken, jarrTijdspannes);}
+		if (!jarrTijdspannes.isNull(0)){synchJarr(JVelden.TIJDSPANNES, jarrTijdspannes, null);}
 			
 		
 	}
 	
 	private  void synchJarr(JVelden jVeld, JSONArray jarr, JSONArray jarrLager) throws MalformedURLException, JSONException, IOException, WebserviceException{
-					
-		for(int i = 0 ; i < jarr.length();i++){			
+		System.out.println("jarrlength:" + jarr.length());
+		for(int i = 0 ; i < jarr.length();i++){	
+			System.out.println("i=" + i);
+			
 			JSONObject jObj =  jarr.getJSONObject(i);
 			int fakeId = jObj.getInt("id");
 			int realId = getId(jVeld,jObj);
-			
+			System.out.println("id= "+realId);
+			System.out.println();
 			if(jarrLager != null){
 				for (int j = 0; j < jarrLager.length(); j++) {
 					
