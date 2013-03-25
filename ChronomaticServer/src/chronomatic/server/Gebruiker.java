@@ -15,7 +15,6 @@ import org.json.ResultsetConverter;
 
 import chronomatic.database.Database;
 import chronomatic.database.DatabaseContainer;
-import chronomatic.email.Mailer;
 
 @Path("gebruiker/")
 public class Gebruiker {
