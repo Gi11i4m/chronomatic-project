@@ -65,10 +65,21 @@ public class UserInterface {
     	return user.getProject(index);
     }
     
+    //Enkel voor treenode class
     public static Project getProject(String name) throws GUIException{
     	for (Project p : getProjects()) {
 			if (p.getNaam().equals(name)) {
 				return p;
+			}
+		}
+    	throw new GUIException("Project not found!");
+    }
+    
+    //Enkel voor treenode class
+    public static Taak getTaak(Project p, String name) throws GUIException{
+    	for (Taak t : p.getTaken()) {
+    		if (t.getNaam().equals(name)) {
+				return t;
 			}
 		}
     	throw new GUIException("Project not found!");

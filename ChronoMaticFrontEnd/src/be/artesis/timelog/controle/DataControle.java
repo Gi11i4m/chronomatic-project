@@ -147,10 +147,4 @@ public abstract class DataControle {
         }
         return sterkte;
     }
-    
-    public static void main(String [ ] args)
-    {
-    	String s = "C:\\User\\Girmi\\test.ic";
-    	System.out.println(icsPathCorrect(s));
-    }
 }
