@@ -12,11 +12,12 @@ import net.fortuna.ical4j.model.Calendar;
 import net.fortuna.ical4j.model.component.VEvent;
 import net.fortuna.ical4j.model.property.DtEnd;
 import net.fortuna.ical4j.model.property.DtStart;
+import be.artesis.timelog.view.Project;
 import be.artesis.timelog.view.Taak;
 
 public class IcsImporteren {
 	
-	public static  ArrayList<Taak> importeren(String url) throws IOException, ParserException{
+	public static ArrayList<Taak> importTasks(String url) throws IOException, ParserException{
 		//opsplitsen in:
 		//lezen van ICS bestand 
 		//taak object maken van events
@@ -29,6 +30,14 @@ public class IcsImporteren {
 		return genereerArray(calendar);
 		
 	}
+	
+	public static ArrayList<Project> importTasksInProject(String url) throws IOException, ParserException{
+				
+		Project p = new Project("",0,0,0);
+		p.setTaken((Taak[]) importTasks(url).toArray());
+		return null;				
+	}
+	
 	private static Calendar inlezen(String url) throws IOException, ParserException{
 		
 		FileInputStream fin = new FileInputStream(url);

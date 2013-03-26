@@ -2,9 +2,6 @@ package be.artesis.timelog.gui;
 
 import be.artesis.timelog.model.Validator;
 
-/**
- * @author Gilliam
- */
 public class Main {
 
     public static void main(String args[]) {
