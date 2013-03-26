@@ -87,13 +87,13 @@ public class Gebruiker {
         return gebruikersnaam;
     }
 
-    public void setGebruikersnaam(String gebruikersnaam) throws DataInputException {
-        if (DataControle.naamCorrect(gebruikersnaam)) {
-            this.gebruikersnaam = gebruikersnaam;
-        } else {
-            throw new DataInputException("Username empty or contains illegal characters");
-        }
-    }
+//    public void setGebruikersnaam(String gebruikersnaam) throws DataInputException {
+//        if (DataControle.naamCorrect(gebruikersnaam)) {
+//            this.gebruikersnaam = gebruikersnaam;
+//        } else {
+//            throw new DataInputException("Username empty or contains illegal characters");
+//        }
+//    }
 
     public String getEmail() {
         return email;
@@ -182,5 +182,14 @@ public class Gebruiker {
     @Override
     public String toString() {
         return voornaam + " " + naam + " (" + gebruikersnaam + ")";
+    }
+    
+    @Override
+    public Object clone(){
+        Gebruiker g = new Gebruiker(this.naam, this.voornaam, this.gebruikersnaam, this.email);
+        g.id = this.id;
+        g.projects = this.projects;
+        g.opdrachtgevers = this.opdrachtgevers;
+        return g;
     }
 }

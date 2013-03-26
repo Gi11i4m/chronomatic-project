@@ -64,6 +64,7 @@ import be.artesis.timelog.ics.IcsExporteren;
 import be.artesis.timelog.model.Validator;
 import be.artesis.timelog.model.WebserviceException;
 import be.artesis.timelog.view.DataInputException;
+import be.artesis.timelog.view.Gebruiker;
 import be.artesis.timelog.view.Opdrachtgever;
 import be.artesis.timelog.view.Project;
 import be.artesis.timelog.view.Taak;
@@ -813,7 +814,125 @@ public class GUIForm extends javax.swing.JFrame {
 		
 		userSettingsJPanel = new JPanel();
 		userSettingsJPanel.setBackground(Color.DARK_GRAY);
-		settingsJTabbedPane.addTab("New tab", null, userSettingsJPanel, null);
+		settingsJTabbedPane.addTab("User Settings", null, userSettingsJPanel, null);
+		userSettingsJPanel.setLayout(null);
+		
+		firstNameJTextField = new JTextField();
+		firstNameJTextField.setBounds(115, 84, 152, 20);
+		userSettingsJPanel.add(firstNameJTextField);
+		firstNameJTextField.setColumns(10);
+		
+		lastNameJTextField = new JTextField();
+		lastNameJTextField.setBounds(115, 115, 152, 20);
+		userSettingsJPanel.add(lastNameJTextField);
+		lastNameJTextField.setColumns(10);
+		
+		emailJTextField = new JTextField();
+		emailJTextField.setBounds(115, 147, 152, 20);
+		userSettingsJPanel.add(emailJTextField);
+		emailJTextField.setColumns(10);
+		
+		firstNameJLabel = new JLabel("First name");
+		firstNameJLabel.setForeground(Color.WHITE);
+		firstNameJLabel.setBounds(36, 87, 69, 14);
+		userSettingsJPanel.add(firstNameJLabel);
+		
+		lastNameJLabel = new JLabel("Last name");
+		lastNameJLabel.setForeground(Color.WHITE);
+		lastNameJLabel.setBounds(36, 118, 69, 14);
+		userSettingsJPanel.add(lastNameJLabel);
+		
+		emailJLabel = new JLabel("Email");
+		emailJLabel.setForeground(Color.WHITE);
+		emailJLabel.setBounds(36, 150, 69, 14);
+		userSettingsJPanel.add(emailJLabel);
+		
+		addressJTextField = new JTextField();
+		addressJTextField.setBounds(115, 178, 152, 20);
+		userSettingsJPanel.add(addressJTextField);
+		addressJTextField.setColumns(10);
+		
+		addressJLabel = new JLabel("Address");
+		addressJLabel.setForeground(Color.WHITE);
+		addressJLabel.setBounds(36, 181, 69, 14);
+		userSettingsJPanel.add(addressJLabel);
+		
+		telephoneJTextField = new JTextField();
+		telephoneJTextField.setBounds(115, 209, 152, 20);
+		userSettingsJPanel.add(telephoneJTextField);
+		telephoneJTextField.setColumns(10);
+		
+		lblTelephone = new JLabel("Telephone");
+		lblTelephone.setForeground(Color.WHITE);
+		lblTelephone.setBounds(36, 212, 69, 14);
+		userSettingsJPanel.add(lblTelephone);
+		
+		personalInfoJLabel = new JLabel("Personal info");
+		personalInfoJLabel.setForeground(Color.WHITE);
+		personalInfoJLabel.setFont(new Font("Tahoma", Font.BOLD, 13));
+		personalInfoJLabel.setHorizontalAlignment(SwingConstants.CENTER);
+		personalInfoJLabel.setBounds(115, 11, 152, 31);
+		userSettingsJPanel.add(personalInfoJLabel);
+		
+		vatJTextField = new JTextField();
+		vatJTextField.setBounds(420, 53, 171, 20);
+		userSettingsJPanel.add(vatJTextField);
+		vatJTextField.setColumns(10);
+		
+		vatJLabel = new JLabel("VAT number");
+		vatJLabel.setForeground(Color.WHITE);
+		vatJLabel.setBounds(330, 56, 80, 14);
+		userSettingsJPanel.add(vatJLabel);
+		
+		ibanJLabel = new JLabel("IBAN");
+		ibanJLabel.setForeground(Color.WHITE);
+		ibanJLabel.setBounds(330, 87, 80, 14);
+		userSettingsJPanel.add(ibanJLabel);
+		
+		ibanJTextField = new JTextField();
+		ibanJTextField.setBounds(420, 84, 171, 20);
+		userSettingsJPanel.add(ibanJTextField);
+		ibanJTextField.setColumns(10);
+		
+		bicJTextField = new JTextField();
+		bicJTextField.setBounds(420, 116, 171, 20);
+		userSettingsJPanel.add(bicJTextField);
+		bicJTextField.setColumns(10);
+		
+		bicJLabel = new JLabel("BIC");
+		bicJLabel.setForeground(Color.WHITE);
+		bicJLabel.setBounds(330, 119, 80, 14);
+		userSettingsJPanel.add(bicJLabel);
+		
+		businessInfoJLabel = new JLabel("Business info");
+		businessInfoJLabel.setHorizontalAlignment(SwingConstants.CENTER);
+		businessInfoJLabel.setForeground(Color.WHITE);
+		businessInfoJLabel.setFont(new Font("Tahoma", Font.BOLD, 13));
+		businessInfoJLabel.setBounds(420, 11, 171, 31);
+		userSettingsJPanel.add(businessInfoJLabel);
+		
+		updateUserJButton = new JButton("Save");
+		updateUserJButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				String firstName = firstNameJTextField.getText();
+				String lastName = lastNameJTextField.getText();
+				String email = emailJTextField.getText();
+				updateUser(firstName, lastName, email);
+			}
+		});
+		updateUserJButton.setBounds(115, 297, 116, 23);
+		userSettingsJPanel.add(updateUserJButton);
+		
+		usernameJTextField = new JTextField();
+		usernameJTextField.setEditable(false);
+		usernameJTextField.setBounds(115, 53, 152, 20);
+		userSettingsJPanel.add(usernameJTextField);
+		usernameJTextField.setColumns(10);
+		
+		usernameJLabel = new JLabel("Username");
+		usernameJLabel.setForeground(Color.WHITE);
+		usernameJLabel.setBounds(36, 53, 69, 14);
+		userSettingsJPanel.add(usernameJLabel);
 		optionsJPanel.setLayout(optionsJPanelLayout);
 
 		contentJTabbedPane.addTab("", new javax.swing.ImageIcon(getClass().getResource("/be/artesis/timelog/gui/icons/SettingsNeonIcon.png")), optionsJPanel, "Settings");
@@ -871,6 +990,19 @@ public class GUIForm extends javax.swing.JFrame {
 	// Save / Edit methods
 	// ================================================================================
 
+	// Update user info
+	
+	private void updateUser(String firstName, String lastName, String email){
+		try {
+			UserInterface.updateUser(firstName, lastName, email);
+			JOptionPane.showMessageDialog(this, "User information updated!");
+			loadUserInfo();
+		} catch (DataInputException | IOException | WebserviceException e) {
+			JOptionPane.showMessageDialog(this, e.getMessage());
+			e.printStackTrace();
+		}
+	}
+	
 	// Create new project
 	private void createProject(String name, long startdate, long enddate, int opdrachtgeverID) {
 		try {
@@ -889,7 +1021,6 @@ public class GUIForm extends javax.swing.JFrame {
 			UserInterface.updateProject(projectsJList.getSelectedIndex(), name, startdate, enddate, opdrachtgeverID);
 			JOptionPane.showMessageDialog(this, "Project edited!");
 			refreshProjectsList(projectsJList, homeProjectsJList);
-			;
 		} catch (DataInputException | IOException | WebserviceException | ParseException e) {
 			JOptionPane.showMessageDialog(this, e.getMessage());
 			e.printStackTrace();
@@ -950,7 +1081,7 @@ public class GUIForm extends javax.swing.JFrame {
 			JOptionPane.showMessageDialog(this, "Client edited!");
 			refreshClientsList(clientsJList);
 		} catch (DataInputException | IOException | WebserviceException e) {
-			// TODO Auto-generated catch block
+			JOptionPane.showMessageDialog(this, e.getMessage());
 			e.printStackTrace();
 		}
 	}
@@ -1131,6 +1262,17 @@ public class GUIForm extends javax.swing.JFrame {
 	// Loading methods
 	// ================================================================================
 
+	// Load user info
+	
+	private void loadUserInfo(){
+		Gebruiker u = UserInterface.getUser();
+		usernameJTextField.setText(u.getGebruikersnaam());
+		firstNameJTextField.setText(u.getVoornaam());
+		lastNameJTextField.setText(u.getNaam());
+		emailJTextField.setText(u.getEmail());
+		emailJTextField.setCaretPosition(0);
+	}
+	
 	// Load info from PROJECT with index parameter
 	private void loadProjectInfo(int index) {
 		if (index != -1) {
@@ -1305,6 +1447,7 @@ public class GUIForm extends javax.swing.JFrame {
 		ingelogdJLabel.setForeground(Color.GREEN);
 		refreshProjectsList(projectsJList, homeProjectsJList);
 		refreshClientsList(clientsJList);
+		loadUserInfo();
 		selectNewItem(projectsJList, tasksJList, clientsJList);
 	}
 
@@ -1472,4 +1615,25 @@ public class GUIForm extends javax.swing.JFrame {
 	private JPanel taskFieldsJPanel;
 	private JTabbedPane settingsJTabbedPane;
 	private JPanel userSettingsJPanel;
+	private JTextField firstNameJTextField;
+	private JTextField lastNameJTextField;
+	private JTextField emailJTextField;
+	private JLabel firstNameJLabel;
+	private JLabel lastNameJLabel;
+	private JLabel emailJLabel;
+	private JTextField addressJTextField;
+	private JLabel addressJLabel;
+	private JTextField telephoneJTextField;
+	private JLabel lblTelephone;
+	private JLabel personalInfoJLabel;
+	private JTextField vatJTextField;
+	private JLabel vatJLabel;
+	private JLabel ibanJLabel;
+	private JTextField ibanJTextField;
+	private JTextField bicJTextField;
+	private JLabel bicJLabel;
+	private JLabel businessInfoJLabel;
+	private JButton updateUserJButton;
+	private JTextField usernameJTextField;
+	private JLabel usernameJLabel;
 }

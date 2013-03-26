@@ -14,6 +14,7 @@ TODO Client:
 	- register new user
 	- Logindialog (spinner) laten zien tot logindialog is geladen
 
+	- If(index != -1) checks verwijderen
 	- Dialogbox voor gegevens indien extern account
 
 	- Help tab? Eerste x openen, help dialog

@@ -114,8 +114,18 @@ public class UserInterface {
     }
 
     //================================================================================
-    // Save methods
+    // Create + update methods
     //================================================================================
+    
+    public static void updateUser(String firstName, String lastName, String email)
+    		throws DataInputException, MalformedURLException, IOException, WebserviceException{
+    	Gebruiker u = (Gebruiker) getUser().clone();
+    	u.setVoornaam(firstName);
+    	u.setNaam(lastName);
+    	u.setEmail(email);
+    	Updater.updateGebruiker(validator.getSessionKey(), u);
+    	setUser(u);
+    }
     
 	public static Opdrachtgever createClient(String naam, String voornaam, String bedrijfsnaam, String email, String telefoonnummer)
 			throws DataInputException, JSONException, IOException, WebserviceException{
@@ -130,7 +140,6 @@ public class UserInterface {
 			client.setID(Inserter.inputOpdrachtgever(validator.getSessionKey(), client));
 		} catch (JSONException | IOException | WebserviceException e) {
 			user.removeOpdrachtgever(client);
-			e.printStackTrace(); 
 			throw e;
 		} // Make Client ++ Add ClientID returned from DB
 		return client;
@@ -161,7 +170,6 @@ public class UserInterface {
 			p.setId(Inserter.inputProject(validator.getSessionKey(), p, opdrachtgeverId));
 		} catch (IOException | WebserviceException| JSONException e) {
 			user.removeProject(p);
-			e.printStackTrace();
 			throw e;
 		}
 		return p;
@@ -197,7 +205,6 @@ public class UserInterface {
 			t.setId((Inserter.inputTaak(validator.getSessionKey(), t, pid)));
 		} catch (IOException | WebserviceException | JSONException e) {
 			getCurrentProject().removeTaak(t);
-			e.printStackTrace();
 			throw e;
 		}
         return t;
@@ -225,7 +232,6 @@ public class UserInterface {
 			Inserter.inputTijdSpanne(validator.getSessionKey(), ts, t.getID());
 		} catch (IOException | WebserviceException e) {
 			t.removeBestedeTijd(ts);
-			e.printStackTrace();
 			throw e;
 		}
 		return ts;
