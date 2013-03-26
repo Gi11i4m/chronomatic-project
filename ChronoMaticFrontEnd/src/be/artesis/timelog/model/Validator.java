@@ -33,7 +33,7 @@ public class Validator
 		this.sessionKey = sessionKey;
 	}
 	
-	public boolean login(String gebruikersnaam, String paswoord) throws IOException, JSONException, WebserviceException, NoSuchAlgorithmException{
+	public boolean login(String gebruikersnaam, String paswoord) throws IOException, JSONException, WebserviceException{
         
 		JSONObject jObject = Connection.getObject("auth/login/" + gebruikersnaam+ "/"+ paswoord);
         if(jObject.has("error")){

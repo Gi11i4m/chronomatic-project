@@ -115,7 +115,7 @@ public class LoginForm extends javax.swing.JFrame implements ActionListener {
 		final int x = (screenSize.width - this.getWidth()) / 2;
 		final int y = (screenSize.height - this.getHeight()) / 2;
 		this.setLocation(x, y);
-		
+
 		pane = getContentPane();
 		layout = new CardLayout();
 		pane.setBackground(Color.WHITE);
@@ -124,7 +124,7 @@ public class LoginForm extends javax.swing.JFrame implements ActionListener {
 		basisPanel = new JFXPanel();
 		browserPanel = new JFXPanel();
 		newUserPanel = new NewUserPanel(this);
-		
+
 		pane.add(basisPanel, "BASISPANEL");
 		pane.add(browserPanel, "BROWSERPANEL");
 		pane.add(newUserPanel, "NEWUSERPANEL");
@@ -147,7 +147,7 @@ public class LoginForm extends javax.swing.JFrame implements ActionListener {
 			}
 
 			JSONObject userInfoJSONObj = GetUserInfo.request(accessToken, social);
-			
+
 			String email = userInfoJSONObj.getString("email");
 
 			// als gebruiker nog niet bestaat..
@@ -277,7 +277,7 @@ public class LoginForm extends javax.swing.JFrame implements ActionListener {
 		//twitterJButton = new JButton(twitterIcon);
 		//twitterJButton.setName("twitter");
 		saveUserCheckBox = new JCheckBox("Gebruiker onthouden");
-		
+
 		usernameJLabel.setBounds(31, 124, 138, 16);
 		paswoordJLabel.setBounds(31, 227, 138, 16);
 		aanmeldenButton.setBounds(31, 327, 107, 25);
@@ -292,14 +292,14 @@ public class LoginForm extends javax.swing.JFrame implements ActionListener {
 		linkedinJButton.setBounds(520, 368, 48, 48);
 		//twitterJButton.setBounds(493, 334, 48, 48);
 		saveUserCheckBox.setBounds(27, 283, 150, 25);
-		
+
 		// Backgrounds socialmedia buttons
 		googleJButton.setBackground(Color.WHITE);
 		facebookJButton.setBackground(Color.WHITE);
 		microsoftJButton.setBackground(Color.WHITE);
 		linkedinJButton.setBackground(Color.WHITE);
 		saveUserCheckBox.setBackground(Color.WHITE);
-		
+
 		// set label fonts
 		socialMediaJLabel.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		usernameJLabel.setFont(new Font("Tahoma", Font.PLAIN, 16));
@@ -327,7 +327,7 @@ public class LoginForm extends javax.swing.JFrame implements ActionListener {
 		//basisPanel.add(twitterJButton);
 		basisPanel.add(linkedinJButton);
 		basisPanel.add(saveUserCheckBox);
-		basisPanel.setFocusTraversalPolicy(new FocusTraversalOnArray(new Component[]{usernameJTextField, passwordJPasswordField, aanmeldenButton, googleJButton, facebookJButton, microsoftJButton, twitterJButton, linkedinJButton, newAccountJLabel}));
+		basisPanel.setFocusTraversalPolicy(new FocusTraversalOnArray(new Component[] { usernameJTextField, passwordJPasswordField, aanmeldenButton, googleJButton, facebookJButton, microsoftJButton, twitterJButton, linkedinJButton, newAccountJLabel }));
 		browserPanel.add(browserGoBackJButton);
 
 		// Action listeners
@@ -347,9 +347,9 @@ public class LoginForm extends javax.swing.JFrame implements ActionListener {
 							login();
 						}
 					};*/
-					
+
 					//loginLoadingThread.start();
-					
+
 					//parent.setVisible(true);
 				}
 			});
@@ -385,12 +385,12 @@ public class LoginForm extends javax.swing.JFrame implements ActionListener {
 				saveUserCheckBox.setSelected(true);
 				passwordJPasswordField.setEnabled(false);
 				passwordJPasswordField.setText("00000000");
-				
+
 			}
 		} catch (IllegalArgumentException | IllegalAccessException | InvocationTargetException e) {
 			e.printStackTrace();
 		}
-		
+
 		saveUserCheckBox.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
@@ -405,7 +405,8 @@ public class LoginForm extends javax.swing.JFrame implements ActionListener {
 						e.printStackTrace();
 					}
 				}
-			}});
+			}
+		});
 
 	}
 
@@ -414,25 +415,31 @@ public class LoginForm extends javax.swing.JFrame implements ActionListener {
 
 		JButton sender = (JButton) evt.getSource();
 
-        switch (sender.getName()) {
-            case "google":  social = new Google();
-                     break;
-            case "facebook":  social = new Facebook();
-                     break;
-            case "microsoft":  social = new Microsoft();
-                     break;
-            case "twitter":  social = new Twitter();
-                     break;
-            case "linkedin":  social = new Linkedin();
-                     break;
-            default: social = new Google();
-                     break;
-        }
-        //this.displayTab("loading");
-        
-        loginProviderJButtonClicked();
+		switch (sender.getName()) {
+		case "google":
+			social = new Google();
+			break;
+		case "facebook":
+			social = new Facebook();
+			break;
+		case "microsoft":
+			social = new Microsoft();
+			break;
+		case "twitter":
+			social = new Twitter();
+			break;
+		case "linkedin":
+			social = new Linkedin();
+			break;
+		default:
+			social = new Google();
+			break;
+		}
+		//this.displayTab("loading");
+
+		loginProviderJButtonClicked();
 	}
-	
+
 	private void loginProviderJButtonClicked() {
 		AuthBrowser browser = new AuthBrowser(this, social);
 		browser.buildUrl();

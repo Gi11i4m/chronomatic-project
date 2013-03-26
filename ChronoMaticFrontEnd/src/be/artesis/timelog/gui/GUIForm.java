@@ -4,7 +4,6 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
-import java.awt.SystemColor;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -17,8 +16,8 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
-import java.util.Vector;
 
+import javax.swing.AbstractListModel;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListModel;
 import javax.swing.GroupLayout;
@@ -26,11 +25,13 @@ import javax.swing.GroupLayout.Alignment;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
-import javax.swing.JFrame;
+import javax.swing.JComboBox;
+import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JProgressBar;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextArea;
@@ -41,14 +42,20 @@ import javax.swing.SwingConstants;
 import javax.swing.border.BevelBorder;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.DefaultTreeModel;
+import javax.swing.tree.TreePath;
+
+import net.fortuna.ical4j.model.ValidationException;
 
 import org.json.JSONException;
 
-import be.artesis.timelog.checkboxtree.*;
 import be.artesis.timelog.clock.Clock;
+import be.artesis.timelog.ics.IcsExporteren;
 import be.artesis.timelog.model.Validator;
 import be.artesis.timelog.model.WebserviceException;
 import be.artesis.timelog.view.DataInputException;
+import be.artesis.timelog.view.Gebruiker;
 import be.artesis.timelog.view.Opdrachtgever;
 import be.artesis.timelog.view.Project;
 import be.artesis.timelog.view.Taak;
@@ -59,10 +66,8 @@ import com.jgoodies.forms.layout.ColumnSpec;
 import com.jgoodies.forms.layout.FormLayout;
 import com.jgoodies.forms.layout.RowSpec;
 import com.toedter.calendar.JDateChooser;
-import javax.swing.JComboBox;
-import javax.swing.SwingConstants;
-import javax.swing.tree.DefaultTreeModel;
-import javax.swing.tree.DefaultMutableTreeNode;
+
+import eu.floraresearch.lablib.gui.checkboxtree.CheckboxTree;
 
 /**
  * @author Gilliam
@@ -74,8 +79,8 @@ public class GUIForm extends javax.swing.JFrame {
 	// Properties
 	// ================================================================================
 
-	LoginForm login;
 	Validator validator;
+	boolean creatingProject;
 	final String NEWCLIENTITEM = "< New client >";
 	final String NEWTASKITEM = "< New task >";
 	final String NEWPROJECTITEM = "< New project >";
@@ -88,7 +93,8 @@ public class GUIForm extends javax.swing.JFrame {
 	/* Begin gegenereerde code */
 	// Initialiseer GUI componenten
 	private void initComponents() {
-		JTabbedPane = new javax.swing.JTabbedPane();
+		creatingProject = false;
+		contentJTabbedPane = new javax.swing.JTabbedPane();
 		homeJPanel = new javax.swing.JPanel();
 		homeJLabel = new javax.swing.JLabel();
 		homeJLabel.setBounds(10, 11, 62, 16);
@@ -139,9 +145,9 @@ public class GUIForm extends javax.swing.JFrame {
 			}
 		});
 
-		JTabbedPane.setBackground(new java.awt.Color(51, 51, 51));
-		JTabbedPane.setTabPlacement(javax.swing.JTabbedPane.LEFT);
-		JTabbedPane.setName("tabContainer");
+		contentJTabbedPane.setBackground(new java.awt.Color(51, 51, 51));
+		contentJTabbedPane.setTabPlacement(javax.swing.JTabbedPane.LEFT);
+		contentJTabbedPane.setName("tabContainer");
 
 		homeJPanel.setBackground(Color.GRAY);
 		homeJPanel.setForeground(new java.awt.Color(65, 152, 134));
@@ -160,7 +166,7 @@ public class GUIForm extends javax.swing.JFrame {
 			}
 		});
 
-		JTabbedPane.addTab("", new javax.swing.ImageIcon(getClass().getResource("/be/artesis/timelog/gui/icons/HomeNeonIcon.png")), homeJPanel, "Home"); // NOI18N
+		contentJTabbedPane.addTab("", new javax.swing.ImageIcon(getClass().getResource("/be/artesis/timelog/gui/icons/HomeNeonIcon.png")), homeJPanel, "Home"); // NOI18N
 		homeJPanel.setLayout(null);
 		homeJPanel.add(workJButton);
 		homeJPanel.add(homeJLabel);
@@ -194,7 +200,7 @@ public class GUIForm extends javax.swing.JFrame {
 		homeProjectsJList.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyPressed(KeyEvent arg0) {
-				setCurrentProjectHomeJList(arg0);
+				setCurrentProjectWithEnter(arg0);
 			}
 		});
 		homeProjectsJList.addListSelectionListener(new ListSelectionListener() {
@@ -232,15 +238,16 @@ public class GUIForm extends javax.swing.JFrame {
 		removeProjectJButton.setEnabled(false);
 		removeProjectJButton.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
-				removeProject();
+				deleteProject();
 			}
 		});
-
-		projectFieldsJPanel = new JPanel();
-		projectFieldsJPanel.setBounds(340, 33, 334, 336);
-		projectFieldsJPanel.setBackground(Color.DARK_GRAY);
-		projectFieldsJPanel.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
 		projectsJList = new javax.swing.JList();
+		projectsJList.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyPressed(KeyEvent arg0) {
+				setCurrentProjectWithEnter(arg0);
+			}
+		});
 		jScrollPane1.setViewportView(projectsJList);
 
 		projectsJList.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
@@ -260,66 +267,124 @@ public class GUIForm extends javax.swing.JFrame {
 				projectsJListValueChanged(evt);
 			}
 		});
-		projectFieldsJPanel.setLayout(new FormLayout(new ColumnSpec[] { FormFactory.UNRELATED_GAP_COLSPEC, ColumnSpec.decode("65px"), FormFactory.LABEL_COMPONENT_GAP_COLSPEC, ColumnSpec.decode("max(53dlu;default):grow"), FormFactory.RELATED_GAP_COLSPEC, ColumnSpec.decode("123px"), FormFactory.RELATED_GAP_COLSPEC, FormFactory.DEFAULT_COLSPEC, }, new RowSpec[] { FormFactory.UNRELATED_GAP_ROWSPEC, RowSpec.decode("20px"), FormFactory.LINE_GAP_ROWSPEC, FormFactory.PREF_ROWSPEC, FormFactory.LINE_GAP_ROWSPEC, FormFactory.PREF_ROWSPEC, FormFactory.RELATED_GAP_ROWSPEC, RowSpec.decode("96px"), FormFactory.UNRELATED_GAP_ROWSPEC, RowSpec.decode("20px"), FormFactory.LINE_GAP_ROWSPEC, RowSpec.decode("21px"), RowSpec.decode("60px"), RowSpec.decode("23px"), }));
+
+		contentJTabbedPane.addTab("", new javax.swing.ImageIcon(getClass().getResource("/be/artesis/timelog/gui/icons/ProjectsNeonIcon.png")), projectsJPanel, "Projects");
+		projectsJPanel.setLayout(null);
+		projectsJPanel.add(removeProjectJButton);
+		projectsJPanel.add(setCurrentProjectJButton);
+		projectsJPanel.add(jScrollPane1);
+		projectsJPanel.add(filler2);
+		projectsJPanel.add(projectsJLabel);
+
+		projectFieldsJPanel = new JPanel();
+		projectFieldsJPanel.setBorder(null);
+		projectFieldsJPanel.setBackground(Color.GRAY);
+		projectFieldsJPanel.setBounds(224, 33, 450, 407);
+		projectsJPanel.add(projectFieldsJPanel);
+		projectFieldsJPanel.setLayout(null);
+
+		projectEditFieldsJPanel = new JPanel();
+		projectEditFieldsJPanel.setBounds(112, 0, 338, 175);
+		projectFieldsJPanel.add(projectEditFieldsJPanel);
+		projectEditFieldsJPanel.setBackground(Color.DARK_GRAY);
+		projectEditFieldsJPanel.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
+		projectEditFieldsJPanel.setLayout(new FormLayout(new ColumnSpec[] { FormFactory.UNRELATED_GAP_COLSPEC, ColumnSpec.decode("65px"), FormFactory.LABEL_COMPONENT_GAP_COLSPEC, ColumnSpec.decode("max(53dlu;default):grow"), FormFactory.RELATED_GAP_COLSPEC, ColumnSpec.decode("123px"), FormFactory.RELATED_GAP_COLSPEC, FormFactory.DEFAULT_COLSPEC, }, new RowSpec[] { FormFactory.UNRELATED_GAP_ROWSPEC, RowSpec.decode("20px"), FormFactory.LINE_GAP_ROWSPEC, FormFactory.PREF_ROWSPEC, FormFactory.LINE_GAP_ROWSPEC, FormFactory.PREF_ROWSPEC, FormFactory.UNRELATED_GAP_ROWSPEC, RowSpec.decode("20px"), FormFactory.LINE_GAP_ROWSPEC, RowSpec.decode("21px"), RowSpec.decode("23px"), }));
 		namecompJLabel = new javax.swing.JLabel();
-		projectFieldsJPanel.add(namecompJLabel, "2, 2, left, center");
+		projectEditFieldsJPanel.add(namecompJLabel, "2, 2, left, center");
 
 		namecompJLabel.setForeground(new java.awt.Color(255, 255, 255));
 		namecompJLabel.setText("Naam");
 		projectNameJTextField = new javax.swing.JTextField();
-		projectFieldsJPanel.add(projectNameJTextField, "4, 2, 3, 1, fill, top");
+		projectEditFieldsJPanel.add(projectNameJTextField, "4, 2, 3, 1, fill, top");
 		startdatecompJLabel = new javax.swing.JLabel();
-		projectFieldsJPanel.add(startdatecompJLabel, "2, 4, 2, 1, left, center");
+		projectEditFieldsJPanel.add(startdatecompJLabel, "2, 4, 2, 1, left, center");
 
 		startdatecompJLabel.setForeground(new java.awt.Color(255, 255, 255));
 		startdatecompJLabel.setText("Start date");
 
 		projectStartDateChooser = new JDateChooser();
 		projectStartDateChooser.setDateFormatString("dd/MM/yyyy");
-		projectFieldsJPanel.add(projectStartDateChooser, "4, 4, fill, fill");
+		projectEditFieldsJPanel.add(projectStartDateChooser, "4, 4, fill, fill");
 		enddatecompJLabel1 = new javax.swing.JLabel();
-		projectFieldsJPanel.add(enddatecompJLabel1, "2, 6, 2, 1, left, center");
+		projectEditFieldsJPanel.add(enddatecompJLabel1, "2, 6, 2, 1, left, center");
 
 		enddatecompJLabel1.setForeground(new java.awt.Color(255, 255, 255));
 		enddatecompJLabel1.setText("End date");
 
 		projectEndDateChooser = new JDateChooser();
 		projectEndDateChooser.setDateFormatString("dd/MM/yyyy");
-		projectFieldsJPanel.add(projectEndDateChooser, "4, 6, fill, fill");
-
-		projectTasksJList = new JList();
-		projectTasksJList.setEnabled(false);
-		projectTasksJList.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
-		projectTasksJList.setBackground(Color.LIGHT_GRAY);
-		projectFieldsJPanel.add(projectTasksJList, "4, 8, 3, 1, fill, fill");
+		projectEditFieldsJPanel.add(projectEndDateChooser, "4, 6, fill, fill");
 		clientcompJLabel1 = new javax.swing.JLabel();
-		projectFieldsJPanel.add(clientcompJLabel1, "2, 10, left, top");
+		projectEditFieldsJPanel.add(clientcompJLabel1, "2, 8, left, top");
 
 		clientcompJLabel1.setForeground(new java.awt.Color(255, 255, 255));
 		clientcompJLabel1.setText("Client");
-		taskscompJLabel = new javax.swing.JLabel();
-		projectFieldsJPanel.add(taskscompJLabel, "2, 8, left, top");
-
-		taskscompJLabel.setForeground(new java.awt.Color(255, 255, 255));
-		taskscompJLabel.setText("Tasks");
 
 		projectClientsJComboBox = new JComboBox();
-		projectFieldsJPanel.add(projectClientsJComboBox, "4, 10, 3, 1, fill, default");
-		percentageCompleteJProgressBar = new javax.swing.JProgressBar();
-		projectFieldsJPanel.add(percentageCompleteJProgressBar, "4, 12, 3, 1, fill, fill");
-		percentageCompletecompJLabel = new javax.swing.JLabel();
-		projectFieldsJPanel.add(percentageCompletecompJLabel, "2, 12, fill, fill");
-
-		percentageCompletecompJLabel.setForeground(new java.awt.Color(255, 255, 255));
-		percentageCompletecompJLabel.setText("Complete");
+		projectClientsJComboBox.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				clientsJComboBoxValueChanged(arg0);
+			}
+		});
+		projectEditFieldsJPanel.add(projectClientsJComboBox, "4, 8, 3, 1, fill, default");
 		saveProjectJButton = new javax.swing.JButton();
-		projectFieldsJPanel.add(saveProjectJButton, "2, 14, 5, 1, fill, top");
+		projectEditFieldsJPanel.add(saveProjectJButton, "2, 11, 5, 1, fill, top");
 
 		saveProjectJButton.setText("Save");
 		saveProjectJButton.setEnabled(false);
+
+		projectTasksJList = new JList();
+		projectTasksJList.setBounds(187, 218, 263, 96);
+		projectFieldsJPanel.add(projectTasksJList);
+		projectTasksJList.setEnabled(false);
+		projectTasksJList.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
+		projectTasksJList.setBackground(Color.LIGHT_GRAY);
+		taskscompJLabel = new javax.swing.JLabel();
+		taskscompJLabel.setBounds(112, 221, 65, 14);
+		projectFieldsJPanel.add(taskscompJLabel);
+
+		taskscompJLabel.setForeground(new java.awt.Color(255, 255, 255));
+		taskscompJLabel.setText("Tasks");
+		percentageCompleteJProgressBar = new javax.swing.JProgressBar();
+		//percentageCompleteJProgressBar.
+		percentageCompleteJProgressBar.setToolTipText("Displays the percentage of completion of the project");
+		percentageCompleteJProgressBar.setStringPainted(true);
+		percentageCompleteJProgressBar.setBounds(187, 186, 263, 21);
+		projectFieldsJPanel.add(percentageCompleteJProgressBar);
+		percentageCompletecompJLabel = new javax.swing.JLabel();
+		percentageCompletecompJLabel.setBounds(112, 186, 65, 21);
+		projectFieldsJPanel.add(percentageCompletecompJLabel);
+
+		percentageCompletecompJLabel.setForeground(new java.awt.Color(255, 255, 255));
+		percentageCompletecompJLabel.setText("Complete");
 		saveProjectJButton.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
-				saveProject();
+				try {
+					String name = projectNameJTextField.getText();
+					long startdate;
+					long enddate;
+					try {
+						startdate = projectStartDateChooser.getDate().getTime() / 1000;
+						enddate = projectEndDateChooser.getDate().getTime() / 1000;
+					} catch (NullPointerException e) {
+						throw new DataInputException("Please choose a valid date");
+					}
+					if (projectClientsJComboBox.getSelectedIndex() == -1 || projectClientsJComboBox.getSelectedItem().equals(NEWCLIENTITEM)) {
+						throw new DataInputException("Select or create a client first");
+					}
+					Opdrachtgever o = (Opdrachtgever) projectClientsJComboBox.getSelectedItem();
+					int opdrachtgeverID = o.getID();
+
+					if (projectsJList.getSelectedValue().equals(NEWPROJECTITEM)) {
+						createProject(name, startdate, enddate, opdrachtgeverID);
+					} else {
+						updateProject(name, startdate, enddate, opdrachtgeverID);
+					}
+				} catch (DataInputException e) {
+					JOptionPane.showMessageDialog(GUIForm.this, e.getMessage());
+					e.printStackTrace();
+				}
+				toggleButtonStates();
 			}
 		});
 
@@ -328,15 +393,6 @@ public class GUIForm extends javax.swing.JFrame {
 				editFieldsFocused(evt);
 			}
 		});
-
-		JTabbedPane.addTab("", new javax.swing.ImageIcon(getClass().getResource("/be/artesis/timelog/gui/icons/ProjectsNeonIcon.png")), projectsJPanel, "Projects");
-		projectsJPanel.setLayout(null);
-		projectsJPanel.add(removeProjectJButton);
-		projectsJPanel.add(setCurrentProjectJButton);
-		projectsJPanel.add(jScrollPane1);
-		projectsJPanel.add(filler2);
-		projectsJPanel.add(projectFieldsJPanel);
-		projectsJPanel.add(projectsJLabel);
 
 		tasksJPanel.setBackground(Color.GRAY);
 
@@ -348,16 +404,27 @@ public class GUIForm extends javax.swing.JFrame {
 		removeTaskJButton.setEnabled(false);
 		removeTaskJButton.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
-				removeTask();
+				deleteTask();
 			}
 		});
 
-		JTabbedPane.addTab("", new javax.swing.ImageIcon(getClass().getResource("/be/artesis/timelog/gui/icons/TasksNeonIcon.png")), tasksJPanel, "Tasks");
+		contentJTabbedPane.addTab("", new javax.swing.ImageIcon(getClass().getResource("/be/artesis/timelog/gui/icons/TasksNeonIcon.png")), tasksJPanel, "Tasks");
 		tasksJPanel.setLayout(null);
 		tasksJPanel.add(tasksJLabel);
 		tasksJPanel.add(jScrollPane3);
 
 		tasksJList = new JList();
+		tasksJList.setModel(new AbstractListModel() {
+			String[] values = new String[] { "Select a current project first!" };
+
+			public int getSize() {
+				return values.length;
+			}
+
+			public Object getElementAt(int index) {
+				return values[index];
+			}
+		});
 		tasksJList.addListSelectionListener(new ListSelectionListener() {
 			public void valueChanged(ListSelectionEvent arg0) {
 				taskJListValueChanged(arg0);
@@ -368,16 +435,23 @@ public class GUIForm extends javax.swing.JFrame {
 		tasksJPanel.add(removeTaskJButton);
 
 		taskFieldsJPanel = new JPanel();
-		taskFieldsJPanel.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
-		taskFieldsJPanel.setBackground(Color.DARK_GRAY);
-		taskFieldsJPanel.setBounds(275, 40, 399, 400);
+		taskFieldsJPanel.setBorder(null);
+		taskFieldsJPanel.setBackground(Color.GRAY);
+		taskFieldsJPanel.setBounds(284, 40, 401, 400);
 		tasksJPanel.add(taskFieldsJPanel);
-		taskFieldsJPanel.setLayout(new FormLayout(new ColumnSpec[] { FormFactory.UNRELATED_GAP_COLSPEC, ColumnSpec.decode("56px"), FormFactory.UNRELATED_GAP_COLSPEC, ColumnSpec.decode("1px"), FormFactory.LABEL_COMPONENT_GAP_COLSPEC, ColumnSpec.decode("110px:grow"), FormFactory.DEFAULT_COLSPEC, FormFactory.RELATED_GAP_COLSPEC, ColumnSpec.decode("55px"), ColumnSpec.decode("51px"), FormFactory.RELATED_GAP_COLSPEC, ColumnSpec.decode("max(27dlu;default)"), FormFactory.RELATED_GAP_COLSPEC, ColumnSpec.decode("max(15dlu;default)"), }, new RowSpec[] { FormFactory.UNRELATED_GAP_ROWSPEC, RowSpec.decode("20px"), FormFactory.RELATED_GAP_ROWSPEC, RowSpec.decode("20px:grow"), FormFactory.RELATED_GAP_ROWSPEC, RowSpec.decode("20px:grow"), RowSpec.decode("38px"), RowSpec.decode("51px"), FormFactory.UNRELATED_GAP_ROWSPEC, RowSpec.decode("51px"), FormFactory.RELATED_GAP_ROWSPEC, RowSpec.decode("37px"), FormFactory.UNRELATED_GAP_ROWSPEC, RowSpec.decode("23px"), FormFactory.UNRELATED_GAP_ROWSPEC, FormFactory.DEFAULT_ROWSPEC, FormFactory.UNRELATED_GAP_ROWSPEC, RowSpec.decode("41px"), }));
+		taskFieldsJPanel.setLayout(null);
+
+		taskEditFieldsJPanel = new JPanel();
+		taskEditFieldsJPanel.setBounds(0, 0, 399, 219);
+		taskFieldsJPanel.add(taskEditFieldsJPanel);
+		taskEditFieldsJPanel.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
+		taskEditFieldsJPanel.setBackground(Color.DARK_GRAY);
+		taskEditFieldsJPanel.setLayout(new FormLayout(new ColumnSpec[] { FormFactory.UNRELATED_GAP_COLSPEC, ColumnSpec.decode("56px"), FormFactory.UNRELATED_GAP_COLSPEC, ColumnSpec.decode("1px"), FormFactory.LABEL_COMPONENT_GAP_COLSPEC, ColumnSpec.decode("110px:grow"), FormFactory.DEFAULT_COLSPEC, FormFactory.RELATED_GAP_COLSPEC, ColumnSpec.decode("55px"), ColumnSpec.decode("51px"), FormFactory.RELATED_GAP_COLSPEC, ColumnSpec.decode("max(27dlu;default)"), FormFactory.RELATED_GAP_COLSPEC, ColumnSpec.decode("max(15dlu;default)"), }, new RowSpec[] { FormFactory.UNRELATED_GAP_ROWSPEC, RowSpec.decode("20px"), FormFactory.RELATED_GAP_ROWSPEC, RowSpec.decode("20px:grow"), FormFactory.RELATED_GAP_ROWSPEC, RowSpec.decode("20px:grow"), RowSpec.decode("38px"), RowSpec.decode("51px"), FormFactory.UNRELATED_GAP_ROWSPEC, RowSpec.decode("51px"), FormFactory.RELATED_GAP_ROWSPEC, RowSpec.decode("37px"), FormFactory.UNRELATED_GAP_ROWSPEC, RowSpec.decode("23px"), FormFactory.UNRELATED_GAP_ROWSPEC, FormFactory.DEFAULT_ROWSPEC, FormFactory.UNRELATED_GAP_ROWSPEC, RowSpec.decode("41px"), }));
 
 		label_5 = new JLabel();
 		label_5.setText("Name");
 		label_5.setForeground(Color.WHITE);
-		taskFieldsJPanel.add(label_5, "2, 2, fill, center");
+		taskEditFieldsJPanel.add(label_5, "2, 2, fill, center");
 
 		taskNameJTextField = new JTextField();
 		taskNameJTextField.addFocusListener(new FocusAdapter() {
@@ -386,21 +460,21 @@ public class GUIForm extends javax.swing.JFrame {
 				editFieldsFocused(e);
 			}
 		});
-		taskFieldsJPanel.add(taskNameJTextField, "6, 2, 7, 1, fill, top");
+		taskEditFieldsJPanel.add(taskNameJTextField, "6, 2, 7, 1, fill, top");
 
 		label_6 = new JLabel();
 		label_6.setText("Start date");
 		label_6.setForeground(Color.WHITE);
-		taskFieldsJPanel.add(label_6, "2, 4, fill, center");
+		taskEditFieldsJPanel.add(label_6, "2, 4, fill, center");
 
 		taskStartDateChooser = new JDateChooser();
 		taskStartDateChooser.setDateFormatString("dd/MM/yyyy");
-		taskFieldsJPanel.add(taskStartDateChooser, "6, 4, fill, center");
+		taskEditFieldsJPanel.add(taskStartDateChooser, "6, 4, fill, center");
 
 		label_7 = new JLabel();
 		label_7.setText("Completed");
 		label_7.setForeground(Color.WHITE);
-		taskFieldsJPanel.add(label_7, "9, 4, 2, 1, center, center");
+		taskEditFieldsJPanel.add(label_7, "9, 4, 2, 1, center, center");
 
 		taskCompletedJCheckBox = new JCheckBox();
 		taskCompletedJCheckBox.addFocusListener(new FocusAdapter() {
@@ -410,54 +484,21 @@ public class GUIForm extends javax.swing.JFrame {
 			}
 		});
 		taskCompletedJCheckBox.setBackground(Color.DARK_GRAY);
-		taskFieldsJPanel.add(taskCompletedJCheckBox, "12, 4, left, center");
+		taskEditFieldsJPanel.add(taskCompletedJCheckBox, "12, 4, left, center");
 
 		label_8 = new JLabel();
 		label_8.setText("End date");
 		label_8.setForeground(Color.WHITE);
-		taskFieldsJPanel.add(label_8, "2, 6, fill, center");
+		taskEditFieldsJPanel.add(label_8, "2, 6, fill, center");
 
 		taskEndDateChooser = new JDateChooser();
 		taskEndDateChooser.setDateFormatString("dd/MM/yyyy");
-		taskFieldsJPanel.add(taskEndDateChooser, "6, 6, fill, center");
+		taskEditFieldsJPanel.add(taskEndDateChooser, "6, 6, fill, center");
 
 		label_9 = new JLabel();
 		label_9.setText("Comment");
 		label_9.setForeground(Color.WHITE);
-		taskFieldsJPanel.add(label_9, "2, 8, fill, top");
-
-		lblWorked = new JLabel();
-		lblWorked.setText("Worked");
-		lblWorked.setForeground(Color.WHITE);
-		taskFieldsJPanel.add(lblWorked, "2, 10, 3, 1, fill, top");
-
-		saveTaskJButton = new JButton();
-		saveTaskJButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				saveTask();
-			}
-		});
-
-		taskTotalWorkedJLabel = new JLabel("Total worked");
-		taskTotalWorkedJLabel.setForeground(Color.WHITE);
-		taskFieldsJPanel.add(taskTotalWorkedJLabel, "2, 14, 2, 1, left, default");
-
-		taskTotalWorkedJTextField = new JTextField();
-		taskTotalWorkedJTextField.setEditable(false);
-		taskFieldsJPanel.add(taskTotalWorkedJTextField, "6, 14, 3, 1, fill, default");
-		taskTotalWorkedJTextField.setColumns(10);
-
-		lblTotalPaused = new JLabel("Total paused");
-		lblTotalPaused.setForeground(Color.WHITE);
-		taskFieldsJPanel.add(lblTotalPaused, "2, 16, 2, 1, left, default");
-
-		taskTotalPauseJTextField = new JTextField();
-		taskTotalPauseJTextField.setEditable(false);
-		taskFieldsJPanel.add(taskTotalPauseJTextField, "6, 16, 3, 1, fill, default");
-		taskTotalPauseJTextField.setColumns(10);
-		saveTaskJButton.setText("Save");
-		saveTaskJButton.setEnabled(false);
-		taskFieldsJPanel.add(saveTaskJButton, "2, 18, 11, 1, fill, top");
+		taskEditFieldsJPanel.add(label_9, "2, 8, fill, top");
 
 		taskCommentJTextArea = new JTextArea();
 		taskCommentJTextArea.addFocusListener(new FocusAdapter() {
@@ -466,10 +507,67 @@ public class GUIForm extends javax.swing.JFrame {
 				editFieldsFocused(e);
 			}
 		});
-		taskFieldsJPanel.add(taskCommentJTextArea, "6, 8, 7, 1, fill, fill");
+		taskEditFieldsJPanel.add(taskCommentJTextArea, "6, 8, 7, 1, fill, fill");
+
+		saveTaskJButton = new JButton();
+		saveTaskJButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				try {
+					String name = taskNameJTextField.getText();
+					String comment = taskCommentJTextArea.getText();
+					boolean completed = taskCompletedJCheckBox.isSelected();
+					long startdate = taskStartDateChooser.getDate().getTime() / 1000;
+					long enddate = taskEndDateChooser.getDate().getTime() / 1000;
+
+					if (tasksJList.getSelectedValue().equals(NEWTASKITEM)) {
+						createTask(name, startdate, enddate, comment, completed);
+					} else {
+						updateTask(name, startdate, enddate, comment, completed);
+					}
+				} catch (NullPointerException ex) {
+					ex.printStackTrace();
+					JOptionPane.showMessageDialog(GUIForm.this, "Please choose a valid date");
+				} finally {
+					toggleButtonStates();
+					loadProjectInfo(projectsJList.getSelectedIndex());
+				}
+			}
+		});
+		saveTaskJButton.setText("Save");
+		saveTaskJButton.setEnabled(false);
+		taskEditFieldsJPanel.add(saveTaskJButton, "6, 10, 7, 1, fill, top");
 
 		workedTimeJList = new JList();
-		taskFieldsJPanel.add(workedTimeJList, "6, 10, 7, 3, fill, fill");
+		workedTimeJList.setBounds(88, 230, 288, 94);
+		taskFieldsJPanel.add(workedTimeJList);
+
+		taskTotalWorkedJTextField = new JTextField();
+		taskTotalWorkedJTextField.setBounds(88, 335, 135, 20);
+		taskFieldsJPanel.add(taskTotalWorkedJTextField);
+		taskTotalWorkedJTextField.setEditable(false);
+		taskTotalWorkedJTextField.setColumns(10);
+
+		taskTotalPauseJTextField = new JTextField();
+		taskTotalPauseJTextField.setBounds(88, 365, 135, 20);
+		taskFieldsJPanel.add(taskTotalPauseJTextField);
+		taskTotalPauseJTextField.setEditable(false);
+		taskTotalPauseJTextField.setColumns(10);
+
+		lblWorked = new JLabel();
+		lblWorked.setBounds(10, 230, 68, 14);
+		taskFieldsJPanel.add(lblWorked);
+		lblWorked.setText("Worked");
+		lblWorked.setForeground(Color.WHITE);
+
+		taskTotalWorkedJLabel = new JLabel("Total worked");
+		taskTotalWorkedJLabel.setBounds(10, 338, 76, 14);
+		taskFieldsJPanel.add(taskTotalWorkedJLabel);
+		taskTotalWorkedJLabel.setForeground(Color.WHITE);
+
+		lblTotalPaused = new JLabel("Total paused");
+		lblTotalPaused.setBounds(10, 368, 76, 14);
+		taskFieldsJPanel.add(lblTotalPaused);
+		lblTotalPaused.setForeground(Color.WHITE);
 		clientsJPanel = new javax.swing.JPanel();
 		clientsJLabel = new javax.swing.JLabel();
 		jScrollPane5 = new javax.swing.JScrollPane();
@@ -485,7 +583,7 @@ public class GUIForm extends javax.swing.JFrame {
 		removeClientJButton.setEnabled(false);
 		removeClientJButton.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
-				removeClient();
+				deleteClient();
 			}
 		});
 
@@ -498,10 +596,11 @@ public class GUIForm extends javax.swing.JFrame {
 		clientsJPanelLayout.setVerticalGroup(clientsJPanelLayout.createParallelGroup(Alignment.TRAILING).addGroup(clientsJPanelLayout.createSequentialGroup().addGroup(clientsJPanelLayout.createParallelGroup(Alignment.LEADING).addGroup(clientsJPanelLayout.createSequentialGroup().addGap(33).addComponent(clientFieldsJPanel, GroupLayout.DEFAULT_SIZE, 378, Short.MAX_VALUE)).addGroup(clientsJPanelLayout.createSequentialGroup().addContainerGap().addComponent(clientsJLabel).addPreferredGap(ComponentPlacement.RELATED).addComponent(jScrollPane5, GroupLayout.DEFAULT_SIZE, 378, Short.MAX_VALUE))).addPreferredGap(ComponentPlacement.RELATED).addComponent(removeClientJButton, GroupLayout.PREFERRED_SIZE, 23, GroupLayout.PREFERRED_SIZE).addContainerGap()));
 
 		clientsJList = new JList();
-		clientsJList.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
-		jScrollPane5.setViewportView(clientsJList);
-
-		clientsJList = new JList();
+		clientsJList.addListSelectionListener(new ListSelectionListener() {
+			public void valueChanged(ListSelectionEvent arg0) {
+				clientsJListValueChanged(arg0);
+			}
+		});
 		jScrollPane5.setViewportView(clientsJList);
 		clientFieldsJPanel.setLayout(new FormLayout(new ColumnSpec[] { FormFactory.UNRELATED_GAP_COLSPEC, ColumnSpec.decode("79px"), ColumnSpec.decode("220px"), }, new RowSpec[] { FormFactory.RELATED_GAP_ROWSPEC, RowSpec.decode("20px"), FormFactory.LINE_GAP_ROWSPEC, RowSpec.decode("20px"), FormFactory.LINE_GAP_ROWSPEC, RowSpec.decode("20px"), FormFactory.LINE_GAP_ROWSPEC, RowSpec.decode("20px"), FormFactory.LINE_GAP_ROWSPEC, RowSpec.decode("20px"), RowSpec.decode("192px"), RowSpec.decode("17px"), FormFactory.RELATED_GAP_ROWSPEC, FormFactory.DEFAULT_ROWSPEC, }));
 
@@ -578,7 +677,18 @@ public class GUIForm extends javax.swing.JFrame {
 		saveClientJButton = new JButton();
 		saveClientJButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				saveClient();
+				String naam = clientNameJTextField.getText();
+				String voornaam = clientFirstNameJTextField.getText();
+				String bedrijfsnaam = clientCompanyJTextField.getText();
+				String email = clientEmailJTextField.getText();
+				String telefoonnummer = clientPhoneNumberJTextField.getText();
+
+				if (clientsJList.getSelectedValue().equals(NEWCLIENTITEM)) {
+					createClient(naam, voornaam, bedrijfsnaam, email, telefoonnummer);
+				} else {
+					updateClient(naam, voornaam, bedrijfsnaam, email, telefoonnummer);
+				}
+				toggleButtonStates();
 			}
 		});
 		saveClientJButton.setText("Save");
@@ -586,7 +696,7 @@ public class GUIForm extends javax.swing.JFrame {
 		clientFieldsJPanel.add(saveClientJButton, "2, 14, 2, 1, fill, top");
 		clientsJPanel.setLayout(clientsJPanelLayout);
 
-		JTabbedPane.addTab("", new javax.swing.ImageIcon(getClass().getResource("/be/artesis/timelog/gui/icons/ClientsNeonIcon.png")), clientsJPanel, "Clients");
+		contentJTabbedPane.addTab("", new javax.swing.ImageIcon(getClass().getResource("/be/artesis/timelog/gui/icons/ClientsNeonIcon.png")), clientsJPanel, "Clients");
 
 		scheduleJPanel.setBackground(Color.GRAY);
 
@@ -594,13 +704,13 @@ public class GUIForm extends javax.swing.JFrame {
 		scheduleJLabel.setForeground(new java.awt.Color(255, 255, 255));
 		scheduleJLabel.setText("Schedule");
 
-		JTabbedPane.addTab("", new javax.swing.ImageIcon(getClass().getResource("/be/artesis/timelog/gui/icons/CalendarNeonIcon.png")), scheduleJPanel, "Schedule");
+		contentJTabbedPane.addTab("", new javax.swing.ImageIcon(getClass().getResource("/be/artesis/timelog/gui/icons/CalendarNeonIcon.png")), scheduleJPanel, "Schedule");
 		scheduleJPanel.setLayout(null);
 		scheduleJPanel.add(scheduleJLabel);
 
 		importExportJPanel = new JPanel();
 		importExportJPanel.setBackground(Color.GRAY);
-		JTabbedPane.addTab("", new ImageIcon(GUIForm.class.getResource("/be/artesis/timelog/gui/icons/ImportExportNeonIcon.png")), importExportJPanel, "Import / Export");
+		contentJTabbedPane.addTab("", new ImageIcon(GUIForm.class.getResource("/be/artesis/timelog/gui/icons/ImportExportNeonIcon.png")), importExportJPanel, "Import / Export");
 		importExportJPanel.setLayout(null);
 
 		importExportTabbedPane = new JTabbedPane(SwingConstants.TOP);
@@ -616,15 +726,12 @@ public class GUIForm extends javax.swing.JFrame {
 		importExportTabbedPane.addTab("Export", null, exportJPanel, "Export your tasks here");
 		importExportTabbedPane.setForegroundAt(0, Color.WHITE);
 		exportJPanel.setLayout(null);
-
-		exportTree = new JTree();
-		exportTree.setModel(new DefaultTreeModel(new DefaultMutableTreeNode("Tasks to export show here") {
-			{
-			}
-		}));
-		exportJScrollPane = new JScrollPane(exportTree);
-		exportJScrollPane.setBounds(10, 11, 320, 347);
+		exportJScrollPane = new JScrollPane();
+		exportJScrollPane.setBounds(10, 11, 260, 379);
 		exportJPanel.add(exportJScrollPane);
+
+		exportJCheckBoxTree = new CheckboxTree();
+		exportJScrollPane.setViewportView(exportJCheckBoxTree);
 
 		exportJButton = new JButton("Export");
 		exportJButton.addActionListener(new ActionListener() {
@@ -632,8 +739,9 @@ public class GUIForm extends javax.swing.JFrame {
 				exportButtonClicked(arg0);
 			}
 		});
-		exportJButton.setBounds(10, 369, 320, 21);
+		exportJButton.setBounds(550, 11, 99, 23);
 		exportJPanel.add(exportJButton);
+
 		importExportTabbedPane.setBackgroundAt(0, Color.DARK_GRAY);
 
 		importJPanel = new JPanel();
@@ -643,18 +751,12 @@ public class GUIForm extends javax.swing.JFrame {
 		importExportTabbedPane.setForegroundAt(1, Color.WHITE);
 		importExportTabbedPane.setBackgroundAt(1, Color.DARK_GRAY);
 		importJPanel.setLayout(null);
-
-		importTree = new JTree();
-		importTree.setModel(new DefaultTreeModel(new DefaultMutableTreeNode("Projects to import show here") {
-			{
-			}
-		}));
-		importJScrollPane = new JScrollPane(importTree);
-		importJScrollPane.setBounds(10, 11, 320, 347);
-		importJPanel.add(importJScrollPane);
+		importProjectsJScrollPane = new JScrollPane();
+		importProjectsJScrollPane.setBounds(10, 11, 260, 379);
+		importJPanel.add(importProjectsJScrollPane);
 
 		importJButton = new JButton("Import");
-		importJButton.setBounds(10, 369, 320, 21);
+		importJButton.setBounds(550, 11, 99, 23);
 		importJPanel.add(importJButton);
 
 		optionsJPanel.setBackground(Color.GRAY);
@@ -663,12 +765,137 @@ public class GUIForm extends javax.swing.JFrame {
 		settingsJLabel.setForeground(new java.awt.Color(255, 255, 255));
 		settingsJLabel.setText("Settings");
 
-		javax.swing.GroupLayout optionsJPanelLayout = new javax.swing.GroupLayout(optionsJPanel);
-		optionsJPanel.setLayout(optionsJPanelLayout);
-		optionsJPanelLayout.setHorizontalGroup(optionsJPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGroup(optionsJPanelLayout.createSequentialGroup().addContainerGap().addComponent(settingsJLabel).addContainerGap(627, Short.MAX_VALUE)));
-		optionsJPanelLayout.setVerticalGroup(optionsJPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGroup(optionsJPanelLayout.createSequentialGroup().addContainerGap().addComponent(settingsJLabel).addContainerGap(369, Short.MAX_VALUE)));
+		settingsJTabbedPane = new JTabbedPane(JTabbedPane.TOP);
+		settingsJTabbedPane.setBackground(Color.GRAY);
 
-		JTabbedPane.addTab("", new javax.swing.ImageIcon(getClass().getResource("/be/artesis/timelog/gui/icons/SettingsNeonIcon.png")), optionsJPanel, "Settings");
+		javax.swing.GroupLayout optionsJPanelLayout = new javax.swing.GroupLayout(optionsJPanel);
+		optionsJPanelLayout.setHorizontalGroup(optionsJPanelLayout.createParallelGroup(Alignment.LEADING).addGroup(optionsJPanelLayout.createSequentialGroup().addContainerGap().addGroup(optionsJPanelLayout.createParallelGroup(Alignment.LEADING).addComponent(settingsJLabel).addComponent(settingsJTabbedPane, GroupLayout.PREFERRED_SIZE, 667, GroupLayout.PREFERRED_SIZE)).addContainerGap(18, Short.MAX_VALUE)));
+		optionsJPanelLayout.setVerticalGroup(optionsJPanelLayout.createParallelGroup(Alignment.LEADING).addGroup(optionsJPanelLayout.createSequentialGroup().addContainerGap().addComponent(settingsJLabel).addGap(18).addComponent(settingsJTabbedPane, GroupLayout.PREFERRED_SIZE, 391, GroupLayout.PREFERRED_SIZE).addContainerGap(15, Short.MAX_VALUE)));
+
+		userSettingsJPanel = new JPanel();
+		userSettingsJPanel.setBackground(Color.DARK_GRAY);
+		settingsJTabbedPane.addTab("User Settings", null, userSettingsJPanel, null);
+		userSettingsJPanel.setLayout(null);
+
+		firstNameJTextField = new JTextField();
+		firstNameJTextField.setBounds(115, 84, 152, 20);
+		userSettingsJPanel.add(firstNameJTextField);
+		firstNameJTextField.setColumns(10);
+
+		lastNameJTextField = new JTextField();
+		lastNameJTextField.setBounds(115, 115, 152, 20);
+		userSettingsJPanel.add(lastNameJTextField);
+		lastNameJTextField.setColumns(10);
+
+		emailJTextField = new JTextField();
+		emailJTextField.setBounds(115, 147, 152, 20);
+		userSettingsJPanel.add(emailJTextField);
+		emailJTextField.setColumns(10);
+
+		firstNameJLabel = new JLabel("First name");
+		firstNameJLabel.setForeground(Color.WHITE);
+		firstNameJLabel.setBounds(36, 87, 69, 14);
+		userSettingsJPanel.add(firstNameJLabel);
+
+		lastNameJLabel = new JLabel("Last name");
+		lastNameJLabel.setForeground(Color.WHITE);
+		lastNameJLabel.setBounds(36, 118, 69, 14);
+		userSettingsJPanel.add(lastNameJLabel);
+
+		emailJLabel = new JLabel("Email");
+		emailJLabel.setForeground(Color.WHITE);
+		emailJLabel.setBounds(36, 150, 69, 14);
+		userSettingsJPanel.add(emailJLabel);
+
+		addressJTextField = new JTextField();
+		addressJTextField.setBounds(115, 178, 152, 20);
+		userSettingsJPanel.add(addressJTextField);
+		addressJTextField.setColumns(10);
+
+		addressJLabel = new JLabel("Address");
+		addressJLabel.setForeground(Color.WHITE);
+		addressJLabel.setBounds(36, 181, 69, 14);
+		userSettingsJPanel.add(addressJLabel);
+
+		telephoneJTextField = new JTextField();
+		telephoneJTextField.setBounds(115, 209, 152, 20);
+		userSettingsJPanel.add(telephoneJTextField);
+		telephoneJTextField.setColumns(10);
+
+		lblTelephone = new JLabel("Telephone");
+		lblTelephone.setForeground(Color.WHITE);
+		lblTelephone.setBounds(36, 212, 69, 14);
+		userSettingsJPanel.add(lblTelephone);
+
+		personalInfoJLabel = new JLabel("Personal info");
+		personalInfoJLabel.setForeground(Color.WHITE);
+		personalInfoJLabel.setFont(new Font("Tahoma", Font.BOLD, 13));
+		personalInfoJLabel.setHorizontalAlignment(SwingConstants.CENTER);
+		personalInfoJLabel.setBounds(115, 11, 152, 31);
+		userSettingsJPanel.add(personalInfoJLabel);
+
+		vatJTextField = new JTextField();
+		vatJTextField.setBounds(420, 53, 171, 20);
+		userSettingsJPanel.add(vatJTextField);
+		vatJTextField.setColumns(10);
+
+		vatJLabel = new JLabel("VAT number");
+		vatJLabel.setForeground(Color.WHITE);
+		vatJLabel.setBounds(330, 56, 80, 14);
+		userSettingsJPanel.add(vatJLabel);
+
+		ibanJLabel = new JLabel("IBAN");
+		ibanJLabel.setForeground(Color.WHITE);
+		ibanJLabel.setBounds(330, 87, 80, 14);
+		userSettingsJPanel.add(ibanJLabel);
+
+		ibanJTextField = new JTextField();
+		ibanJTextField.setBounds(420, 84, 171, 20);
+		userSettingsJPanel.add(ibanJTextField);
+		ibanJTextField.setColumns(10);
+
+		bicJTextField = new JTextField();
+		bicJTextField.setBounds(420, 116, 171, 20);
+		userSettingsJPanel.add(bicJTextField);
+		bicJTextField.setColumns(10);
+
+		bicJLabel = new JLabel("BIC");
+		bicJLabel.setForeground(Color.WHITE);
+		bicJLabel.setBounds(330, 119, 80, 14);
+		userSettingsJPanel.add(bicJLabel);
+
+		businessInfoJLabel = new JLabel("Business info");
+		businessInfoJLabel.setHorizontalAlignment(SwingConstants.CENTER);
+		businessInfoJLabel.setForeground(Color.WHITE);
+		businessInfoJLabel.setFont(new Font("Tahoma", Font.BOLD, 13));
+		businessInfoJLabel.setBounds(420, 11, 171, 31);
+		userSettingsJPanel.add(businessInfoJLabel);
+
+		updateUserJButton = new JButton("Save");
+		updateUserJButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				String firstName = firstNameJTextField.getText();
+				String lastName = lastNameJTextField.getText();
+				String email = emailJTextField.getText();
+				updateUser(firstName, lastName, email);
+			}
+		});
+		updateUserJButton.setBounds(115, 297, 116, 23);
+		userSettingsJPanel.add(updateUserJButton);
+
+		usernameJTextField = new JTextField();
+		usernameJTextField.setEditable(false);
+		usernameJTextField.setBounds(115, 53, 152, 20);
+		userSettingsJPanel.add(usernameJTextField);
+		usernameJTextField.setColumns(10);
+
+		usernameJLabel = new JLabel("Username");
+		usernameJLabel.setForeground(Color.WHITE);
+		usernameJLabel.setBounds(36, 53, 69, 14);
+		userSettingsJPanel.add(usernameJLabel);
+		optionsJPanel.setLayout(optionsJPanelLayout);
+
+		contentJTabbedPane.addTab("", new javax.swing.ImageIcon(getClass().getResource("/be/artesis/timelog/gui/icons/SettingsNeonIcon.png")), optionsJPanel, "Settings");
 
 		headerJPanel.setBackground(new java.awt.Color(64, 64, 64));
 
@@ -705,8 +932,8 @@ public class GUIForm extends javax.swing.JFrame {
 
 		javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
 		getContentPane().setLayout(layout);
-		layout.setHorizontalGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addComponent(headerJPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE).addComponent(JTabbedPane));
-		layout.setVerticalGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGroup(layout.createSequentialGroup().addComponent(headerJPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE).addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED).addComponent(JTabbedPane)));
+		layout.setHorizontalGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addComponent(headerJPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE).addComponent(contentJTabbedPane));
+		layout.setVerticalGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGroup(layout.createSequentialGroup().addComponent(headerJPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE).addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED).addComponent(contentJTabbedPane)));
 		pack();
 
 		// set form in center
@@ -719,99 +946,103 @@ public class GUIForm extends javax.swing.JFrame {
 
 	/* Einde gegenereerde code */
 
-	// FIXME edit fields van elk panel disablen als niks geselecteerd is
-
 	// ================================================================================
 	// Save / Edit methods
 	// ================================================================================
 
-	// Save PROJECT
-	private void saveProject() {
-		try {
-			String name = projectNameJTextField.getText();
-			//FIXME misschien nullPointerException van dateChooser wrappen in custom exception?
-			long startdate = projectStartDateChooser.getDate().getTime() / 1000;
-			long enddate = projectEndDateChooser.getDate().getTime() / 1000;
-			if (projectClientsJComboBox.getSelectedIndex() == -1 || projectClientsJComboBox.getSelectedItem().equals(NEWCLIENTITEM)) {
-				throw new DataInputException("Select or create a client first");
-			}
-			Opdrachtgever o = (Opdrachtgever) projectClientsJComboBox.getSelectedItem();
-			int opdrachtgeverID = o.getID();
+	// Update user info
 
-			if (projectsJList.getSelectedValue().equals(NEWPROJECTITEM)) {
-				UserInterface.saveNewProject(name, startdate, enddate, opdrachtgeverID);
-				JOptionPane.showMessageDialog(this, "Project added!");
-			} else {
-				UserInterface.saveProject(projectsJList.getSelectedIndex(), name, startdate, enddate, opdrachtgeverID);
-				JOptionPane.showMessageDialog(this, "Project edited!");
-			}
-		} catch (DataInputException | IOException | WebserviceException | JSONException | ParseException ex) {
-			ex.printStackTrace();
-			JOptionPane.showMessageDialog(this, ex.getMessage());
-		} catch (NullPointerException ex) {
-			//vangt invalid date van dateChooser op dmv op nullPointerException te checken
-			ex.printStackTrace();
-			JOptionPane.showMessageDialog(this, "Please choose a valid date");
-		} finally {
-			//FIXME zorgen dat bij DataInputException door geen client de velden niet gereset worden
+	private void updateUser(String firstName, String lastName, String email) {
+		try {
+			UserInterface.updateUser(firstName, lastName, email);
+			JOptionPane.showMessageDialog(this, "User information updated!");
+			loadUserInfo();
+		} catch (DataInputException | IOException | WebserviceException e) {
+			JOptionPane.showMessageDialog(this, e.getMessage());
+			e.printStackTrace();
+		}
+	}
+
+	// Create new project
+	private void createProject(String name, long startdate, long enddate, int opdrachtgeverID) {
+		try {
+			UserInterface.createProject(name, startdate, enddate, opdrachtgeverID);
+			JOptionPane.showMessageDialog(this, "Project added!");
 			refreshProjectsList(projectsJList, homeProjectsJList);
-			toggleButtonStates();
+		} catch (DataInputException | ParseException | IOException | WebserviceException | JSONException e) {
+			JOptionPane.showMessageDialog(this, e.getMessage());
+			e.printStackTrace();
 		}
 	}
 
-	// Save TASK
-	private void saveTask() {
+	// Update existing project
+	private void updateProject(String name, long startdate, long enddate, int opdrachtgeverID) {
 		try {
-			String name = taskNameJTextField.getText();
-			long startdate = taskStartDateChooser.getDate().getTime() / 1000;
-			long enddate = taskEndDateChooser.getDate().getTime() / 1000;
-			String comment = taskCommentJTextArea.getText();
-			boolean completed = taskCompletedJCheckBox.isSelected();
-
-			if (tasksJList.getSelectedValue().equals(NEWTASKITEM)) {
-				UserInterface.saveNewTask(name, startdate, enddate, comment, completed);
-				JOptionPane.showMessageDialog(this, "Task added!");
-				refreshTasksList(UserInterface.getCurrentProject(), tasksJList);
-			} else {
-				UserInterface.saveTask(tasksJList.getSelectedIndex(), name, startdate, enddate, comment, completed);
-				JOptionPane.showMessageDialog(this, "Task edited!");
-				refreshTasksList(UserInterface.getCurrentProject(), tasksJList);
-			}
-		} catch (GUIException | DataInputException | JSONException | ParseException | IOException | WebserviceException ex) {
-			ex.printStackTrace();
-			JOptionPane.showMessageDialog(this, ex.getMessage());
-		} catch (NullPointerException ex) {
-			ex.printStackTrace();
-			JOptionPane.showMessageDialog(this, "Please choose a valid date");
-		} finally {
-			toggleButtonStates();
-			loadProjectInfo(projectsJList.getSelectedIndex());
+			UserInterface.updateProject(projectsJList.getSelectedIndex(), name, startdate, enddate, opdrachtgeverID);
+			JOptionPane.showMessageDialog(this, "Project edited!");
+			refreshProjectsList(projectsJList, homeProjectsJList);
+		} catch (DataInputException | IOException | WebserviceException | ParseException e) {
+			JOptionPane.showMessageDialog(this, e.getMessage());
+			e.printStackTrace();
 		}
 	}
 
-	// Save CLIENT
-	private void saveClient() {
-		String naam = clientNameJTextField.getText();
-		String voornaam = clientFirstNameJTextField.getText();
-		String bedrijfsnaam = clientCompanyJTextField.getText();
-		String email = clientEmailJTextField.getText();
-		String telefoonnummer = clientPhoneNumberJTextField.getText();
-
+	// Create new task
+	private void createTask(String name, long startdate, long enddate, String comment, boolean completed) {
 		try {
-			if (clientsJList.getSelectedValue().equals(NEWCLIENTITEM)) {
-				UserInterface.saveNewClient(naam, voornaam, bedrijfsnaam, email, telefoonnummer);
-				JOptionPane.showMessageDialog(this, "Client added!");
-				//FIXME clientJCombox op project-tab refreshen (of het volledige project tab-refreshen?)
+			UserInterface.createTask(name, startdate, enddate, comment, completed);
+			JOptionPane.showMessageDialog(this, "Task added!");
+			refreshTasksList(UserInterface.getCurrentProject(), tasksJList);
+		} catch (DataInputException | ParseException | GUIException | IOException | WebserviceException | JSONException e) {
+			JOptionPane.showMessageDialog(this, e.getMessage());
+			e.printStackTrace();
+		}
+	}
+
+	// Update existing task
+	private void updateTask(String name, long startdate, long enddate, String comment, boolean completed) {
+		try {
+			UserInterface.updateTask(tasksJList.getSelectedIndex(), name, startdate, enddate, comment, completed);
+			JOptionPane.showMessageDialog(this, "Task edited!");
+			refreshTasksList(UserInterface.getCurrentProject(), tasksJList);
+		} catch (GUIException | DataInputException | ParseException | IOException | WebserviceException e) {
+			JOptionPane.showMessageDialog(this, e.getMessage());
+			e.printStackTrace();
+		}
+	}
+
+	// Create new client
+	private void createClient(String naam, String voornaam, String bedrijfsnaam, String email, String telefoonnummer) {
+		Opdrachtgever o = null;
+		try {
+			o = UserInterface.createClient(naam, voornaam, bedrijfsnaam, email, telefoonnummer);
+			JOptionPane.showMessageDialog(this, "Client added!");
+			if (projectsJList.getSelectedValue().equals(NEWPROJECTITEM)) {
+				refreshClientsComboBox(null, projectClientsJComboBox);
 			} else {
-				UserInterface.saveClient(clientsJList.getSelectedIndex(), voornaam, voornaam, bedrijfsnaam, email, telefoonnummer);
-				JOptionPane.showMessageDialog(this, "Client edited!");
+				refreshClientsComboBox((Project) projectsJList.getSelectedValue(), projectClientsJComboBox);
 			}
-		} catch (DataInputException | IOException | WebserviceException | JSONException ex) {
-			ex.printStackTrace();
-			JOptionPane.showMessageDialog(this, ex.getMessage());
-		} finally {
-			refreshClientsList();
-			toggleButtonStates();
+			refreshClientsList(clientsJList);
+			if (creatingProject) {
+				contentJTabbedPane.setSelectedIndex(1);
+				projectClientsJComboBox.setSelectedItem(o);
+				creatingProject = false;
+			}
+		} catch (DataInputException | JSONException | IOException | WebserviceException e) {
+			JOptionPane.showMessageDialog(this, e.getMessage());
+			e.printStackTrace();
+		}
+	}
+
+	// Update existing client
+	private void updateClient(String naam, String voornaam, String bedrijfsnaam, String email, String telefoonnummer) {
+		try {
+			UserInterface.updateClient(clientsJList.getSelectedIndex(), voornaam, voornaam, bedrijfsnaam, email, telefoonnummer);
+			JOptionPane.showMessageDialog(this, "Client edited!");
+			refreshClientsList(clientsJList);
+		} catch (DataInputException | IOException | WebserviceException e) {
+			JOptionPane.showMessageDialog(this, e.getMessage());
+			e.printStackTrace();
 		}
 	}
 
@@ -820,30 +1051,40 @@ public class GUIForm extends javax.swing.JFrame {
 	// ================================================================================
 
 	// Remove PROJECT
-	private void removeProject() {
-		int result = JOptionPane.showConfirmDialog(this, "Are you sure you want to delete this project?", null, JOptionPane.YES_NO_OPTION);
-		if (result == JOptionPane.YES_OPTION) {
-			try {
-				UserInterface.removeProject((Project) projectsJList.getSelectedValue());
-				JOptionPane.showMessageDialog(this, "Project removed!");
-				//FIXME indien currentProject verwijderd, setCurrentProjectGUI(-1);
-				refreshProjectsList(projectsJList, homeProjectsJList);
-			} catch (IOException | WebserviceException ex) {
-				ex.printStackTrace();
-				JOptionPane.showMessageDialog(this, ex.getMessage());
-			} finally {
-				clearFieldsOnPanel(projectFieldsJPanel);
-				toggleButtonStates();
+	private void deleteProject() {
+		try {
+			if (UserInterface.getCurrentProjectIndex() != -1 && projectsJList.getSelectedValue() == UserInterface.getCurrentProject()) {
+				JOptionPane.showMessageDialog(this, "Can't remove current project");
+			} else {
+				int result = JOptionPane.showConfirmDialog(this, "Are you sure you want to delete this project?", null, JOptionPane.YES_NO_OPTION);
+				if (result == JOptionPane.YES_OPTION) {
+					try {
+						UserInterface.deleteProject((Project) projectsJList.getSelectedValue());
+						JOptionPane.showMessageDialog(this, "Project removed!");
+						refreshProjectsList(projectsJList, homeProjectsJList);
+					} catch (IOException | WebserviceException ex) {
+						ex.printStackTrace();
+						JOptionPane.showMessageDialog(this, ex.getMessage());
+					} finally {
+						clearFieldsOnPanel(projectFieldsJPanel);
+						toggleButtonStates();
+						selectNewItem(projectsJList, tasksJList);
+					}
+				}
 			}
+		} catch (GUIException e) {
+			e.printStackTrace();
 		}
 	}
 
 	// Remove TASK
-	private void removeTask() {
+	private void deleteTask() {
 		int result = JOptionPane.showConfirmDialog(this, "Are you sure you want to delete this task?", null, JOptionPane.YES_NO_OPTION);
 		if (result == JOptionPane.YES_OPTION) {
 			try {
-				UserInterface.removeTask((Taak) tasksJList.getSelectedValue());
+				UserInterface.deleteTask((Taak) tasksJList.getSelectedValue());
+				refreshTasksList(UserInterface.getCurrentProject(), tasksJList);
+				selectNewItem(tasksJList);
 				JOptionPane.showMessageDialog(this, "Task removed!");
 			} catch (GUIException | IOException | WebserviceException ex) {
 				ex.printStackTrace();
@@ -856,14 +1097,15 @@ public class GUIForm extends javax.swing.JFrame {
 	}
 
 	// Remove CLIENT
-	private void removeClient() {
+	private void deleteClient() {
 		int result = JOptionPane.showConfirmDialog(this, "Are you sure you want to delete this client?", null, JOptionPane.YES_NO_OPTION);
 		if (result == JOptionPane.YES_OPTION) {
 			try {
-				UserInterface.removeClient((Opdrachtgever) clientsJList.getSelectedValue());
+				UserInterface.deleteClient((Opdrachtgever) clientsJList.getSelectedValue());
 				refreshClientsList(clientsJList);
 				clearFieldsOnPanel(clientFieldsJPanel);
 				toggleButtonStates();
+				selectNewItem(clientsJList);
 				JOptionPane.showMessageDialog(this, "Client removed!");
 			} catch (GUIException | IOException | WebserviceException ex) {
 				ex.printStackTrace();
@@ -896,6 +1138,7 @@ public class GUIForm extends javax.swing.JFrame {
 			list.setCellRenderer(new ProjectCellRenderer());
 			list.setSelectedIndex(selectedIndex);
 		}
+		// FIXME refresh export view
 	}
 
 	// Refresh all TASK lists
@@ -918,6 +1161,7 @@ public class GUIForm extends javax.swing.JFrame {
 			list.setCellRenderer(new TaskCellRenderer());
 			list.setSelectedIndex(selectedIndex);
 		}
+		// FIXME refresh export view
 	}
 
 	// Refresh all CLIENT lists
@@ -942,41 +1186,52 @@ public class GUIForm extends javax.swing.JFrame {
 		}
 	}
 
-	// Refresh import (/ export?) tree view
-	private void refreshExportTreeView(JTree tree) {
-		ArrayList projects = UserInterface.getProjects();
-		Object rootNodes[] = new Object[projects.size()];
-
-		Vector projectVector = null;
-		CheckBoxNode projectOptions[] = new CheckBoxNode[projects.size()];
-
-		for (int i = 0; i < projects.size(); i++) {
-			Project p = ((ArrayList<Project>) projects).get(i);
-			projectOptions[i] = new CheckBoxNode(p, false);
-
-			CheckBoxNode taskOptions[] = new CheckBoxNode[p.getTaken().size()];
-			for (int j = 0; j < p.getTaken().size(); j++) {
-				Taak t = p.getTaken().get(j);
-				taskOptions[j] = new CheckBoxNode(t, false);
+	// Refresh CLIENTS combobox
+	private void refreshClientsComboBox(Project p, JComboBox... boxes) {
+		for (JComboBox box : boxes) {
+			DefaultComboBoxModel listmodel = new DefaultComboBoxModel();
+			Opdrachtgever og = null;
+			for (Opdrachtgever o : UserInterface.getClients()) {
+				if (p != null && o.getID() == p.getOpdrachtgeverId()) {
+					og = o;
+				}
+				listmodel.addElement(o);
 			}
-
-			projectVector = new NamedVector(p, taskOptions);
-			rootNodes[i] = projectVector;
+			listmodel.addElement(NEWCLIENTITEM);
+			box.setModel(listmodel);
+			box.setSelectedItem(og);
 		}
+	}
 
-		Vector rootVector = new NamedVector(new Project(), rootNodes);
-		tree = new JTree(rootVector);
-
-		CheckBoxNodeRenderer renderer = new CheckBoxNodeRenderer();
-		tree.setCellRenderer(renderer);
-
-		tree.setCellEditor(new CheckBoxNodeEditor(tree));
-		tree.setEditable(true);
+	private void refreshTree(JTree tree, ArrayList<Project> projects) {
+		DefaultMutableTreeNode root = new DefaultMutableTreeNode("Project");
+		for (Project p : projects) {
+			if (!p.getTaken().isEmpty()) {
+				DefaultMutableTreeNode project = new DefaultMutableTreeNode(p);
+				for (Taak t : p.getTaken()) {
+					project.add(new DefaultMutableTreeNode(t));
+				}
+				root.add(project);
+			}
+		}
+		DefaultTreeModel treeModel = new DefaultTreeModel(root);
+		tree.setModel(treeModel);
 	}
 
 	// ================================================================================
 	// Loading methods
 	// ================================================================================
+
+	// Load user info
+
+	private void loadUserInfo() {
+		Gebruiker u = UserInterface.getUser();
+		usernameJTextField.setText(u.getGebruikersnaam());
+		firstNameJTextField.setText(u.getVoornaam());
+		lastNameJTextField.setText(u.getNaam());
+		emailJTextField.setText(u.getEmail());
+		emailJTextField.setCaretPosition(0);
+	}
 
 	// Load info from PROJECT with index parameter
 	private void loadProjectInfo(int index) {
@@ -985,17 +1240,8 @@ public class GUIForm extends javax.swing.JFrame {
 			projectNameJTextField.setText(p.getNaam());
 			projectStartDateChooser.setDate(new Date(p.getBegindatum() * 1000));
 			projectEndDateChooser.setDate(new Date(p.getEinddatum() * 1000));
-			DefaultComboBoxModel listmodel = new DefaultComboBoxModel();
-			Opdrachtgever og = null;
-			for (Opdrachtgever o : UserInterface.getClients()) {
-				if (o.getID() == p.getOpdrachtgeverId()) {
-					og = o;
-				}
-				listmodel.addElement(o);
-			}
-			projectClientsJComboBox.setModel(listmodel);
-			projectClientsJComboBox.setSelectedItem(og);
 
+			refreshClientsComboBox(p, projectClientsJComboBox);
 			refreshTasksList(p, projectTasksJList);
 			percentageCompleteJProgressBar.setValue((int) (((Project) projectsJList.getSelectedValue()).getPercentageComplete() * 100));
 		}
@@ -1038,7 +1284,7 @@ public class GUIForm extends javax.swing.JFrame {
 	}
 
 	// ================================================================================
-	// Other methods (nakijken)
+	// Other methods, FIXME nakijken
 	// ================================================================================
 
 	private void workClicked(java.awt.event.MouseEvent evt) {
@@ -1065,9 +1311,11 @@ public class GUIForm extends javax.swing.JFrame {
 
 	// Clear all fields on the panels in parameter
 	private void clearFieldsOnPanel(JPanel panel) {
-		Component[] clientPanelComps = panel.getComponents();
-		for (Component c : clientPanelComps) {
-			if (c instanceof JTextField) {
+		Component[] panelComponents = panel.getComponents();
+		for (Component c : panelComponents) {
+			if (c instanceof JPanel) {
+				clearFieldsOnPanel((JPanel) c);
+			} else if (c instanceof JTextField) {
 				((JTextField) c).setText(null);
 			} else if (c instanceof JList) {
 				((JList) c).setModel(new DefaultListModel());
@@ -1079,10 +1327,13 @@ public class GUIForm extends javax.swing.JFrame {
 				((JDateChooser) c).setDate(null);
 			} else if (c instanceof JComboBox) {
 				((JComboBox) c).setModel(new DefaultComboBoxModel());
+			} else if (c instanceof JProgressBar) {
+				((JProgressBar) c).setValue(0);
 			}
 		}
 	}
 
+	// FIXME methode maken met 2 parameters en overal waar deze aangeroepen wordt de juiste parameters meegeven
 	// Change button states (enabled / disabled) looking at selected indexes
 	private void toggleButtonStates() {
 		boolean taskSelected = tasksJList.getSelectedIndex() != -1;
@@ -1108,7 +1359,6 @@ public class GUIForm extends javax.swing.JFrame {
 
 	private void setCurrentProjectGUI(int index) {
 		try {
-			//FIXME als currentProject verwijdert wordt moet index op -1 geset worden, maar dan throwt dit een error
 			UserInterface.setCurrentProjectIndex(index);
 			currentProjectJLabel.setText("Current project: " + UserInterface.getCurrentProject().getNaam());
 			saveTaskJButton.setText("Save to " + UserInterface.getCurrentProject().getNaam());
@@ -1116,10 +1366,23 @@ public class GUIForm extends javax.swing.JFrame {
 			refreshProjectsList(projectsJList, homeProjectsJList);
 			refreshTasksList(UserInterface.getCurrentProject(), tasksJList);
 			clearFieldsOnPanel(taskFieldsJPanel);
-			tasksJList.clearSelection();
+			selectNewItem(tasksJList);
 		} catch (GUIException ex) {
 			ex.printStackTrace();
 			JOptionPane.showMessageDialog(this, ex.getMessage());
+		}
+	}
+
+	private void clientsJListValueChanged(ListSelectionEvent arg0) {
+		if (clientsJList.getSelectedIndex() != -1) {
+			if (clientsJList.getSelectedValue().equals(NEWCLIENTITEM)) {
+				clearFieldsOnPanel(clientFieldsJPanel);
+				saveClientJButton.setText("Save [new]");
+			} else {
+				loadClientInfo(clientsJList.getSelectedIndex());
+				saveClientJButton.setText("Save");
+			}
+			toggleButtonStates();
 		}
 	}
 
@@ -1127,13 +1390,7 @@ public class GUIForm extends javax.swing.JFrame {
 		if (projectsJList.getSelectedIndex() != -1) {
 			if (projectsJList.getSelectedValue().equals(NEWPROJECTITEM)) {
 				clearFieldsOnPanel(projectFieldsJPanel);
-				DefaultComboBoxModel listmodel = new DefaultComboBoxModel();
-				for (Opdrachtgever o : UserInterface.getClients()) {
-					listmodel.addElement(o);
-				}
-				listmodel.addElement(NEWCLIENTITEM);
-				projectClientsJComboBox.setModel(listmodel);
-				projectClientsJComboBox.setSelectedItem(null);
+				refreshClientsComboBox(null, projectClientsJComboBox);
 				saveProjectJButton.setText("Save [new]");
 			} else {
 				loadProjectInfo(projectsJList.getSelectedIndex());
@@ -1143,11 +1400,24 @@ public class GUIForm extends javax.swing.JFrame {
 		}
 	}
 
+	// Initialiseer statusvelden (linksboven) en project en client lijsten
 	private void guiOpened(java.awt.event.WindowEvent evt) {
 		ingelogdJLabel.setText(UserInterface.getUser().getVolledigeNaam());
 		ingelogdJLabel.setForeground(Color.GREEN);
 		refreshProjectsList(projectsJList, homeProjectsJList);
 		refreshClientsList(clientsJList);
+		refreshTree(exportJCheckBoxTree, UserInterface.getProjects());
+		loadUserInfo();
+		selectNewItem(projectsJList, tasksJList, clientsJList);
+	}
+
+	// sets selected item to < new ... >
+	private void selectNewItem(JList... lists) {
+		for (JList list : lists) {
+			list.setSelectedIndex(list.getModel().getSize() - 1);
+			list.ensureIndexIsVisible(list.getSelectedIndex());
+		}
+		// FIXME refresh export view
 	}
 
 	// Event handlers for all the edit fields
@@ -1155,6 +1425,7 @@ public class GUIForm extends javax.swing.JFrame {
 		toggleButtonStates();
 	}
 
+	// FIXME, samenvoegen met andere listvaluechanged event handlers
 	private void homeProjectListValueChanged(ListSelectionEvent evt) {
 		if (homeProjectsJList.getSelectedIndex() != -1) {
 			refreshTasksList((Project) homeProjectsJList.getSelectedValue(), homeTasksJList);
@@ -1162,18 +1433,34 @@ public class GUIForm extends javax.swing.JFrame {
 	}
 
 	private void exportButtonClicked(ActionEvent arg0) {
-		refreshExportTreeView(exportTree);
-	}
+		try {
+			ArrayList<Taak> toExport = new ArrayList();
+			TreePath[] paths = exportJCheckBoxTree.getCheckingPaths();
 
-	private void setCurrentProjectHomeJList(KeyEvent arg0) {
-		if (arg0.getKeyCode() == KeyEvent.VK_ENTER) {
-			setCurrentProjectGUI(homeProjectsJList.getSelectedIndex());
+			for (TreePath p : paths) {
+				if (p.getPathCount() == 3) {
+					Project project = UserInterface.getProject(p.getParentPath().getLastPathComponent().toString());
+					Taak toAddTask = UserInterface.getTaak(project, p.getLastPathComponent().toString());
+					toExport.add(toAddTask);
+				}
+			}
+
+			if (!toExport.isEmpty()) {
+				JFileChooser fileChooser = new JFileChooser();
+				fileChooser.showSaveDialog(this);
+				Taak[] t = new Taak[toExport.size()];
+				if (fileChooser.getSelectedFile() != null)
+					IcsExporteren.export(toExport.toArray(t), fileChooser.getSelectedFile().toPath().toString());
+			}
+		} catch (IOException | ValidationException | GUIException e) {
+			e.printStackTrace();
+			JOptionPane.showMessageDialog(this, e.getMessage());
 		}
 	}
 
 	private void taskJListValueChanged(ListSelectionEvent arg0) {
 		if (tasksJList.getSelectedIndex() != -1) {
-			if (tasksJList.getSelectedValue().equals(NEWTASKITEM)) {
+			if (tasksJList.getSelectedValue().getClass().equals(String.class)) {
 				clearFieldsOnPanel(taskFieldsJPanel);
 				saveTaskJButton.setText("Save [new]");
 			} else {
@@ -1190,26 +1477,24 @@ public class GUIForm extends javax.swing.JFrame {
 		}
 	}
 
-	private void tasksJListprojectListValueChanged(javax.swing.event.ListSelectionEvent evt) {
-		if (projectsJList.getSelectedIndex() != -1) {
-			if (tasksJList.getSelectedValue().equals(NEWTASKITEM)) {
-				clearFieldsOnPanel(taskFieldsJPanel);
-				saveTaskJButton.setText("Save [new]");
-			} else {
-				try {
-					loadTaskInfo(tasksJList.getSelectedIndex());
-				} catch (GUIException ex) {
-					ex.printStackTrace();
-					JOptionPane.showMessageDialog(this, ex.getMessage());
-				} finally {
-					saveTaskJButton.setText("Save");
-				}
+	private void clientsJComboBoxValueChanged(ActionEvent arg0) {
+		JComboBox combobox = (JComboBox) arg0.getSource();
+		if (combobox.getSelectedIndex() != -1) {
+			if (combobox.getSelectedItem().getClass().equals(String.class)) {
+				creatingProject = true;
+				contentJTabbedPane.setSelectedIndex(3);
+				selectNewItem(clientsJList);
 			}
-			toggleButtonStates();
 		}
 	}
 
-	private javax.swing.JTabbedPane JTabbedPane;
+	private void setCurrentProjectWithEnter(KeyEvent arg0) {
+		if (arg0.getKeyCode() == KeyEvent.VK_ENTER) {
+			setCurrentProjectGUI(((JList) arg0.getSource()).getSelectedIndex());
+		}
+	}
+
+	private javax.swing.JTabbedPane contentJTabbedPane;
 	private javax.swing.JLabel clientcompJLabel1;
 	private javax.swing.JLabel clientsJLabel;
 	private javax.swing.JPanel clientsJPanel;
@@ -1253,7 +1538,7 @@ public class GUIForm extends javax.swing.JFrame {
 	private JTextField clientPhoneNumberJTextField;
 	private JPanel clientFieldsJPanel;
 	private JButton saveClientJButton;
-	private JPanel taskFieldsJPanel;
+	private JPanel taskEditFieldsJPanel;
 	private JLabel label_5;
 	private JTextField taskNameJTextField;
 	private JLabel label_6;
@@ -1265,7 +1550,7 @@ public class GUIForm extends javax.swing.JFrame {
 	private JButton saveTaskJButton;
 	private JTextArea taskCommentJTextArea;
 	private JList workedTimeJList;
-	private JPanel projectFieldsJPanel;
+	private JPanel projectEditFieldsJPanel;
 	private JList tasksJList;
 	private JList projectTasksJList;
 	private JDateChooser taskStartDateChooser;
@@ -1283,7 +1568,7 @@ public class GUIForm extends javax.swing.JFrame {
 	private JTabbedPane importExportTabbedPane;
 	private JPanel importJPanel;
 	private JPanel exportJPanel;
-	private JScrollPane importJScrollPane;
+	private JScrollPane importProjectsJScrollPane;
 	private JButton importJButton;
 	private JScrollPane exportJScrollPane;
 	private JButton exportJButton;
@@ -1293,6 +1578,30 @@ public class GUIForm extends javax.swing.JFrame {
 	private JTextField taskTotalPauseJTextField;
 	private JLabel taskTotalWorkedJLabel;
 	private JLabel lblTotalPaused;
-	private JTree exportTree;
-	private JTree importTree;
+	private JPanel projectFieldsJPanel;
+	private JPanel taskFieldsJPanel;
+	private JTabbedPane settingsJTabbedPane;
+	private JPanel userSettingsJPanel;
+	private CheckboxTree exportJCheckBoxTree;
+	private JTextField firstNameJTextField;
+	private JTextField lastNameJTextField;
+	private JTextField emailJTextField;
+	private JLabel firstNameJLabel;
+	private JLabel lastNameJLabel;
+	private JLabel emailJLabel;
+	private JTextField addressJTextField;
+	private JLabel addressJLabel;
+	private JTextField telephoneJTextField;
+	private JLabel lblTelephone;
+	private JLabel personalInfoJLabel;
+	private JTextField vatJTextField;
+	private JLabel vatJLabel;
+	private JLabel ibanJLabel;
+	private JTextField ibanJTextField;
+	private JTextField bicJTextField;
+	private JLabel bicJLabel;
+	private JLabel businessInfoJLabel;
+	private JButton updateUserJButton;
+	private JTextField usernameJTextField;
+	private JLabel usernameJLabel;
 }

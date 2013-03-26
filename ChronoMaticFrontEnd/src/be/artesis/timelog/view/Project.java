@@ -150,7 +150,8 @@ public class Project implements Cloneable{
             if (t.getBegindatum() >= begindatum && t.getGeschatteEinddatum() <= einddatum) {
                 taken.add(t);
             } else {
-                throw new DataInputException("Task dates out of project bounds");
+                throw new DataInputException("Task dates out of project bounds \n(" +
+                		Clock.timestampToDateString(begindatum) + " - " + Clock.timestampToDateString(einddatum) + ")");
             }
         } else {
             throw new DataInputException("Name already exists");
