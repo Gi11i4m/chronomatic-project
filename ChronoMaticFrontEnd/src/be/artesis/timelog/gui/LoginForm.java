@@ -116,7 +116,7 @@ public class LoginForm extends javax.swing.JFrame implements ActionListener {
 		final int x = (screenSize.width - this.getWidth()) / 2;
 		final int y = (screenSize.height - this.getHeight()) / 2;
 		this.setLocation(x, y);
-		
+
 		pane = getContentPane();
 		layout = new CardLayout();
 		pane.setBackground(Color.WHITE);
@@ -125,7 +125,7 @@ public class LoginForm extends javax.swing.JFrame implements ActionListener {
 		basisPanel = new JFXPanel();
 		browserPanel = new JFXPanel();
 		newUserPanel = new NewUserPanel(this);
-		
+
 		pane.add(basisPanel, "BASISPANEL");
 		pane.add(browserPanel, "BROWSERPANEL");
 		pane.add(newUserPanel, "NEWUSERPANEL");
@@ -207,7 +207,7 @@ public class LoginForm extends javax.swing.JFrame implements ActionListener {
 			}
 
 			JSONObject userInfoJSONObj = GetUserInfo.request(accessToken, social);
-			
+
 			String email = userInfoJSONObj.getString("email");
 
 			// als gebruiker nog niet bestaat..
@@ -374,9 +374,9 @@ public class LoginForm extends javax.swing.JFrame implements ActionListener {
 							login();
 						}
 					};*/
-					
+
 					//loginLoadingThread.start();
-					
+
 					//parent.setVisible(true);
 				}
 			});
@@ -447,25 +447,31 @@ public class LoginForm extends javax.swing.JFrame implements ActionListener {
 
 		JButton sender = (JButton) evt.getSource();
 
-        switch (sender.getName()) {
-            case "google":  social = new Google();
-                     break;
-            case "facebook":  social = new Facebook();
-                     break;
-            case "microsoft":  social = new Microsoft();
-                     break;
-            case "twitter":  social = new Twitter();
-                     break;
-            case "linkedin":  social = new Linkedin();
-                     break;
-            default: social = new Google();
-                     break;
-        }
-        //this.displayTab("loading");
-        
-        loginProviderJButtonClicked();
+		switch (sender.getName()) {
+		case "google":
+			social = new Google();
+			break;
+		case "facebook":
+			social = new Facebook();
+			break;
+		case "microsoft":
+			social = new Microsoft();
+			break;
+		case "twitter":
+			social = new Twitter();
+			break;
+		case "linkedin":
+			social = new Linkedin();
+			break;
+		default:
+			social = new Google();
+			break;
+		}
+		//this.displayTab("loading");
+
+		loginProviderJButtonClicked();
 	}
-	
+
 	private void loginProviderJButtonClicked() {
 		AuthBrowser browser = new AuthBrowser(this, social);
 		browser.buildUrl();
