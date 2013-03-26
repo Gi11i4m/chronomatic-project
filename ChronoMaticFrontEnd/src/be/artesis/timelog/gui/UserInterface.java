@@ -65,6 +65,15 @@ public class UserInterface {
     	return user.getProject(index);
     }
     
+    public static Project getProject(String name) throws GUIException{
+    	for (Project p : getProjects()) {
+			if (p.getNaam().equals(name)) {
+				return p;
+			}
+		}
+    	throw new GUIException("Project not found!");
+    }
+    
     public static ArrayList<Taak> getCurrentTasks() throws GUIException{
     	if (currentProjectIndex == -1) {
             throw new GUIException("Please select a current project first");

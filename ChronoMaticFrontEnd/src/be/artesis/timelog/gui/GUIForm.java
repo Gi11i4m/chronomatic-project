@@ -574,12 +574,12 @@ public class GUIForm extends javax.swing.JFrame {
 																																												lblWorked.setForeground(Color.WHITE);
 																																												
 																																														taskTotalWorkedJLabel = new JLabel("Total worked");
-																																														taskTotalWorkedJLabel.setBounds(10, 338, 62, 14);
+																																														taskTotalWorkedJLabel.setBounds(10, 338, 76, 14);
 																																														taskFieldsJPanel.add(taskTotalWorkedJLabel);
 																																														taskTotalWorkedJLabel.setForeground(Color.WHITE);
 																																														
 																																																lblTotalPaused = new JLabel("Total paused");
-																																																lblTotalPaused.setBounds(10, 368, 62, 14);
+																																																lblTotalPaused.setBounds(10, 368, 76, 14);
 																																																taskFieldsJPanel.add(lblTotalPaused);
 																																																lblTotalPaused.setForeground(Color.WHITE);
 		clientsJPanel = new javax.swing.JPanel();
@@ -787,11 +787,34 @@ public class GUIForm extends javax.swing.JFrame {
 		settingsJLabel.setFont(new java.awt.Font("Tw Cen MT", 1, 14));
 		settingsJLabel.setForeground(new java.awt.Color(255, 255, 255));
 		settingsJLabel.setText("Settings");
+		
+		settingsJTabbedPane = new JTabbedPane(JTabbedPane.TOP);
+		settingsJTabbedPane.setBackground(Color.GRAY);
 
 		javax.swing.GroupLayout optionsJPanelLayout = new javax.swing.GroupLayout(optionsJPanel);
+		optionsJPanelLayout.setHorizontalGroup(
+			optionsJPanelLayout.createParallelGroup(Alignment.LEADING)
+				.addGroup(optionsJPanelLayout.createSequentialGroup()
+					.addContainerGap()
+					.addGroup(optionsJPanelLayout.createParallelGroup(Alignment.LEADING)
+						.addComponent(settingsJLabel)
+						.addComponent(settingsJTabbedPane, GroupLayout.PREFERRED_SIZE, 667, GroupLayout.PREFERRED_SIZE))
+					.addContainerGap(18, Short.MAX_VALUE))
+		);
+		optionsJPanelLayout.setVerticalGroup(
+			optionsJPanelLayout.createParallelGroup(Alignment.LEADING)
+				.addGroup(optionsJPanelLayout.createSequentialGroup()
+					.addContainerGap()
+					.addComponent(settingsJLabel)
+					.addGap(18)
+					.addComponent(settingsJTabbedPane, GroupLayout.PREFERRED_SIZE, 391, GroupLayout.PREFERRED_SIZE)
+					.addContainerGap(15, Short.MAX_VALUE))
+		);
+		
+		userSettingsJPanel = new JPanel();
+		userSettingsJPanel.setBackground(Color.DARK_GRAY);
+		settingsJTabbedPane.addTab("New tab", null, userSettingsJPanel, null);
 		optionsJPanel.setLayout(optionsJPanelLayout);
-		optionsJPanelLayout.setHorizontalGroup(optionsJPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGroup(optionsJPanelLayout.createSequentialGroup().addContainerGap().addComponent(settingsJLabel).addContainerGap(627, Short.MAX_VALUE)));
-		optionsJPanelLayout.setVerticalGroup(optionsJPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGroup(optionsJPanelLayout.createSequentialGroup().addContainerGap().addComponent(settingsJLabel).addContainerGap(369, Short.MAX_VALUE)));
 
 		contentJTabbedPane.addTab("", new javax.swing.ImageIcon(getClass().getResource("/be/artesis/timelog/gui/icons/SettingsNeonIcon.png")), optionsJPanel, "Settings");
 
@@ -843,8 +866,6 @@ public class GUIForm extends javax.swing.JFrame {
 	}
 
 	/* Einde gegenereerde code */
-
-	// FIXME edit fields van elk panel disablen als niks geselecteerd is
 
 	// ================================================================================
 	// Save / Edit methods
@@ -954,7 +975,7 @@ public class GUIForm extends javax.swing.JFrame {
 						ex.printStackTrace();
 						JOptionPane.showMessageDialog(this, ex.getMessage());
 					} finally {
-						clearFieldsOnPanel(projectEditFieldsJPanel);
+						clearFieldsOnPanel(projectFieldsJPanel);
 						toggleButtonStates();
 						selectNewItem(projectsJList, tasksJList);
 					}
@@ -978,7 +999,7 @@ public class GUIForm extends javax.swing.JFrame {
 				ex.printStackTrace();
 				JOptionPane.showMessageDialog(this, ex.getMessage());
 			} finally {
-				clearFieldsOnPanel(taskEditFieldsJPanel);
+				clearFieldsOnPanel(taskFieldsJPanel);
 				toggleButtonStates();
 			}
 		}
@@ -1188,31 +1209,23 @@ public class GUIForm extends javax.swing.JFrame {
 
 	// Clear all fields on the panels in parameter
 	private void clearFieldsOnPanel(JPanel panel) {
-		Component[] clientPanelComps = panel.getComponents();
-		for (Component c : clientPanelComps) {
+		Component[] panelComponents = panel.getComponents();
+		for (Component c : panelComponents) {
 			if (c instanceof JPanel) {
-				System.out.println("panel");
 				clearFieldsOnPanel((JPanel) c);
 			} else if (c instanceof JTextField) {
-				System.out.println("texfield");
 				((JTextField) c).setText(null);
 			} else if (c instanceof JList) {
-				System.out.println("list");
 				((JList) c).setModel(new DefaultListModel());
 			} else if (c instanceof JTextArea) {
-				System.out.println("texarea");
 				((JTextArea) c).setText(null);
 			} else if (c instanceof JCheckBox) {
-				System.out.println("checkbox");
 				((JCheckBox) c).setSelected(false);
 			} else if (c instanceof JDateChooser) {
-				System.out.println("datechooser");
 				((JDateChooser) c).setDate(null);
 			} else if (c instanceof JComboBox) {
-				System.out.println("combobox");
 				((JComboBox) c).setModel(new DefaultComboBoxModel());
 			} else if (c instanceof JProgressBar){
-				System.out.println("progressBar");
 				((JProgressBar) c).setValue(0);
 			}
 			
@@ -1251,7 +1264,7 @@ public class GUIForm extends javax.swing.JFrame {
 			projectsJList.setSelectedIndex(index);
 			refreshProjectsList(projectsJList, homeProjectsJList);
 			refreshTasksList(UserInterface.getCurrentProject(), tasksJList);
-			clearFieldsOnPanel(taskEditFieldsJPanel);
+			clearFieldsOnPanel(taskFieldsJPanel);
 			selectNewItem(tasksJList);
 		} catch (GUIException ex) {
 			ex.printStackTrace();
@@ -1275,7 +1288,7 @@ public class GUIForm extends javax.swing.JFrame {
 	private void projectsJListValueChanged(javax.swing.event.ListSelectionEvent evt) {
 		if (projectsJList.getSelectedIndex() != -1) {
 			if (projectsJList.getSelectedValue().equals(NEWPROJECTITEM)) {
-				clearFieldsOnPanel(projectEditFieldsJPanel);
+				clearFieldsOnPanel(projectFieldsJPanel);
 				refreshClientsComboBox(null, projectClientsJComboBox);
 				saveProjectJButton.setText("Save [new]");
 			} else {
@@ -1336,7 +1349,7 @@ public class GUIForm extends javax.swing.JFrame {
 	private void taskJListValueChanged(ListSelectionEvent arg0) {
 		if (tasksJList.getSelectedIndex() != -1) {
 			if (tasksJList.getSelectedValue().getClass().equals(String.class)) {
-				clearFieldsOnPanel(taskEditFieldsJPanel);
+				clearFieldsOnPanel(taskFieldsJPanel);
 				saveTaskJButton.setText("Save [new]");
 			} else {
 				try {
@@ -1457,4 +1470,6 @@ public class GUIForm extends javax.swing.JFrame {
 	private JTree importTree;
 	private JPanel projectFieldsJPanel;
 	private JPanel taskFieldsJPanel;
+	private JTabbedPane settingsJTabbedPane;
+	private JPanel userSettingsJPanel;
 }

@@ -13,7 +13,6 @@ TODO Client:
 	- loading animatie bij inloggen (en andere dingen?) inloggen met thread
 	- register new user
 	- Logindialog (spinner) laten zien tot logindialog is geladen
-	- disabled controls uit panels halen
 
 	- Dialogbox voor gegevens indien extern account
 
