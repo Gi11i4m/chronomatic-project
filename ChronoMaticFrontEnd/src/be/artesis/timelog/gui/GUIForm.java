@@ -357,6 +357,9 @@ public class GUIForm extends javax.swing.JFrame {
 		taskscompJLabel.setForeground(new java.awt.Color(255, 255, 255));
 		taskscompJLabel.setText("Tasks");
 		percentageCompleteJProgressBar = new javax.swing.JProgressBar();
+		//percentageCompleteJProgressBar.
+		percentageCompleteJProgressBar.setToolTipText("Displays the percentage of completion of the project");
+		percentageCompleteJProgressBar.setStringPainted(true);
 		percentageCompleteJProgressBar.setBounds(187, 186, 263, 21);
 		projectFieldsJPanel.add(percentageCompleteJProgressBar);
 		percentageCompletecompJLabel = new javax.swing.JLabel();
