@@ -776,101 +776,101 @@ public class GUIForm extends javax.swing.JFrame {
 		userSettingsJPanel.setBackground(Color.DARK_GRAY);
 		settingsJTabbedPane.addTab("User Settings", null, userSettingsJPanel, null);
 		userSettingsJPanel.setLayout(null);
-		
+
 		firstNameJTextField = new JTextField();
 		firstNameJTextField.setBounds(115, 84, 152, 20);
 		userSettingsJPanel.add(firstNameJTextField);
 		firstNameJTextField.setColumns(10);
-		
+
 		lastNameJTextField = new JTextField();
 		lastNameJTextField.setBounds(115, 115, 152, 20);
 		userSettingsJPanel.add(lastNameJTextField);
 		lastNameJTextField.setColumns(10);
-		
+
 		emailJTextField = new JTextField();
 		emailJTextField.setBounds(115, 147, 152, 20);
 		userSettingsJPanel.add(emailJTextField);
 		emailJTextField.setColumns(10);
-		
+
 		firstNameJLabel = new JLabel("First name");
 		firstNameJLabel.setForeground(Color.WHITE);
 		firstNameJLabel.setBounds(36, 87, 69, 14);
 		userSettingsJPanel.add(firstNameJLabel);
-		
+
 		lastNameJLabel = new JLabel("Last name");
 		lastNameJLabel.setForeground(Color.WHITE);
 		lastNameJLabel.setBounds(36, 118, 69, 14);
 		userSettingsJPanel.add(lastNameJLabel);
-		
+
 		emailJLabel = new JLabel("Email");
 		emailJLabel.setForeground(Color.WHITE);
 		emailJLabel.setBounds(36, 150, 69, 14);
 		userSettingsJPanel.add(emailJLabel);
-		
+
 		addressJTextField = new JTextField();
 		addressJTextField.setBounds(115, 178, 152, 20);
 		userSettingsJPanel.add(addressJTextField);
 		addressJTextField.setColumns(10);
-		
+
 		addressJLabel = new JLabel("Address");
 		addressJLabel.setForeground(Color.WHITE);
 		addressJLabel.setBounds(36, 181, 69, 14);
 		userSettingsJPanel.add(addressJLabel);
-		
+
 		telephoneJTextField = new JTextField();
 		telephoneJTextField.setBounds(115, 209, 152, 20);
 		userSettingsJPanel.add(telephoneJTextField);
 		telephoneJTextField.setColumns(10);
-		
+
 		lblTelephone = new JLabel("Telephone");
 		lblTelephone.setForeground(Color.WHITE);
 		lblTelephone.setBounds(36, 212, 69, 14);
 		userSettingsJPanel.add(lblTelephone);
-		
+
 		personalInfoJLabel = new JLabel("Personal info");
 		personalInfoJLabel.setForeground(Color.WHITE);
 		personalInfoJLabel.setFont(new Font("Tahoma", Font.BOLD, 13));
 		personalInfoJLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		personalInfoJLabel.setBounds(115, 11, 152, 31);
 		userSettingsJPanel.add(personalInfoJLabel);
-		
+
 		vatJTextField = new JTextField();
 		vatJTextField.setBounds(420, 53, 171, 20);
 		userSettingsJPanel.add(vatJTextField);
 		vatJTextField.setColumns(10);
-		
+
 		vatJLabel = new JLabel("VAT number");
 		vatJLabel.setForeground(Color.WHITE);
 		vatJLabel.setBounds(330, 56, 80, 14);
 		userSettingsJPanel.add(vatJLabel);
-		
+
 		ibanJLabel = new JLabel("IBAN");
 		ibanJLabel.setForeground(Color.WHITE);
 		ibanJLabel.setBounds(330, 87, 80, 14);
 		userSettingsJPanel.add(ibanJLabel);
-		
+
 		ibanJTextField = new JTextField();
 		ibanJTextField.setBounds(420, 84, 171, 20);
 		userSettingsJPanel.add(ibanJTextField);
 		ibanJTextField.setColumns(10);
-		
+
 		bicJTextField = new JTextField();
 		bicJTextField.setBounds(420, 116, 171, 20);
 		userSettingsJPanel.add(bicJTextField);
 		bicJTextField.setColumns(10);
-		
+
 		bicJLabel = new JLabel("BIC");
 		bicJLabel.setForeground(Color.WHITE);
 		bicJLabel.setBounds(330, 119, 80, 14);
 		userSettingsJPanel.add(bicJLabel);
-		
+
 		businessInfoJLabel = new JLabel("Business info");
 		businessInfoJLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		businessInfoJLabel.setForeground(Color.WHITE);
 		businessInfoJLabel.setFont(new Font("Tahoma", Font.BOLD, 13));
 		businessInfoJLabel.setBounds(420, 11, 171, 31);
 		userSettingsJPanel.add(businessInfoJLabel);
-		
+
 		updateUserJButton = new JButton("Save");
 		updateUserJButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
@@ -882,13 +882,13 @@ public class GUIForm extends javax.swing.JFrame {
 		});
 		updateUserJButton.setBounds(115, 297, 116, 23);
 		userSettingsJPanel.add(updateUserJButton);
-		
+
 		usernameJTextField = new JTextField();
 		usernameJTextField.setEditable(false);
 		usernameJTextField.setBounds(115, 53, 152, 20);
 		userSettingsJPanel.add(usernameJTextField);
 		usernameJTextField.setColumns(10);
-		
+
 		usernameJLabel = new JLabel("Username");
 		usernameJLabel.setForeground(Color.WHITE);
 		usernameJLabel.setBounds(36, 53, 69, 14);
@@ -951,8 +951,8 @@ public class GUIForm extends javax.swing.JFrame {
 	// ================================================================================
 
 	// Update user info
-	
-	private void updateUser(String firstName, String lastName, String email){
+
+	private void updateUser(String firstName, String lastName, String email) {
 		try {
 			UserInterface.updateUser(firstName, lastName, email);
 			JOptionPane.showMessageDialog(this, "User information updated!");
@@ -962,7 +962,7 @@ public class GUIForm extends javax.swing.JFrame {
 			e.printStackTrace();
 		}
 	}
-	
+
 	// Create new project
 	private void createProject(String name, long startdate, long enddate, int opdrachtgeverID) {
 		try {
@@ -1223,8 +1223,8 @@ public class GUIForm extends javax.swing.JFrame {
 	// ================================================================================
 
 	// Load user info
-	
-	private void loadUserInfo(){
+
+	private void loadUserInfo() {
 		Gebruiker u = UserInterface.getUser();
 		usernameJTextField.setText(u.getGebruikersnaam());
 		firstNameJTextField.setText(u.getVoornaam());
@@ -1232,7 +1232,7 @@ public class GUIForm extends javax.swing.JFrame {
 		emailJTextField.setText(u.getEmail());
 		emailJTextField.setCaretPosition(0);
 	}
-	
+
 	// Load info from PROJECT with index parameter
 	private void loadProjectInfo(int index) {
 		if (index != -1) {
@@ -1433,29 +1433,28 @@ public class GUIForm extends javax.swing.JFrame {
 	}
 
 	private void exportButtonClicked(ActionEvent arg0) {
-		JFileChooser fileChooser = new JFileChooser();
-		fileChooser.showSaveDialog(this);
-
-		if (fileChooser.getSelectedFile() != null) {
+		try {
 			ArrayList<Taak> toExport = new ArrayList();
 			TreePath[] paths = exportJCheckBoxTree.getCheckingPaths();
 
 			for (TreePath p : paths) {
 				if (p.getPathCount() == 3) {
-					Project project = UserInterface.getProject(p.getParentPath().getLastPathComponent());
-					Taak toAddTask = UserInterface.getTask(project, p.getLastPathComponent().toString());
+					Project project = UserInterface.getProject(p.getParentPath().getLastPathComponent().toString());
+					Taak toAddTask = UserInterface.getTaak(project, p.getLastPathComponent().toString());
 					toExport.add(toAddTask);
 				}
 			}
 
-			Taak[] t = new Taak[toExport.size()];
-
-			try {
-				IcsExporteren.export(toExport.toArray(t), fileChooser.getSelectedFile().toPath().toString());
-			} catch (IOException | ValidationException e) {
-				e.printStackTrace();
-				JOptionPane.showMessageDialog(this, e.getMessage());
+			if (!toExport.isEmpty()) {
+				JFileChooser fileChooser = new JFileChooser();
+				fileChooser.showSaveDialog(this);
+				Taak[] t = new Taak[toExport.size()];
+				if (fileChooser.getSelectedFile() != null)
+					IcsExporteren.export(toExport.toArray(t), fileChooser.getSelectedFile().toPath().toString());
 			}
+		} catch (IOException | ValidationException | GUIException e) {
+			e.printStackTrace();
+			JOptionPane.showMessageDialog(this, e.getMessage());
 		}
 	}
 
