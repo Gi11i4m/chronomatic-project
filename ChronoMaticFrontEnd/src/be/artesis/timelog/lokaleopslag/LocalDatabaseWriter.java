@@ -14,17 +14,21 @@ import be.artesis.timelog.view.*;
 public class LocalDatabaseWriter {
 	//hier aant troubleshooten. Het opslaan en opvragen van shit van begin tot eind door de lokale db
 	
-		public static final String URL = "c:\\Users\\Yolan\\Desktop\\";
+		public static final String URL = "c:\\Users\\Yolan\\Desktop\\";		
 		//public static final String OPDRACHTGEVER = "opdrachtgever"; 
 		//public static final String PROJECT = JVelden.PROJECTEN.toString().toLowerCase();
 		//public static final String TAAK = JVelden.TAKEN.toString().toLowerCase();
 		//public static final String TIJDSPANNE = JVelden.TIJDSPANNES.toString().toLowerCase();		
 		
 		private String filePath;
+		private Commando c;
 				
-		public LocalDatabaseWriter(Commando c){
+		public LocalDatabaseWriter(Commando c){			
+			setCommando(c);
+		}
+		public void setCommando(Commando c){
+			this.c = c;
 			filePath = URL + c + ".txt";
-			
 		}
 					
 		public void schrijfProject(Project project, int opdrachtgeverId) throws JSONException, IOException{	
@@ -33,8 +37,7 @@ public class LocalDatabaseWriter {
 			if(LocalDatabaseReader.LeesBestand(filePath) == null){
 				
 				makeDatabase();
-			}
-			
+			}			
 			
 			JSONObject jObj = LocalDatabaseReader.LeesBestand(filePath);
 			
@@ -161,7 +164,12 @@ public class LocalDatabaseWriter {
 			
 			//System.out.println(collection);
 		}
-
+		private void checkUpdate(){
+			
+		}
+		private void checkDelete(){
+			
+		}
 	
 }
 

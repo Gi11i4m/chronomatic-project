@@ -24,16 +24,16 @@ public class UpdaterLocal {
 		Connection.execute("gebruiker/update/" + sessionKey + "/" + gebruiker.getNaam() + "/" + gebruiker.getVoornaam() + "/" + gebruiker.getGebruikersnaam() + "/" +gebruiker.getEmail());
 	}
         
-	public static void updateProject(String sessionKey, Project project) throws MalformedURLException, IOException, WebserviceException, JSONException {
-		wr.schrijfProject(project, 0);
+	public static void updateProject(String sessionKey, Project project,int opdrachtgeverId) throws MalformedURLException, IOException, WebserviceException, JSONException {
+		wr.schrijfProject(project, opdrachtgeverId);
 	}
 
 	public static void updateOpdrachtgever(String sessionKey, Opdrachtgever opdrachtgever) throws MalformedURLException, IOException, WebserviceException, JSONException{
 		wr.schrijfOpdrachtgever(opdrachtgever);
 	}
 	// FIXME Indien dit niet lukt, effe checken hoe het enkele commits terug was en aanpassen
-	public static void updateTaak(String sessionKey, Taak taak) throws MalformedURLException, IOException, WebserviceException, JSONException {
-		wr.schrijfTaak(taak, 0);
+	public static void updateTaak(String sessionKey, Taak taak, int projectId) throws MalformedURLException, IOException, WebserviceException, JSONException {
+		wr.schrijfTaak(taak, projectId);
     }
 	public static void updateTijdspanne(String sessionKey, Tijdspanne tijdspanne,int taakId) throws IOException, WebserviceException, JSONException{		 
 		wr.schrijfTijdspannne(tijdspanne,taakId);
