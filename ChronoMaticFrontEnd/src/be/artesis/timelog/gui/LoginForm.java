@@ -2,6 +2,7 @@ package be.artesis.timelog.gui;
 
 import java.awt.Color;
 import java.awt.CardLayout;
+import java.awt.Cursor;
 import java.awt.Toolkit;
 
 import javax.imageio.ImageIO;
@@ -167,45 +168,40 @@ public class LoginForm extends javax.swing.JFrame implements ActionListener {
 	}
 
 	public void login() {
+
+		this.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
 		String paswoord = null;
 		try {
 			MD5Generator MD5 = new MD5Generator();
-			//Gewoon
-			if (passwordJPasswordField.isEnabled()) {
+			//Pasw uit textfield
+			if(passwordJPasswordField.isEnabled()) {
 				paswoord = MD5.gen(new String(passwordJPasswordField.getPassword()));
 			}
-
-			//Uit register
-			else if (!passwordJPasswordField.isEnabled()) {
-				paswoord = WinRegistry.readString(WinRegistry.HKEY_CURRENT_USER, "SOFTWARE\\ChronoMatic", "password");
+			
+			//Pasw uit register
+			else if(!passwordJPasswordField.isEnabled()) {
+				paswoord = WinRegistry.readString (
+					    WinRegistry.HKEY_CURRENT_USER,
+						   "SOFTWARE\\ChronoMatic",
+						   "password");
 			}
+			
+			System.out.println(usernameJTextField.getText()+" | "+ paswoord);
+            
+            if (validator.login(usernameJTextField.getText(), paswoord )) {
+            	loadUserData();
+            	
+            	if(saveUserCheckBox.isSelected()) {
+        			saveUserCredentials(paswoord);
+        		}
+            	
+            	this.dispose();
+                
+                parent.setVisible(true);
+            } else {
 
-			System.out.println(usernameJTextField.getText() + " | " + paswoord);
-			if (usernameJTextField.getText().equals("")) {
-
-				UserInterface.setUser(new Gebruiker("Flebus", "Gilliam", "Gi11i4m", "gi11i4m@gmail.com")); // tijdelijke user
-
-				UserInterface.getUser().addOpdrachtgever(new Opdrachtgever("Flebus", "Gilliam", "Mot-art", "blabla", "0475", 456));
-
-				UserInterface.getUser().addOpdrachtgever(new Opdrachtgever("Schouten", "Girmi", "Artesis", "bla", "0478", 457));
-				UserInterface.getUser().addProject(new Project("Test project 1", 456, 1343059472, 1453059472));
-				UserInterface.getUser().addProject(new Project("Test project 2", 457, 1243059472, 1553059472));
-				UserInterface.getUser().getProjects().get(1).addTaak(new Taak("Test taak", 1343059472, 1453059472, ""));
-				this.dispose();
-
-			} else if (validator.login(usernameJTextField.getText(), paswoord)) {
-				loadUserData();
-				this.dispose();
-				try {
-					Thread.sleep(5000);
-				} catch (InterruptedException ignore) {
-				}
-
-				parent.setVisible(true);
-			} else {
-
-			}
-		} catch (DataInputException | HeadlessException | IOException | JSONException | WebserviceException | NoSuchAlgorithmException | IllegalArgumentException | IllegalAccessException | InvocationTargetException e) {
+            }
+		} catch (HeadlessException | IOException | JSONException | WebserviceException | NoSuchAlgorithmException | IllegalArgumentException | IllegalAccessException | InvocationTargetException e) {
 			e.printStackTrace();
 			JOptionPane.showMessageDialog(this, "Error connecting to server");
 			this.dispose();
@@ -224,20 +220,13 @@ public class LoginForm extends javax.swing.JFrame implements ActionListener {
 			}
 
 			for (int i = 0; i < UserInterface.getUser().getProjects().size(); i++) {
-				// System.out.println("project: "+UserControl.getUser().getProject(i));
 				for (int j = 0; j < UserInterface.getUser().getProject(i).getTaken().size(); j++) {
 					UserInterface.getUser().getProject(i).getTaak(j).addTotaleTijd(CreatorFromJSON.createTijdspannes(validator.getSessionKey(), UserInterface.getUser().getProject(i).getTaak(j).getID(), false));
 					UserInterface.getUser().getProject(i).getTaak(j).addTotaleTijd(CreatorFromJSON.createTijdspannes(validator.getSessionKey(), UserInterface.getUser().getProject(i).getTaak(j).getID(), true));
-					// System.out.println("taak "
-					// +UserControl.getUser().getProject(i).getTaak(j).getID()+
-					// ": " + UserControl.getUser().getProject(i).getTaak(j));
-					// System.out.println("gewerkt: " +
-					// UserControl.getUser().getProject(i).getTaak(j).getGewerkteTijd());
-					// System.out.println("pauze: "+UserControl.getUser().getProject(i).getTaak(j).getPauze());
+					UserInterface.getUser().getProject(i).getTaak(j).getGewerkteTijd();
 				}
 			}
 		} catch (JSONException | IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -253,12 +242,19 @@ public class LoginForm extends javax.swing.JFrame implements ActionListener {
 		JLabel loadingJLabel = new JLabel(loadingGif);
 		loadingJLabel.setBounds(431, 124, 200, 200);
 		browserPanel.add(loadingJLabel);*/
+		
+		// socialmedia icons
+		googleIcon = new ImageIcon(Toolkit.getDefaultToolkit().getImage(
+				getClass().getResource("/be/artesis/timelog/gui/icons/google.png")));
+		facebookIcon = new ImageIcon(Toolkit.getDefaultToolkit().getImage(
+				getClass().getResource("/be/artesis/timelog/gui/icons/facebook.png")));
+		microsoftIcon = new ImageIcon(Toolkit.getDefaultToolkit().getImage(
+				getClass().getResource("/be/artesis/timelog/gui/icons/microsoft.png")));
+		twitterIcon = new ImageIcon(Toolkit.getDefaultToolkit().getImage(
+				getClass().getResource("/be/artesis/timelog/gui/icons/twitter.png")));
+		linkedinIcon = new ImageIcon(Toolkit.getDefaultToolkit().getImage(
+				getClass().getResource("/be/artesis/timelog/gui/icons/linkedin.png")));
 
-		googleIcon = new ImageIcon(Toolkit.getDefaultToolkit().getImage(getClass().getResource("/be/artesis/timelog/gui/icons/google.png")));
-		facebookIcon = new ImageIcon(Toolkit.getDefaultToolkit().getImage(getClass().getResource("/be/artesis/timelog/gui/icons/facebook.png")));
-		microsoftIcon = new ImageIcon(Toolkit.getDefaultToolkit().getImage(getClass().getResource("/be/artesis/timelog/gui/icons/microsoft.png")));
-		twitterIcon = new ImageIcon(Toolkit.getDefaultToolkit().getImage(getClass().getResource("/be/artesis/timelog/gui/icons/twitter.png")));
-		linkedinIcon = new ImageIcon(Toolkit.getDefaultToolkit().getImage(getClass().getResource("/be/artesis/timelog/gui/icons/linkedin.png")));
 
 		// initialize fields
 		usernameJLabel = new JLabel("Gebruikersnaam:");
@@ -375,12 +371,15 @@ public class LoginForm extends javax.swing.JFrame implements ActionListener {
 				displayTab("NEWUSERPANEL");
 			}
 		});
-
-		// Vul de user data in uit register
+		
+		// Vul de user data in, uit register
 		try {
-			String username = WinRegistry.readString(WinRegistry.HKEY_CURRENT_USER, "SOFTWARE\\ChronoMatic", "username");
-
-			if (username != null) {
+			String username = WinRegistry.readString (
+				    WinRegistry.HKEY_CURRENT_USER,
+				   "SOFTWARE\\ChronoMatic",
+				   "username");
+			
+			if(username != null) {
 				usernameJTextField.setText(username);
 				saveUserCheckBox.setSelected(true);
 				passwordJPasswordField.setEnabled(false);
@@ -392,17 +391,16 @@ public class LoginForm extends javax.swing.JFrame implements ActionListener {
 		}
 
 		saveUserCheckBox.addActionListener(new ActionListener() {
-
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				// TODO Auto-generated method stub
-				if (!saveUserCheckBox.isSelected()) {
+				if(!saveUserCheckBox.isSelected()) {
 					try {
-						WinRegistry.deleteKey(WinRegistry.HKEY_CURRENT_USER, "SOFTWARE\\ChronoMatic");
+						WinRegistry.deleteValue(WinRegistry.HKEY_CURRENT_USER, "SOFTWARE\\ChronoMatic", "username");
+						WinRegistry.deleteValue(WinRegistry.HKEY_CURRENT_USER, "SOFTWARE\\ChronoMatic", "password");
 						passwordJPasswordField.setEnabled(true);
 						passwordJPasswordField.setText("");
+						usernameJTextField.setText("");
 					} catch (IllegalArgumentException | IllegalAccessException | InvocationTargetException e) {
-						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
 				}
@@ -448,17 +446,24 @@ public class LoginForm extends javax.swing.JFrame implements ActionListener {
 		this.displayTab("BROWSERPANEL");
 		//this.setSize(820, 620);
 	}
-
-	private void saveUserCredentials() {
-		try {
-			MD5Generator MD5 = new MD5Generator();
+	
+	private void saveUserCredentials(String paswoord) {
+		try {			
 			WinRegistry.createKey(WinRegistry.HKEY_CURRENT_USER, "SOFTWARE\\ChronoMatic");
-
-			WinRegistry.writeStringValue(WinRegistry.HKEY_CURRENT_USER, "SOFTWARE\\ChronoMatic", "username", usernameJTextField.getText());
-
-			WinRegistry.writeStringValue(WinRegistry.HKEY_CURRENT_USER, "SOFTWARE\\ChronoMatic", "password", MD5.gen(new String(passwordJPasswordField.getPassword())));
-
-		} catch (IllegalArgumentException | IllegalAccessException | InvocationTargetException | NoSuchAlgorithmException e) {
+			
+			WinRegistry.writeStringValue(
+					WinRegistry.HKEY_CURRENT_USER,
+					"SOFTWARE\\ChronoMatic",
+					"username",
+					usernameJTextField.getText());
+			
+			WinRegistry.writeStringValue(
+					WinRegistry.HKEY_CURRENT_USER,
+					"SOFTWARE\\ChronoMatic",
+					"password",
+					paswoord);
+			
+		} catch (IllegalArgumentException | IllegalAccessException | InvocationTargetException e) {
 			e.printStackTrace();
 		}
 	}
