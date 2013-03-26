@@ -125,7 +125,7 @@ public class UserInterface {
 	}
 	
 	public static void saveClient(int index, String naam, String voornaam, String bedrijfsnaam, String email, String telefoonnummer)
-			throws DataInputException, MalformedURLException, IOException, WebserviceException {
+			throws DataInputException, MalformedURLException, IOException, WebserviceException, JSONException {
 		Opdrachtgever c = (Opdrachtgever) getClient(index).clone();
         c.setNaam(naam);
         c.setVoornaam(voornaam);
@@ -133,7 +133,7 @@ public class UserInterface {
         c.setEmail(email);
         c.setTelefoonnummer(telefoonnummer);
         // Past opdrachtgeverwaarden aan in database
-        UpdaterLocal.updateOpdrachtgever(validator.getSessionKey(), c);
+        UpdaterLocal.updateOpdrachtgever(c);
         getClients().set(index, c);
 	}
 	
@@ -163,7 +163,7 @@ public class UserInterface {
         p.setEinddatum(einddatum);
         p.setOpdrachtgeverId(opdrachtgeverId);
         // Past projectwaarden aan in database
-        UpdaterLocal.updateProject(validator.getSessionKey(), p);;
+        UpdaterLocal.updateProject(p,);;
         getProjects().set(index, p);
 	}
 	
@@ -200,7 +200,7 @@ public class UserInterface {
         t.setCommentaar(comment);
         t.setCompleted(completed);
         // Taakwaarden worden aangepast in database
-        UpdaterLocal.updateTaak(validator.getSessionKey(), t);
+        UpdaterLocal.updateTaak(t,);
         getCurrentTasks().set(index, t);
 	}
     

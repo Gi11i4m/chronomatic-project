@@ -43,18 +43,18 @@ public class Converter {
 		jTijd.put("beginTijd", tijdspanne.getBeginTijd());
 		jTijd.put("eindTijd", tijdspanne.getEindTijd());
 		jTijd.put("isPauze", tijdspanne.isPauze());
-		jTijd.put("linkId", taakId);
+		jTijd.put("linkId", taakId);	
 		
 		return jTijd;
 	}
-	public static JSONObject converteer(Project project, int opdrachtgeverId) throws JSONException{
+	public static JSONObject converteer(Project project) throws JSONException{
 		JSONObject jProject = new JSONObject();
-		
+				
 		jProject.put("id", project.getId());
 		jProject.put("naam", project.getNaam());
 		jProject.put("beginDatum", project.getBegindatum());
 		jProject.put("eindDatum", project.getEinddatum());
-		jProject.put("linkId",opdrachtgeverId);
+		jProject.put("linkId",project.getOpdrachtgeverId());
 		
 		return jProject;
 	}

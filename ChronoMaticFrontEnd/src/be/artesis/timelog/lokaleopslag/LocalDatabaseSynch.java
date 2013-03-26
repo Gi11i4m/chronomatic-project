@@ -33,7 +33,7 @@ public class LocalDatabaseSynch {
 		this.v = v;
 	}
 	
-	public  void synch(Commando c) throws JSONException, IOException, WebserviceException{
+	public void synch(Commando c) throws JSONException, IOException, WebserviceException{
 		JSONObject file = LocalDatabaseReader.LeesBestand( LocalDatabaseWriter.URL+ c +".txt");
 		
 		jarrOpdrachtgevers = file.getJSONArray(JVelden.OPDRACHTGEVERS.toString().toLowerCase());

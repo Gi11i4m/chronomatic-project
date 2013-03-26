@@ -38,6 +38,7 @@ public class Connection {
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setRequestMethod("GET");
             conn.setRequestProperty("Accept", "application/json");
+            System.out.println(url);
             if (conn.getResponseCode() != 200){
                 throw new RuntimeException("Failed : HTTP error code : " + conn.getResponseCode());
             }

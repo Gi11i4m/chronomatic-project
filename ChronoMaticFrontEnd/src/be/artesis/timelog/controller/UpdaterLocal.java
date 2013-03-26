@@ -28,9 +28,9 @@ public class UpdaterLocal {
 		Connection.execute("gebruiker/update/" + sessionKey + "/" + gebruiker.getNaam() + "/" + gebruiker.getVoornaam() + "/" + gebruiker.getGebruikersnaam() + "/" +gebruiker.getEmail());
 	}
         
-	public static void updateProject(Project project,int opdrachtgeverId) throws MalformedURLException, IOException, WebserviceException, JSONException {
+	public static void updateProject(Project project) throws MalformedURLException, IOException, WebserviceException, JSONException {
 		
-		checkUpdate( Converter.converteer(project, opdrachtgeverId), JVelden.PROJECTEN);
+		checkUpdate( Converter.converteer(project), JVelden.PROJECTEN);
 	}
 
 	public static void updateOpdrachtgever( Opdrachtgever opdrachtgever) throws MalformedURLException, IOException, WebserviceException, JSONException{

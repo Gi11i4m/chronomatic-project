@@ -24,7 +24,7 @@ public class TestDB {
 		// TODO Auto-generated method stub
 		
 
-		try {			
+		try {	
 			
 			/*
 			 //opdrachtgevers
@@ -64,7 +64,7 @@ public class TestDB {
 			
 			
 			*/
-			
+			/*
 			//projecten
 			Project p0 = new Project("javaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",1,10,20);
 			Project p1 = new Project("C#",100,1000,2000);
@@ -75,31 +75,31 @@ public class TestDB {
 			InserterLocal.inputProject(p0, 1);
 			InserterLocal.inputProject(p1, 2);
 			InserterLocal.inputProject(p2, 2);
-
+*/
 			//lbcw2.setCommando(Commando.UPDATE);
 			//UpdaterLocal.updateProject(p3, 1);
 			//UpdaterLocal.updateProject(p4, 1);
 			
 			
-			//Validator v = Validator.getInstance();
-			//v.login("p", "p");
+				Validator v = Validator.getInstance();
 			
-			//LocalDatabaseSynch lds = new LocalDatabaseSynch(v);
-			//lds.synch(Commando.INSERT);
+				v.login("p", "350a7d3dccd195c7c2b7168f6561011e");
+				LocalDatabaseSynch lds = new LocalDatabaseSynch(v);
+				lds.synch(Commando.INSERT);
+				
+				
+			} catch (NoSuchAlgorithmException | IOException | JSONException
+					| WebserviceException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			
 			
 			
 			
-		} catch (JSONException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (WebserviceException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+			
+			
+	
 	
 	}
 
