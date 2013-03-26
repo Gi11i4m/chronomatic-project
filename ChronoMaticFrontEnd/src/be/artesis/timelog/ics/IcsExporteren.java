@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.net.SocketException;
 import java.util.GregorianCalendar;
 
+import be.artesis.timelog.controle.DataControle;
 import be.artesis.timelog.view.Taak;
 
 import net.fortuna.ical4j.data.CalendarOutputter;
@@ -35,8 +36,11 @@ public class IcsExporteren {
 			//System.out.println(taak);
 		}			
 		
-		schrijfWeg(cal, url);
+		url = DataControle.icsPathCorrect(url);
+		if (url == null)
+			throw new ValidationException("Pad naar bestand is incorrect");
 		
+		schrijfWeg(cal, url);		
 	}	
 	private static void maakCalendar(){
 		// initialise as an all-day event..
