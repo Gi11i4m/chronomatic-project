@@ -112,6 +112,17 @@ public abstract class DataControle {
         return false;
     }
 
+	public static String icsPathCorrect(String path) {
+		String filename = path.substring(path.lastIndexOf("\\") + 1, path.length());
+		String s = null;
+		if (filename.matches("[A-z0-9-_.]+.ics")) {
+			s = path;
+		} else if (filename.matches("[A-z0-9-_.]+")) {
+			s = path.concat(".ics");
+		}
+		return s;
+	}
+    
     //controle lengte, hoofdletter, cijfers, speciale tekens
     //sterkte op 10
     public static int passwoordSterkte(String password) {
