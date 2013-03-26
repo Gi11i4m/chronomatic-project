@@ -6,10 +6,6 @@ Chronomatic is een systeem voor timemanagement, het loggen van tijd die aan bepa
 
 
 TODO Webservice:
-	- Error 404 bij het verwijderen taken
-	- bij verwijderen van taak:
-	Fout met het uitvoeren van queryjava.sql.SQLException:
-	You can't specify target table 'taken' for update in FROM clause
 
 
 TODO Client:
