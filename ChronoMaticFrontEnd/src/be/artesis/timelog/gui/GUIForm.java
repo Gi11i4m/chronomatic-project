@@ -4,7 +4,6 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
-import java.awt.HeadlessException;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -13,24 +12,21 @@ import java.awt.event.FocusEvent;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
-import java.util.Vector;
 
+import javax.swing.AbstractListModel;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListModel;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
-import javax.swing.BoundedRangeModel;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
@@ -41,26 +37,19 @@ import javax.swing.JTabbedPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.JTree;
-import javax.swing.ListModel;
 import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.SwingConstants;
 import javax.swing.border.BevelBorder;
-import javax.swing.event.ListDataListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
-import javax.swing.tree.TreeNode;
+import javax.swing.tree.TreePath;
 
 import net.fortuna.ical4j.model.ValidationException;
 
 import org.json.JSONException;
 
-import be.artesis.timelog.checkboxlist.CheckBoxList;
-import be.artesis.timelog.checkboxtree.CheckBoxNode;
-import be.artesis.timelog.checkboxtree.CheckBoxNodeEditor;
-import be.artesis.timelog.checkboxtree.CheckBoxNodeRenderer;
-import be.artesis.timelog.checkboxtree.NamedVector;
 import be.artesis.timelog.clock.Clock;
 import be.artesis.timelog.ics.IcsExporteren;
 import be.artesis.timelog.model.Validator;
@@ -76,13 +65,8 @@ import com.jgoodies.forms.layout.ColumnSpec;
 import com.jgoodies.forms.layout.FormLayout;
 import com.jgoodies.forms.layout.RowSpec;
 import com.toedter.calendar.JDateChooser;
-import javax.swing.JComboBox;
-import javax.swing.SwingConstants;
-import javax.swing.tree.DefaultTreeModel;
-import javax.swing.tree.DefaultMutableTreeNode;
-import javax.swing.AbstractListModel;
-import java.awt.SystemColor;
-import javax.swing.UIManager;
+
+import eu.floraresearch.lablib.gui.checkboxtree.CheckboxTree;
 
 /**
  * @author Gilliam
@@ -94,7 +78,6 @@ public class GUIForm extends javax.swing.JFrame {
 	// Properties
 	// ================================================================================
 
-	LoginForm login;
 	Validator validator;
 	boolean creatingProject;
 	final String NEWCLIENTITEM = "< New client >";
@@ -449,141 +432,141 @@ public class GUIForm extends javax.swing.JFrame {
 		tasksJList.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
 		jScrollPane3.setViewportView(tasksJList);
 		tasksJPanel.add(removeTaskJButton);
-		
+
 		taskFieldsJPanel = new JPanel();
 		taskFieldsJPanel.setBorder(null);
 		taskFieldsJPanel.setBackground(Color.GRAY);
 		taskFieldsJPanel.setBounds(284, 40, 401, 400);
 		tasksJPanel.add(taskFieldsJPanel);
 		taskFieldsJPanel.setLayout(null);
-		
-				taskEditFieldsJPanel = new JPanel();
-				taskEditFieldsJPanel.setBounds(0, 0, 399, 219);
-				taskFieldsJPanel.add(taskEditFieldsJPanel);
-				taskEditFieldsJPanel.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
-				taskEditFieldsJPanel.setBackground(Color.DARK_GRAY);
-				taskEditFieldsJPanel.setLayout(new FormLayout(new ColumnSpec[] { FormFactory.UNRELATED_GAP_COLSPEC, ColumnSpec.decode("56px"), FormFactory.UNRELATED_GAP_COLSPEC, ColumnSpec.decode("1px"), FormFactory.LABEL_COMPONENT_GAP_COLSPEC, ColumnSpec.decode("110px:grow"), FormFactory.DEFAULT_COLSPEC, FormFactory.RELATED_GAP_COLSPEC, ColumnSpec.decode("55px"), ColumnSpec.decode("51px"), FormFactory.RELATED_GAP_COLSPEC, ColumnSpec.decode("max(27dlu;default)"), FormFactory.RELATED_GAP_COLSPEC, ColumnSpec.decode("max(15dlu;default)"), }, new RowSpec[] { FormFactory.UNRELATED_GAP_ROWSPEC, RowSpec.decode("20px"), FormFactory.RELATED_GAP_ROWSPEC, RowSpec.decode("20px:grow"), FormFactory.RELATED_GAP_ROWSPEC, RowSpec.decode("20px:grow"), RowSpec.decode("38px"), RowSpec.decode("51px"), FormFactory.UNRELATED_GAP_ROWSPEC, RowSpec.decode("51px"), FormFactory.RELATED_GAP_ROWSPEC, RowSpec.decode("37px"), FormFactory.UNRELATED_GAP_ROWSPEC, RowSpec.decode("23px"), FormFactory.UNRELATED_GAP_ROWSPEC, FormFactory.DEFAULT_ROWSPEC, FormFactory.UNRELATED_GAP_ROWSPEC, RowSpec.decode("41px"), }));
-				
-						label_5 = new JLabel();
-						label_5.setText("Name");
-						label_5.setForeground(Color.WHITE);
-						taskEditFieldsJPanel.add(label_5, "2, 2, fill, center");
-						
-								taskNameJTextField = new JTextField();
-								taskNameJTextField.addFocusListener(new FocusAdapter() {
-									@Override
-									public void focusGained(FocusEvent e) {
-										editFieldsFocused(e);
-									}
-								});
-								taskEditFieldsJPanel.add(taskNameJTextField, "6, 2, 7, 1, fill, top");
-								
-										label_6 = new JLabel();
-										label_6.setText("Start date");
-										label_6.setForeground(Color.WHITE);
-										taskEditFieldsJPanel.add(label_6, "2, 4, fill, center");
-										
-												taskStartDateChooser = new JDateChooser();
-												taskStartDateChooser.setDateFormatString("dd/MM/yyyy");
-												taskEditFieldsJPanel.add(taskStartDateChooser, "6, 4, fill, center");
-												
-														label_7 = new JLabel();
-														label_7.setText("Completed");
-														label_7.setForeground(Color.WHITE);
-														taskEditFieldsJPanel.add(label_7, "9, 4, 2, 1, center, center");
-														
-																taskCompletedJCheckBox = new JCheckBox();
-																taskCompletedJCheckBox.addFocusListener(new FocusAdapter() {
-																	@Override
-																	public void focusGained(FocusEvent arg0) {
-																		editFieldsFocused(arg0);
-																	}
-																});
-																taskCompletedJCheckBox.setBackground(Color.DARK_GRAY);
-																taskEditFieldsJPanel.add(taskCompletedJCheckBox, "12, 4, left, center");
-																
-																		label_8 = new JLabel();
-																		label_8.setText("End date");
-																		label_8.setForeground(Color.WHITE);
-																		taskEditFieldsJPanel.add(label_8, "2, 6, fill, center");
-																		
-																				taskEndDateChooser = new JDateChooser();
-																				taskEndDateChooser.setDateFormatString("dd/MM/yyyy");
-																				taskEditFieldsJPanel.add(taskEndDateChooser, "6, 6, fill, center");
-																				
-																						label_9 = new JLabel();
-																						label_9.setText("Comment");
-																						label_9.setForeground(Color.WHITE);
-																						taskEditFieldsJPanel.add(label_9, "2, 8, fill, top");
-																																		
-																																				taskCommentJTextArea = new JTextArea();
-																																				taskCommentJTextArea.addFocusListener(new FocusAdapter() {
-																																					@Override
-																																					public void focusGained(FocusEvent e) {
-																																						editFieldsFocused(e);
-																																					}
-																																				});
-																																				taskEditFieldsJPanel.add(taskCommentJTextArea, "6, 8, 7, 1, fill, fill");
-																																				
-																																						saveTaskJButton = new JButton();
-																																						saveTaskJButton.addActionListener(new ActionListener() {
-																																							public void actionPerformed(ActionEvent e) {
-																																								try {
-																																									String name = taskNameJTextField.getText();
-																																									String comment = taskCommentJTextArea.getText();
-																																									boolean completed = taskCompletedJCheckBox.isSelected();
-																																									long startdate = taskStartDateChooser.getDate().getTime() / 1000;
-																																									long enddate = taskEndDateChooser.getDate().getTime() / 1000;
 
-																																									if (tasksJList.getSelectedValue().equals(NEWTASKITEM)) {
-																																										createTask(name, startdate, enddate, comment, completed);
-																																									} else {
-																																										updateTask(name, startdate, enddate, comment, completed);
-																																									}
-																																								} catch (NullPointerException ex) {
-																																									ex.printStackTrace();
-																																									JOptionPane.showMessageDialog(GUIForm.this, "Please choose a valid date");
-																																								} finally {
-																																									toggleButtonStates();
-																																									loadProjectInfo(projectsJList.getSelectedIndex());
-																																								}
-																																							}
-																																						});
-																																						saveTaskJButton.setText("Save");
-																																						saveTaskJButton.setEnabled(false);
-																																						taskEditFieldsJPanel.add(saveTaskJButton, "6, 10, 7, 1, fill, top");
-																																				
-																																						workedTimeJList = new JList();
-																																						workedTimeJList.setBounds(88, 230, 288, 94);
-																																						taskFieldsJPanel.add(workedTimeJList);
-																																						
-																																								taskTotalWorkedJTextField = new JTextField();
-																																								taskTotalWorkedJTextField.setBounds(88, 335, 135, 20);
-																																								taskFieldsJPanel.add(taskTotalWorkedJTextField);
-																																								taskTotalWorkedJTextField.setEditable(false);
-																																								taskTotalWorkedJTextField.setColumns(10);
-																																								
-																																										taskTotalPauseJTextField = new JTextField();
-																																										taskTotalPauseJTextField.setBounds(88, 365, 135, 20);
-																																										taskFieldsJPanel.add(taskTotalPauseJTextField);
-																																										taskTotalPauseJTextField.setEditable(false);
-																																										taskTotalPauseJTextField.setColumns(10);
-																																										
-																																												lblWorked = new JLabel();
-																																												lblWorked.setBounds(10, 230, 68, 14);
-																																												taskFieldsJPanel.add(lblWorked);
-																																												lblWorked.setText("Worked");
-																																												lblWorked.setForeground(Color.WHITE);
-																																												
-																																														taskTotalWorkedJLabel = new JLabel("Total worked");
-																																														taskTotalWorkedJLabel.setBounds(10, 338, 76, 14);
-																																														taskFieldsJPanel.add(taskTotalWorkedJLabel);
-																																														taskTotalWorkedJLabel.setForeground(Color.WHITE);
-																																														
-																																																lblTotalPaused = new JLabel("Total paused");
-																																																lblTotalPaused.setBounds(10, 368, 76, 14);
-																																																taskFieldsJPanel.add(lblTotalPaused);
-																																																lblTotalPaused.setForeground(Color.WHITE);
+		taskEditFieldsJPanel = new JPanel();
+		taskEditFieldsJPanel.setBounds(0, 0, 399, 219);
+		taskFieldsJPanel.add(taskEditFieldsJPanel);
+		taskEditFieldsJPanel.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
+		taskEditFieldsJPanel.setBackground(Color.DARK_GRAY);
+		taskEditFieldsJPanel.setLayout(new FormLayout(new ColumnSpec[] { FormFactory.UNRELATED_GAP_COLSPEC, ColumnSpec.decode("56px"), FormFactory.UNRELATED_GAP_COLSPEC, ColumnSpec.decode("1px"), FormFactory.LABEL_COMPONENT_GAP_COLSPEC, ColumnSpec.decode("110px:grow"), FormFactory.DEFAULT_COLSPEC, FormFactory.RELATED_GAP_COLSPEC, ColumnSpec.decode("55px"), ColumnSpec.decode("51px"), FormFactory.RELATED_GAP_COLSPEC, ColumnSpec.decode("max(27dlu;default)"), FormFactory.RELATED_GAP_COLSPEC, ColumnSpec.decode("max(15dlu;default)"), }, new RowSpec[] { FormFactory.UNRELATED_GAP_ROWSPEC, RowSpec.decode("20px"), FormFactory.RELATED_GAP_ROWSPEC, RowSpec.decode("20px:grow"), FormFactory.RELATED_GAP_ROWSPEC, RowSpec.decode("20px:grow"), RowSpec.decode("38px"), RowSpec.decode("51px"), FormFactory.UNRELATED_GAP_ROWSPEC, RowSpec.decode("51px"), FormFactory.RELATED_GAP_ROWSPEC, RowSpec.decode("37px"), FormFactory.UNRELATED_GAP_ROWSPEC, RowSpec.decode("23px"), FormFactory.UNRELATED_GAP_ROWSPEC, FormFactory.DEFAULT_ROWSPEC, FormFactory.UNRELATED_GAP_ROWSPEC, RowSpec.decode("41px"), }));
+
+		label_5 = new JLabel();
+		label_5.setText("Name");
+		label_5.setForeground(Color.WHITE);
+		taskEditFieldsJPanel.add(label_5, "2, 2, fill, center");
+
+		taskNameJTextField = new JTextField();
+		taskNameJTextField.addFocusListener(new FocusAdapter() {
+			@Override
+			public void focusGained(FocusEvent e) {
+				editFieldsFocused(e);
+			}
+		});
+		taskEditFieldsJPanel.add(taskNameJTextField, "6, 2, 7, 1, fill, top");
+
+		label_6 = new JLabel();
+		label_6.setText("Start date");
+		label_6.setForeground(Color.WHITE);
+		taskEditFieldsJPanel.add(label_6, "2, 4, fill, center");
+
+		taskStartDateChooser = new JDateChooser();
+		taskStartDateChooser.setDateFormatString("dd/MM/yyyy");
+		taskEditFieldsJPanel.add(taskStartDateChooser, "6, 4, fill, center");
+
+		label_7 = new JLabel();
+		label_7.setText("Completed");
+		label_7.setForeground(Color.WHITE);
+		taskEditFieldsJPanel.add(label_7, "9, 4, 2, 1, center, center");
+
+		taskCompletedJCheckBox = new JCheckBox();
+		taskCompletedJCheckBox.addFocusListener(new FocusAdapter() {
+			@Override
+			public void focusGained(FocusEvent arg0) {
+				editFieldsFocused(arg0);
+			}
+		});
+		taskCompletedJCheckBox.setBackground(Color.DARK_GRAY);
+		taskEditFieldsJPanel.add(taskCompletedJCheckBox, "12, 4, left, center");
+
+		label_8 = new JLabel();
+		label_8.setText("End date");
+		label_8.setForeground(Color.WHITE);
+		taskEditFieldsJPanel.add(label_8, "2, 6, fill, center");
+
+		taskEndDateChooser = new JDateChooser();
+		taskEndDateChooser.setDateFormatString("dd/MM/yyyy");
+		taskEditFieldsJPanel.add(taskEndDateChooser, "6, 6, fill, center");
+
+		label_9 = new JLabel();
+		label_9.setText("Comment");
+		label_9.setForeground(Color.WHITE);
+		taskEditFieldsJPanel.add(label_9, "2, 8, fill, top");
+
+		taskCommentJTextArea = new JTextArea();
+		taskCommentJTextArea.addFocusListener(new FocusAdapter() {
+			@Override
+			public void focusGained(FocusEvent e) {
+				editFieldsFocused(e);
+			}
+		});
+		taskEditFieldsJPanel.add(taskCommentJTextArea, "6, 8, 7, 1, fill, fill");
+
+		saveTaskJButton = new JButton();
+		saveTaskJButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				try {
+					String name = taskNameJTextField.getText();
+					String comment = taskCommentJTextArea.getText();
+					boolean completed = taskCompletedJCheckBox.isSelected();
+					long startdate = taskStartDateChooser.getDate().getTime() / 1000;
+					long enddate = taskEndDateChooser.getDate().getTime() / 1000;
+
+					if (tasksJList.getSelectedValue().equals(NEWTASKITEM)) {
+						createTask(name, startdate, enddate, comment, completed);
+					} else {
+						updateTask(name, startdate, enddate, comment, completed);
+					}
+				} catch (NullPointerException ex) {
+					ex.printStackTrace();
+					JOptionPane.showMessageDialog(GUIForm.this, "Please choose a valid date");
+				} finally {
+					toggleButtonStates();
+					loadProjectInfo(projectsJList.getSelectedIndex());
+				}
+			}
+		});
+		saveTaskJButton.setText("Save");
+		saveTaskJButton.setEnabled(false);
+		taskEditFieldsJPanel.add(saveTaskJButton, "6, 10, 7, 1, fill, top");
+
+		workedTimeJList = new JList();
+		workedTimeJList.setBounds(88, 230, 288, 94);
+		taskFieldsJPanel.add(workedTimeJList);
+
+		taskTotalWorkedJTextField = new JTextField();
+		taskTotalWorkedJTextField.setBounds(88, 335, 135, 20);
+		taskFieldsJPanel.add(taskTotalWorkedJTextField);
+		taskTotalWorkedJTextField.setEditable(false);
+		taskTotalWorkedJTextField.setColumns(10);
+
+		taskTotalPauseJTextField = new JTextField();
+		taskTotalPauseJTextField.setBounds(88, 365, 135, 20);
+		taskFieldsJPanel.add(taskTotalPauseJTextField);
+		taskTotalPauseJTextField.setEditable(false);
+		taskTotalPauseJTextField.setColumns(10);
+
+		lblWorked = new JLabel();
+		lblWorked.setBounds(10, 230, 68, 14);
+		taskFieldsJPanel.add(lblWorked);
+		lblWorked.setText("Worked");
+		lblWorked.setForeground(Color.WHITE);
+
+		taskTotalWorkedJLabel = new JLabel("Total worked");
+		taskTotalWorkedJLabel.setBounds(10, 338, 76, 14);
+		taskFieldsJPanel.add(taskTotalWorkedJLabel);
+		taskTotalWorkedJLabel.setForeground(Color.WHITE);
+
+		lblTotalPaused = new JLabel("Total paused");
+		lblTotalPaused.setBounds(10, 368, 76, 14);
+		taskFieldsJPanel.add(lblTotalPaused);
+		lblTotalPaused.setForeground(Color.WHITE);
 		clientsJPanel = new javax.swing.JPanel();
 		clientsJLabel = new javax.swing.JLabel();
 		jScrollPane5 = new javax.swing.JScrollPane();
@@ -742,12 +725,12 @@ public class GUIForm extends javax.swing.JFrame {
 		importExportTabbedPane.addTab("Export", null, exportJPanel, "Export your tasks here");
 		importExportTabbedPane.setForegroundAt(0, Color.WHITE);
 		exportJPanel.setLayout(null);
-		exportProjectsJScrollPane = new JScrollPane();
-		exportProjectsJScrollPane.setBounds(10, 11, 260, 379);
-		exportJPanel.add(exportProjectsJScrollPane);
+		exportJScrollPane = new JScrollPane();
+		exportJScrollPane.setBounds(10, 11, 260, 379);
+		exportJPanel.add(exportJScrollPane);
 
-		exportProjectsCheckBoxList = new CheckBoxList();
-		exportProjectsJScrollPane.setViewportView(exportProjectsCheckBoxList);
+		exportJCheckBoxTree = new CheckboxTree();
+		exportJScrollPane.setViewportView(exportJCheckBoxTree);
 
 		exportJButton = new JButton("Export");
 		exportJButton.addActionListener(new ActionListener() {
@@ -758,12 +741,6 @@ public class GUIForm extends javax.swing.JFrame {
 		exportJButton.setBounds(550, 11, 99, 23);
 		exportJPanel.add(exportJButton);
 
-		exportTasksJScrollPane = new JScrollPane();
-		exportTasksJScrollPane.setBounds(280, 11, 260, 379);
-		exportJPanel.add(exportTasksJScrollPane);
-
-		exportTasksCheckBoxList = new CheckBoxList();
-		exportTasksJScrollPane.setViewportView(exportTasksCheckBoxList);
 		importExportTabbedPane.setBackgroundAt(0, Color.DARK_GRAY);
 
 		importJPanel = new JPanel();
@@ -777,49 +754,23 @@ public class GUIForm extends javax.swing.JFrame {
 		importProjectsJScrollPane.setBounds(10, 11, 260, 379);
 		importJPanel.add(importProjectsJScrollPane);
 
-		importProjectsCheckBoxList = new CheckBoxList();
-		importProjectsJScrollPane.setViewportView(importProjectsCheckBoxList);
-
 		importJButton = new JButton("Import");
 		importJButton.setBounds(550, 11, 99, 23);
 		importJPanel.add(importJButton);
-
-		importTasksJScrollPane = new JScrollPane();
-		importTasksJScrollPane.setBounds(280, 11, 260, 379);
-		importJPanel.add(importTasksJScrollPane);
-
-		importTasksCheckBoxList = new CheckBoxList();
-		importTasksJScrollPane.setViewportView(importTasksCheckBoxList);
 
 		optionsJPanel.setBackground(Color.GRAY);
 
 		settingsJLabel.setFont(new java.awt.Font("Tw Cen MT", 1, 14));
 		settingsJLabel.setForeground(new java.awt.Color(255, 255, 255));
 		settingsJLabel.setText("Settings");
-		
+
 		settingsJTabbedPane = new JTabbedPane(JTabbedPane.TOP);
 		settingsJTabbedPane.setBackground(Color.GRAY);
 
 		javax.swing.GroupLayout optionsJPanelLayout = new javax.swing.GroupLayout(optionsJPanel);
-		optionsJPanelLayout.setHorizontalGroup(
-			optionsJPanelLayout.createParallelGroup(Alignment.LEADING)
-				.addGroup(optionsJPanelLayout.createSequentialGroup()
-					.addContainerGap()
-					.addGroup(optionsJPanelLayout.createParallelGroup(Alignment.LEADING)
-						.addComponent(settingsJLabel)
-						.addComponent(settingsJTabbedPane, GroupLayout.PREFERRED_SIZE, 667, GroupLayout.PREFERRED_SIZE))
-					.addContainerGap(18, Short.MAX_VALUE))
-		);
-		optionsJPanelLayout.setVerticalGroup(
-			optionsJPanelLayout.createParallelGroup(Alignment.LEADING)
-				.addGroup(optionsJPanelLayout.createSequentialGroup()
-					.addContainerGap()
-					.addComponent(settingsJLabel)
-					.addGap(18)
-					.addComponent(settingsJTabbedPane, GroupLayout.PREFERRED_SIZE, 391, GroupLayout.PREFERRED_SIZE)
-					.addContainerGap(15, Short.MAX_VALUE))
-		);
-		
+		optionsJPanelLayout.setHorizontalGroup(optionsJPanelLayout.createParallelGroup(Alignment.LEADING).addGroup(optionsJPanelLayout.createSequentialGroup().addContainerGap().addGroup(optionsJPanelLayout.createParallelGroup(Alignment.LEADING).addComponent(settingsJLabel).addComponent(settingsJTabbedPane, GroupLayout.PREFERRED_SIZE, 667, GroupLayout.PREFERRED_SIZE)).addContainerGap(18, Short.MAX_VALUE)));
+		optionsJPanelLayout.setVerticalGroup(optionsJPanelLayout.createParallelGroup(Alignment.LEADING).addGroup(optionsJPanelLayout.createSequentialGroup().addContainerGap().addComponent(settingsJLabel).addGap(18).addComponent(settingsJTabbedPane, GroupLayout.PREFERRED_SIZE, 391, GroupLayout.PREFERRED_SIZE).addContainerGap(15, Short.MAX_VALUE)));
+
 		userSettingsJPanel = new JPanel();
 		userSettingsJPanel.setBackground(Color.DARK_GRAY);
 		settingsJTabbedPane.addTab("New tab", null, userSettingsJPanel, null);
@@ -1056,7 +1007,7 @@ public class GUIForm extends javax.swing.JFrame {
 			list.setCellRenderer(new ProjectCellRenderer());
 			list.setSelectedIndex(selectedIndex);
 		}
-		refreshExportView();
+		// FIXME refresh export view
 	}
 
 	// Refresh all TASK lists
@@ -1079,7 +1030,7 @@ public class GUIForm extends javax.swing.JFrame {
 			list.setCellRenderer(new TaskCellRenderer());
 			list.setSelectedIndex(selectedIndex);
 		}
-		refreshExportView();
+		// FIXME refresh export view
 	}
 
 	// Refresh all CLIENT lists
@@ -1121,29 +1072,19 @@ public class GUIForm extends javax.swing.JFrame {
 		}
 	}
 
-	// Refresh IMPORT / EXPORT lists on panels
-	private void refreshExportView() {
-		ArrayList projects = UserInterface.getProjects();
-		DefaultListModel model = new DefaultListModel();
-
-		for (Project p : (ArrayList<Project>) projects) {
-			JCheckBox check = new JCheckBox();
-			check.setText(p.getNaam());
-			model.addElement(check);
-		}
-
-		ArrayList tasks = new ArrayList();
-		for (int i = 0; i < exportProjectsCheckBoxList.getModel().getSize(); i++) {
-			if (((JCheckBox) exportProjectsCheckBoxList.getModel().getElementAt(i)).isSelected()) {
-				// Project proj = UserInterface.getp
+	private void refreshTree(JTree tree, ArrayList<Project> projects) {
+		DefaultMutableTreeNode root = new DefaultMutableTreeNode("Project");
+		for (Project p : projects) {
+			if (!p.getTaken().isEmpty()) {
+				DefaultMutableTreeNode project = new DefaultMutableTreeNode(p);
+				for (Taak t : p.getTaken()) {
+					project.add(new DefaultMutableTreeNode(t));
+				}
+				root.add(project);
 			}
 		}
-
-		/*for (Taak t : ) {
-			
-		}*/
-
-		exportProjectsCheckBoxList.setModel(model);
+		DefaultTreeModel treeModel = new DefaultTreeModel(root);
+		tree.setModel(treeModel);
 	}
 
 	// ================================================================================
@@ -1244,10 +1185,9 @@ public class GUIForm extends javax.swing.JFrame {
 				((JDateChooser) c).setDate(null);
 			} else if (c instanceof JComboBox) {
 				((JComboBox) c).setModel(new DefaultComboBoxModel());
-			} else if (c instanceof JProgressBar){
+			} else if (c instanceof JProgressBar) {
 				((JProgressBar) c).setValue(0);
 			}
-			
 		}
 	}
 
@@ -1324,6 +1264,7 @@ public class GUIForm extends javax.swing.JFrame {
 		ingelogdJLabel.setForeground(Color.GREEN);
 		refreshProjectsList(projectsJList, homeProjectsJList);
 		refreshClientsList(clientsJList);
+		refreshTree(exportJCheckBoxTree, UserInterface.getProjects());
 		selectNewItem(projectsJList, tasksJList, clientsJList);
 	}
 
@@ -1333,7 +1274,7 @@ public class GUIForm extends javax.swing.JFrame {
 			list.setSelectedIndex(list.getModel().getSize() - 1);
 			list.ensureIndexIsVisible(list.getSelectedIndex());
 		}
-		refreshExportView();
+		// FIXME refresh export view
 	}
 
 	// Event handlers for all the edit fields
@@ -1350,15 +1291,28 @@ public class GUIForm extends javax.swing.JFrame {
 
 	private void exportButtonClicked(ActionEvent arg0) {
 		JFileChooser fileChooser = new JFileChooser();
-		fileChooser.showDialog(this, "Export");
-		ArrayList<Taak> toExport = new ArrayList();
-		Taak[] t = new Taak[toExport.size()];
-		// FIXME, Hier code om te exporteren uit de exportTaskJList te halen
-		try {
-			IcsExporteren.export(toExport.toArray(t), fileChooser.getSelectedFile().toPath().toString());
-		} catch (IOException | ValidationException e) {
-			e.printStackTrace();
-			JOptionPane.showMessageDialog(this, e.getMessage());
+		fileChooser.showSaveDialog(this);
+
+		if (fileChooser.getSelectedFile() != null) {
+			ArrayList<Taak> toExport = new ArrayList();
+			TreePath[] paths = exportJCheckBoxTree.getCheckingPaths();
+
+			for (TreePath p : paths) {
+				if (p.getPathCount() == 3) {
+					Project project = UserInterface.getProject(p.getParentPath().getLastPathComponent());
+					Taak toAddTask = UserInterface.getTask(project, p.getLastPathComponent().toString());
+					toExport.add(toAddTask);
+				}
+			}
+
+			Taak[] t = new Taak[toExport.size()];
+
+			try {
+				IcsExporteren.export(toExport.toArray(t), fileChooser.getSelectedFile().toPath().toString());
+			} catch (IOException | ValidationException e) {
+				e.printStackTrace();
+				JOptionPane.showMessageDialog(this, e.getMessage());
+			}
 		}
 	}
 
@@ -1474,7 +1428,7 @@ public class GUIForm extends javax.swing.JFrame {
 	private JPanel exportJPanel;
 	private JScrollPane importProjectsJScrollPane;
 	private JButton importJButton;
-	private JScrollPane exportProjectsJScrollPane;
+	private JScrollPane exportJScrollPane;
 	private JButton exportJButton;
 	private JComboBox projectClientsJComboBox;
 	private JList clientsJList;
@@ -1483,13 +1437,8 @@ public class GUIForm extends javax.swing.JFrame {
 	private JLabel taskTotalWorkedJLabel;
 	private JLabel lblTotalPaused;
 	private JPanel projectFieldsJPanel;
-	private JScrollPane exportTasksJScrollPane;
-	private JScrollPane importTasksJScrollPane;
-	private CheckBoxList exportProjectsCheckBoxList;
-	private CheckBoxList exportTasksCheckBoxList;
-	private CheckBoxList importProjectsCheckBoxList;
-	private CheckBoxList importTasksCheckBoxList;
 	private JPanel taskFieldsJPanel;
 	private JTabbedPane settingsJTabbedPane;
 	private JPanel userSettingsJPanel;
+	private CheckboxTree exportJCheckBoxTree;
 }
