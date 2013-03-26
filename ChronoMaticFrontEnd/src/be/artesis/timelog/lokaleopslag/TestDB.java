@@ -6,6 +6,8 @@ import java.security.NoSuchAlgorithmException;
 import org.json.JSONArray;
 import org.json.JSONException;
 
+import be.artesis.timelog.controller.InserterLocal;
+import be.artesis.timelog.controller.UpdaterLocal;
 import be.artesis.timelog.model.Validator;
 import be.artesis.timelog.model.WebserviceException;
 import be.artesis.timelog.view.Opdrachtgever;
@@ -22,11 +24,8 @@ public class TestDB {
 		// TODO Auto-generated method stub
 		
 
-		//LocalDatabaseWriter wr = new LocalDatabaseWriter(Commando.INSERT);
-		try {
-			//wr.makeDatabase();
+		try {			
 			
-			//LocalDatabaseWriter lbcw = new LocalDatabaseWriter(Commando.INSERT);
 			/*
 			 //opdrachtgevers
 			Opdrachtgever opdrachtgever = new Opdrachtgever("Possy","phil","1","possy@artisis.awesome","123456789",12);
@@ -65,26 +64,28 @@ public class TestDB {
 			
 			
 			*/
-			/*
+			
 			//projecten
-			Project p0 = new Project("javaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",1,10,20,3);
-			Project p1 = new Project("C#",100,1000,2000,4);
-			Project p2 = new Project("fritselshnizel",1,10,20,3);
-			Project p3 = new Project("poepsnoepje",1,10,20,3);
-			Project p4 = new Project("nee",1,10,20,3);
+			Project p0 = new Project("javaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",1,10,20);
+			Project p1 = new Project("C#",100,1000,2000);
+			Project p2 = new Project("fritselshnizel",1,10,20);
+			Project p3 = new Project("poepsnoepje",1,10,20,4);
+			Project p4 = new Project("CSharp",100,1000,2000,1);
 			
-			lbcw.schrijfProject(p0, 1);
-			lbcw.schrijfProject(p1, 2);
-			lbcw.schrijfProject(p2, 2);
-			lbcw.schrijfProject(p3, 1);
-			lbcw.schrijfProject(p4, 1);
+			InserterLocal.inputProject(p0, 1);
+			InserterLocal.inputProject(p1, 2);
+			InserterLocal.inputProject(p2, 2);
+
+			//lbcw2.setCommando(Commando.UPDATE);
+			//UpdaterLocal.updateProject(p3, 1);
+			//UpdaterLocal.updateProject(p4, 1);
 			
-			*/
-			Validator v = Validator.getInstance();
-			v.login("p", "p");
 			
-			LocalDatabaseSynch lds = new LocalDatabaseSynch(v);
-			lds.synch(Commando.INSERT);
+			//Validator v = Validator.getInstance();
+			//v.login("p", "p");
+			
+			//LocalDatabaseSynch lds = new LocalDatabaseSynch(v);
+			//lds.synch(Commando.INSERT);
 			
 			
 			
@@ -95,13 +96,11 @@ public class TestDB {
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		} catch (NoSuchAlgorithmException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 		} catch (WebserviceException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	
 	}
 
 }

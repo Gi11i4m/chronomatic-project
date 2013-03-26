@@ -9,7 +9,7 @@ import be.artesis.timelog.view.Tijdspanne;
 import java.io.IOException;
 import java.net.MalformedURLException;
 
-public class Deleter {
+public class DeleterServer {
 	
 	public static void deleteTijdSpanne(String sessionKey, Tijdspanne tijdSpanne) throws MalformedURLException, IOException, WebserviceException {
 		Connection.execute("tijdSpanne/delete/" + sessionKey + "/" + tijdSpanne.getId());
