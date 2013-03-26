@@ -31,8 +31,8 @@ public class AuthBrowser {
 	private Group group;
 	private Scene scene;
 	private WebView webView;
-	private final int BROWSERWIDTH = 714;
-	private final int BROWSERHEIGHT = 487;
+	private final int BROWSERWIDTH = 715;
+	private final int BROWSERHEIGHT = 450;
 	private LoginForm loginDialog;
 	private String Url;
 	private SocialMedia social;
