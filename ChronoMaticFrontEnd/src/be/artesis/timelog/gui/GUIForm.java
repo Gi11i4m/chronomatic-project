@@ -41,10 +41,11 @@ import javax.swing.JTabbedPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.JTree;
+import javax.swing.ListModel;
 import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.SwingConstants;
 import javax.swing.border.BevelBorder;
-import javax.swing.event.ChangeListener;
+import javax.swing.event.ListDataListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.tree.DefaultMutableTreeNode;
@@ -55,6 +56,7 @@ import net.fortuna.ical4j.model.ValidationException;
 
 import org.json.JSONException;
 
+import be.artesis.timelog.checkboxlist.CheckBoxList;
 import be.artesis.timelog.checkboxtree.CheckBoxNode;
 import be.artesis.timelog.checkboxtree.CheckBoxNodeEditor;
 import be.artesis.timelog.checkboxtree.CheckBoxNodeRenderer;
@@ -741,16 +743,12 @@ public class GUIForm extends javax.swing.JFrame {
 		importExportTabbedPane.addTab("Export", null, exportJPanel, "Export your tasks here");
 		importExportTabbedPane.setForegroundAt(0, Color.WHITE);
 		exportJPanel.setLayout(null);
-		exportJScrollPane = new JScrollPane();
-		exportJScrollPane.setBounds(10, 11, 320, 347);
-		exportJPanel.add(exportJScrollPane);
+		exportProjectsJScrollPane = new JScrollPane();
+		exportProjectsJScrollPane.setBounds(10, 11, 260, 379);
+		exportJPanel.add(exportProjectsJScrollPane);
 
-		exportTree = new JTree();
-		exportJScrollPane.setViewportView(exportTree);
-		exportTree.setModel(new DefaultTreeModel(new DefaultMutableTreeNode("Tasks to export show here") {
-			{
-			}
-		}));
+		exportProjectsCheckBoxList = new CheckBoxList();
+		exportProjectsJScrollPane.setViewportView(exportProjectsCheckBoxList);
 
 		exportJButton = new JButton("Export");
 		exportJButton.addActionListener(new ActionListener() {
@@ -758,8 +756,15 @@ public class GUIForm extends javax.swing.JFrame {
 				exportButtonClicked(arg0);
 			}
 		});
-		exportJButton.setBounds(10, 367, 320, 23);
+		exportJButton.setBounds(550, 11, 99, 23);
 		exportJPanel.add(exportJButton);
+
+		exportTasksJScrollPane = new JScrollPane();
+		exportTasksJScrollPane.setBounds(280, 11, 260, 379);
+		exportJPanel.add(exportTasksJScrollPane);
+
+		exportTasksCheckBoxList = new CheckBoxList();
+		exportTasksJScrollPane.setViewportView(exportTasksCheckBoxList);
 		importExportTabbedPane.setBackgroundAt(0, Color.DARK_GRAY);
 
 		importJPanel = new JPanel();
@@ -769,19 +774,23 @@ public class GUIForm extends javax.swing.JFrame {
 		importExportTabbedPane.setForegroundAt(1, Color.WHITE);
 		importExportTabbedPane.setBackgroundAt(1, Color.DARK_GRAY);
 		importJPanel.setLayout(null);
+		importProjectsJScrollPane = new JScrollPane();
+		importProjectsJScrollPane.setBounds(10, 11, 260, 379);
+		importJPanel.add(importProjectsJScrollPane);
 
-		importTree = new JTree();
-		importTree.setModel(new DefaultTreeModel(new DefaultMutableTreeNode("Projects to import show here") {
-			{
-			}
-		}));
-		importJScrollPane = new JScrollPane(importTree);
-		importJScrollPane.setBounds(10, 11, 320, 347);
-		importJPanel.add(importJScrollPane);
+		importProjectsCheckBoxList = new CheckBoxList();
+		importProjectsJScrollPane.setViewportView(importProjectsCheckBoxList);
 
 		importJButton = new JButton("Import");
-		importJButton.setBounds(10, 367, 320, 23);
+		importJButton.setBounds(550, 11, 99, 23);
 		importJPanel.add(importJButton);
+
+		importTasksJScrollPane = new JScrollPane();
+		importTasksJScrollPane.setBounds(280, 11, 260, 379);
+		importJPanel.add(importTasksJScrollPane);
+
+		importTasksCheckBoxList = new CheckBoxList();
+		importTasksJScrollPane.setViewportView(importTasksCheckBoxList);
 
 		optionsJPanel.setBackground(Color.GRAY);
 
@@ -1178,7 +1187,7 @@ public class GUIForm extends javax.swing.JFrame {
 			list.setCellRenderer(new ProjectCellRenderer());
 			list.setSelectedIndex(selectedIndex);
 		}
-		refreshTreeView(exportTree, UserInterface.getProjects());
+		refreshExportView();
 	}
 
 	// Refresh all TASK lists
@@ -1201,7 +1210,7 @@ public class GUIForm extends javax.swing.JFrame {
 			list.setCellRenderer(new TaskCellRenderer());
 			list.setSelectedIndex(selectedIndex);
 		}
-		refreshTreeView(exportTree, UserInterface.getProjects());
+		refreshExportView();
 	}
 
 	// Refresh all CLIENT lists
@@ -1243,19 +1252,29 @@ public class GUIForm extends javax.swing.JFrame {
 		}
 	}
 
-	// Refresh IMPORT / EXPORT treeview
-	private void refreshTreeView(JTree tree, ArrayList projects) {
+	// Refresh IMPORT / EXPORT lists on panels
+	private void refreshExportView() {
+		ArrayList projects = UserInterface.getProjects();
+		DefaultListModel model = new DefaultListModel();
 
-		DefaultMutableTreeNode top = new DefaultMutableTreeNode("Tasks");
-		for (int i = 0; i < projects.size(); i++) {
-			Project p = ((ArrayList<Project>) projects).get(i);
-			for (int j = 0; j < p.getTaken().size(); j++) {
-				Taak t = p.getTaken().get(j);
-				top.add(new DefaultMutableTreeNode(t, false));
+		for (Project p : (ArrayList<Project>) projects) {
+			JCheckBox check = new JCheckBox();
+			check.setText(p.getNaam());
+			model.addElement(check);
+		}
+
+		ArrayList tasks = new ArrayList();
+		for (int i = 0; i < exportProjectsCheckBoxList.getModel().getSize(); i++) {
+			if (((JCheckBox) exportProjectsCheckBoxList.getModel().getElementAt(i)).isSelected()) {
+				// Project proj = UserInterface.getp
 			}
 		}
-		tree = new JTree(top);
-		exportJScrollPane = new JScrollPane(tree);
+
+		/*for (Taak t : ) {
+			
+		}*/
+
+		exportProjectsCheckBoxList.setModel(model);
 	}
 
 	// ================================================================================
@@ -1457,7 +1476,7 @@ public class GUIForm extends javax.swing.JFrame {
 			list.setSelectedIndex(list.getModel().getSize() - 1);
 			list.ensureIndexIsVisible(list.getSelectedIndex());
 		}
-		refreshTreeView(exportTree, UserInterface.getProjects());
+		refreshExportView();
 	}
 
 	// Event handlers for all the edit fields
@@ -1477,10 +1496,7 @@ public class GUIForm extends javax.swing.JFrame {
 		fileChooser.showDialog(this, "Export");
 		ArrayList<Taak> toExport = new ArrayList();
 		Taak[] t = new Taak[toExport.size()];
-		for (Object o : exportTree.getSelectionPaths()) {
-			if (o instanceof Taak)
-				toExport.add((Taak) o);
-		}
+		// FIXME, Hier code om te exporteren uit de exportTaskJList te halen
 		try {
 			IcsExporteren.export(toExport.toArray(t), fileChooser.getSelectedFile().toPath().toString());
 		} catch (IOException | ValidationException e) {
@@ -1599,9 +1615,9 @@ public class GUIForm extends javax.swing.JFrame {
 	private JTabbedPane importExportTabbedPane;
 	private JPanel importJPanel;
 	private JPanel exportJPanel;
-	private JScrollPane importJScrollPane;
+	private JScrollPane importProjectsJScrollPane;
 	private JButton importJButton;
-	private JScrollPane exportJScrollPane;
+	private JScrollPane exportProjectsJScrollPane;
 	private JButton exportJButton;
 	private JComboBox projectClientsJComboBox;
 	private JList clientsJList;
@@ -1609,9 +1625,13 @@ public class GUIForm extends javax.swing.JFrame {
 	private JTextField taskTotalPauseJTextField;
 	private JLabel taskTotalWorkedJLabel;
 	private JLabel lblTotalPaused;
-	private JTree exportTree;
-	private JTree importTree;
 	private JPanel projectFieldsJPanel;
+	private JScrollPane exportTasksJScrollPane;
+	private JScrollPane importTasksJScrollPane;
+	private CheckBoxList exportProjectsCheckBoxList;
+	private CheckBoxList exportTasksCheckBoxList;
+	private CheckBoxList importProjectsCheckBoxList;
+	private CheckBoxList importTasksCheckBoxList;
 	private JPanel taskFieldsJPanel;
 	private JTabbedPane settingsJTabbedPane;
 	private JPanel userSettingsJPanel;
