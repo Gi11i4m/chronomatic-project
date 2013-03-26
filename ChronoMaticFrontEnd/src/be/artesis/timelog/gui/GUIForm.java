@@ -971,11 +971,47 @@ public class GUIForm extends javax.swing.JFrame {
 		currentProjectJLabel.setOpaque(true);
 
 		clockJLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/be/artesis/timelog/gui/icons/ClockNeonIcon.png")));
+		
+		logoutJButton = new JButton("Logout");
+		logoutJButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				logout();
+			}
+		});
 
 		javax.swing.GroupLayout headerJPanelLayout = new javax.swing.GroupLayout(headerJPanel);
+		headerJPanelLayout.setHorizontalGroup(
+			headerJPanelLayout.createParallelGroup(Alignment.TRAILING)
+				.addGroup(headerJPanelLayout.createSequentialGroup()
+					.addContainerGap()
+					.addGroup(headerJPanelLayout.createParallelGroup(Alignment.LEADING, false)
+						.addComponent(currentProjectJLabel, GroupLayout.DEFAULT_SIZE, 201, Short.MAX_VALUE)
+						.addComponent(ingelogdJLabel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+					.addGap(147)
+					.addComponent(logoutJButton)
+					.addPreferredGap(ComponentPlacement.RELATED, 150, Short.MAX_VALUE)
+					.addComponent(titleLabel)
+					.addGap(18)
+					.addComponent(clockJLabel)
+					.addGap(6))
+		);
+		headerJPanelLayout.setVerticalGroup(
+			headerJPanelLayout.createParallelGroup(Alignment.LEADING)
+				.addGroup(headerJPanelLayout.createSequentialGroup()
+					.addContainerGap()
+					.addGroup(headerJPanelLayout.createParallelGroup(Alignment.LEADING)
+						.addGroup(headerJPanelLayout.createParallelGroup(Alignment.BASELINE)
+							.addComponent(titleLabel, GroupLayout.DEFAULT_SIZE, 60, Short.MAX_VALUE)
+							.addComponent(logoutJButton))
+						.addComponent(clockJLabel, Alignment.TRAILING)
+						.addGroup(headerJPanelLayout.createSequentialGroup()
+							.addComponent(ingelogdJLabel)
+							.addPreferredGap(ComponentPlacement.UNRELATED)
+							.addComponent(currentProjectJLabel)
+							.addGap(0, 9, Short.MAX_VALUE)))
+					.addContainerGap())
+		);
 		headerJPanel.setLayout(headerJPanelLayout);
-		headerJPanelLayout.setHorizontalGroup(headerJPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGroup(javax.swing.GroupLayout.Alignment.TRAILING, headerJPanelLayout.createSequentialGroup().addContainerGap().addGroup(headerJPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false).addComponent(currentProjectJLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 201, Short.MAX_VALUE).addComponent(ingelogdJLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)).addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE).addComponent(titleLabel).addGap(18, 18, 18).addComponent(clockJLabel).addGap(6, 6, 6)));
-		headerJPanelLayout.setVerticalGroup(headerJPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGroup(headerJPanelLayout.createSequentialGroup().addContainerGap().addGroup(headerJPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addComponent(titleLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE).addComponent(clockJLabel, javax.swing.GroupLayout.Alignment.TRAILING).addGroup(headerJPanelLayout.createSequentialGroup().addComponent(ingelogdJLabel).addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED).addComponent(currentProjectJLabel).addGap(0, 0, Short.MAX_VALUE))).addContainerGap()));
 
 		clockJLabel.getAccessibleContext().setAccessibleName("iconJLabel");
 
@@ -1346,6 +1382,22 @@ public class GUIForm extends javax.swing.JFrame {
 	// Other methods, FIXME nakijken
 	// ================================================================================
 
+	private void setCurrentProjectGUI(int index) {
+		try {
+			UserInterface.setCurrentProjectIndex(index);
+			currentProjectJLabel.setText("Current project: " + UserInterface.getCurrentProject().getNaam());
+			saveTaskJButton.setText("Save to " + UserInterface.getCurrentProject().getNaam());
+			projectsJList.setSelectedIndex(index);
+			refreshProjectsList(projectsJList, homeProjectsJList);
+			refreshTasksList(UserInterface.getCurrentProject(), tasksJList);
+			clearFieldsOnPanel(taskFieldsJPanel);
+			selectNewItem(tasksJList);
+		} catch (GUIException ex) {
+			ex.printStackTrace();
+			JOptionPane.showMessageDialog(this, ex.getMessage());
+		}
+	}
+	
 	private void workClicked(java.awt.event.MouseEvent evt) {
 		try {
 			Project p = UserInterface.getCurrentProject();
@@ -1362,6 +1414,11 @@ public class GUIForm extends javax.swing.JFrame {
 			ex.printStackTrace();
 			JOptionPane.showMessageDialog(this, ex.getMessage());
 		}
+	}
+	
+	//FIXME nog invullen
+	private void logout(){
+		
 	}
 
 	// ================================================================================
@@ -1415,22 +1472,6 @@ public class GUIForm extends javax.swing.JFrame {
 
 	private void setCurrentProjectJButtonActionPerformed(java.awt.event.ActionEvent evt) {
 		setCurrentProjectGUI(projectsJList.getSelectedIndex());
-	}
-
-	private void setCurrentProjectGUI(int index) {
-		try {
-			UserInterface.setCurrentProjectIndex(index);
-			currentProjectJLabel.setText("Current project: " + UserInterface.getCurrentProject().getNaam());
-			saveTaskJButton.setText("Save to " + UserInterface.getCurrentProject().getNaam());
-			projectsJList.setSelectedIndex(index);
-			refreshProjectsList(projectsJList, homeProjectsJList);
-			refreshTasksList(UserInterface.getCurrentProject(), tasksJList);
-			clearFieldsOnPanel(taskFieldsJPanel);
-			selectNewItem(tasksJList);
-		} catch (GUIException ex) {
-			ex.printStackTrace();
-			JOptionPane.showMessageDialog(this, ex.getMessage());
-		}
 	}
 
 	private void clientsJListValueChanged(ListSelectionEvent arg0) {
@@ -1656,4 +1697,5 @@ public class GUIForm extends javax.swing.JFrame {
 	private JButton updateUserJButton;
 	private JTextField usernameJTextField;
 	private JLabel usernameJLabel;
+	private JButton logoutJButton;
 }
