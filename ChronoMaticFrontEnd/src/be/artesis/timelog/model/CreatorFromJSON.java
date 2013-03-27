@@ -29,8 +29,8 @@ public class CreatorFromJSON
 
 		Project[] project = new Project[Jproject.length];
 		
+		//if(!Jproject[0].getString("error").equals("Geen projecten")) {
 		if(!Jproject[0].has("error")) {
-		
 	        int i = 0;
 	        for(JSONObject Jobject: Jproject)
 	        {
@@ -47,11 +47,13 @@ public class CreatorFromJSON
 		JSONObject[] Jopdrachtgever = JSONOverdrager.getOpdrachtgeverVanGebruiker(sessionKey);
 
 		Opdrachtgever[] opdrachtgever = new Opdrachtgever[Jopdrachtgever.length];
-
-        int i = 0;
-        for (JSONObject Jobject : Jopdrachtgever){
-                opdrachtgever[i++] = new Opdrachtgever(Jobject.getString("naam"),Jobject.getString("voornaam"),Jobject.getString("bedrijfsnaam"),Jobject.getString("email"),Jobject.getString("telefoonnummer"),Jobject.getInt("ID"));
-         }
+		
+		if(!Jopdrachtgever[0].has("error")) {
+	        int i = 0;
+	        for (JSONObject Jobject : Jopdrachtgever){
+	                opdrachtgever[i++] = new Opdrachtgever(Jobject.getString("naam"),Jobject.getString("voornaam"),Jobject.getString("bedrijfsnaam"),Jobject.getString("email"),Jobject.getString("telefoonnummer"),Jobject.getInt("ID"));
+	        }
+		}
         return opdrachtgever;
 	}
 
