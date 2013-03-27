@@ -396,11 +396,32 @@ public class LoginForm extends javax.swing.JFrame implements ActionListener {
 				Platform.exit();
 				displayTab("BASISPANEL");
 			}
+
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				JLabel l = (JLabel) e.getSource();
+				l.setForeground(Color.BLUE);
+			}
+			@Override
+			public void mouseExited(MouseEvent e) {
+				JLabel l = (JLabel) e.getSource();
+				l.setForeground(Color.BLACK);
+			}
 		});
 
 		newAccountJLabel.addMouseListener(new java.awt.event.MouseAdapter() {
 			public void mouseClicked(java.awt.event.MouseEvent evt) {
 				displayTab("NEWUSERPANEL");
+			}
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				JLabel l = (JLabel) e.getSource();
+				l.setForeground(Color.BLUE);
+			}
+			@Override
+			public void mouseExited(MouseEvent e) {
+				JLabel l = (JLabel) e.getSource();
+				l.setForeground(Color.BLACK);
 			}
 		});
 		

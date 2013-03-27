@@ -76,6 +76,8 @@ import com.toedter.calendar.JDateChooser;
 import eu.floraresearch.lablib.gui.checkboxtree.CheckboxTree;
 import javax.swing.UIManager;
 import java.awt.SystemColor;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 /**
  * @author Gilliam
@@ -206,6 +208,18 @@ public class GUIForm extends javax.swing.JFrame {
 		homeFieldsJPanel.add(scrollPane);
 
 		homeProjectsJList = new JList();
+		homeProjectsJList.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent arg0) {
+				JList list = (JList)arg0.getSource();
+		        if (arg0.getClickCount() == 2) {
+		            int index = list.locationToIndex(arg0.getPoint());
+		            if (index != -1) {
+						setCurrentProjectGUI(index);
+					}
+		        } 
+			}
+		});
 		homeProjectsJList.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyPressed(KeyEvent arg0) {
@@ -251,6 +265,18 @@ public class GUIForm extends javax.swing.JFrame {
 			}
 		});
 		projectsJList = new javax.swing.JList();
+		projectsJList.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent arg0) {
+				JList list = (JList)arg0.getSource();
+		        if (arg0.getClickCount() == 2) {
+		            int index = list.locationToIndex(arg0.getPoint());
+		            if (index != -1) {
+						setCurrentProjectGUI(index);
+					}
+		        }
+			}
+		});
 		projectsJList.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyPressed(KeyEvent arg0) {
@@ -260,15 +286,13 @@ public class GUIForm extends javax.swing.JFrame {
 		jScrollPane1.setViewportView(projectsJList);
 
 		projectsJList.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
-		projectsJList.setModel(new javax.swing.AbstractListModel() {
-			String[] strings = {};
-
+		projectsJList.setModel(new AbstractListModel() {
+			String[] values = new String[] {"Add a new project here"};
 			public int getSize() {
-				return strings.length;
+				return values.length;
 			}
-
-			public Object getElementAt(int i) {
-				return strings[i];
+			public Object getElementAt(int index) {
+				return values[index];
 			}
 		});
 		projectsJList.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
@@ -1215,7 +1239,6 @@ public class GUIForm extends javax.swing.JFrame {
 				listmodel.addElement(p);
 			}
 			box.setModel(listmodel);
-			box.setSelectedIndex(0);
 		}
 	}
 
