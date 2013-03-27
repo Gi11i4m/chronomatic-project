@@ -1241,6 +1241,7 @@ public class GUIForm extends javax.swing.JFrame {
 					listmodel.addElement(p);
 				}
 			}
+
 			if (list.equals(projectsJList)) {
 				listmodel.addElement(NEWPROJECTITEM);
 				list.setModel(listmodel);
