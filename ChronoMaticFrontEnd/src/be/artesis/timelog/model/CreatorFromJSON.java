@@ -28,12 +28,15 @@ public class CreatorFromJSON
 		JSONObject[] Jproject = JSONOverdrager.getProjectenVanGebruiker(sessionKey);
 
 		Project[] project = new Project[Jproject.length];
-
-        int i = 0;
-        for(JSONObject Jobject: Jproject)
-        {
-        	project[i++] =  new Project(Jobject.getString("naam"), Jobject.getInt("opdrachtgevers_ID"), Jobject.getLong("start_datum"),Jobject.getLong("eind_datum"), Jobject.getInt("ID"));
-    	}
+		
+		//if(!Jproject[0].getString("error").equals("Geen projecten")) {
+		if(!Jproject[0].has("error")) {
+	        int i = 0;
+	        for(JSONObject Jobject: Jproject)
+	        {
+	        	project[i++] =  new Project(Jobject.getString("naam"), Jobject.getInt("opdrachtgevers_ID"), Jobject.getLong("start_datum"),Jobject.getLong("eind_datum"), Jobject.getInt("ID"));
+	    	}
+		}
 
 		return project;
 	}
@@ -44,11 +47,13 @@ public class CreatorFromJSON
 		JSONObject[] Jopdrachtgever = JSONOverdrager.getOpdrachtgeverVanGebruiker(sessionKey);
 
 		Opdrachtgever[] opdrachtgever = new Opdrachtgever[Jopdrachtgever.length];
-
-        int i = 0;
-        for (JSONObject Jobject : Jopdrachtgever){
-                opdrachtgever[i++] = new Opdrachtgever(Jobject.getString("naam"),Jobject.getString("voornaam"),Jobject.getString("bedrijfsnaam"),Jobject.getString("email"),Jobject.getString("telefoonnummer"),Jobject.getInt("ID"));
-         }
+		
+		if(!Jopdrachtgever[0].has("error")) {
+	        int i = 0;
+	        for (JSONObject Jobject : Jopdrachtgever){
+	                opdrachtgever[i++] = new Opdrachtgever(Jobject.getString("naam"),Jobject.getString("voornaam"),Jobject.getString("bedrijfsnaam"),Jobject.getString("email"),Jobject.getString("telefoonnummer"),Jobject.getInt("ID"));
+	        }
+		}
         return opdrachtgever;
 	}
 

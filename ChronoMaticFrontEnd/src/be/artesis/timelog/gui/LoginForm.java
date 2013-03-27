@@ -212,7 +212,6 @@ public class LoginForm extends javax.swing.JFrame implements ActionListener {
             		WinRegistry.writeStringValue(WinRegistry.HKEY_CURRENT_USER, "SOFTWARE\\ChronoMatic", "autologin", "extern");
             		WinRegistry.writeStringValue(WinRegistry.HKEY_CURRENT_USER, "SOFTWARE\\ChronoMatic", "username", email);
         		}
-				
 				parent.setVisible(true);
 				this.dispose();
 			} else {
@@ -228,17 +227,21 @@ public class LoginForm extends javax.swing.JFrame implements ActionListener {
 		try {
 			UserInterface.setUser(CreatorFromJSON.createGebruiker(validator.getSessionKey()));
 			UserInterface.getUser().setProjects(CreatorFromJSON.createProjecten(validator.getSessionKey()));
-			UserInterface.getUser().setOpdrachtgevers(CreatorFromJSON.createOpdrachtgevers(validator.getSessionKey()));
-
-			for (int i = 0; i < UserInterface.getUser().getProjects().size(); i++) {
-				UserInterface.getUser().getProject(i).addTaken(CreatorFromJSON.createTaken(validator.getSessionKey(), UserInterface.getUser().getProject(i).getId()));
-			}
-
-			for (int i = 0; i < UserInterface.getUser().getProjects().size(); i++) {
-				for (int j = 0; j < UserInterface.getUser().getProject(i).getTaken().size(); j++) {
-					UserInterface.getUser().getProject(i).getTaak(j).addTotaleTijd(CreatorFromJSON.createTijdspannes(validator.getSessionKey(), UserInterface.getUser().getProject(i).getTaak(j).getID(), false));
-					UserInterface.getUser().getProject(i).getTaak(j).addTotaleTijd(CreatorFromJSON.createTijdspannes(validator.getSessionKey(), UserInterface.getUser().getProject(i).getTaak(j).getID(), true));
-					UserInterface.getUser().getProject(i).getTaak(j).getGewerkteTijd();
+			//System.out.println(UserInterface.getUser().getProject(0) + " PIEEEEEET");
+			
+			if(UserInterface.getUser().getProject(0) != null) {
+				UserInterface.getUser().setOpdrachtgevers(CreatorFromJSON.createOpdrachtgevers(validator.getSessionKey()));
+				
+				for (int i = 0; i < UserInterface.getUser().getProjects().size(); i++) {
+					UserInterface.getUser().getProject(i).addTaken(CreatorFromJSON.createTaken(validator.getSessionKey(), UserInterface.getUser().getProject(i).getId()));
+				}
+	
+				for (int i = 0; i < UserInterface.getUser().getProjects().size(); i++) {
+					for (int j = 0; j < UserInterface.getUser().getProject(i).getTaken().size(); j++) {
+						UserInterface.getUser().getProject(i).getTaak(j).addTotaleTijd(CreatorFromJSON.createTijdspannes(validator.getSessionKey(), UserInterface.getUser().getProject(i).getTaak(j).getID(), false));
+						UserInterface.getUser().getProject(i).getTaak(j).addTotaleTijd(CreatorFromJSON.createTijdspannes(validator.getSessionKey(), UserInterface.getUser().getProject(i).getTaak(j).getID(), true));
+						UserInterface.getUser().getProject(i).getTaak(j).getGewerkteTijd();
+					}
 				}
 			}
 		} catch (JSONException | IOException e) {
