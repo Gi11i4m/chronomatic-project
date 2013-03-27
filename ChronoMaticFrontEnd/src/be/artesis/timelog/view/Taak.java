@@ -62,7 +62,7 @@ public class Taak implements Cloneable {
         if (DataControle.naamCorrect(naam)) {
             this.naam = naam;
         } else {
-            throw new DataInputException("Project name contains illegal characters");
+            throw new DataInputException("Task name contains illegal characters");
         }
     }
 

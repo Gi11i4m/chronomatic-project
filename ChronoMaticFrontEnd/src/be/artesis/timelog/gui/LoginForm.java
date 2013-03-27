@@ -9,7 +9,8 @@ import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 
-import be.artesis.timelog.controller.Inserter;
+import be.artesis.timelog.controller.InserterLocal;
+import be.artesis.timelog.controller.InserterServer;
 import be.artesis.timelog.externAuth.*;
 import be.artesis.timelog.model.ExistingUsernames;
 import be.artesis.timelog.model.CreatorFromJSON;
@@ -203,7 +204,7 @@ public class LoginForm extends javax.swing.JFrame implements ActionListener {
 			
 			//System.out.println(ExistingUsernames.check("extern",email));
 			if (!ExistingUsernames.check("extern",email)) {
-				Inserter.CreateUserExtern(userInfoJSONObj.getString("naam"), userInfoJSONObj.getString("voornaam"), email);
+				InserterServer.CreateUserExtern(userInfoJSONObj.getString("naam"), userInfoJSONObj.getString("voornaam"), email);
 			}
 
 			if (validator.loginExtern(email)) {
@@ -402,11 +403,32 @@ public class LoginForm extends javax.swing.JFrame implements ActionListener {
 				Platform.exit();
 				displayTab("BASISPANEL");
 			}
+
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				JLabel l = (JLabel) e.getSource();
+				l.setForeground(Color.BLUE);
+			}
+			@Override
+			public void mouseExited(MouseEvent e) {
+				JLabel l = (JLabel) e.getSource();
+				l.setForeground(Color.BLACK);
+			}
 		});
 
 		newAccountJLabel.addMouseListener(new java.awt.event.MouseAdapter() {
 			public void mouseClicked(java.awt.event.MouseEvent evt) {
 				displayTab("NEWUSERPANEL");
+			}
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				JLabel l = (JLabel) e.getSource();
+				l.setForeground(Color.BLUE);
+			}
+			@Override
+			public void mouseExited(MouseEvent e) {
+				JLabel l = (JLabel) e.getSource();
+				l.setForeground(Color.BLACK);
 			}
 		});
 		

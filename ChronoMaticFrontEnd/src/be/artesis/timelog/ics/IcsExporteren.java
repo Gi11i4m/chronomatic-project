@@ -85,9 +85,9 @@ public class IcsExporteren {
 	}
 	
 	private static void schrijfWeg(Calendar cal, String url) throws IOException, ValidationException{
-		// agenda/callendar wegschrijven
+		// agenda/calendar wegschrijven
 		FileOutputStream fout = new FileOutputStream(url);
-		//System.out.println(cal);
+		// System.out.println(url);
 		CalendarOutputter outputter = new CalendarOutputter();
 		outputter.output(cal, fout);
 		fout.flush();
