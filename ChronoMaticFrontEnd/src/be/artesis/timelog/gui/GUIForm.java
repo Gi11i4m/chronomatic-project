@@ -247,7 +247,7 @@ public class GUIForm extends javax.swing.JFrame {
 		removeProjectJButton.setEnabled(false);
 		removeProjectJButton.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
-				deleteProject();
+				deleteProject((Project) projectsJList.getSelectedValue());
 			}
 		});
 		projectsJList = new javax.swing.JList();
@@ -1016,7 +1016,12 @@ public class GUIForm extends javax.swing.JFrame {
 	// Save / Edit methods
 	// ================================================================================
 
-	// Update user info
+	/**
+	 * Update USER info
+	 * @param 	firstName	first name of the user to be updated
+	 * @param	lastName	last name of the user to be updated
+	 * @param	email		email of the user to be updated
+	 */
 	private void updateUser(String firstName, String lastName, String email) {
 		try {
 			UserInterface.updateUser(firstName, lastName, email);
@@ -1028,7 +1033,13 @@ public class GUIForm extends javax.swing.JFrame {
 		}
 	}
 
-	// Create new PROJECT
+	/**
+	 * Create new PROJECT
+	 * @param 	name		name of new project
+	 * @param	startdate	startdate of new project
+	 * @param	enddate 	enddate of new project
+	 * @param 	opdrachtgeverID	ID of client to link to the new project
+	 */
 	private void createProject(String name, long startdate, long enddate, int opdrachtgeverID) {
 		try {
 			UserInterface.createProject(name, startdate, enddate, opdrachtgeverID);
@@ -1040,7 +1051,13 @@ public class GUIForm extends javax.swing.JFrame {
 		}
 	}
 
-	// Update existing PROJECT
+	/**
+	 * Update existing PROJECT
+	 * @param 	name		name of to update project
+	 * @param	startdate	startdate of to update project
+	 * @param	enddate 	enddate of to update project
+	 * @param 	opdrachtgeverID	ID of client to link to the to update project
+	 */
 	private void updateProject(String name, long startdate, long enddate, int opdrachtgeverID) {
 		try {
 			UserInterface.updateProject(projectsJList.getSelectedIndex(), name, startdate, enddate, opdrachtgeverID);
@@ -1052,10 +1069,17 @@ public class GUIForm extends javax.swing.JFrame {
 		}
 	}
 
-	// Create new TASK
+	/**
+	 * Create new TASK
+	 * @param 	name		name of new task
+	 * @param	startdate	startdate of new task
+	 * @param	enddate 	enddate of new task
+	 * @param 	comment		ID of client to link to the new task
+	 * @param	completed	shows if the new task is already completed (false is logical)
+	 */
 	private void createTask(String name, long startdate, long enddate, String comment, boolean completed) {
 		try {
-			UserInterface.createTask(name, startdate, enddate, comment, completed);
+			UserInterface.createTask(name, startdate, enddate, comment, completed, UserInterface.getCurrentProject());
 			JOptionPane.showMessageDialog(this, "Task added!");
 			refreshTasksList(UserInterface.getCurrentProject(), tasksJList);
 		} catch (DataInputException | ParseException | GUIException | IOException | WebserviceException | JSONException e) {
@@ -1064,7 +1088,14 @@ public class GUIForm extends javax.swing.JFrame {
 		}
 	}
 
-	// Update existing TASK
+	/**
+	 * Update existing TASK
+	 * @param 	name		name of to update task
+	 * @param	startdate	startdate of to update task
+	 * @param	enddate 	enddate of to update task
+	 * @param 	comment		contents of the comment field
+	 * @param	completed	shows if the task is completed
+	 */
 	private void updateTask(String name, long startdate, long enddate, String comment, boolean completed) {
 		try {
 			UserInterface.updateTask(tasksJList.getSelectedIndex(), name, startdate, enddate, comment, completed);
@@ -1076,7 +1107,14 @@ public class GUIForm extends javax.swing.JFrame {
 		}
 	}
 
-	// Create new CLIENT
+	/**
+	 * Create new CLIENT
+	 * @param 	name		name of new client
+	 * @param	firstName	first name of new client
+	 * @param	companyName	company of new client
+	 * @param 	email		email address from the new client
+	 * @param	phoneNumber	phone number of new client
+	 */
 	private void createClient(String naam, String voornaam, String bedrijfsnaam, String email, String telefoonnummer) {
 		Opdrachtgever o = null;
 		try {
@@ -1099,7 +1137,14 @@ public class GUIForm extends javax.swing.JFrame {
 		}
 	}
 
-	// Update existing CLIENT
+	/**
+	 * Update existing CLIENT
+	 * @param 	name		name of to update client
+	 * @param	firstName	first name of to update client
+	 * @param	companyName	company of to update client
+	 * @param 	email		email address from the to update client
+	 * @param	phoneNumber	phone number of to update client
+	 */
 	private void updateClient(String naam, String voornaam, String bedrijfsnaam, String email, String telefoonnummer) {
 		try {
 			UserInterface.updateClient(clientsJList.getSelectedIndex(), voornaam, voornaam, bedrijfsnaam, email, telefoonnummer);
@@ -1115,17 +1160,19 @@ public class GUIForm extends javax.swing.JFrame {
 	// Remove methods
 	// ================================================================================
 
-	// Remove PROJECT
-	private void deleteProject() {
+	/**
+	 * Remove a PROJECT
+	 * @param 	project	the project that's going to be removed if possible
+	 */
+	private void deleteProject(Project project) {
 		try {
-			if (UserInterface.getCurrentProjectIndex() != -1 && projectsJList.getSelectedValue() == UserInterface.getCurrentProject()) {
+			if (UserInterface.getCurrentProjectIndex() != -1 && project == UserInterface.getCurrentProject()) {
 				JOptionPane.showMessageDialog(this, "Can't remove current project");
 			} else {
 				int result = JOptionPane.showConfirmDialog(this, "Are you sure you want to delete this project?", null, JOptionPane.YES_NO_OPTION);
 				if (result == JOptionPane.YES_OPTION) {
 					try {
-						UserInterface.deleteProject((Project) projectsJList.getSelectedValue());
-						JOptionPane.showMessageDialog(this, "Project removed!");
+						UserInterface.deleteProject(project);
 						refreshProjectsList(projectsJList, homeProjectsJList);
 					} catch (IOException | WebserviceException ex) {
 						ex.printStackTrace();
@@ -1188,12 +1235,12 @@ public class GUIForm extends javax.swing.JFrame {
 		for (JList list : lists) {
 			int selectedIndex = list.getSelectedIndex();
 			DefaultListModel listmodel = new DefaultListModel();
-
-			for (Iterator<Project> it = UserInterface.getProjects().iterator(); it.hasNext();) {
-				Project p = it.next();
-				listmodel.addElement(p);
+			if (!UserInterface.getProjects().isEmpty()) {
+				for (Iterator<Project> it = UserInterface.getProjects().iterator(); it.hasNext();) {
+					Project p = it.next();
+					listmodel.addElement(p);
+				}
 			}
-
 			if (list.equals(projectsJList)) {
 				listmodel.addElement(NEWPROJECTITEM);
 				list.setModel(listmodel);
@@ -1388,7 +1435,10 @@ public class GUIForm extends javax.swing.JFrame {
 	// GUI methods
 	// ================================================================================
 
-	// CLEAR ALL FIELDS on the panels in parameter
+	/**
+	 * CLEAR ALL FIELDS on the panels in parameter
+	 * @param 	panel	the panel on which to clear the components
+	 */
 	private void clearFieldsOnPanel(JPanel panel) {
 		Component[] panelComponents = panel.getComponents();
 		for (Component c : panelComponents) {
