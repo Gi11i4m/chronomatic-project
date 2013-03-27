@@ -1079,7 +1079,7 @@ public class GUIForm extends javax.swing.JFrame {
 	 */
 	private void createTask(String name, long startdate, long enddate, String comment, boolean completed) {
 		try {
-			UserInterface.createTask(name, startdate, enddate, comment, completed);
+			UserInterface.createTask(name, startdate, enddate, comment, completed, UserInterface.getCurrentProject());
 			JOptionPane.showMessageDialog(this, "Task added!");
 			refreshTasksList(UserInterface.getCurrentProject(), tasksJList);
 		} catch (DataInputException | ParseException | GUIException | IOException | WebserviceException | JSONException e) {
