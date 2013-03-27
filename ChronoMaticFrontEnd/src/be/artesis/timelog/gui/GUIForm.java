@@ -1387,8 +1387,8 @@ public class GUIForm extends javax.swing.JFrame {
 	 */
 	private void refreshTree(JTree tree, ArrayList<Project> projects) {
 		DefaultMutableTreeNode root = new DefaultMutableTreeNode("Project");
-		for (Project p : projects) {
-			if (!p.getTaken().isEmpty()) {
+		if (!projects.isEmpty()) {
+			for (Project p : projects) {
 				DefaultMutableTreeNode project = new DefaultMutableTreeNode(p);
 				for (Taak t : p.getTaken()) {
 					project.add(new DefaultMutableTreeNode(t));
