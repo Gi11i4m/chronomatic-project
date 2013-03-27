@@ -211,13 +211,13 @@ public class GUIForm extends javax.swing.JFrame {
 		homeProjectsJList.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
-				JList list = (JList)arg0.getSource();
-		        if (arg0.getClickCount() == 2) {
-		            int index = list.locationToIndex(arg0.getPoint());
-		            if (index != -1) {
+				JList list = (JList) arg0.getSource();
+				if (arg0.getClickCount() == 2) {
+					int index = list.locationToIndex(arg0.getPoint());
+					if (index != -1) {
 						setCurrentProjectGUI(index);
 					}
-		        } 
+				}
 			}
 		});
 		homeProjectsJList.addKeyListener(new KeyAdapter() {
@@ -268,13 +268,13 @@ public class GUIForm extends javax.swing.JFrame {
 		projectsJList.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
-				JList list = (JList)arg0.getSource();
-		        if (arg0.getClickCount() == 2) {
-		            int index = list.locationToIndex(arg0.getPoint());
-		            if (index != -1) {
+				JList list = (JList) arg0.getSource();
+				if (arg0.getClickCount() == 2) {
+					int index = list.locationToIndex(arg0.getPoint());
+					if (index != -1) {
 						setCurrentProjectGUI(index);
 					}
-		        }
+				}
 			}
 		});
 		projectsJList.addKeyListener(new KeyAdapter() {
@@ -287,10 +287,12 @@ public class GUIForm extends javax.swing.JFrame {
 
 		projectsJList.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
 		projectsJList.setModel(new AbstractListModel() {
-			String[] values = new String[] {"Add a new project here"};
+			String[] values = new String[] { "Add a new project here" };
+
 			public int getSize() {
 				return values.length;
 			}
+
 			public Object getElementAt(int index) {
 				return values[index];
 			}
@@ -444,7 +446,7 @@ public class GUIForm extends javax.swing.JFrame {
 		removeTaskJButton.setEnabled(false);
 		removeTaskJButton.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
-				deleteTask();
+				deleteTask((Taak) tasksJList.getSelectedValue());
 			}
 		});
 
@@ -568,14 +570,14 @@ public class GUIForm extends javax.swing.JFrame {
 				} catch (NullPointerException ex) {
 					ex.printStackTrace();
 					JOptionPane.showMessageDialog(GUIForm.this, "Please choose a valid date");
-				} catch (GUIException e1) {				
+				} catch (GUIException e1) {
 					e1.printStackTrace();
 					JOptionPane.showMessageDialog(GUIForm.this, e1.getMessage());
 				} finally {
 					toggleButtonStates();
 					loadProjectInfo(projectsJList.getSelectedIndex());
 				}
-			}			
+			}
 		});
 		saveTaskJButton.setText("Save");
 		saveTaskJButton.setEnabled(false);
@@ -634,7 +636,7 @@ public class GUIForm extends javax.swing.JFrame {
 		removeClientJButton.setEnabled(false);
 		removeClientJButton.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
-				deleteClient();
+				deleteClient((Opdrachtgever) clientsJList.getSelectedValue());
 			}
 		});
 
@@ -1218,12 +1220,15 @@ public class GUIForm extends javax.swing.JFrame {
 		}
 	}
 
-	// Remove TASK
-	private void deleteTask() {
+	/**
+	 * Remove a TASK
+	 * @param 	task	the task that's going to be removed
+	 */
+	private void deleteTask(Taak task) {
 		int result = JOptionPane.showConfirmDialog(this, "Are you sure you want to delete this task?", null, JOptionPane.YES_NO_OPTION);
 		if (result == JOptionPane.YES_OPTION) {
 			try {
-				UserInterface.deleteTask((Taak) tasksJList.getSelectedValue());
+				UserInterface.deleteTask(task);
 				refreshTasksList(UserInterface.getCurrentProject(), tasksJList);
 				selectNewItem(tasksJList);
 				JOptionPane.showMessageDialog(this, "Task removed!");
@@ -1237,12 +1242,15 @@ public class GUIForm extends javax.swing.JFrame {
 		}
 	}
 
-	// Remove CLIENT
-	private void deleteClient() {
+	/**
+	 * Remove a CLIENT
+	 * @param 	client	the client that's going to be removed
+	 */
+	private void deleteClient(Opdrachtgever client) {
 		int result = JOptionPane.showConfirmDialog(this, "Are you sure you want to delete this client?", null, JOptionPane.YES_NO_OPTION);
 		if (result == JOptionPane.YES_OPTION) {
 			try {
-				UserInterface.deleteClient((Opdrachtgever) clientsJList.getSelectedValue());
+				UserInterface.deleteClient(client);
 				refreshClientsList(clientsJList);
 				clearFieldsOnPanel(clientFieldsJPanel);
 				toggleButtonStates();
@@ -1259,7 +1267,10 @@ public class GUIForm extends javax.swing.JFrame {
 	// Refresh methods
 	// ================================================================================
 
-	// Refresh all PROJECT lists
+	/**
+	 * Refresh all PROJECT lists
+	 * @param 	lists	the project lists that will be reloaded
+	 */
 	private void refreshProjectsList(JList... lists) {
 		for (JList list : lists) {
 			int selectedIndex = list.getSelectedIndex();
@@ -1284,7 +1295,10 @@ public class GUIForm extends javax.swing.JFrame {
 		refreshProjectsComboBox(projectsJComboBox);
 	}
 
-	// Refresh all PROJECT comboboxes
+	/**
+	 * Refresh all PROJECT comboboxes
+	 * @param 	boxes	the project comboboxes that will be reloaded
+	 */
 	private void refreshProjectsComboBox(JComboBox... boxes) {
 		for (JComboBox box : boxes) {
 			DefaultComboBoxModel listmodel = new DefaultComboBoxModel();
@@ -1295,7 +1309,11 @@ public class GUIForm extends javax.swing.JFrame {
 		}
 	}
 
-	// Refresh all TASK lists
+	/**
+	 * Refresh all TASK lists
+	 * @param 	p		the project wherefrom tasks should be gotten	
+	 * @param 	lists	the task lists that will be reloaded
+	 */
 	private void refreshTasksList(Project p, JList... lists) {
 		for (JList list : lists) {
 			int selectedIndex = list.getSelectedIndex();
@@ -1318,7 +1336,10 @@ public class GUIForm extends javax.swing.JFrame {
 		refreshTree(exportJCheckBoxTree, UserInterface.getProjects());
 	}
 
-	// Refresh all CLIENT lists
+	/**
+	 * Refresh all CLIENT lists
+	 * @param 	lists	the client lists that will be reloaded
+	 */
 	private void refreshClientsList(JList... lists) {
 		for (JList list : lists) {
 			int selectedIndex = list.getSelectedIndex();
@@ -1340,7 +1361,10 @@ public class GUIForm extends javax.swing.JFrame {
 		}
 	}
 
-	// Refresh all CLIENTS comboboxes, FIXME og = o, whut?
+	/**
+	 * Refresh all CLIENT comboboxes
+	 * @param 	boxes	the client comboboxes that will be reloaded
+	 */
 	private void refreshClientsComboBox(Project p, JComboBox... boxes) {
 		for (JComboBox box : boxes) {
 			DefaultComboBoxModel listmodel = new DefaultComboBoxModel();
@@ -1357,7 +1381,11 @@ public class GUIForm extends javax.swing.JFrame {
 		}
 	}
 
-	// Refresh IMPORT & EXPORT trees
+	/**
+	 * Refresh IMPORT & EXPORT trees
+	 * @param 	tree		the tree that should be filled with projects and tasks
+	 * @param	projects	the projects that should be loaded in the tree
+	 */
 	private void refreshTree(JTree tree, ArrayList<Project> projects) {
 		DefaultMutableTreeNode root = new DefaultMutableTreeNode("Project");
 		for (Project p : projects) {
@@ -1377,7 +1405,9 @@ public class GUIForm extends javax.swing.JFrame {
 	// Loading info into GUI methods
 	// ================================================================================
 
-	// Load USER info
+	/**
+	 * Load USER info
+	 */
 	private void loadUserInfo() {
 		Gebruiker u = UserInterface.getUser();
 		usernameJTextField.setText(u.getGebruikersnaam());
@@ -1536,7 +1566,7 @@ public class GUIForm extends javax.swing.JFrame {
 		saveClientJButton.setEnabled(clientSelected);
 		removeClientJButton.setEnabled(clientSelected);
 	}
-	
+
 	// ================================================================================
 	// Event handlers, FIXME afsplitsen!
 	// ================================================================================
