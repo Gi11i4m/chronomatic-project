@@ -1083,7 +1083,7 @@ public class GUIForm extends javax.swing.JFrame {
 	 */
 	private void createTask(String name, long startdate, long enddate, String comment, boolean completed) {
 		try {
-			UserInterface.createTask(name, startdate, enddate, comment, completed, UserInterface.getCurrentProject());
+			UserInterface.createTask(name, startdate, enddate, comment, completed, UserInterface.getCurrentProject().getId());
 			JOptionPane.showMessageDialog(this, "Task added!");
 			refreshTasksList(UserInterface.getCurrentProject(), tasksJList);
 		} catch (DataInputException | ParseException | GUIException | IOException | WebserviceException | JSONException e) {
@@ -1099,8 +1099,9 @@ public class GUIForm extends javax.swing.JFrame {
 	 * @param	enddate 	enddate of to update task
 	 * @param 	comment		contents of the comment field
 	 * @param	completed	shows if the task is completed
+	 * @param projectId 
 	 */
-	private void updateTask(String name, long startdate, long enddate, String comment, boolean completed) {
+	private void updateTask(String name, long startdate, long enddate, String comment, boolean completed, int projectId) {
 		try {
 			UserInterface.updateTask(tasksJList.getSelectedIndex(), name, startdate, enddate, comment, completed, projectId);
 			JOptionPane.showMessageDialog(this, "Task edited!");
