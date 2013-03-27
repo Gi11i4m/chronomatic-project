@@ -195,7 +195,7 @@ public class UserInterface {
 		getProjects().set(index, p);
 	}
 
-	public static Taak createTask(String name, long startdate, long enddate, String comment, boolean completed) throws DataInputException, ParseException, GUIException, IOException, WebserviceException, JSONException {
+	public static Taak createTask(String name, long startdate, long enddate, String comment, boolean completed, Project p) throws DataInputException, ParseException, GUIException, IOException, WebserviceException, JSONException {
 		Taak t = new Taak();
 		t.setNaam(name);
 		t.setBegindatum(startdate);
@@ -206,15 +206,29 @@ public class UserInterface {
 		t.setCommentaar(comment);
 		t.setCompleted(completed);
 		//Send to Database
-		int pid = UserInterface.getCurrentProject().getId();
-		getCurrentProject().addTaak(t);
+		p.addTaak(t);
 		try {
-			t.setId((Inserter.inputTaak(validator.getSessionKey(), t, pid)));
+			t.setId((Inserter.inputTaak(validator.getSessionKey(), t, p.getId())));
 		} catch (IOException | WebserviceException | JSONException e) {
 			getCurrentProject().removeTaak(t);
 			throw e;
 		}
 		return t;
+	}
+	
+	public static void createTasks(ArrayList<Taak> tasks, Project p) throws ParseException, GUIException, IOException, WebserviceException, JSONException, DataInputException{
+		for (Taak t : tasks) {
+			if ("".equals(t.getCommentaar())) {
+				t.setCommentaar(" ");
+			}
+			p.addTaak(t);
+			try {
+				t.setId((Inserter.inputTaak(validator.getSessionKey(), t, p.getId())));
+			} catch (IOException | WebserviceException | JSONException e) {
+				p.removeTaak(t);
+				throw e;
+			}
+		}
 	}
 
 	public static void updateTask(int index, String name, long startdate, long enddate, String comment, boolean completed) throws GUIException, DataInputException, ParseException, MalformedURLException, IOException, WebserviceException {
