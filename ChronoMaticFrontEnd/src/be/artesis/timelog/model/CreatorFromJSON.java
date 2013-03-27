@@ -28,12 +28,15 @@ public class CreatorFromJSON
 		JSONObject[] Jproject = JSONOverdrager.getProjectenVanGebruiker(sessionKey);
 
 		Project[] project = new Project[Jproject.length];
-
-        int i = 0;
-        for(JSONObject Jobject: Jproject)
-        {
-        	project[i++] =  new Project(Jobject.getString("naam"), Jobject.getInt("opdrachtgevers_ID"), Jobject.getLong("start_datum"),Jobject.getLong("eind_datum"), Jobject.getInt("ID"));
-    	}
+		
+		if(!Jproject[0].has("error")) {
+		
+	        int i = 0;
+	        for(JSONObject Jobject: Jproject)
+	        {
+	        	project[i++] =  new Project(Jobject.getString("naam"), Jobject.getInt("opdrachtgevers_ID"), Jobject.getLong("start_datum"),Jobject.getLong("eind_datum"), Jobject.getInt("ID"));
+	    	}
+		}
 
 		return project;
 	}

@@ -41,7 +41,7 @@ public class Gebruiker {
 				// Geen projecten
 				JSONArray error = new JSONArray();
 				JSONObject obj = new JSONObject();
-				obj.put("najam", "piet");
+				obj.put("error", "error");
 				error.put(obj);
 				
 				return error.toString();
