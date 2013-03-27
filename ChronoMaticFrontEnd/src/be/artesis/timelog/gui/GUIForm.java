@@ -57,6 +57,7 @@ import org.json.JSONException;
 import be.artesis.timelog.clock.Clock;
 import be.artesis.timelog.ics.IcsExporteren;
 import be.artesis.timelog.ics.IcsImporteren;
+import be.artesis.timelog.lokaleopslag.LocalDatabaseSynch;
 import be.artesis.timelog.model.Validator;
 import be.artesis.timelog.model.WebserviceException;
 import be.artesis.timelog.secure.WinRegistry;
@@ -155,6 +156,11 @@ public class GUIForm extends javax.swing.JFrame {
 		addWindowListener(new java.awt.event.WindowAdapter() {
 			public void windowOpened(java.awt.event.WindowEvent evt) {
 				guiOpened(evt);
+			}
+
+			@Override
+			public void windowClosing(WindowEvent arg0) {
+				// sync();
 			}
 		});
 
@@ -1020,6 +1026,11 @@ public class GUIForm extends javax.swing.JFrame {
 		});
 
 		syncButton = new JButton("Sync");
+		syncButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				sync();
+			}
+		});
 
 		javax.swing.GroupLayout headerJPanelLayout = new javax.swing.GroupLayout(headerJPanel);
 		headerJPanelLayout.setHorizontalGroup(headerJPanelLayout.createParallelGroup(Alignment.TRAILING).addGroup(headerJPanelLayout.createSequentialGroup().addContainerGap().addGroup(headerJPanelLayout.createParallelGroup(Alignment.LEADING, false).addComponent(currentProjectJLabel, GroupLayout.DEFAULT_SIZE, 201, Short.MAX_VALUE).addComponent(ingelogdJLabel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)).addPreferredGap(ComponentPlacement.RELATED).addComponent(logoutJButton).addPreferredGap(ComponentPlacement.RELATED, 215, Short.MAX_VALUE).addComponent(syncButton, GroupLayout.PREFERRED_SIZE, 68, GroupLayout.PREFERRED_SIZE).addPreferredGap(ComponentPlacement.UNRELATED).addComponent(titleLabel).addGap(18).addComponent(clockJLabel).addGap(6)));
@@ -1480,6 +1491,16 @@ public class GUIForm extends javax.swing.JFrame {
 		}
 	}
 
+	private void sync() {
+		try {
+			LocalDatabaseSynch lds = new LocalDatabaseSynch(Validator.getInstance());
+			lds.synch();
+		} catch (JSONException | IOException | WebserviceException e) {
+			JOptionPane.showMessageDialog(this, e.getMessage());
+			e.printStackTrace();
+		}
+	}
+
 	// ================================================================================
 	// GUI methods
 	// ================================================================================
@@ -1724,9 +1745,13 @@ public class GUIForm extends javax.swing.JFrame {
 			if (tasksJList.getSelectedValue().getClass().equals(String.class)) {
 				clearFieldsOnPanel(taskFieldsJPanel);
 				saveTaskJButton.setText("Save [new]");
+				removeTaskJButton.setEnabled(false);
+			} else if (!(tasksJList.getSelectedValue() instanceof Taak)) {
+				JOptionPane.showMessageDialog(this, "Gelukt"); // FIXME
 			} else {
 				try {
 					loadTaskInfo(((JList) arg0.getSource()).getSelectedIndex());
+					removeTaskJButton.setEnabled(true);
 					toggleButtonStates();
 				} catch (GUIException e) {
 					e.printStackTrace();
