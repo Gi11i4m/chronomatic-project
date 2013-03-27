@@ -141,7 +141,7 @@ public class GUIForm extends javax.swing.JFrame {
 		setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 		setTitle("Time Management System");
 		setBackground(new java.awt.Color(51, 51, 51));
-		this.getContentPane().setBackground(Color.darkGray);
+		this.getContentPane().setBackground(SystemColor.inactiveCaption);
 		setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
 		setForeground(new java.awt.Color(51, 51, 51));
 		setIconImages(null);
@@ -154,7 +154,7 @@ public class GUIForm extends javax.swing.JFrame {
 			}
 		});
 
-		contentJTabbedPane.setBackground(new java.awt.Color(51, 51, 51));
+		contentJTabbedPane.setBackground(SystemColor.activeCaption);
 		contentJTabbedPane.setTabPlacement(javax.swing.JTabbedPane.LEFT);
 		contentJTabbedPane.setName("tabContainer");
 
@@ -165,7 +165,7 @@ public class GUIForm extends javax.swing.JFrame {
 		homeJLabel.setForeground(new java.awt.Color(255, 255, 255));
 		homeJLabel.setText("Home");
 
-		workJButton.setBackground(new java.awt.Color(14, 196, 188));
+		workJButton.setBackground(SystemColor.textHighlight);
 		workJButton.setFont(new java.awt.Font("Tahoma", 1, 18));
 		workJButton.setForeground(new java.awt.Color(204, 204, 204));
 		workJButton.setText("Work");
@@ -181,7 +181,7 @@ public class GUIForm extends javax.swing.JFrame {
 		homeJPanel.add(homeJLabel);
 
 		homeFieldsJPanel = new JPanel();
-		homeFieldsJPanel.setBackground(Color.DARK_GRAY);
+		homeFieldsJPanel.setBackground(SystemColor.textHighlight);
 		homeFieldsJPanel.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
 		homeFieldsJPanel.setBounds(10, 86, 352, 354);
 		homeJPanel.add(homeFieldsJPanel);
@@ -189,14 +189,14 @@ public class GUIForm extends javax.swing.JFrame {
 
 		homeProjectsJLabel = new JLabel();
 		homeProjectsJLabel.setText("Projects");
-		homeProjectsJLabel.setForeground(new Color(0, 153, 153));
+		homeProjectsJLabel.setForeground(Color.WHITE);
 		homeProjectsJLabel.setFont(new Font("Tw Cen MT", Font.BOLD, 14));
 		homeProjectsJLabel.setBounds(10, 11, 157, 16);
 		homeFieldsJPanel.add(homeProjectsJLabel);
 
 		homeTaskJLabel = new JLabel();
 		homeTaskJLabel.setText("Tasks");
-		homeTaskJLabel.setForeground(new Color(0, 153, 153));
+		homeTaskJLabel.setForeground(Color.WHITE);
 		homeTaskJLabel.setFont(new Font("Tw Cen MT", Font.BOLD, 14));
 		homeTaskJLabel.setBounds(177, 11, 159, 16);
 		homeFieldsJPanel.add(homeTaskJLabel);
@@ -295,7 +295,7 @@ public class GUIForm extends javax.swing.JFrame {
 		projectEditFieldsJPanel = new JPanel();
 		projectEditFieldsJPanel.setBounds(112, 0, 338, 175);
 		projectFieldsJPanel.add(projectEditFieldsJPanel);
-		projectEditFieldsJPanel.setBackground(Color.DARK_GRAY);
+		projectEditFieldsJPanel.setBackground(SystemColor.textHighlight);
 		projectEditFieldsJPanel.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
 		projectEditFieldsJPanel.setLayout(new FormLayout(new ColumnSpec[] { FormFactory.UNRELATED_GAP_COLSPEC, ColumnSpec.decode("65px"), FormFactory.LABEL_COMPONENT_GAP_COLSPEC, ColumnSpec.decode("max(53dlu;default):grow"), FormFactory.RELATED_GAP_COLSPEC, ColumnSpec.decode("123px"), FormFactory.RELATED_GAP_COLSPEC, FormFactory.DEFAULT_COLSPEC, }, new RowSpec[] { FormFactory.UNRELATED_GAP_ROWSPEC, RowSpec.decode("20px"), FormFactory.LINE_GAP_ROWSPEC, FormFactory.PREF_ROWSPEC, FormFactory.LINE_GAP_ROWSPEC, FormFactory.PREF_ROWSPEC, FormFactory.UNRELATED_GAP_ROWSPEC, RowSpec.decode("20px"), FormFactory.LINE_GAP_ROWSPEC, RowSpec.decode("21px"), RowSpec.decode("23px"), }));
 		namecompJLabel = new javax.swing.JLabel();
@@ -342,34 +342,34 @@ public class GUIForm extends javax.swing.JFrame {
 		saveProjectJButton.setText("Save");
 		saveProjectJButton.setEnabled(false);
 
-		panel_1 = new JPanel();
-		panel_1.setBackground(Color.DARK_GRAY);
-		panel_1.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
-		panel_1.setBounds(112, 186, 338, 167);
-		projectFieldsJPanel.add(panel_1);
-		panel_1.setLayout(null);
+		projectStatusFieldsJPanel = new JPanel();
+		projectStatusFieldsJPanel.setBackground(Color.GRAY);
+		projectStatusFieldsJPanel.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
+		projectStatusFieldsJPanel.setBounds(112, 186, 338, 167);
+		projectFieldsJPanel.add(projectStatusFieldsJPanel);
+		projectStatusFieldsJPanel.setLayout(null);
 
 		projectTasksJList = new JList();
 		projectTasksJList.setBounds(113, 43, 215, 113);
-		panel_1.add(projectTasksJList);
+		projectStatusFieldsJPanel.add(projectTasksJList);
 		projectTasksJList.setEnabled(false);
 		projectTasksJList.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
 		projectTasksJList.setBackground(Color.LIGHT_GRAY);
 		taskscompJLabel = new javax.swing.JLabel();
 		taskscompJLabel.setBounds(10, 46, 93, 21);
-		panel_1.add(taskscompJLabel);
+		projectStatusFieldsJPanel.add(taskscompJLabel);
 
 		taskscompJLabel.setForeground(new java.awt.Color(255, 255, 255));
 		taskscompJLabel.setText("Tasks");
 		percentageCompletecompJLabel = new javax.swing.JLabel();
 		percentageCompletecompJLabel.setBounds(10, 10, 92, 21);
-		panel_1.add(percentageCompletecompJLabel);
+		projectStatusFieldsJPanel.add(percentageCompletecompJLabel);
 
 		percentageCompletecompJLabel.setForeground(new java.awt.Color(255, 255, 255));
 		percentageCompletecompJLabel.setText("Complete");
 		percentageCompleteJProgressBar = new javax.swing.JProgressBar();
 		percentageCompleteJProgressBar.setBounds(113, 11, 215, 21);
-		panel_1.add(percentageCompleteJProgressBar);
+		projectStatusFieldsJPanel.add(percentageCompleteJProgressBar);
 		//percentageCompleteJProgressBar.
 		percentageCompleteJProgressBar.setToolTipText("Displays the percentage of completion of the project");
 		percentageCompleteJProgressBar.setStringPainted(true);
@@ -410,10 +410,10 @@ public class GUIForm extends javax.swing.JFrame {
 			}
 		});
 
-		tasksJPanel.setBackground(Color.GRAY);
+		tasksJPanel.setBackground(Color.WHITE);
 
 		tasksJLabel.setFont(new java.awt.Font("Tw Cen MT", 1, 14));
-		tasksJLabel.setForeground(new java.awt.Color(255, 255, 255));
+		tasksJLabel.setForeground(Color.CYAN);
 		tasksJLabel.setText("Tasks");
 
 		removeTaskJButton.setText("Remove task");
@@ -452,7 +452,7 @@ public class GUIForm extends javax.swing.JFrame {
 
 		taskFieldsJPanel = new JPanel();
 		taskFieldsJPanel.setBorder(null);
-		taskFieldsJPanel.setBackground(Color.GRAY);
+		taskFieldsJPanel.setBackground(Color.WHITE);
 		taskFieldsJPanel.setBounds(284, 40, 401, 400);
 		tasksJPanel.add(taskFieldsJPanel);
 		taskFieldsJPanel.setLayout(null);
@@ -461,7 +461,7 @@ public class GUIForm extends javax.swing.JFrame {
 		taskEditFieldsJPanel.setBounds(0, 0, 399, 219);
 		taskFieldsJPanel.add(taskEditFieldsJPanel);
 		taskEditFieldsJPanel.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
-		taskEditFieldsJPanel.setBackground(Color.DARK_GRAY);
+		taskEditFieldsJPanel.setBackground(SystemColor.textHighlight);
 		taskEditFieldsJPanel.setLayout(new FormLayout(new ColumnSpec[] { FormFactory.UNRELATED_GAP_COLSPEC, ColumnSpec.decode("56px"), FormFactory.UNRELATED_GAP_COLSPEC, ColumnSpec.decode("1px"), FormFactory.LABEL_COMPONENT_GAP_COLSPEC, ColumnSpec.decode("110px:grow"), FormFactory.DEFAULT_COLSPEC, FormFactory.RELATED_GAP_COLSPEC, ColumnSpec.decode("55px"), ColumnSpec.decode("51px"), FormFactory.RELATED_GAP_COLSPEC, ColumnSpec.decode("max(27dlu;default)"), FormFactory.RELATED_GAP_COLSPEC, ColumnSpec.decode("max(15dlu;default)"), }, new RowSpec[] { FormFactory.UNRELATED_GAP_ROWSPEC, RowSpec.decode("20px"), FormFactory.RELATED_GAP_ROWSPEC, RowSpec.decode("20px:grow"), FormFactory.RELATED_GAP_ROWSPEC, RowSpec.decode("20px:grow"), RowSpec.decode("38px"), RowSpec.decode("51px"), FormFactory.UNRELATED_GAP_ROWSPEC, RowSpec.decode("51px"), FormFactory.RELATED_GAP_ROWSPEC, RowSpec.decode("37px"), FormFactory.UNRELATED_GAP_ROWSPEC, RowSpec.decode("23px"), FormFactory.UNRELATED_GAP_ROWSPEC, FormFactory.DEFAULT_ROWSPEC, FormFactory.UNRELATED_GAP_ROWSPEC, RowSpec.decode("41px"), }));
 
 		label_5 = new JLabel();
@@ -553,46 +553,53 @@ public class GUIForm extends javax.swing.JFrame {
 		saveTaskJButton.setEnabled(false);
 		taskEditFieldsJPanel.add(saveTaskJButton, "6, 10, 7, 1, fill, top");
 
-		workedTimeJList = new JList();
-		workedTimeJList.setBounds(88, 230, 288, 94);
-		taskFieldsJPanel.add(workedTimeJList);
-
-		taskTotalWorkedJTextField = new JTextField();
-		taskTotalWorkedJTextField.setBounds(88, 335, 135, 20);
-		taskFieldsJPanel.add(taskTotalWorkedJTextField);
-		taskTotalWorkedJTextField.setEditable(false);
-		taskTotalWorkedJTextField.setColumns(10);
-
-		taskTotalPauseJTextField = new JTextField();
-		taskTotalPauseJTextField.setBounds(88, 365, 135, 20);
-		taskFieldsJPanel.add(taskTotalPauseJTextField);
-		taskTotalPauseJTextField.setEditable(false);
-		taskTotalPauseJTextField.setColumns(10);
+		taskStatusFieldsJPanel = new JPanel();
+		taskStatusFieldsJPanel.setBackground(Color.GRAY);
+		taskStatusFieldsJPanel.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
+		taskStatusFieldsJPanel.setBounds(0, 230, 399, 170);
+		taskFieldsJPanel.add(taskStatusFieldsJPanel);
+		taskStatusFieldsJPanel.setLayout(null);
 
 		lblWorked = new JLabel();
-		lblWorked.setBounds(10, 230, 68, 14);
-		taskFieldsJPanel.add(lblWorked);
+		lblWorked.setBounds(10, 11, 68, 14);
+		taskStatusFieldsJPanel.add(lblWorked);
 		lblWorked.setText("Worked");
 		lblWorked.setForeground(Color.WHITE);
 
+		workedTimeJList = new JList();
+		workedTimeJList.setBounds(88, 11, 288, 87);
+		taskStatusFieldsJPanel.add(workedTimeJList);
+
 		taskTotalWorkedJLabel = new JLabel("Total worked");
-		taskTotalWorkedJLabel.setBounds(10, 338, 76, 14);
-		taskFieldsJPanel.add(taskTotalWorkedJLabel);
+		taskTotalWorkedJLabel.setBounds(10, 112, 76, 14);
+		taskStatusFieldsJPanel.add(taskTotalWorkedJLabel);
 		taskTotalWorkedJLabel.setForeground(Color.WHITE);
 
+		taskTotalWorkedJTextField = new JTextField();
+		taskTotalWorkedJTextField.setBounds(88, 109, 135, 20);
+		taskStatusFieldsJPanel.add(taskTotalWorkedJTextField);
+		taskTotalWorkedJTextField.setEditable(false);
+		taskTotalWorkedJTextField.setColumns(10);
+
 		lblTotalPaused = new JLabel("Total paused");
-		lblTotalPaused.setBounds(10, 368, 76, 14);
-		taskFieldsJPanel.add(lblTotalPaused);
+		lblTotalPaused.setBounds(10, 142, 76, 14);
+		taskStatusFieldsJPanel.add(lblTotalPaused);
 		lblTotalPaused.setForeground(Color.WHITE);
+
+		taskTotalPauseJTextField = new JTextField();
+		taskTotalPauseJTextField.setBounds(88, 139, 135, 20);
+		taskStatusFieldsJPanel.add(taskTotalPauseJTextField);
+		taskTotalPauseJTextField.setEditable(false);
+		taskTotalPauseJTextField.setColumns(10);
 		clientsJPanel = new javax.swing.JPanel();
 		clientsJLabel = new javax.swing.JLabel();
 		jScrollPane5 = new javax.swing.JScrollPane();
 		removeClientJButton = new javax.swing.JButton();
 
-		clientsJPanel.setBackground(Color.GRAY);
+		clientsJPanel.setBackground(Color.WHITE);
 
 		clientsJLabel.setFont(new java.awt.Font("Tw Cen MT", 1, 14));
-		clientsJLabel.setForeground(new java.awt.Color(255, 255, 255));
+		clientsJLabel.setForeground(Color.CYAN);
 		clientsJLabel.setText("Clients");
 
 		removeClientJButton.setText("Remove client");
@@ -605,7 +612,7 @@ public class GUIForm extends javax.swing.JFrame {
 
 		clientFieldsJPanel = new JPanel();
 		clientFieldsJPanel.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
-		clientFieldsJPanel.setBackground(Color.DARK_GRAY);
+		clientFieldsJPanel.setBackground(SystemColor.textHighlight);
 
 		javax.swing.GroupLayout clientsJPanelLayout = new javax.swing.GroupLayout(clientsJPanel);
 		clientsJPanelLayout.setHorizontalGroup(clientsJPanelLayout.createParallelGroup(Alignment.LEADING).addGroup(clientsJPanelLayout.createSequentialGroup().addContainerGap().addGroup(clientsJPanelLayout.createParallelGroup(Alignment.LEADING).addGroup(clientsJPanelLayout.createSequentialGroup().addGroup(clientsJPanelLayout.createParallelGroup(Alignment.LEADING).addComponent(removeClientJButton).addComponent(jScrollPane5, GroupLayout.PREFERRED_SIZE, 245, GroupLayout.PREFERRED_SIZE)).addPreferredGap(ComponentPlacement.RELATED, 95, Short.MAX_VALUE).addComponent(clientFieldsJPanel, GroupLayout.PREFERRED_SIZE, 324, GroupLayout.PREFERRED_SIZE)).addComponent(clientsJLabel)).addContainerGap()));
@@ -714,10 +721,10 @@ public class GUIForm extends javax.swing.JFrame {
 
 		contentJTabbedPane.addTab("", new javax.swing.ImageIcon(getClass().getResource("/be/artesis/timelog/gui/icons/ClientsNeonIcon.png")), clientsJPanel, "Clients");
 
-		scheduleJPanel.setBackground(Color.GRAY);
+		scheduleJPanel.setBackground(Color.WHITE);
 
 		scheduleJLabel.setFont(new java.awt.Font("Tw Cen MT", 1, 14));
-		scheduleJLabel.setForeground(new java.awt.Color(255, 255, 255));
+		scheduleJLabel.setForeground(Color.CYAN);
 		scheduleJLabel.setText("Schedule");
 
 		contentJTabbedPane.addTab("", new javax.swing.ImageIcon(getClass().getResource("/be/artesis/timelog/gui/icons/CalendarNeonIcon.png")), scheduleJPanel, "Schedule");
@@ -725,7 +732,7 @@ public class GUIForm extends javax.swing.JFrame {
 		scheduleJPanel.add(scheduleJLabel);
 
 		importExportJPanel = new JPanel();
-		importExportJPanel.setBackground(Color.GRAY);
+		importExportJPanel.setBackground(Color.WHITE);
 		contentJTabbedPane.addTab("", new ImageIcon(GUIForm.class.getResource("/be/artesis/timelog/gui/icons/ImportExportNeonIcon.png")), importExportJPanel, "Import / Export");
 		importExportJPanel.setLayout(null);
 
@@ -737,10 +744,10 @@ public class GUIForm extends javax.swing.JFrame {
 		importExportJPanel.add(importExportTabbedPane);
 
 		exportJPanel = new JPanel();
-		exportJPanel.setBackground(Color.DARK_GRAY);
+		exportJPanel.setBackground(SystemColor.textHighlight);
 		exportJPanel.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
 		importExportTabbedPane.addTab("Export", null, exportJPanel, "Export your tasks here");
-		importExportTabbedPane.setForegroundAt(0, Color.WHITE);
+		importExportTabbedPane.setForegroundAt(0, Color.CYAN);
 		exportJPanel.setLayout(null);
 		exportJScrollPane = new JScrollPane();
 		exportJScrollPane.setBounds(10, 11, 260, 379);
@@ -765,10 +772,10 @@ public class GUIForm extends javax.swing.JFrame {
 		importExportTabbedPane.setBackgroundAt(0, Color.DARK_GRAY);
 
 		importJPanel = new JPanel();
-		importJPanel.setBackground(Color.DARK_GRAY);
+		importJPanel.setBackground(SystemColor.textHighlight);
 		importJPanel.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
 		importExportTabbedPane.addTab("Import", null, importJPanel, "Import tasks here");
-		importExportTabbedPane.setForegroundAt(1, Color.WHITE);
+		importExportTabbedPane.setForegroundAt(1, Color.CYAN);
 		importExportTabbedPane.setBackgroundAt(1, Color.DARK_GRAY);
 		importJPanel.setLayout(null);
 		importProjectsJScrollPane = new JScrollPane();
@@ -807,7 +814,7 @@ public class GUIForm extends javax.swing.JFrame {
 		importToProjectJButton.setBounds(280, 333, 181, 23);
 		importJPanel.add(importToProjectJButton);
 
-		optionsJPanel.setBackground(Color.GRAY);
+		optionsJPanel.setBackground(Color.WHITE);
 
 		settingsJLabel.setFont(new java.awt.Font("Tw Cen MT", 1, 14));
 		settingsJLabel.setForeground(new java.awt.Color(255, 255, 255));
@@ -821,8 +828,9 @@ public class GUIForm extends javax.swing.JFrame {
 		optionsJPanelLayout.setVerticalGroup(optionsJPanelLayout.createParallelGroup(Alignment.LEADING).addGroup(optionsJPanelLayout.createSequentialGroup().addContainerGap().addComponent(settingsJLabel).addGap(18).addComponent(settingsJTabbedPane, GroupLayout.PREFERRED_SIZE, 391, GroupLayout.PREFERRED_SIZE).addContainerGap(15, Short.MAX_VALUE)));
 
 		userSettingsJPanel = new JPanel();
-		userSettingsJPanel.setBackground(Color.DARK_GRAY);
+		userSettingsJPanel.setBackground(SystemColor.textHighlight);
 		settingsJTabbedPane.addTab("User Settings", null, userSettingsJPanel, null);
+		settingsJTabbedPane.setForegroundAt(0, Color.CYAN);
 		userSettingsJPanel.setLayout(null);
 
 		firstNameJTextField = new JTextField();
@@ -945,7 +953,7 @@ public class GUIForm extends javax.swing.JFrame {
 
 		contentJTabbedPane.addTab("", new javax.swing.ImageIcon(getClass().getResource("/be/artesis/timelog/gui/icons/SettingsNeonIcon.png")), optionsJPanel, "Settings");
 
-		headerJPanel.setBackground(new java.awt.Color(64, 64, 64));
+		headerJPanel.setBackground(SystemColor.inactiveCaption);
 
 		titleLabel.setFont(new java.awt.Font("Tempus Sans ITC", 1, 18));
 		titleLabel.setForeground(new java.awt.Color(255, 255, 255));
@@ -983,7 +991,7 @@ public class GUIForm extends javax.swing.JFrame {
 
 		javax.swing.GroupLayout headerJPanelLayout = new javax.swing.GroupLayout(headerJPanel);
 		headerJPanelLayout.setHorizontalGroup(headerJPanelLayout.createParallelGroup(Alignment.TRAILING).addGroup(headerJPanelLayout.createSequentialGroup().addContainerGap().addGroup(headerJPanelLayout.createParallelGroup(Alignment.LEADING, false).addComponent(currentProjectJLabel, GroupLayout.DEFAULT_SIZE, 201, Short.MAX_VALUE).addComponent(ingelogdJLabel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)).addPreferredGap(ComponentPlacement.RELATED).addComponent(logoutJButton).addPreferredGap(ComponentPlacement.RELATED, 293, Short.MAX_VALUE).addComponent(titleLabel).addGap(18).addComponent(clockJLabel).addGap(6)));
-		headerJPanelLayout.setVerticalGroup(headerJPanelLayout.createParallelGroup(Alignment.LEADING).addGroup(headerJPanelLayout.createSequentialGroup().addContainerGap().addGroup(headerJPanelLayout.createParallelGroup(Alignment.LEADING).addComponent(titleLabel, GroupLayout.DEFAULT_SIZE, 60, Short.MAX_VALUE).addComponent(clockJLabel, Alignment.TRAILING).addGroup(headerJPanelLayout.createSequentialGroup().addGroup(headerJPanelLayout.createParallelGroup(Alignment.BASELINE).addComponent(ingelogdJLabel).addComponent(logoutJButton, GroupLayout.PREFERRED_SIZE, 21, GroupLayout.PREFERRED_SIZE)).addPreferredGap(ComponentPlacement.UNRELATED).addComponent(currentProjectJLabel).addGap(0, 9, Short.MAX_VALUE))).addContainerGap()));
+		headerJPanelLayout.setVerticalGroup(headerJPanelLayout.createParallelGroup(Alignment.LEADING).addGroup(headerJPanelLayout.createSequentialGroup().addContainerGap().addGroup(headerJPanelLayout.createParallelGroup(Alignment.LEADING).addComponent(titleLabel, GroupLayout.DEFAULT_SIZE, 63, Short.MAX_VALUE).addComponent(clockJLabel, Alignment.TRAILING).addGroup(headerJPanelLayout.createSequentialGroup().addGroup(headerJPanelLayout.createParallelGroup(Alignment.BASELINE).addComponent(ingelogdJLabel).addComponent(logoutJButton, GroupLayout.PREFERRED_SIZE, 22, GroupLayout.PREFERRED_SIZE)).addPreferredGap(ComponentPlacement.UNRELATED).addComponent(currentProjectJLabel).addGap(0, 9, Short.MAX_VALUE))).addContainerGap()));
 		headerJPanel.setLayout(headerJPanelLayout);
 
 		clockJLabel.getAccessibleContext().setAccessibleName("iconJLabel");
@@ -1737,6 +1745,7 @@ public class GUIForm extends javax.swing.JFrame {
 	private CheckboxTree importJCheckBoxTree;
 	private JComboBox projectsJComboBox;
 	private JButton importToProjectJButton;
-	private JPanel panel_1;
+	private JPanel projectStatusFieldsJPanel;
+	private JPanel taskStatusFieldsJPanel;
 }
 // EOF
