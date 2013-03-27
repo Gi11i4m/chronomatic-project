@@ -88,13 +88,13 @@ public class Project {
 	}
 	
 	@GET
-	@Path("update/{sessionKey}/{projectID}/{projectName}/{startDate}/{endDate}")
+	@Path("update/{sessionKey}/{projectID}/{projectName}/{startDate}/{endDate}/{opdrachtgeversID}")
 	@Produces(MediaType.APPLICATION_JSON)
 	public String update(@PathParam("sessionKey") String sessionKey,@PathParam("projectID") int projectID,@PathParam("projectName") String projectName,@PathParam("startDate") int startDate,@PathParam("endDate") int endDate,@PathParam("opdrachtgeversID") int opdrachtgeversID) 
 	{ 
 		Connection con = DatabaseContainer.getConnection();
 		int userID = Authentication.getUserId(sessionKey);
-		String query = "UPDATE projecten SET eind_datum = "+endDate+", naam = '" + projectName + "', start_datum = "+startDate+" WHERE ID = "+projectID+" AND gebruikers_ID = " + userID;
+		String query = "UPDATE projecten SET  eind_datum = "+endDate+", naam = '" + projectName + ", opdrachtgevers_ID = " + opdrachtgeversID + "', start_datum = "+startDate+" WHERE ID = "+projectID+" AND gebruikers_ID = " + userID;
 		System.out.println(query);
 		JSONObject returnObject = new JSONObject();
 		try {

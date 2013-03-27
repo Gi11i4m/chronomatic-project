@@ -82,14 +82,14 @@ public class Tijdspanne {
 	}
 	
 	@GET 
-	@Path("update/{sessionKey}/{beginUur}/{eindUur}/{pauze}/{tijdspanneID}")
+	@Path("update/{sessionKey}/{beginUur}/{eindUur}/{pauze}/{tijdspanneID}/{taken_ID}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public String updateSession(@PathParam("sessionKey") String sessionKey, @PathParam("beginUur") int beginUur,@PathParam("eindUur") int eindUur, @PathParam("pauze") boolean pauze, @PathParam("tijdspanneID") int tijdspanneID) { 
+	public String updateSession(@PathParam("sessionKey") String sessionKey, @PathParam("beginUur") int beginUur,@PathParam("eindUur") int eindUur, @PathParam("pauze") boolean pauze, @PathParam("tijdspanneID") int tijdspanneID, @PathParam("taken_ID") int taken_ID) { 
 		Connection con = DatabaseContainer.getConnection();
 		
 		int userID = Authentication.getUserId(sessionKey);
 		
-		String query = "UPDATE tijdspanne SET begin_uur = " + beginUur + ", eind_uur = " + eindUur + ", pauze = " + pauze + " WHERE ID = " + tijdspanneID + " AND (SELECT COUNT(ID) FROM tijdspanne AS TP INNER JOIN taken AS T INNER JOIN projecten AS P  ON TP.ID = " + tijdspanneID + " AND TP.taken_ID = T.ID AND T.ID = P.taken_ID AND P.gebruikers_ID = " + userID + ") > 0 ";
+		String query = "UPDATE tijdspanne SET begin_uur = " + beginUur + ", eind_uur = " + eindUur + ", pauze = " + pauze + ", taken_ID = " + taken_ID + " WHERE ID = " + tijdspanneID + " AND (SELECT COUNT(ID) FROM tijdspanne AS TP INNER JOIN taken AS T INNER JOIN projecten AS P  ON TP.ID = " + tijdspanneID + " AND TP.taken_ID = T.ID AND T.ID = P.taken_ID AND P.gebruikers_ID = " + userID + ") > 0 ";
 		
 		try { 
 			if(userID > 0) { 
