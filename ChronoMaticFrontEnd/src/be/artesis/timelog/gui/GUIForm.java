@@ -779,6 +779,21 @@ public class GUIForm extends javax.swing.JFrame {
 		importJButton.setBounds(550, 11, 99, 23);
 		importJPanel.add(importJButton);
 
+		projectsJComboBox = new JComboBox();
+		projectsJComboBox.setEnabled(false);
+		projectsJComboBox.setBounds(280, 367, 181, 23);
+		importJPanel.add(projectsJComboBox);
+
+		importToProjectJButton = new JButton("Save to");
+		importToProjectJButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				refreshProjectsComboBox(projectsJComboBox);
+			}
+		});
+		importToProjectJButton.setEnabled(false);
+		importToProjectJButton.setBounds(280, 333, 69, 23);
+		importJPanel.add(importToProjectJButton);
+
 		optionsJPanel.setBackground(Color.GRAY);
 
 		settingsJLabel.setFont(new java.awt.Font("Tw Cen MT", 1, 14));
@@ -1164,7 +1179,19 @@ public class GUIForm extends javax.swing.JFrame {
 			list.setCellRenderer(new ProjectCellRenderer());
 			list.setSelectedIndex(selectedIndex);
 		}
-		// FIXME refresh export view
+		refreshTree(exportJCheckBoxTree, UserInterface.getProjects());
+	}
+
+	// Refresh all PROJECT comboboxes
+	private void refreshProjectsComboBox(JComboBox... boxes) {
+		for (JComboBox box : boxes) {
+			DefaultComboBoxModel listmodel = new DefaultComboBoxModel();
+			for (Project p : UserInterface.getProjects()) {
+				listmodel.addElement(p);
+			}
+			box.setModel(listmodel);
+			box.setSelectedIndex(0);
+		}
 	}
 
 	// Refresh all TASK lists
@@ -1187,7 +1214,7 @@ public class GUIForm extends javax.swing.JFrame {
 			list.setCellRenderer(new TaskCellRenderer());
 			list.setSelectedIndex(selectedIndex);
 		}
-		// FIXME refresh export view
+		refreshTree(exportJCheckBoxTree, UserInterface.getProjects());
 	}
 
 	// Refresh all CLIENT lists
@@ -1502,6 +1529,8 @@ public class GUIForm extends javax.swing.JFrame {
 			e.printStackTrace();
 			JOptionPane.showMessageDialog(this, e.getMessage());
 		}
+		importJButton.setEnabled(true);
+		projectsJList.setEnabled(true);
 	}
 
 	private void taskJListValueChanged(ListSelectionEvent arg0) {
@@ -1655,5 +1684,7 @@ public class GUIForm extends javax.swing.JFrame {
 	private JLabel usernameJLabel;
 	private JButton logoutJButton;
 	private CheckboxTree importJCheckBoxTree;
+	private JComboBox projectsJComboBox;
+	private JButton importToProjectJButton;
 }
 // EOF
