@@ -321,7 +321,7 @@ public class GUIForm extends javax.swing.JFrame {
 		projectFieldsJPanel.setLayout(null);
 
 		projectEditFieldsJPanel = new JPanel();
-		projectEditFieldsJPanel.setBounds(112, 0, 338, 175);
+		projectEditFieldsJPanel.setBounds(51, 0, 399, 175);
 		projectFieldsJPanel.add(projectEditFieldsJPanel);
 		projectEditFieldsJPanel.setBackground(Color.DARK_GRAY);
 		projectEditFieldsJPanel.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
@@ -373,7 +373,7 @@ public class GUIForm extends javax.swing.JFrame {
 		projectStatusFieldsJPanel = new JPanel();
 		projectStatusFieldsJPanel.setBackground(new Color(128, 128, 128));
 		projectStatusFieldsJPanel.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
-		projectStatusFieldsJPanel.setBounds(112, 186, 338, 167);
+		projectStatusFieldsJPanel.setBounds(51, 186, 399, 221);
 		projectFieldsJPanel.add(projectStatusFieldsJPanel);
 		projectStatusFieldsJPanel.setLayout(null);
 
@@ -648,7 +648,7 @@ public class GUIForm extends javax.swing.JFrame {
 		clientFieldsJPanel.setBackground(Color.DARK_GRAY);
 
 		javax.swing.GroupLayout clientsJPanelLayout = new javax.swing.GroupLayout(clientsJPanel);
-		clientsJPanelLayout.setHorizontalGroup(clientsJPanelLayout.createParallelGroup(Alignment.LEADING).addGroup(clientsJPanelLayout.createSequentialGroup().addContainerGap().addGroup(clientsJPanelLayout.createParallelGroup(Alignment.LEADING).addGroup(clientsJPanelLayout.createSequentialGroup().addGroup(clientsJPanelLayout.createParallelGroup(Alignment.LEADING).addComponent(removeClientJButton).addComponent(jScrollPane5, GroupLayout.PREFERRED_SIZE, 245, GroupLayout.PREFERRED_SIZE)).addPreferredGap(ComponentPlacement.RELATED, 95, Short.MAX_VALUE).addComponent(clientFieldsJPanel, GroupLayout.PREFERRED_SIZE, 324, GroupLayout.PREFERRED_SIZE)).addComponent(clientsJLabel)).addContainerGap()));
+		clientsJPanelLayout.setHorizontalGroup(clientsJPanelLayout.createParallelGroup(Alignment.LEADING).addGroup(clientsJPanelLayout.createSequentialGroup().addContainerGap().addGroup(clientsJPanelLayout.createParallelGroup(Alignment.LEADING).addComponent(clientsJLabel).addGroup(clientsJPanelLayout.createSequentialGroup().addGroup(clientsJPanelLayout.createParallelGroup(Alignment.TRAILING, false).addComponent(removeClientJButton, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE).addComponent(jScrollPane5, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 245, Short.MAX_VALUE)).addPreferredGap(ComponentPlacement.RELATED, 106, Short.MAX_VALUE).addComponent(clientFieldsJPanel, GroupLayout.PREFERRED_SIZE, 324, GroupLayout.PREFERRED_SIZE))).addContainerGap()));
 		clientsJPanelLayout.setVerticalGroup(clientsJPanelLayout.createParallelGroup(Alignment.TRAILING).addGroup(clientsJPanelLayout.createSequentialGroup().addGroup(clientsJPanelLayout.createParallelGroup(Alignment.LEADING).addGroup(clientsJPanelLayout.createSequentialGroup().addGap(33).addComponent(clientFieldsJPanel, GroupLayout.DEFAULT_SIZE, 378, Short.MAX_VALUE)).addGroup(clientsJPanelLayout.createSequentialGroup().addContainerGap().addComponent(clientsJLabel).addPreferredGap(ComponentPlacement.RELATED).addComponent(jScrollPane5, GroupLayout.DEFAULT_SIZE, 378, Short.MAX_VALUE))).addPreferredGap(ComponentPlacement.RELATED).addComponent(removeClientJButton, GroupLayout.PREFERRED_SIZE, 23, GroupLayout.PREFERRED_SIZE).addContainerGap()));
 
 		clientsJList = new JList();
@@ -780,7 +780,7 @@ public class GUIForm extends javax.swing.JFrame {
 		exportJPanel.setBackground(Color.DARK_GRAY);
 		exportJPanel.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
 		importExportTabbedPane.addTab("Export", null, exportJPanel, "Export your tasks here");
-		importExportTabbedPane.setForegroundAt(0, Color.CYAN);
+		importExportTabbedPane.setForegroundAt(0, Color.WHITE);
 		exportJPanel.setLayout(null);
 		exportJScrollPane = new JScrollPane();
 		exportJScrollPane.setBounds(10, 11, 260, 379);
@@ -802,14 +802,14 @@ public class GUIForm extends javax.swing.JFrame {
 		exportJButton.setBounds(550, 11, 99, 23);
 		exportJPanel.add(exportJButton);
 
-		importExportTabbedPane.setBackgroundAt(0, new Color(30, 144, 255));
+		importExportTabbedPane.setBackgroundAt(0, new Color(70, 130, 180));
 
 		importJPanel = new JPanel();
 		importJPanel.setBackground(Color.DARK_GRAY);
 		importJPanel.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
 		importExportTabbedPane.addTab("Import", null, importJPanel, "Import tasks here");
-		importExportTabbedPane.setForegroundAt(1, Color.CYAN);
-		importExportTabbedPane.setBackgroundAt(1, Color.DARK_GRAY);
+		importExportTabbedPane.setForegroundAt(1, Color.WHITE);
+		importExportTabbedPane.setBackgroundAt(1, new Color(70, 130, 180));
 		importJPanel.setLayout(null);
 		importProjectsJScrollPane = new JScrollPane();
 		importProjectsJScrollPane.setBounds(10, 11, 260, 379);
@@ -859,7 +859,8 @@ public class GUIForm extends javax.swing.JFrame {
 		userSettingsJPanel = new JPanel();
 		userSettingsJPanel.setBackground(Color.DARK_GRAY);
 		settingsJTabbedPane.addTab("User Settings", null, userSettingsJPanel, null);
-		settingsJTabbedPane.setForegroundAt(0, Color.CYAN);
+		settingsJTabbedPane.setBackgroundAt(0, new Color(70, 130, 180));
+		settingsJTabbedPane.setForegroundAt(0, Color.WHITE);
 		userSettingsJPanel.setLayout(null);
 
 		firstNameJTextField = new JTextField();
@@ -1017,44 +1018,12 @@ public class GUIForm extends javax.swing.JFrame {
 				logout();
 			}
 		});
-		
+
 		syncButton = new JButton("Sync");
 
 		javax.swing.GroupLayout headerJPanelLayout = new javax.swing.GroupLayout(headerJPanel);
-		headerJPanelLayout.setHorizontalGroup(
-			headerJPanelLayout.createParallelGroup(Alignment.TRAILING)
-				.addGroup(headerJPanelLayout.createSequentialGroup()
-					.addContainerGap()
-					.addGroup(headerJPanelLayout.createParallelGroup(Alignment.LEADING, false)
-						.addComponent(currentProjectJLabel, GroupLayout.DEFAULT_SIZE, 201, Short.MAX_VALUE)
-						.addComponent(ingelogdJLabel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(logoutJButton)
-					.addPreferredGap(ComponentPlacement.RELATED, 215, Short.MAX_VALUE)
-					.addComponent(syncButton, GroupLayout.PREFERRED_SIZE, 68, GroupLayout.PREFERRED_SIZE)
-					.addPreferredGap(ComponentPlacement.UNRELATED)
-					.addComponent(titleLabel)
-					.addGap(18)
-					.addComponent(clockJLabel)
-					.addGap(6))
-		);
-		headerJPanelLayout.setVerticalGroup(
-			headerJPanelLayout.createParallelGroup(Alignment.LEADING)
-				.addGroup(headerJPanelLayout.createSequentialGroup()
-					.addContainerGap()
-					.addGroup(headerJPanelLayout.createParallelGroup(Alignment.LEADING)
-						.addComponent(titleLabel, GroupLayout.DEFAULT_SIZE, 63, Short.MAX_VALUE)
-						.addComponent(clockJLabel, Alignment.TRAILING)
-						.addGroup(headerJPanelLayout.createSequentialGroup()
-							.addGroup(headerJPanelLayout.createParallelGroup(Alignment.BASELINE)
-								.addComponent(ingelogdJLabel)
-								.addComponent(logoutJButton, GroupLayout.PREFERRED_SIZE, 22, GroupLayout.PREFERRED_SIZE)
-								.addComponent(syncButton))
-							.addPreferredGap(ComponentPlacement.UNRELATED)
-							.addComponent(currentProjectJLabel)
-							.addGap(0, 10, Short.MAX_VALUE)))
-					.addContainerGap())
-		);
+		headerJPanelLayout.setHorizontalGroup(headerJPanelLayout.createParallelGroup(Alignment.TRAILING).addGroup(headerJPanelLayout.createSequentialGroup().addContainerGap().addGroup(headerJPanelLayout.createParallelGroup(Alignment.LEADING, false).addComponent(currentProjectJLabel, GroupLayout.DEFAULT_SIZE, 201, Short.MAX_VALUE).addComponent(ingelogdJLabel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)).addPreferredGap(ComponentPlacement.RELATED).addComponent(logoutJButton).addPreferredGap(ComponentPlacement.RELATED, 215, Short.MAX_VALUE).addComponent(syncButton, GroupLayout.PREFERRED_SIZE, 68, GroupLayout.PREFERRED_SIZE).addPreferredGap(ComponentPlacement.UNRELATED).addComponent(titleLabel).addGap(18).addComponent(clockJLabel).addGap(6)));
+		headerJPanelLayout.setVerticalGroup(headerJPanelLayout.createParallelGroup(Alignment.LEADING).addGroup(headerJPanelLayout.createSequentialGroup().addContainerGap().addGroup(headerJPanelLayout.createParallelGroup(Alignment.LEADING).addComponent(titleLabel, GroupLayout.DEFAULT_SIZE, 63, Short.MAX_VALUE).addComponent(clockJLabel, Alignment.TRAILING).addGroup(headerJPanelLayout.createSequentialGroup().addGroup(headerJPanelLayout.createParallelGroup(Alignment.BASELINE).addComponent(ingelogdJLabel).addComponent(logoutJButton, GroupLayout.PREFERRED_SIZE, 22, GroupLayout.PREFERRED_SIZE).addComponent(syncButton)).addPreferredGap(ComponentPlacement.UNRELATED).addComponent(currentProjectJLabel).addGap(0, 10, Short.MAX_VALUE))).addContainerGap()));
 		headerJPanel.setLayout(headerJPanelLayout);
 
 		clockJLabel.getAccessibleContext().setAccessibleName("iconJLabel");
@@ -1423,11 +1392,13 @@ public class GUIForm extends javax.swing.JFrame {
 		DefaultMutableTreeNode root = new DefaultMutableTreeNode("Project");
 		if (!projects.isEmpty()) {
 			for (Project p : projects) {
-				DefaultMutableTreeNode project = new DefaultMutableTreeNode(p);
-				for (Taak t : p.getTaken()) {
-					project.add(new DefaultMutableTreeNode(t));
+				if (!p.getTaken().isEmpty()) {
+					DefaultMutableTreeNode project = new DefaultMutableTreeNode(p);
+					for (Taak t : p.getTaken()) {
+						project.add(new DefaultMutableTreeNode(t));
+					}
+					root.add(project);
 				}
-				root.add(project);
 			}
 		}
 		DefaultTreeModel treeModel = new DefaultTreeModel(root);
