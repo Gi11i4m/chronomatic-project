@@ -173,7 +173,7 @@ public class GUIForm extends javax.swing.JFrame {
 		workJButton.setText("Work");
 		workJButton.addMouseListener(new java.awt.event.MouseAdapter() {
 			public void mouseClicked(java.awt.event.MouseEvent evt) {
-				workClicked(evt);
+				openWorkDialog();
 			}
 		});
 
@@ -1417,7 +1417,10 @@ public class GUIForm extends javax.swing.JFrame {
 		emailJTextField.setCaretPosition(0);
 	}
 
-	// Load info from PROJECT with index parameter
+	/**
+	 * Load info from PROJECT
+	 * @param	index	the list index (should equal arraylist index from projects) from the project to be loaded
+	 */
 	private void loadProjectInfo(int index) {
 		if (index != -1) {
 			Project p = UserInterface.getProject(index);
@@ -1431,7 +1434,10 @@ public class GUIForm extends javax.swing.JFrame {
 		}
 	}
 
-	// Load info from TASK with index parameter
+	/**
+	 * Load info from TASK
+	 * @param	index	the list index (should equal arraylist index from tasks) from the task to be loaded
+	 */
 	private void loadTaskInfo(int index) throws GUIException {
 		if (index != -1) {
 			Taak t = (Taak) tasksJList.getSelectedValue();
@@ -1455,7 +1461,10 @@ public class GUIForm extends javax.swing.JFrame {
 		}
 	}
 
-	// Load info from CLIENT with index parameter
+	/**
+	 * Load info from CLIENT
+	 * @param	index	the list index (should equal arraylist index from clients) from the client to be loaded
+	 */
 	private void loadClientInfo(int index) {
 		if (index != -1) {
 			Opdrachtgever o = (Opdrachtgever) clientsJList.getSelectedValue();
@@ -1468,14 +1477,17 @@ public class GUIForm extends javax.swing.JFrame {
 	}
 
 	// ================================================================================
-	// Other methods, FIXME nakijken
+	// GUI methods
 	// ================================================================================
 
-	private void workClicked(java.awt.event.MouseEvent evt) {
+	/**
+	 * Open a new work dialog if current project is set and contains running tasks
+	 */
+	private void openWorkDialog() {
 		try {
 			Project p = UserInterface.getCurrentProject();
 			if (!p.tasksAvailable()) {
-				throw new GUIException("Current project contains no available tasks");
+				throw new GUIException("Current project contains no running tasks");
 			}
 			setVisible(false);
 			WorkDialog work = new WorkDialog(this, true, validator);
@@ -1487,12 +1499,7 @@ public class GUIForm extends javax.swing.JFrame {
 			ex.printStackTrace();
 			JOptionPane.showMessageDialog(this, ex.getMessage());
 		}
-		this.invalidate();
 	}
-
-	// ================================================================================
-	// GUI methods
-	// ================================================================================
 
 	/**
 	 * CLEAR ALL FIELDS on the panels in parameter
@@ -1521,7 +1528,10 @@ public class GUIForm extends javax.swing.JFrame {
 		}
 	}
 
-	// Set the CURRENT PROJECT with GUI responding right
+	/**
+	 * Set the CURRENT PROJECT with GUI responding right
+	 * @param 	index	the index (GUI list and arraylist) from the project that's going to be the current project
+	 */
 	private void setCurrentProjectGUI(int index) {
 		try {
 			UserInterface.setCurrentProjectIndex(index);
@@ -1538,7 +1548,9 @@ public class GUIForm extends javax.swing.JFrame {
 		}
 	}
 
-	// Log user out and show new loginForm
+	/**
+	 * Log user out and show new loginForm
+	 */
 	private void logout() {
 		try {
 			WinRegistry.deleteKey(WinRegistry.HKEY_CURRENT_USER, "SOFTWARE\\ChronoMatic");
