@@ -12,6 +12,7 @@ import java.awt.event.FocusEvent;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
@@ -57,6 +58,7 @@ import be.artesis.timelog.ics.IcsExporteren;
 import be.artesis.timelog.ics.IcsImporteren;
 import be.artesis.timelog.model.Validator;
 import be.artesis.timelog.model.WebserviceException;
+import be.artesis.timelog.secure.WinRegistry;
 import be.artesis.timelog.view.DataInputException;
 import be.artesis.timelog.view.Gebruiker;
 import be.artesis.timelog.view.Opdrachtgever;
@@ -82,6 +84,7 @@ public class GUIForm extends javax.swing.JFrame {
 	// Properties
 	// ================================================================================
 
+	
 	Validator validator;
 	boolean creatingProject;
 	final String NEWCLIENTITEM = "< New client >";
@@ -1333,6 +1336,56 @@ public class GUIForm extends javax.swing.JFrame {
 			clientCompanyJTextField.setText(o.getBedrijfsnaam());
 			clientEmailJTextField.setText(o.getEmail());
 			clientPhoneNumberJTextField.setText(o.getTelefoonnummer());
+		}
+	}
+
+	// ================================================================================
+	// Other methods, FIXME nakijken
+	// ================================================================================
+
+	private void setCurrentProjectGUI(int index) {
+		try {
+			UserInterface.setCurrentProjectIndex(index);
+			currentProjectJLabel.setText("Current project: " + UserInterface.getCurrentProject().getNaam());
+			saveTaskJButton.setText("Save to " + UserInterface.getCurrentProject().getNaam());
+			projectsJList.setSelectedIndex(index);
+			refreshProjectsList(projectsJList, homeProjectsJList);
+			refreshTasksList(UserInterface.getCurrentProject(), tasksJList);
+			clearFieldsOnPanel(taskFieldsJPanel);
+			selectNewItem(tasksJList);
+		} catch (GUIException ex) {
+			ex.printStackTrace();
+			JOptionPane.showMessageDialog(this, ex.getMessage());
+		}
+	}
+
+	private void workClicked(java.awt.event.MouseEvent evt) {
+		try {
+			Project p = UserInterface.getCurrentProject();
+			if (!p.tasksAvailable()) {
+				throw new GUIException("Current project contains no available tasks");
+			}
+			setVisible(false);
+			WorkDialog work = new WorkDialog(this, true, validator);
+			work.setVisible(true);
+			setVisible(true);
+			loadTaskInfo(tasksJList.getSelectedIndex());
+			toggleButtonStates();
+		} catch (GUIException ex) {
+			ex.printStackTrace();
+			JOptionPane.showMessageDialog(this, ex.getMessage());
+		}
+	}
+
+	private void logout() {
+		try {
+			WinRegistry.deleteKey(WinRegistry.HKEY_CURRENT_USER, "SOFTWARE\\ChronoMatic");
+			LoginForm f = new LoginForm(this, validator);
+			this.dispose();
+			f.setVisible(true);
+			
+		} catch (IllegalArgumentException | IllegalAccessException | InvocationTargetException e) {
+			e.printStackTrace();
 		}
 	}
 
