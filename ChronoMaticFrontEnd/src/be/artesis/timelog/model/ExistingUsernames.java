@@ -14,7 +14,7 @@ public class ExistingUsernames {
 		} catch (IOException | JSONException e) {
 			e.printStackTrace();
 		}
-		
+		System.out.println(jObject);
 		return (jObject != null) ;
 		
 	}
