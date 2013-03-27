@@ -10,7 +10,7 @@ import org.json.JSONObject;
 public class LocalDatabaseWriter {
 	//hier aant troubleshooten. Het opslaan en opvragen van shit van begin tot eind door de lokale db
 	
-		public static final String URL = "c:\\Users\\Yolan\\Desktop\\";		
+		public static final String URL = "c:\\Users\\Stijn\\Desktop\\";		
 		public static final String EXTENSIE = ".txt";									
 			
 		public static void schrijfweg(JSONObject j, Commando c) throws IOException{							
