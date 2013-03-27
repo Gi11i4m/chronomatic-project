@@ -7,7 +7,7 @@ import org.json.JSONObject;
 
 public class ExistingUsernames {
 
-	public static boolean check(String mode, String gebruikersnaam) {
+	public static boolean check(String mode, String gebruikersnaam) throws JSONException {
 		JSONObject jObject = null;
 		try {
 			jObject = Connection.getObject("gebruiker/checkExists/" + mode + "/" + gebruikersnaam);
@@ -15,7 +15,7 @@ public class ExistingUsernames {
 			e.printStackTrace();
 		}
 		System.out.println(jObject);
-		return (jObject != null) ;
+		return (jObject.getInt("Count(1)") == 1) ;
 		
 	}
 }
