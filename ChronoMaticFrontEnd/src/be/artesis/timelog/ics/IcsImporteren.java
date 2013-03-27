@@ -33,8 +33,9 @@ public class IcsImporteren {
 	
 	public static ArrayList<Project> importTasksInProject(String url) throws IOException, ParserException{
 				
-		Project p = new Project("",0,0,0);
-		p.setTaken((Taak[]) importTasks(url).toArray());
+		Project p = new Project("Imported tasks",0,0,0);
+		Taak[] taken = new Taak[importTasks(url).size()];
+		p.setTaken(importTasks(url).toArray(taken));
 		return null;				
 	}
 	
