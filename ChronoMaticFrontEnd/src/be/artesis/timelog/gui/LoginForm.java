@@ -138,7 +138,9 @@ public class LoginForm extends javax.swing.JFrame implements ActionListener {
 		try {
 			usernameJTextField.setText(WinRegistry.readString(WinRegistry.HKEY_CURRENT_USER, "SOFTWARE\\ChronoMatic", "username"));
 			basisPanel.setFocusTraversalPolicy(new FocusTraversalOnArray(new Component[]{usernameJTextField, passwordJPasswordField, aanmeldenButton}));
-			if(WinRegistry.readString(WinRegistry.HKEY_CURRENT_USER, "SOFTWARE\\ChronoMatic", "autologin").equals("true")) {
+			String autologin = "";
+			autologin = WinRegistry.readString(WinRegistry.HKEY_CURRENT_USER, "SOFTWARE\\ChronoMatic", "autologin");
+			if(autologin.equals("true")) {
 				autoLoginNormalCheckBox.setSelected(true);
 			}
 		} catch (IllegalArgumentException | IllegalAccessException | InvocationTargetException e) {
@@ -190,7 +192,7 @@ public class LoginForm extends javax.swing.JFrame implements ActionListener {
             } else {
 
             }
-		} catch (HeadlessException | IOException | JSONException | WebserviceException | NoSuchAlgorithmException | IllegalArgumentException | IllegalAccessException | InvocationTargetException e) {
+		} catch (HeadlessException | IOException | JSONException | WebserviceException | IllegalArgumentException | IllegalAccessException | InvocationTargetException e) {
 			e.printStackTrace();
 			JOptionPane.showMessageDialog(this, "Error connecting to server");
 			this.dispose();

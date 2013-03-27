@@ -19,8 +19,9 @@ public class Main {
 		try {
 			username = WinRegistry.readString(WinRegistry.HKEY_CURRENT_USER, "SOFTWARE\\ChronoMatic", "username");
 			password = WinRegistry.readString(WinRegistry.HKEY_CURRENT_USER, "SOFTWARE\\ChronoMatic", "password");
-		
-			if(WinRegistry.readString(WinRegistry.HKEY_CURRENT_USER, "SOFTWARE\\ChronoMatic", "autologin").equals("true")) {
+			String autologin = "";
+			autologin = WinRegistry.readString(WinRegistry.HKEY_CURRENT_USER, "SOFTWARE\\ChronoMatic", "autologin");
+			if(autologin.equals("true")) {
 				login.login(username, password);
 				//System.out.println(username+" "+ WinRegistry.readString(WinRegistry.HKEY_CURRENT_USER, "SOFTWARE\\ChronoMatic","password"));
 			}
