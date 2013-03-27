@@ -2,6 +2,9 @@ package be.artesis.timelog.gui;
 
 import java.lang.reflect.InvocationTargetException;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import be.artesis.timelog.model.Validator;
 import be.artesis.timelog.secure.WinRegistry;
 
@@ -38,7 +41,9 @@ public class Main {
 					login.login(username, password);
 				}
 				else if(autologin.equals("extern")) {
-					login.loginExtern(username);
+					JSONObject obj = new JSONObject();
+					obj.put("email", username);
+					login.loginExtern(obj);
 				}
 				else {
 					login.setVisible(true);
@@ -47,7 +52,7 @@ public class Main {
 			else {
 				login.setVisible(true);
 			}
-		} catch (IllegalArgumentException | IllegalAccessException | InvocationTargetException e) {
+		} catch (IllegalArgumentException | IllegalAccessException | InvocationTargetException | JSONException e) {
 			e.printStackTrace();
 		}
 		

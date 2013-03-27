@@ -172,22 +172,33 @@ public class LoginForm extends javax.swing.JFrame implements ActionListener {
 		}
 
 	}
+	
+	public void generateLoginExtern(String accessToken) {
+		String email = null;
+		JSONObject userInfoJSONObj = null;
+		try {
+		MD5Generator MD5 = new MD5Generator();
+		// Facebook moet geen Access token aanvragen, de rest wel (omwille van oude Oauth)
+			if (!social.toString().equals("facebook")) {
+				
+				accessToken = AccessToken.request(accessToken, social);
+				
+				userInfoJSONObj = GetUserInfo.request(accessToken, social);
 
-	public void loginExtern(String accessToken) {
+				loginExtern(userInfoJSONObj);
+			}
+		} catch (IOException | JSONException | ParserConfigurationException | SAXException e) {
+			e.printStackTrace();
+		}
+	}
+
+	public void loginExtern(JSONObject userInfoJSONObj) {
 		try {
 			// Maak key
 			WinRegistry.createKey(WinRegistry.HKEY_CURRENT_USER, "SOFTWARE\\ChronoMatic");
 			
-			MD5Generator MD5 = new MD5Generator();
-			// Facebook moet geen Access token aanvragen, de rest wel (omwille van oude Oauth)
-			if (!social.toString().equals("facebook")) {
-				accessToken = AccessToken.request(accessToken, social);
-			}
-
-			JSONObject userInfoJSONObj = GetUserInfo.request(accessToken, social);
-
+			
 			String email = userInfoJSONObj.getString("email");
-
 			// als gebruiker nog niet bestaat..
 			if (ExistingUsernames.check(email)) {
 				Inserter.CreateUserExtern(userInfoJSONObj.getString("naam"), userInfoJSONObj.getString("voornaam"), email);
@@ -196,10 +207,10 @@ public class LoginForm extends javax.swing.JFrame implements ActionListener {
 			if (validator.loginExtern(email)) {
 				loadUserData();
 				
-				//if(autoLoginExternCheckBox.isSelected()) {
-            	//	WinRegistry.writeStringValue(WinRegistry.HKEY_CURRENT_USER, "SOFTWARE\\ChronoMatic", "autologin", "extern");
-            	//	WinRegistry.writeStringValue(WinRegistry.HKEY_CURRENT_USER, "SOFTWARE\\ChronoMatic", "username", email);
-        		//}
+				if(autoLoginExternCheckBox.isSelected()) {
+            		WinRegistry.writeStringValue(WinRegistry.HKEY_CURRENT_USER, "SOFTWARE\\ChronoMatic", "autologin", "extern");
+            		WinRegistry.writeStringValue(WinRegistry.HKEY_CURRENT_USER, "SOFTWARE\\ChronoMatic", "username", email);
+        		}
 				
 				parent.setVisible(true);
 				this.dispose();
@@ -207,7 +218,7 @@ public class LoginForm extends javax.swing.JFrame implements ActionListener {
 				JOptionPane.showMessageDialog(this, "Login failed");
 			}
 
-		} catch (IOException | JSONException | WebserviceException | ParserConfigurationException | SAXException | IllegalArgumentException | IllegalAccessException | InvocationTargetException e) {
+		} catch (IOException | JSONException | WebserviceException | IllegalArgumentException | IllegalAccessException | InvocationTargetException e) {
 			e.printStackTrace();
 		}
 	}
@@ -436,7 +447,7 @@ public class LoginForm extends javax.swing.JFrame implements ActionListener {
 
 		switch (sender.getName()) {
 		case "google":
-			social = new Github();
+			social = new Google();
 			break;
 		case "facebook":
 			social = new Facebook();

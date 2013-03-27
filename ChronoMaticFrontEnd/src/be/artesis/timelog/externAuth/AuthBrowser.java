@@ -100,25 +100,25 @@ public class AuthBrowser {
 								// TODO Auto-generated catch block
 								e.printStackTrace();
 							}*/
-                            loginDialog.loginExtern(url.substring(70));
+                            loginDialog.generateLoginExtern(url.substring(70));
                             exit(); 
                         }
                         //Linkedin
                         if(url != null && url.startsWith("http://www.linkedin.com/chronomatic?code=")) {
                         	//System.out.println(url.substring(41,156));
-                            loginDialog.loginExtern(url.substring(41,156));
+                            loginDialog.generateLoginExtern(url.substring(41,156));
                             exit(); 
                         }
                         //Facebook
                         if(url != null && url.startsWith("https://www.facebook.com/connect/login_success.html")) {
                         	//System.out.println(url.substring(65));
-                            loginDialog.loginExtern(url.substring(65));
+                            loginDialog.generateLoginExtern(url.substring(65));
                             exit(); 
                         }
                         //Micosoft
                         if(url != null && url.startsWith("http://www.dvl-sanitair.be/")) {
                         	//System.out.println(url.substring(33,69));
-                            loginDialog.loginExtern(url.substring(33, 69));
+                            loginDialog.generateLoginExtern(url.substring(33, 69));
                             exit(); 
                         }
                     }
