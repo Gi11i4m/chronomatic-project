@@ -4,7 +4,6 @@ import be.artesis.timelog.lokaleopslag.Commando;
 import be.artesis.timelog.lokaleopslag.JVelden;
 import be.artesis.timelog.lokaleopslag.LocalDatabaseReader;
 import be.artesis.timelog.lokaleopslag.LocalDatabaseWriter;
-import be.artesis.timelog.model.Connection;
 import be.artesis.timelog.model.WebserviceException;
 import be.artesis.timelog.view.Opdrachtgever;
 import be.artesis.timelog.view.Project;

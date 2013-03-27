@@ -24,7 +24,7 @@ public class TestDB {
 		// TODO Auto-generated method stub
 		
 
-		try {	
+		
 			
 			/*
 			 //opdrachtgevers
@@ -83,23 +83,21 @@ public class TestDB {
 			
 				Validator v = Validator.getInstance();
 			
-				v.login("p", "350a7d3dccd195c7c2b7168f6561011e");
-				LocalDatabaseSynch lds = new LocalDatabaseSynch(v);
-				lds.synch(Commando.INSERT);
+				try {
+					v.login("p", "4ba7e14b8176fb8163d903fbca711799");
+					LocalDatabaseSynch lds = new LocalDatabaseSynch(v);
+					lds.synch();
+				} catch (IOException | JSONException | WebserviceException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 				
 				
-			} catch (NoSuchAlgorithmException | IOException | JSONException
-					| WebserviceException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+		
 			
 			
 			
-			
-			
-			
-	
+				
 	
 	}
 

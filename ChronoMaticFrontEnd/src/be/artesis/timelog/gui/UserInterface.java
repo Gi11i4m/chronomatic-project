@@ -131,7 +131,7 @@ public class UserInterface {
     	u.setVoornaam(firstName);
     	u.setNaam(lastName);
     	u.setEmail(email);
-    	Updater.updateGebruiker(validator.getSessionKey(), u);
+    	UpdaterLocal.updateGebruiker(validator.getSessionKey(), u);
     	setUser(u);
     }
     
@@ -154,7 +154,7 @@ public class UserInterface {
 	}
 	
 	public static void updateClient(int index, String naam, String voornaam, String bedrijfsnaam, String email, String telefoonnummer)
-			throws DataInputException, MalformedURLException, IOException, WebserviceException {
+			throws DataInputException, MalformedURLException, IOException, WebserviceException, JSONException {
 		Opdrachtgever c = (Opdrachtgever) getClient(index).clone();
         c.setNaam(naam);
         c.setVoornaam(voornaam);
@@ -184,14 +184,14 @@ public class UserInterface {
 	}
 	
 	public static void updateProject(int index, String naam, long begindatum, long einddatum, int opdrachtgeverId)
-			throws DataInputException, MalformedURLException, IOException, WebserviceException, ParseException{
+			throws DataInputException, MalformedURLException, IOException, WebserviceException, ParseException, JSONException{
 		Project p = (Project) getProject(index).clone();
         p.setNaam(naam);
         p.setBegindatum(begindatum);
         p.setEinddatum(einddatum);
         p.setOpdrachtgeverId(opdrachtgeverId);
         // Past projectwaarden aan in database
-        UpdaterLocal.updateProject(p,);;
+        UpdaterLocal.updateProject(p);;
         getProjects().set(index, p);
 	}
 	
@@ -218,8 +218,8 @@ public class UserInterface {
         return t;
 	}
 	
-	public static void updateTask(int index, String name, long startdate, long enddate, String comment, boolean completed)
-			throws GUIException, DataInputException, ParseException, MalformedURLException, IOException, WebserviceException{	
+	public static void updateTask(int index, String name, long startdate, long enddate, String comment, boolean completed, int projectId)
+			throws GUIException, DataInputException, ParseException, MalformedURLException, IOException, WebserviceException, JSONException{	
 		Taak t = (Taak) getCurrentTasks().get(index).clone();
         t.setNaam(name);
         t.setBegindatum(startdate);
@@ -227,12 +227,12 @@ public class UserInterface {
         t.setCommentaar(comment);
         t.setCompleted(completed);
         // Taakwaarden worden aangepast in database
-        UpdaterLocal.updateTaak(t,);
+        UpdaterLocal.updateTaak(t,projectId);
         getCurrentTasks().set(index, t);
 	}
     
 	public static Tijdspanne createTimespan(long start, long stop, Taak t, boolean isPause)
-			throws DataInputException, IOException, WebserviceException{
+			throws DataInputException, IOException, WebserviceException, JSONException{
 		Tijdspanne ts = new Tijdspanne(start, stop);
 		ts.setPauze(isPause);
 		t.addBestedeTijd(ts);
@@ -246,7 +246,7 @@ public class UserInterface {
 	}
 	
 	public static void updateTimespan(int index, long start, long stop, Taak t, boolean isPause)
-			throws DataInputException, IOException, WebserviceException{
+			throws DataInputException, IOException, WebserviceException, JSONException{
 		int i = t.convertTimespanIndex(index, isPause);
 		
 		Tijdspanne ts = (Tijdspanne) t.getTotaleTijd().get(i).clone();
@@ -255,7 +255,7 @@ public class UserInterface {
 		ts.setPauze(isPause);
 		
 		t.getTotaleTijd().set(i, ts);
-		UpdaterLocal.updateTijdspanne(validator.getSessionKey(), ts);
+		UpdaterLocal.updateTijdspanne(ts,t.getId());
 	}
 
     //================================================================================
@@ -263,34 +263,31 @@ public class UserInterface {
     //================================================================================
 	
 	public static void deleteClient(Opdrachtgever c)
-			throws MalformedURLException, IOException, WebserviceException, GUIException{
+			throws MalformedURLException, IOException, WebserviceException, GUIException, JSONException{
 		for (Project p : UserInterface.getProjects()) {
 			if (p.getOpdrachtgeverId() == c.getID()) {
 				throw new GUIException("This client is associated with a project");
 			}
 		}
-		DeleterLocaal.deleteOpdrachtgever(validator.getSessionKey(), c);
+		DeleterLocaal.deleteOpdrachtgever( c);
 		getClients().remove(c);
 	}
 	
 	public static void deleteProject(Project p)
-			throws MalformedURLException, IOException, WebserviceException{
-		DeleterLocaal.deleteProject(validator.getSessionKey(), p);
+			throws MalformedURLException, IOException, WebserviceException, JSONException{
+		DeleterLocaal.deleteProject( p);
         getProjects().remove(p);
 	}
 	
-	public static void deleteTask(Taak t)throws MalformedURLException, IOException, WebserviceException, GUIException{
-		Deleter.deleteTaak(validator.getSessionKey(), t);
+	public static void deleteTask(Taak t)throws MalformedURLException, IOException, WebserviceException, GUIException, JSONException{
+		DeleterLocaal.deleteTaak( t);
         getCurrentTasks().remove(t);
 	}
 	
-	public static void deleteTimespan(Tijdspanne ts, Taak t) throws MalformedURLException, IOException, WebserviceException{
-		Deleter.deleteTijdSpanne(validator.getSessionKey(), ts);
+	public static void deleteTimespan(Tijdspanne ts, Taak t) throws MalformedURLException, IOException, WebserviceException, JSONException{
+		DeleterLocaal.deleteTijdSpanne(ts);
 		t.getGewerkteTijd().remove(ts);
 	}
-	
-	
-	
 	
 	
 	
@@ -298,4 +295,5 @@ public class UserInterface {
     // Code verplaatst vanwege verwijderde methode
     // Taak taak = Creator.createTaak();
     // Inserter.inputTaak(validator.getSessionKey(), t);
+	// you tring my tralalaa
 }

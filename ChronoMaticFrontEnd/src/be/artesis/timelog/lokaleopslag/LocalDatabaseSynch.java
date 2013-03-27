@@ -7,7 +7,9 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import be.artesis.timelog.controller.DeleterServer;
 import be.artesis.timelog.controller.InserterServer;
+import be.artesis.timelog.controller.UpdaterServer;
 import be.artesis.timelog.model.Validator;
 import be.artesis.timelog.model.WebserviceException;
 
@@ -33,24 +35,42 @@ public class LocalDatabaseSynch {
 		this.v = v;
 	}
 	
-	public void synch(Commando c) throws JSONException, IOException, WebserviceException{
-		JSONObject file = LocalDatabaseReader.LeesBestand( LocalDatabaseWriter.URL+ c +".txt");
+	public void synch() throws JSONException, IOException, WebserviceException{
 		
-		jarrOpdrachtgevers = file.getJSONArray(JVelden.OPDRACHTGEVERS.toString().toLowerCase());
-		jarrProjecten =  file.getJSONArray(JVelden.PROJECTEN.toString().toLowerCase());		
-		jarrTaken = file.getJSONArray(JVelden.TAKEN.toString().toLowerCase());
-		jarrTijdspannes = file.getJSONArray(JVelden.TIJDSPANNES.toString().toLowerCase());
-		
-		if (!jarrOpdrachtgevers.isNull(0)){synchJarr(JVelden.OPDRACHTGEVERS, jarrOpdrachtgevers, jarrProjecten);}
-		if (!jarrProjecten.isNull(0)){synchJarr(JVelden.PROJECTEN,jarrProjecten,jarrTaken);}
-		if (!jarrTaken.isNull(0)){synchJarr(JVelden.TAKEN, jarrTaken, jarrTijdspannes);}
-		if (!jarrTijdspannes.isNull(0)){synchJarr(JVelden.TIJDSPANNES, jarrTijdspannes, null);}
-			
+		for ( Commando c :Commando.values()){
+			synchCommando(c);
+		}
 		
 	}
+	private void synchCommando(Commando c) throws JSONException, IOException, WebserviceException{		
+		
+			JSONObject file = LocalDatabaseReader.LeesBestand( LocalDatabaseWriter.URL+ c +".txt");
+			if (file!=null){
+				jarrOpdrachtgevers = file.getJSONArray(JVelden.OPDRACHTGEVERS.toString().toLowerCase());
+				jarrProjecten =  file.getJSONArray(JVelden.PROJECTEN.toString().toLowerCase());		
+				jarrTaken = file.getJSONArray(JVelden.TAKEN.toString().toLowerCase());
+				jarrTijdspannes = file.getJSONArray(JVelden.TIJDSPANNES.toString().toLowerCase());
+			if (c == Commando.INSERT){
+				if (!jarrOpdrachtgevers.isNull(0)){insertJarr(JVelden.OPDRACHTGEVERS, jarrOpdrachtgevers, jarrProjecten);}
+				if (!jarrProjecten.isNull(0)){insertJarr(JVelden.PROJECTEN,jarrProjecten,jarrTaken);}
+				if (!jarrTaken.isNull(0)){insertJarr(JVelden.TAKEN, jarrTaken, jarrTijdspannes);}
+				if (!jarrTijdspannes.isNull(0)){insertJarr(JVelden.TIJDSPANNES, jarrTijdspannes, null);}
+			}else if(c== Commando.UPDATE){
+				if (!jarrOpdrachtgevers.isNull(0)){updateJarr(JVelden.OPDRACHTGEVERS, jarrOpdrachtgevers);}
+				if (!jarrProjecten.isNull(0)){updateJarr(JVelden.PROJECTEN, jarrProjecten);}
+				if (!jarrTaken.isNull(0)){updateJarr(JVelden.TAKEN, jarrTaken);}
+				if (!jarrTijdspannes.isNull(0)){updateJarr(JVelden.TIJDSPANNES, jarrTijdspannes);}
+			}else if (c == Commando.DELETE) {
+				if (!jarrOpdrachtgevers.isNull(0)){deleteJarr(JVelden.OPDRACHTGEVERS, jarrOpdrachtgevers);}
+				if (!jarrProjecten.isNull(0)){deleteJarr(JVelden.PROJECTEN, jarrProjecten);}
+				if (!jarrTaken.isNull(0)){deleteJarr(JVelden.TAKEN, jarrTaken);}
+				if (!jarrTijdspannes.isNull(0)){deleteJarr(JVelden.TIJDSPANNES, jarrTijdspannes);}
+			}
+		}		
+	}
 	
-	private void synchJarr(JVelden jVeld, JSONArray jarr, JSONArray jarrLager) throws MalformedURLException, JSONException, IOException, WebserviceException{
-		System.out.println("jarrlength:" + jarr.length());
+	private void insertJarr(JVelden jVeld, JSONArray jarr, JSONArray jarrLager) throws MalformedURLException, JSONException, IOException, WebserviceException{
+		
 		for(int i = 0 ; i < jarr.length();i++){	
 			System.out.println("i=" + i);
 			
@@ -71,34 +91,108 @@ public class LocalDatabaseSynch {
 		}
 	}
 	
+	public void updateJarr(JVelden jVeld,JSONArray jarr) throws JSONException, MalformedURLException, IOException, WebserviceException{
+		
+		for(int i = 0 ; i < jarr.length();i++){				
+			
+			JSONObject jObj =  jarr.getJSONObject(i);
+			update(jVeld, jObj);
+		}
+	}
+	public void deleteJarr(JVelden jVeld,JSONArray jarr) throws JSONException, MalformedURLException, IOException, WebserviceException{
+		
+		for(int i = 0 ; i < jarr.length();i++){				
+			
+			JSONObject jObj =  jarr.getJSONObject(i);
+			delete(jVeld, jObj.getInt("id"));
+		}
+	}
+	
 	private int getId(JVelden jVeld,JSONObject jObj) throws MalformedURLException, JSONException, IOException, WebserviceException{
 	
 		switch (jVeld) {
 		case OPDRACHTGEVERS:
-			return synchOpdrachtgever(jObj);
+			return insertOpdrachtgever(jObj);
 		case TAKEN:
-			return synchTaak(jObj);
+			return insertTaak(jObj);
 		case PROJECTEN:
-			return synchProject(jObj);	
+			return insertProject(jObj);	
 		case TIJDSPANNES:
-			return synchTijdspanne(jObj);
+			return insertTijdspanne(jObj);
 		}
 		return 0;
 	}
+	private void update(JVelden jVeld,JSONObject jObj) throws MalformedURLException, JSONException, IOException, WebserviceException{
+		
+		switch (jVeld) {
+		case OPDRACHTGEVERS:
+			updateOpdrachtgever(jObj);
+		case TAKEN:
+			updateTaak(jObj);
+		case PROJECTEN:
+			updateProject(jObj);	
+		case TIJDSPANNES:
+			updateTijdspanne(jObj);
+		}		
+	}
+	private void delete(JVelden jVeld,int id) throws MalformedURLException, JSONException, IOException, WebserviceException{
+		
+		switch (jVeld) {
+		case OPDRACHTGEVERS:
+			deleteOpdrachtgever(id);
+		case TAKEN:
+			deleteTaak(id);
+		case PROJECTEN:
+			deleteProject(id);	
+		case TIJDSPANNES:
+			deleteTijdspanne(id);
+		}		
+	}
 	
-	private  int synchOpdrachtgever(JSONObject jOpdrachtgever) throws MalformedURLException, JSONException, IOException, WebserviceException{
+	private  int insertOpdrachtgever(JSONObject jOpdrachtgever) throws MalformedURLException, JSONException, IOException, WebserviceException{
 		return InserterServer.inputOpdrachtgever(v.getSessionKey(), jOpdrachtgever.getString("bedrijfsnaam"), jOpdrachtgever.getString("naam"), jOpdrachtgever.getString("voornaam"), jOpdrachtgever.getString("email"), jOpdrachtgever.getString("telefoonnummer"));
 	}	
 	
-	private  int synchProject(JSONObject jProject) throws MalformedURLException, IOException, WebserviceException, JSONException{
+	private  int insertProject(JSONObject jProject) throws MalformedURLException, IOException, WebserviceException, JSONException{
 		return InserterServer.inputProject(v.getSessionKey(), jProject.getString("naam"), jProject.getLong("beginDatum"), jProject.getLong("eindDatum"), jProject.getInt("linkId"));
 	}
 	
-	private  int synchTaak(JSONObject jTaak) throws MalformedURLException, IOException, WebserviceException, JSONException {
+	private  int insertTaak(JSONObject jTaak) throws MalformedURLException, IOException, WebserviceException, JSONException {
 		return InserterServer.inputTaak(v.getSessionKey(), jTaak.getString("naam"), jTaak.getLong("beginDatum"), jTaak.getLong("eindDatum"), jTaak.getString("commentaar"), jTaak.getBoolean("completed"), jTaak.getInt("linkId"));
 	}
-	private  int synchTijdspanne(JSONObject jTijdspanne) throws MalformedURLException, IOException, WebserviceException, JSONException {
+	private  int insertTijdspanne(JSONObject jTijdspanne) throws MalformedURLException, IOException, WebserviceException, JSONException {
 		return InserterServer.inputTijdSpanne(v.getSessionKey(), jTijdspanne.getLong("beginTijd"), jTijdspanne.getLong("eindTijd"), jTijdspanne.getBoolean("isPauze"), jTijdspanne.getInt("linkId"));
 	}
+	
+	private  void updateOpdrachtgever(JSONObject jOpdrachtgever) throws MalformedURLException, JSONException, IOException, WebserviceException{
+		UpdaterServer.updateOpdrachtgever(v.getSessionKey(),jOpdrachtgever.getInt("id") ,jOpdrachtgever.getString("bedrijfsnaam"), jOpdrachtgever.getString("naam"), jOpdrachtgever.getString("voornaam"), jOpdrachtgever.getString("email"), jOpdrachtgever.getString("telefoonnummer"));
+	}	
+	
+	private  void updateProject(JSONObject jProject) throws MalformedURLException, IOException, WebserviceException, JSONException{
+		UpdaterServer.updateProject(v.getSessionKey(), jProject.getInt("id"),jProject.getString("naam"), jProject.getLong("beginDatum"), jProject.getLong("eindDatum"), jProject.getInt("linkId"));
+	}
+	
+	private  void updateTaak(JSONObject jTaak) throws MalformedURLException, IOException, WebserviceException, JSONException {
+		UpdaterServer.updateTaak(v.getSessionKey(), jTaak.getInt("id"), jTaak.getString("naam"), jTaak.getLong("beginDatum"), jTaak.getLong("eindDatum"), jTaak.getString("commentaar"), jTaak.getBoolean("completed"), jTaak.getInt("linkId"));
+	}
+	private  void updateTijdspanne(JSONObject jTijdspanne) throws MalformedURLException, IOException, WebserviceException, JSONException {		
+		UpdaterServer.updateTijdspanne(v.getSessionKey(), jTijdspanne.getInt("id"), jTijdspanne.getLong("beginTijd"), jTijdspanne.getLong("eindTijd"), jTijdspanne.getBoolean("isPauze"), jTijdspanne.getInt("linkId"));
+	}
+//
+	private  void deleteOpdrachtgever(int id) throws MalformedURLException, JSONException, IOException, WebserviceException{
+		DeleterServer.deleteOpdrachtgever(v.getSessionKey(),id);
+	}	
+	
+	private  void deleteProject(int id) throws MalformedURLException, IOException, WebserviceException, JSONException{
+		DeleterServer.deleteProject(v.getSessionKey(),id);
+	}
+	
+	private  void deleteTaak(int id) throws MalformedURLException, IOException, WebserviceException, JSONException {
+		DeleterServer.deleteTaak(v.getSessionKey(), id);
+	}
+	private  void deleteTijdspanne(int id) throws MalformedURLException, IOException, WebserviceException, JSONException {		
+		DeleterServer.deleteTijdSpanne(v.getSessionKey(), id);
+	}
+	
 
 }

@@ -4,13 +4,12 @@ package be.artesis.timelog.controller;
 import be.artesis.timelog.model.Connection;
 import be.artesis.timelog.model.WebserviceException;
 import be.artesis.timelog.view.Gebruiker;
-import be.artesis.timelog.view.Opdrachtgever;
-import be.artesis.timelog.view.Project;
-import be.artesis.timelog.view.Taak;
-import be.artesis.timelog.view.Tijdspanne;
+
 
 import java.io.IOException;
 import java.net.MalformedURLException;
+
+import org.json.JSONException;
 
 public class UpdaterServer {
 
@@ -18,19 +17,18 @@ public class UpdaterServer {
 		Connection.execute("gebruiker/update/" + sessionKey + "/" + gebruiker.getNaam() + "/" + gebruiker.getVoornaam() + "/" + gebruiker.getGebruikersnaam() + "/" +gebruiker.getEmail());
 	}
         
-	public static void updateProject(String sessionKey, Project project) throws MalformedURLException, IOException, WebserviceException {
-		Connection.execute("project/update/" + sessionKey + "/" + project.getId() + "/" + project.getNaam() + "/" + project.getBegindatum() + "/" + project.getEinddatum());
+	public static void updateProject(String sessionKey,int id, String naam, long begindatum, long einddatum, int opdrachtGeverID) throws MalformedURLException, IOException, WebserviceException {
+		Connection.execute("project/update/" + sessionKey + "/" + id + "/" + naam + "/" + begindatum + "/" + einddatum + "/" + opdrachtGeverID);
 	}
 
-	public static void updateOpdrachtgever(String sessionKey, Opdrachtgever opdrachtgever) throws MalformedURLException, IOException, WebserviceException{
-		Connection.execute("opdrachtgever/update/" + sessionKey + "/" + opdrachtgever.getID() + "/" + opdrachtgever.getBedrijfsnaam() + "/" + opdrachtgever.getNaam() + "/" + opdrachtgever.getVoornaam() + "/" + opdrachtgever.getEmail() + "/" + opdrachtgever.getTelefoonnummer());
+	public static void updateOpdrachtgever(String sessionKey,int id, String bedrijfsnaam, String naam, String voornaam, String email, String telefoonnummer) throws MalformedURLException, IOException, WebserviceException{
+		Connection.execute("opdrachtgever/update/" + sessionKey + "/" + id+ "/" + bedrijfsnaam + "/" + naam + "/" + voornaam + "/" + email + "/" + telefoonnummer);
 	}
-	// FIXME Indien dit niet lukt, effe checken hoe het enkele commits terug was en aanpassen
-	public static void updateTaak(String sessionKey, Taak taak) throws MalformedURLException, IOException, WebserviceException {
-		//System.out.println("task/update/" + sessionKey + "/" + taak.getNaam() + "/" + taak.getBegindatum()+ "/" + taak.getGeschatteEinddatum() + "/" + taak.getCommentaar() + "/" + taak.getID() + "/" + taak.getCompleted());
-		Connection.execute("task/update/" + sessionKey + "/" + taak.getNaam() + "/" + taak.getBegindatum()+ "/" + taak.getGeschatteEinddatum() + "/" + taak.getCommentaar() + "/" + taak.getID() + "/" + taak.getCompleted());
+
+	public static void updateTaak(String sessionKey,int id, String naam, long begindatum, long geschatteEinddatum, String commentaar, boolean completed  , int projectID) throws MalformedURLException, IOException, WebserviceException, JSONException {		
+		Connection.execute("task/update/" + sessionKey + "/" + naam + "/" + begindatum+ "/" + geschatteEinddatum + "/" + commentaar + "/" + id + "/" + completed);
     }
-	public static void updateTijdspanne(String sessionKey, Tijdspanne tijdspanne) throws IOException, WebserviceException{		 
-		Connection.execute("tijdspanne/update/" +sessionKey + "/" + tijdspanne.getEindTijd()+ "/" +tijdspanne.getEindTijd() + "/" + tijdspanne.isPauze() + "/" + tijdspanne.getId());
+	public static void updateTijdspanne(String sessionKey,int id,long beginTijd, long eindTijd, boolean isPauze, int taakID) throws MalformedURLException, IOException, WebserviceException, JSONException {		 
+		Connection.execute("tijdspanne/update/" +sessionKey + "/" + eindTijd + "/" +eindTijd + "/" + isPauze + "/" + id + "/"+taakID);
 	}
 }

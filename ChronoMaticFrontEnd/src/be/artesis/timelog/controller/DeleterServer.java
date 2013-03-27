@@ -11,20 +11,20 @@ import java.net.MalformedURLException;
 
 public class DeleterServer {
 	
-	public static void deleteTijdSpanne(String sessionKey, Tijdspanne tijdSpanne) throws MalformedURLException, IOException, WebserviceException {
-		Connection.execute("tijdSpanne/delete/" + sessionKey + "/" + tijdSpanne.getId());
+	public static void deleteTijdSpanne(String sessionKey, int id) throws MalformedURLException, IOException, WebserviceException {
+		Connection.execute("tijdSpanne/delete/" + sessionKey + "/" + id);
 	}
 	
-	public static void deleteProject(String sessionKey, Project project) throws MalformedURLException, IOException, WebserviceException {
-		Connection.execute("project/delete/" + sessionKey + "/" + project.getId());
+	public static void deleteProject(String sessionKey, int id) throws MalformedURLException, IOException, WebserviceException {
+		Connection.execute("project/delete/" + sessionKey + "/" + id);
 	}
 
-	public static void deleteOpdrachtgever(String sessionKey, Opdrachtgever opdrachtgever) throws MalformedURLException, IOException, WebserviceException {
-		Connection.execute("opdrachtgever/delete/" + sessionKey + "/" + opdrachtgever.getID());
+	public static void deleteOpdrachtgever(String sessionKey, int id) throws MalformedURLException, IOException, WebserviceException {
+		Connection.execute("opdrachtgever/delete/" + sessionKey + "/" + id);
 	}
 
-	public static void deleteTaak(String sessionKey, Taak taak) throws MalformedURLException, IOException, WebserviceException {
-		Connection.execute("task/delete/" + sessionKey + "/" + taak.getID());
+	public static void deleteTaak(String sessionKey, int id) throws MalformedURLException, IOException, WebserviceException {
+		Connection.execute("task/delete/" + sessionKey + "/" + id);
 	}
 
 }

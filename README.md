@@ -20,3 +20,13 @@ TODO Client:
 	- Help tab? Eerste x openen, help dialog
 	- Event handlers (bv. list) combineren
 	test
+
+yolan:
+	dubbel klikken in eerste scherm om current project te setten
+	drag and drop functionaliteiten
+	klasse taak op lijn 65 staat er "Project name contains illegal characters"  moet dit niet task name zijn?7
+	login form: op enter duwen om aan te melden zou tof zijn
+	als er nen server error is sluit den dialog automatisch, iznogood
+
+gilliam:
+	bestanden zonder extensie exporteren gaat niet

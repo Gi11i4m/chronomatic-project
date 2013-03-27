@@ -21,7 +21,7 @@ public class InserterLocal {
 	private static int tijdspannesId = 0;				
 	
 	public  static int inputTijdSpanne(Tijdspanne tijdSpanne, int taakId) throws MalformedURLException, IOException, WebserviceException, JSONException {
-		tijdSpanne.setID(tijdspannesId++);	
+		tijdSpanne.setID(++tijdspannesId);	
 		
 		JSONObject jTijd = Converter.converteer(tijdSpanne,taakId);
 		
@@ -31,7 +31,7 @@ public class InserterLocal {
 	}
 
 	public static int inputProject( Project project, int opdrachtGeverId) throws MalformedURLException, IOException, WebserviceException, JSONException {
-        project.setId(projectId++);                
+        project.setId(++projectId);                
         
         JSONObject jProject = Converter.converteer(project);        
 		System.out.println(jProject);		
@@ -41,7 +41,7 @@ public class InserterLocal {
     }
 
 	public static int inputOpdrachtgever(Opdrachtgever opdrachtgever) throws JSONException, MalformedURLException, IOException, WebserviceException {            
-		opdrachtgever.setID(opdrachtgeverId++);
+		opdrachtgever.setID(++opdrachtgeverId);
 		
 		JSONObject jOpdrachtgever = Converter.converteer(opdrachtgever);
 					
@@ -51,7 +51,7 @@ public class InserterLocal {
 	}
 
 	public static int inputTaak(Taak taak, int projectID) throws MalformedURLException, IOException, WebserviceException, JSONException {
-		taak.setId(taakId++);					
+		taak.setId(++taakId);					
 		
 		JSONObject jTaak = Converter.converteer(taak, projectID);
 		

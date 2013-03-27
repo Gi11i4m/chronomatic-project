@@ -7,8 +7,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import be.artesis.timelog.view.*;
-
 public class LocalDatabaseWriter {
 	//hier aant troubleshooten. Het opslaan en opvragen van shit van begin tot eind door de lokale db
 	

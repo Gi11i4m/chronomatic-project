@@ -518,20 +518,24 @@ public class GUIForm extends javax.swing.JFrame {
 					boolean completed = taskCompletedJCheckBox.isSelected();
 					long startdate = taskStartDateChooser.getDate().getTime() / 1000;
 					long enddate = taskEndDateChooser.getDate().getTime() / 1000;
+					int projectId = UserInterface.getCurrentProject().getId();
 
 					if (tasksJList.getSelectedValue().equals(NEWTASKITEM)) {
 						createTask(name, startdate, enddate, comment, completed);
 					} else {
-						updateTask(name, startdate, enddate, comment, completed);
+						updateTask(name, startdate, enddate, comment, completed, projectId);
 					}
 				} catch (NullPointerException ex) {
 					ex.printStackTrace();
 					JOptionPane.showMessageDialog(GUIForm.this, "Please choose a valid date");
+				} catch (GUIException e1) {				
+					e1.printStackTrace();
+					JOptionPane.showMessageDialog(GUIForm.this, e1.getMessage());
 				} finally {
 					toggleButtonStates();
 					loadProjectInfo(projectsJList.getSelectedIndex());
 				}
-			}
+			}			
 		});
 		saveTaskJButton.setText("Save");
 		saveTaskJButton.setEnabled(false);
@@ -981,7 +985,7 @@ public class GUIForm extends javax.swing.JFrame {
 			UserInterface.updateProject(projectsJList.getSelectedIndex(), name, startdate, enddate, opdrachtgeverID);
 			JOptionPane.showMessageDialog(this, "Project edited!");
 			refreshProjectsList(projectsJList, homeProjectsJList);
-		} catch (DataInputException | IOException | WebserviceException | ParseException e) {
+		} catch (DataInputException | IOException | WebserviceException | ParseException | JSONException e) {
 			JOptionPane.showMessageDialog(this, e.getMessage());
 			e.printStackTrace();
 		}
@@ -1000,12 +1004,12 @@ public class GUIForm extends javax.swing.JFrame {
 	}
 
 	// Update existing task
-	private void updateTask(String name, long startdate, long enddate, String comment, boolean completed) {
+	private void updateTask(String name, long startdate, long enddate, String comment, boolean completed, int projectId) {
 		try {
-			UserInterface.updateTask(tasksJList.getSelectedIndex(), name, startdate, enddate, comment, completed);
+			UserInterface.updateTask(tasksJList.getSelectedIndex(), name, startdate, enddate, comment, completed, projectId);
 			JOptionPane.showMessageDialog(this, "Task edited!");
 			refreshTasksList(UserInterface.getCurrentProject(), tasksJList);
-		} catch (GUIException | DataInputException | ParseException | IOException | WebserviceException e) {
+		} catch (GUIException | DataInputException | ParseException | IOException | WebserviceException | JSONException e) {
 			JOptionPane.showMessageDialog(this, e.getMessage());
 			e.printStackTrace();
 		}
@@ -1040,7 +1044,7 @@ public class GUIForm extends javax.swing.JFrame {
 			UserInterface.updateClient(clientsJList.getSelectedIndex(), voornaam, voornaam, bedrijfsnaam, email, telefoonnummer);
 			JOptionPane.showMessageDialog(this, "Client edited!");
 			refreshClientsList(clientsJList);
-		} catch (DataInputException | IOException | WebserviceException e) {
+		} catch (DataInputException | IOException | WebserviceException | JSONException e) {
 			JOptionPane.showMessageDialog(this, e.getMessage());
 			e.printStackTrace();
 		}
@@ -1062,7 +1066,7 @@ public class GUIForm extends javax.swing.JFrame {
 						UserInterface.deleteProject((Project) projectsJList.getSelectedValue());
 						JOptionPane.showMessageDialog(this, "Project removed!");
 						refreshProjectsList(projectsJList, homeProjectsJList);
-					} catch (IOException | WebserviceException ex) {
+					} catch (IOException | WebserviceException | JSONException ex) {
 						ex.printStackTrace();
 						JOptionPane.showMessageDialog(this, ex.getMessage());
 					} finally {
@@ -1086,7 +1090,7 @@ public class GUIForm extends javax.swing.JFrame {
 				refreshTasksList(UserInterface.getCurrentProject(), tasksJList);
 				selectNewItem(tasksJList);
 				JOptionPane.showMessageDialog(this, "Task removed!");
-			} catch (GUIException | IOException | WebserviceException ex) {
+			} catch (GUIException | IOException | WebserviceException | JSONException ex) {
 				ex.printStackTrace();
 				JOptionPane.showMessageDialog(this, ex.getMessage());
 			} finally {
@@ -1107,7 +1111,7 @@ public class GUIForm extends javax.swing.JFrame {
 				toggleButtonStates();
 				selectNewItem(clientsJList);
 				JOptionPane.showMessageDialog(this, "Client removed!");
-			} catch (GUIException | IOException | WebserviceException ex) {
+			} catch (GUIException | IOException | WebserviceException | JSONException ex) {
 				ex.printStackTrace();
 				JOptionPane.showMessageDialog(this, ex.getMessage());
 			}
