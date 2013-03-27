@@ -408,7 +408,7 @@ public class GUIForm extends javax.swing.JFrame {
 		percentageCompleteJProgressBar.setToolTipText("Displays the percentage of completion of the project");
 		percentageCompleteJProgressBar.setStringPainted(true);
 		saveProjectJButton.addActionListener(new java.awt.event.ActionListener() {
-			public void actionPerformed(java.awt.event.ActionEvent evt) {
+			public void actionPerformed(java.awt.event.ActionEvent evt) { // FIXME code naar methode verplaatsen
 				try {
 					String name = projectNameJTextField.getText();
 					long startdate;
@@ -638,7 +638,7 @@ public class GUIForm extends javax.swing.JFrame {
 		clientsJPanel.setBackground(new Color(211, 211, 211));
 
 		clientsJLabel.setFont(new java.awt.Font("Tw Cen MT", 1, 14));
-		clientsJLabel.setForeground(new Color(70, 130, 180));
+		clientsJLabel.setForeground(Color.DARK_GRAY);
 		clientsJLabel.setText("Clients");
 
 		removeClientJButton.setText("Remove client");
@@ -763,7 +763,7 @@ public class GUIForm extends javax.swing.JFrame {
 		scheduleJPanel.setBackground(new Color(211, 211, 211));
 
 		scheduleJLabel.setFont(new java.awt.Font("Tw Cen MT", 1, 14));
-		scheduleJLabel.setForeground(new Color(70, 130, 180));
+		scheduleJLabel.setForeground(Color.DARK_GRAY);
 		scheduleJLabel.setText("Schedule");
 
 		contentJTabbedPane.addTab("", new javax.swing.ImageIcon(getClass().getResource("/be/artesis/timelog/gui/icons/CalendarNeonIcon.png")), scheduleJPanel, "Schedule");
@@ -1613,11 +1613,12 @@ public class GUIForm extends javax.swing.JFrame {
 			if (clientsJList.getSelectedValue().equals(NEWCLIENTITEM)) {
 				clearFieldsOnPanel(clientFieldsJPanel);
 				saveClientJButton.setText("Save [new]");
+				removeClientJButton.setEnabled(false);
 			} else {
 				loadClientInfo(clientsJList.getSelectedIndex());
 				saveClientJButton.setText("Save");
+				removeClientJButton.setEnabled(true);
 			}
-			toggleButtonStates();
 		}
 	}
 
@@ -1662,6 +1663,8 @@ public class GUIForm extends javax.swing.JFrame {
 		ingelogdJLabel.setForeground(Color.GREEN);
 		refreshProjectsList(projectsJList, homeProjectsJList);
 		refreshClientsList(clientsJList);
+		removeClientJButton.setEnabled(false);
+		removeTaskJButton.setEnabled(false);
 		refreshTree(exportJCheckBoxTree, UserInterface.getProjects());
 		loadUserInfo();
 		selectNewItem(projectsJList, tasksJList, clientsJList);
@@ -1746,8 +1749,6 @@ public class GUIForm extends javax.swing.JFrame {
 				clearFieldsOnPanel(taskFieldsJPanel);
 				saveTaskJButton.setText("Save [new]");
 				removeTaskJButton.setEnabled(false);
-			} else if (!(tasksJList.getSelectedValue() instanceof Taak)) {
-				JOptionPane.showMessageDialog(this, "Gelukt"); // FIXME
 			} else {
 				try {
 					loadTaskInfo(((JList) arg0.getSource()).getSelectedIndex());
