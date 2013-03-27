@@ -7,52 +7,43 @@ import org.json.*;
 
 public class JSONOverdrager
 {
-        public static JSONObject getGebruiker(String sessionKey) throws IOException, JSONException
-	{
+    public static JSONObject getGebruiker(String sessionKey) throws IOException, JSONException {
 	
-           JSONObject jObject = Connection.getObject("gebruiker/read/" + sessionKey);
-            //JSONObject jObject = makeConnection("gebruiker/read/" + sessionKey);
-            
+    	JSONObject jObject = Connection.getObject("gebruiker/read/" + sessionKey);
 		return jObject;
 	}
        
-        public static JSONObject[] getProjectenVanGebruiker(String sessionKey) throws IOException, JSONException
-	{
+    public static JSONObject[] getProjectenVanGebruiker(String sessionKey) throws IOException, JSONException {
 		return JArrayToJSONArrayArray(Connection.getArray("gebruiker/projecten/" + sessionKey ));		
 	}
 	
-	public static JSONObject[] getTakenVanProject(String sessionKey, int projectID) throws IOException, JSONException
-	{
+	public static JSONObject[] getTakenVanProject(String sessionKey, int projectID) throws IOException, JSONException {
 		return  JArrayToJSONArrayArray(Connection.getArray("project/tasks/" + sessionKey + "/" + projectID ));		
 	}               
 	
         
-        public static JSONObject[] getOpdrachtgeverVanGebruiker(String sessionKey) throws IOException, JSONException
-	{
-		return JArrayToJSONArrayArray(Connection.getArray("gebruiker/opdrachtgevers/" + sessionKey ));		
+	public static JSONObject[] getOpdrachtgeverVanGebruiker(String sessionKey) throws IOException, JSONException {
+		return JArrayToJSONArrayArray(Connection.getArray("gebruiker/opdrachtgevers/" + sessionKey ));
 	}
 	
-        public static JSONObject[] getTijdspannesVanTaak(String sessionKey, int taakID, boolean pauze) throws IOException, JSONException
-	{
-                return JArrayToJSONArrayArray(Connection.getArray("task/tijdspannes/" + sessionKey + "/" + taakID + "/" + pauze ));		
+    public static JSONObject[] getTijdspannesVanTaak(String sessionKey, int taakID, boolean pauze) throws IOException, JSONException {
+    	return JArrayToJSONArrayArray(Connection.getArray("task/tijdspannes/" + sessionKey + "/" + taakID + "/" + pauze ));		
 	}        	
 	
-        private static JSONObject[] JArrayToJSONArrayArray(JSONArray jArray){
-            
-            JSONObject[] JSONArray = new JSONObject[jArray.length()];
-            for(int i=0;i<jArray.length();i++)
-		 {
-                try {
-                    JSONArray[i] = jArray.getJSONObject(i);
-                } catch (JSONException ex) {
-                    Logger.getLogger(JSONOverdrager.class.getName()).log(Level.SEVERE, null, ex);
-                }
-		 }
-            
-            
-            return JSONArray;
-        
+    private static JSONObject[] JArrayToJSONArrayArray(JSONArray jArray) {
+    	JSONObject[] JSONArray = new JSONObject[jArray.length()];
+        for(int i=0;i<jArray.length();i++) {
+            try {
+                JSONArray[i] = jArray.getJSONObject(i);
+            } catch (JSONException ex) {
+                Logger.getLogger(JSONOverdrager.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
+        return JSONArray;
+    }
+        
+        
+        
          /*
 	public static JSONObject getProject(String sessionKey, int projectID)
 	{		

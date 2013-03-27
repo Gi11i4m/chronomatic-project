@@ -17,11 +17,7 @@ public class CreatorFromJSON
         public static Gebruiker createGebruiker(String sessionKey) throws JSONException, IOException {
 		JSONObject Jgebruiker = JSONOverdrager.getGebruiker(sessionKey);
 
-		Gebruiker gebruiker = null;
-
-
-			gebruiker = new Gebruiker(Jgebruiker.getString("naam"), Jgebruiker.getString("voornaam"), Jgebruiker.getString("gebruikersnaam"), Jgebruiker.getString("email"), Jgebruiker.getInt("ID"));
-
+		Gebruiker gebruiker = new Gebruiker(Jgebruiker.getString("naam"), Jgebruiker.getString("voornaam"), Jgebruiker.getString("gebruikersnaam"), Jgebruiker.getString("email"), Jgebruiker.getInt("ID"));
 
 		return gebruiker;
 
@@ -29,21 +25,15 @@ public class CreatorFromJSON
 
 	public static Project[] createProjecten(String sessionKey) throws JSONException, IOException {
             //een project maken vanuit de database
-                JSONObject[] Jproject = JSONOverdrager.getProjectenVanGebruiker(sessionKey);
+		JSONObject[] Jproject = JSONOverdrager.getProjectenVanGebruiker(sessionKey);
 
 		Project[] project = new Project[Jproject.length];
 
-
-		//Project project =  new Project(Jproject.getString("naam"),Jproject.getString("startdatum"),Jproject.getString("einddatum"))
-
-
-                        int i = 0;
-                    for(JSONObject Jobject: Jproject)
-                        {
-                        // tijdelijk in comment om programma te kunnen runnen
-
-                        project[i++] =  new Project(Jobject.getString("naam"), Jobject.getInt("opdrachtgevers_ID"), Jobject.getLong("start_datum"),Jobject.getLong("eind_datum"), Jobject.getInt("ID"));
-                    	}
+        int i = 0;
+        for(JSONObject Jobject: Jproject)
+        {
+        	project[i++] =  new Project(Jobject.getString("naam"), Jobject.getInt("opdrachtgevers_ID"), Jobject.getLong("start_datum"),Jobject.getLong("eind_datum"), Jobject.getInt("ID"));
+    	}
 
 		return project;
 	}
@@ -55,23 +45,21 @@ public class CreatorFromJSON
 
 		Opdrachtgever[] opdrachtgever = new Opdrachtgever[Jopdrachtgever.length];
 
-                int i = 0;
-                for (JSONObject Jobject : Jopdrachtgever){
-                        opdrachtgever[i++] = new Opdrachtgever(Jobject.getString("naam"),Jobject.getString("voornaam"),Jobject.getString("bedrijfsnaam"),Jobject.getString("email"),Jobject.getString("telefoonnummer"),Jobject.getInt("ID"));
-                 }
-                return opdrachtgever;
+        int i = 0;
+        for (JSONObject Jobject : Jopdrachtgever){
+                opdrachtgever[i++] = new Opdrachtgever(Jobject.getString("naam"),Jobject.getString("voornaam"),Jobject.getString("bedrijfsnaam"),Jobject.getString("email"),Jobject.getString("telefoonnummer"),Jobject.getInt("ID"));
+         }
+        return opdrachtgever;
 	}
 
 	public static Taak[] createTaken(String sessionKey,int projectID) throws JSONException, IOException {
 		JSONObject Jtaken[] = JSONOverdrager.getTakenVanProject(sessionKey,projectID);
 
 		Taak[] taken = new Taak[Jtaken.length];
-
-
-                    int i = 0;
-                    for (JSONObject Jobject : Jtaken){
+		int i = 0;
+		for (JSONObject Jobject : Jtaken){
 			taken[i++] = new Taak(Jobject.getString("naam"), Jobject.getLong("begin_tijd"), Jobject.getLong("verwacht_eind"), Jobject.getString("commentaar"),Jobject.getInt("ID"));
-                    }
+		}
 
 
 		return taken;
@@ -83,12 +71,10 @@ public class CreatorFromJSON
 
 		Tijdspanne[] tijdspannes = new Tijdspanne[Jtijdspannes.length];
 
-
-                        int i = 0;
-                        for (JSONObject Jobject : Jtijdspannes){
-                            tijdspannes[i++] = new Tijdspanne(Jobject.getLong("begin_uur"),Jobject.getLong("eind_uur"),Jobject.getInt("ID"),Jobject.getBoolean("pauze"));
-                        }
-
+        int i = 0;
+        for (JSONObject Jobject : Jtijdspannes){
+            tijdspannes[i++] = new Tijdspanne(Jobject.getLong("begin_uur"),Jobject.getLong("eind_uur"),Jobject.getInt("ID"),Jobject.getBoolean("pauze"));
+        }
 
 		return tijdspannes;
 	}

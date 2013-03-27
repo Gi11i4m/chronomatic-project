@@ -49,7 +49,9 @@ public class NewUserPanel extends javax.swing.JPanel {
         passwordJPasswordField = new javax.swing.JPasswordField();
         passwordRepeatJPasswordField = new javax.swing.JPasswordField();
         passwordStrengthJLabel = new javax.swing.JLabel("");
-
+        goBackJButton = new javax.swing.JButton();
+        
+        goBackJButton.setText("Ga terug");
         firstNameJLabel.setText("Voornaam");
         nameJLabel.setText("Naam");
         usernameJLabel.setText("Gebruikersnaam");
@@ -60,6 +62,13 @@ public class NewUserPanel extends javax.swing.JPanel {
                 registerJButtonClicked(evt);
             }
         });
+        
+        goBackJButton.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                goBackJButtonClicked(evt);
+            }
+        });
+
 
         passwordJLabel.setText("Paswoord");
         passwordRepeatJLabel.setText("Herhaal paswoord");
@@ -84,22 +93,28 @@ public class NewUserPanel extends javax.swing.JPanel {
         this.add(passwordJPasswordField);
         this.add(passwordRepeatJPasswordField);
         this.add(passwordStrengthJLabel);
-        
+        this.add(goBackJButton);
+        		
         this.firstNameJLabel.setBounds(48,74,112,25);
-        this.nameJLabel.setBounds(48,179,112,25);
-        this.usernameJLabel.setBounds(370,74,112,25);
-        this.emailJTextField.setBounds(48,331,200,25);
-        this.emailJLabel.setBounds(48,283,112,25);
-        this.usernameJTextField.setBounds(370,112,200,25);
-        this.nameJTextField.setBounds(48,217,200,25);
         this.firstNameJTextField.setBounds(48,112,200,25);
-        this.registerJButton.setBounds(48,436,200,25);
-        this.passwordJLabel.setBounds(370,179,112,25);
+        this.nameJLabel.setBounds(370,74,112,25);
+        this.nameJTextField.setBounds(370,112,200,25);
+        this.usernameJLabel.setBounds(48,179,112,25);
+        this.usernameJTextField.setBounds(48,217,200,25);
+        this.emailJLabel.setBounds(370,179,112,25);
+        this.emailJTextField.setBounds(370,217,200,25);
+        this.passwordJLabel.setBounds(48,283,112,25);
+        this.passwordJPasswordField.setBounds(48,321,200,25);
         this.passwordRepeatJLabel.setBounds(370,283,112,25);
-        this.passwordJPasswordField.setBounds(370,217,200,25);
-        this.passwordRepeatJPasswordField.setBounds(370,331,200,25);
+        this.passwordRepeatJPasswordField.setBounds(370,321,200,25);
         this.passwordStrengthJLabel.setBounds(458,397,112,25);
-        setFocusTraversalPolicy(new FocusTraversalOnArray(new Component[]{firstNameJTextField, nameJTextField, emailJTextField, usernameJTextField, passwordJPasswordField, registerJButton, passwordRepeatJPasswordField}));
+        this.goBackJButton.setBounds(48,436,100,25);
+        this.registerJButton.setBounds(370,436,100,25);
+        this.setFocusTraversalPolicy(new FocusTraversalOnArray(new Component[]{firstNameJTextField, nameJTextField, emailJTextField, usernameJTextField, passwordJPasswordField, registerJButton, passwordRepeatJPasswordField}));
+    }
+    
+    private void goBackJButtonClicked(java.awt.event.MouseEvent evt) {
+    	parent.displayTab("BASISPANEL");
     }
 
     private void registerJButtonClicked(java.awt.event.MouseEvent evt) {
@@ -162,4 +177,5 @@ public class NewUserPanel extends javax.swing.JPanel {
     private javax.swing.JButton registerJButton;
     private javax.swing.JLabel usernameJLabel;
     private javax.swing.JTextField usernameJTextField;
+    private javax.swing.JButton goBackJButton;
 }
