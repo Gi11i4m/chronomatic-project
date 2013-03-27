@@ -1017,10 +1017,44 @@ public class GUIForm extends javax.swing.JFrame {
 				logout();
 			}
 		});
+		
+		syncButton = new JButton("Sync");
 
 		javax.swing.GroupLayout headerJPanelLayout = new javax.swing.GroupLayout(headerJPanel);
-		headerJPanelLayout.setHorizontalGroup(headerJPanelLayout.createParallelGroup(Alignment.TRAILING).addGroup(headerJPanelLayout.createSequentialGroup().addContainerGap().addGroup(headerJPanelLayout.createParallelGroup(Alignment.LEADING, false).addComponent(currentProjectJLabel, GroupLayout.DEFAULT_SIZE, 201, Short.MAX_VALUE).addComponent(ingelogdJLabel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)).addPreferredGap(ComponentPlacement.RELATED).addComponent(logoutJButton).addPreferredGap(ComponentPlacement.RELATED, 293, Short.MAX_VALUE).addComponent(titleLabel).addGap(18).addComponent(clockJLabel).addGap(6)));
-		headerJPanelLayout.setVerticalGroup(headerJPanelLayout.createParallelGroup(Alignment.LEADING).addGroup(headerJPanelLayout.createSequentialGroup().addContainerGap().addGroup(headerJPanelLayout.createParallelGroup(Alignment.LEADING).addComponent(titleLabel, GroupLayout.DEFAULT_SIZE, 63, Short.MAX_VALUE).addComponent(clockJLabel, Alignment.TRAILING).addGroup(headerJPanelLayout.createSequentialGroup().addGroup(headerJPanelLayout.createParallelGroup(Alignment.BASELINE).addComponent(ingelogdJLabel).addComponent(logoutJButton, GroupLayout.PREFERRED_SIZE, 22, GroupLayout.PREFERRED_SIZE)).addPreferredGap(ComponentPlacement.UNRELATED).addComponent(currentProjectJLabel).addGap(0, 9, Short.MAX_VALUE))).addContainerGap()));
+		headerJPanelLayout.setHorizontalGroup(
+			headerJPanelLayout.createParallelGroup(Alignment.TRAILING)
+				.addGroup(headerJPanelLayout.createSequentialGroup()
+					.addContainerGap()
+					.addGroup(headerJPanelLayout.createParallelGroup(Alignment.LEADING, false)
+						.addComponent(currentProjectJLabel, GroupLayout.DEFAULT_SIZE, 201, Short.MAX_VALUE)
+						.addComponent(ingelogdJLabel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addComponent(logoutJButton)
+					.addPreferredGap(ComponentPlacement.RELATED, 215, Short.MAX_VALUE)
+					.addComponent(syncButton, GroupLayout.PREFERRED_SIZE, 68, GroupLayout.PREFERRED_SIZE)
+					.addPreferredGap(ComponentPlacement.UNRELATED)
+					.addComponent(titleLabel)
+					.addGap(18)
+					.addComponent(clockJLabel)
+					.addGap(6))
+		);
+		headerJPanelLayout.setVerticalGroup(
+			headerJPanelLayout.createParallelGroup(Alignment.LEADING)
+				.addGroup(headerJPanelLayout.createSequentialGroup()
+					.addContainerGap()
+					.addGroup(headerJPanelLayout.createParallelGroup(Alignment.LEADING)
+						.addComponent(titleLabel, GroupLayout.DEFAULT_SIZE, 63, Short.MAX_VALUE)
+						.addComponent(clockJLabel, Alignment.TRAILING)
+						.addGroup(headerJPanelLayout.createSequentialGroup()
+							.addGroup(headerJPanelLayout.createParallelGroup(Alignment.BASELINE)
+								.addComponent(ingelogdJLabel)
+								.addComponent(logoutJButton, GroupLayout.PREFERRED_SIZE, 22, GroupLayout.PREFERRED_SIZE)
+								.addComponent(syncButton))
+							.addPreferredGap(ComponentPlacement.UNRELATED)
+							.addComponent(currentProjectJLabel)
+							.addGap(0, 10, Short.MAX_VALUE)))
+					.addContainerGap())
+		);
 		headerJPanel.setLayout(headerJPanelLayout);
 
 		clockJLabel.getAccessibleContext().setAccessibleName("iconJLabel");
@@ -1868,4 +1902,5 @@ public class GUIForm extends javax.swing.JFrame {
 	private JButton importToProjectJButton;
 	private JPanel projectStatusFieldsJPanel;
 	private JPanel taskStatusFieldsJPanel;
+	private JButton syncButton;
 }

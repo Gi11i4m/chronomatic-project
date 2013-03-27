@@ -27,7 +27,6 @@ class ProjectCellRenderer extends JLabel implements ListCellRenderer {
 		JLabel renderer = (JLabel) defaultRenderer.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
 		Font f = list.getFont();
 		System.out.println(value);
-		System.out.println(value.getClass());
 		if (String.class.equals(value.getClass())) {
 			renderer.setFont(new Font(f.getName(),f.getStyle() | Font.ITALIC, f.getSize()));
 		} else {
