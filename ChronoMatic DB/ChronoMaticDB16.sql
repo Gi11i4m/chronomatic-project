@@ -156,7 +156,7 @@ SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
 -- -----------------------------------------------------
 START TRANSACTION;
 USE `chrono_matic`;
-INSERT INTO `chrono_matic`.`gebruikers` (`ID`, `naam`, `voornaam`, `gebruikersnaam`, `passwoord`, `email`, `telefoonnummer`, `gebruikerscol`) VALUES (1001, 'Possemiers', 'Philippe', 'p', 'p', 'philippe.possemiers@artesis.be', '0903696969', NULL);
+INSERT INTO `chrono_matic`.`gebruikers` (`ID`, `naam`, `voornaam`, `gebruikersnaam`, `passwoord`, `email`, `telefoonnummer`, `gebruikerscol`) VALUES (1001, 'Possemiers', 'Philippe', 'p', '4ba7e14b8176fb8163d903fbca711799', 'philippe.possemiers@artesis.be', '0903696969', NULL);
 INSERT INTO `chrono_matic`.`gebruikers` (`ID`, `naam`, `voornaam`, `gebruikersnaam`, `passwoord`, `email`, `telefoonnummer`, `gebruikerscol`) VALUES (1002, 'Naam1', 'Voornaam1', 'leeg', 'leeg', 'Email1@email.email', '0000000000', NULL);
 
 COMMIT;
@@ -166,12 +166,12 @@ COMMIT;
 -- -----------------------------------------------------
 START TRANSACTION;
 USE `chrono_matic`;
-INSERT INTO `chrono_matic`.`opdrachtgevers` (`ID`, `bedrijfsnaam`, `naam`, `voornaam`, `email`, `telefoonnummer`, `gebruikers_ID`) VALUES (1001, 'Apple', 'Jobs', 'Steve', 'steve@apple.com', '555066554', 1);
-INSERT INTO `chrono_matic`.`opdrachtgevers` (`ID`, `bedrijfsnaam`, `naam`, `voornaam`, `email`, `telefoonnummer`, `gebruikers_ID`) VALUES (1002, 'Microsoft', 'Grenouille', 'Jean-Claude', 'jean@microsoft.com', '555648524', 1);
-INSERT INTO `chrono_matic`.`opdrachtgevers` (`ID`, `bedrijfsnaam`, `naam`, `voornaam`, `email`, `telefoonnummer`, `gebruikers_ID`) VALUES (1003, 'Google', 'Uitdebroek', 'Piet', 'piet@gmail.com', '000045454', 1);
-INSERT INTO `chrono_matic`.`opdrachtgevers` (`ID`, `bedrijfsnaam`, `naam`, `voornaam`, `email`, `telefoonnummer`, `gebruikers_ID`) VALUES (1004, 'Samsung', 'Hiruyashi', 'Ntongo', 'ntongo@samsung.com', '090369696', 1);
-INSERT INTO `chrono_matic`.`opdrachtgevers` (`ID`, `bedrijfsnaam`, `naam`, `voornaam`, `email`, `telefoonnummer`, `gebruikers_ID`) VALUES (1005, 'Philips', 'Philips', 'Gerard', 'gerard@philips.com', '111111111', 1);
-INSERT INTO `chrono_matic`.`opdrachtgevers` (`ID`, `bedrijfsnaam`, `naam`, `voornaam`, `email`, `telefoonnummer`, `gebruikers_ID`) VALUES (1006, 'Sony', 'Chubachi', 'Ryoji', 'baas@sony.com', '99988741112', 1);
+INSERT INTO `chrono_matic`.`opdrachtgevers` (`ID`, `bedrijfsnaam`, `naam`, `voornaam`, `email`, `telefoonnummer`, `gebruikers_ID`) VALUES (1001, 'Apple', 'Jobs', 'Steve', 'steve@apple.com', '555066554', 1001);
+INSERT INTO `chrono_matic`.`opdrachtgevers` (`ID`, `bedrijfsnaam`, `naam`, `voornaam`, `email`, `telefoonnummer`, `gebruikers_ID`) VALUES (1002, 'Microsoft', 'Grenouille', 'Jean-Claude', 'jean@microsoft.com', '555648524', 1001);
+INSERT INTO `chrono_matic`.`opdrachtgevers` (`ID`, `bedrijfsnaam`, `naam`, `voornaam`, `email`, `telefoonnummer`, `gebruikers_ID`) VALUES (1003, 'Google', 'Uitdebroek', 'Piet', 'piet@gmail.com', '000045454', 1001);
+INSERT INTO `chrono_matic`.`opdrachtgevers` (`ID`, `bedrijfsnaam`, `naam`, `voornaam`, `email`, `telefoonnummer`, `gebruikers_ID`) VALUES (1004, 'Samsung', 'Hiruyashi', 'Ntongo', 'ntongo@samsung.com', '090369696', 1001);
+INSERT INTO `chrono_matic`.`opdrachtgevers` (`ID`, `bedrijfsnaam`, `naam`, `voornaam`, `email`, `telefoonnummer`, `gebruikers_ID`) VALUES (1005, 'Philips', 'Philips', 'Gerard', 'gerard@philips.com', '111111111', 1001);
+INSERT INTO `chrono_matic`.`opdrachtgevers` (`ID`, `bedrijfsnaam`, `naam`, `voornaam`, `email`, `telefoonnummer`, `gebruikers_ID`) VALUES (1006, 'Sony', 'Chubachi', 'Ryoji', 'baas@sony.com', '99988741112', 1001);
 
 COMMIT;
 
