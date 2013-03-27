@@ -106,13 +106,16 @@ public class GUIForm extends javax.swing.JFrame {
 	private void initComponents() {
 		creatingProject = false;
 		contentJTabbedPane = new javax.swing.JTabbedPane();
+		contentJTabbedPane.setForeground(Color.WHITE);
 		homeJPanel = new javax.swing.JPanel();
 		homeJLabel = new javax.swing.JLabel();
 		homeJLabel.setBounds(10, 11, 62, 16);
 		workJButton = new javax.swing.JButton();
+		workJButton.setToolTipText("Open a work dialog and start timing your work");
 		workJButton.setBounds(10, 11, 675, 64);
 		projectsJPanel = new javax.swing.JPanel();
 		projectsJLabel = new javax.swing.JLabel();
+		projectsJLabel.setBackground(new Color(70, 130, 180));
 		projectsJLabel.setBounds(10, 11, 204, 16);
 		jScrollPane1 = new javax.swing.JScrollPane();
 		jScrollPane1.setBounds(10, 33, 204, 336);
@@ -133,7 +136,6 @@ public class GUIForm extends javax.swing.JFrame {
 		scheduleJLabel = new javax.swing.JLabel();
 		scheduleJLabel.setBounds(10, 11, 66, 19);
 		optionsJPanel = new javax.swing.JPanel();
-		settingsJLabel = new javax.swing.JLabel();
 		headerJPanel = new javax.swing.JPanel();
 		titleLabel = new javax.swing.JLabel();
 		ingelogdJLabel = new javax.swing.JLabel();
@@ -143,7 +145,7 @@ public class GUIForm extends javax.swing.JFrame {
 		setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 		setTitle("Time Management System");
 		setBackground(new java.awt.Color(51, 51, 51));
-		this.getContentPane().setBackground(SystemColor.inactiveCaption);
+		this.getContentPane().setBackground(new Color(70, 130, 180));
 		setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
 		setForeground(new java.awt.Color(51, 51, 51));
 		setIconImages(null);
@@ -156,24 +158,24 @@ public class GUIForm extends javax.swing.JFrame {
 			}
 		});
 
-		contentJTabbedPane.setBackground(SystemColor.activeCaption);
+		contentJTabbedPane.setBackground(Color.DARK_GRAY);
 		contentJTabbedPane.setTabPlacement(javax.swing.JTabbedPane.LEFT);
 		contentJTabbedPane.setName("tabContainer");
 
-		homeJPanel.setBackground(new Color(255, 255, 255));
+		homeJPanel.setBackground(new Color(211, 211, 211));
 		homeJPanel.setForeground(new java.awt.Color(65, 152, 134));
 
 		homeJLabel.setFont(new java.awt.Font("Tw Cen MT", 1, 14));
 		homeJLabel.setForeground(new java.awt.Color(255, 255, 255));
 		homeJLabel.setText("Home");
 
-		workJButton.setBackground(new Color(30, 144, 255));
+		workJButton.setBackground(Color.DARK_GRAY);
 		workJButton.setFont(new java.awt.Font("Tahoma", 1, 18));
 		workJButton.setForeground(new java.awt.Color(204, 204, 204));
 		workJButton.setText("Work");
 		workJButton.addMouseListener(new java.awt.event.MouseAdapter() {
 			public void mouseClicked(java.awt.event.MouseEvent evt) {
-				workClicked(evt);
+				openWorkDialog();
 			}
 		});
 
@@ -183,7 +185,7 @@ public class GUIForm extends javax.swing.JFrame {
 		homeJPanel.add(homeJLabel);
 
 		homeFieldsJPanel = new JPanel();
-		homeFieldsJPanel.setBackground(new Color(30, 144, 255));
+		homeFieldsJPanel.setBackground(Color.DARK_GRAY);
 		homeFieldsJPanel.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
 		homeFieldsJPanel.setBounds(10, 86, 352, 354);
 		homeJPanel.add(homeFieldsJPanel);
@@ -243,10 +245,10 @@ public class GUIForm extends javax.swing.JFrame {
 		homeTasksJList.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
 		scrollPane_1.setViewportView(homeTasksJList);
 
-		projectsJPanel.setBackground(Color.WHITE);
+		projectsJPanel.setBackground(new Color(211, 211, 211));
 
 		projectsJLabel.setFont(new java.awt.Font("Tw Cen MT", 1, 14));
-		projectsJLabel.setForeground(Color.CYAN);
+		projectsJLabel.setForeground(Color.DARK_GRAY);
 		projectsJLabel.setText("Projects");
 
 		setCurrentProjectJButton.setText("Set as current project");
@@ -313,7 +315,7 @@ public class GUIForm extends javax.swing.JFrame {
 
 		projectFieldsJPanel = new JPanel();
 		projectFieldsJPanel.setBorder(null);
-		projectFieldsJPanel.setBackground(Color.WHITE);
+		projectFieldsJPanel.setBackground(new Color(211, 211, 211));
 		projectFieldsJPanel.setBounds(224, 33, 450, 407);
 		projectsJPanel.add(projectFieldsJPanel);
 		projectFieldsJPanel.setLayout(null);
@@ -321,7 +323,7 @@ public class GUIForm extends javax.swing.JFrame {
 		projectEditFieldsJPanel = new JPanel();
 		projectEditFieldsJPanel.setBounds(112, 0, 338, 175);
 		projectFieldsJPanel.add(projectEditFieldsJPanel);
-		projectEditFieldsJPanel.setBackground(new Color(30, 144, 255));
+		projectEditFieldsJPanel.setBackground(Color.DARK_GRAY);
 		projectEditFieldsJPanel.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
 		projectEditFieldsJPanel.setLayout(new FormLayout(new ColumnSpec[] { FormFactory.UNRELATED_GAP_COLSPEC, ColumnSpec.decode("65px"), FormFactory.LABEL_COMPONENT_GAP_COLSPEC, ColumnSpec.decode("max(53dlu;default):grow"), FormFactory.RELATED_GAP_COLSPEC, ColumnSpec.decode("123px"), FormFactory.RELATED_GAP_COLSPEC, FormFactory.DEFAULT_COLSPEC, }, new RowSpec[] { FormFactory.UNRELATED_GAP_ROWSPEC, RowSpec.decode("20px"), FormFactory.LINE_GAP_ROWSPEC, FormFactory.PREF_ROWSPEC, FormFactory.LINE_GAP_ROWSPEC, FormFactory.PREF_ROWSPEC, FormFactory.UNRELATED_GAP_ROWSPEC, RowSpec.decode("20px"), FormFactory.LINE_GAP_ROWSPEC, RowSpec.decode("21px"), RowSpec.decode("23px"), }));
 		namecompJLabel = new javax.swing.JLabel();
@@ -436,10 +438,10 @@ public class GUIForm extends javax.swing.JFrame {
 			}
 		});
 
-		tasksJPanel.setBackground(Color.WHITE);
+		tasksJPanel.setBackground(new Color(211, 211, 211));
 
 		tasksJLabel.setFont(new java.awt.Font("Tw Cen MT", 1, 14));
-		tasksJLabel.setForeground(Color.CYAN);
+		tasksJLabel.setForeground(Color.DARK_GRAY);
 		tasksJLabel.setText("Tasks");
 
 		removeTaskJButton.setText("Remove task");
@@ -478,7 +480,7 @@ public class GUIForm extends javax.swing.JFrame {
 
 		taskFieldsJPanel = new JPanel();
 		taskFieldsJPanel.setBorder(null);
-		taskFieldsJPanel.setBackground(Color.WHITE);
+		taskFieldsJPanel.setBackground(new Color(211, 211, 211));
 		taskFieldsJPanel.setBounds(284, 40, 401, 400);
 		tasksJPanel.add(taskFieldsJPanel);
 		taskFieldsJPanel.setLayout(null);
@@ -487,7 +489,7 @@ public class GUIForm extends javax.swing.JFrame {
 		taskEditFieldsJPanel.setBounds(0, 0, 399, 219);
 		taskFieldsJPanel.add(taskEditFieldsJPanel);
 		taskEditFieldsJPanel.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
-		taskEditFieldsJPanel.setBackground(new Color(30, 144, 255));
+		taskEditFieldsJPanel.setBackground(Color.DARK_GRAY);
 		taskEditFieldsJPanel.setLayout(new FormLayout(new ColumnSpec[] { FormFactory.UNRELATED_GAP_COLSPEC, ColumnSpec.decode("56px"), FormFactory.UNRELATED_GAP_COLSPEC, ColumnSpec.decode("1px"), FormFactory.LABEL_COMPONENT_GAP_COLSPEC, ColumnSpec.decode("110px:grow"), FormFactory.DEFAULT_COLSPEC, FormFactory.RELATED_GAP_COLSPEC, ColumnSpec.decode("55px"), ColumnSpec.decode("51px"), FormFactory.RELATED_GAP_COLSPEC, ColumnSpec.decode("max(27dlu;default)"), FormFactory.RELATED_GAP_COLSPEC, ColumnSpec.decode("max(15dlu;default)"), }, new RowSpec[] { FormFactory.UNRELATED_GAP_ROWSPEC, RowSpec.decode("20px"), FormFactory.RELATED_GAP_ROWSPEC, RowSpec.decode("20px:grow"), FormFactory.RELATED_GAP_ROWSPEC, RowSpec.decode("20px:grow"), RowSpec.decode("38px"), RowSpec.decode("51px"), FormFactory.UNRELATED_GAP_ROWSPEC, RowSpec.decode("51px"), FormFactory.RELATED_GAP_ROWSPEC, RowSpec.decode("37px"), FormFactory.UNRELATED_GAP_ROWSPEC, RowSpec.decode("23px"), FormFactory.UNRELATED_GAP_ROWSPEC, FormFactory.DEFAULT_ROWSPEC, FormFactory.UNRELATED_GAP_ROWSPEC, RowSpec.decode("41px"), }));
 
 		label_5 = new JLabel();
@@ -622,14 +624,15 @@ public class GUIForm extends javax.swing.JFrame {
 		taskTotalPauseJTextField.setEditable(false);
 		taskTotalPauseJTextField.setColumns(10);
 		clientsJPanel = new javax.swing.JPanel();
+		clientsJPanel.setForeground(new Color(211, 211, 211));
 		clientsJLabel = new javax.swing.JLabel();
 		jScrollPane5 = new javax.swing.JScrollPane();
 		removeClientJButton = new javax.swing.JButton();
 
-		clientsJPanel.setBackground(Color.WHITE);
+		clientsJPanel.setBackground(new Color(211, 211, 211));
 
 		clientsJLabel.setFont(new java.awt.Font("Tw Cen MT", 1, 14));
-		clientsJLabel.setForeground(Color.CYAN);
+		clientsJLabel.setForeground(new Color(70, 130, 180));
 		clientsJLabel.setText("Clients");
 
 		removeClientJButton.setText("Remove client");
@@ -642,7 +645,7 @@ public class GUIForm extends javax.swing.JFrame {
 
 		clientFieldsJPanel = new JPanel();
 		clientFieldsJPanel.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
-		clientFieldsJPanel.setBackground(new Color(30, 144, 255));
+		clientFieldsJPanel.setBackground(Color.DARK_GRAY);
 
 		javax.swing.GroupLayout clientsJPanelLayout = new javax.swing.GroupLayout(clientsJPanel);
 		clientsJPanelLayout.setHorizontalGroup(clientsJPanelLayout.createParallelGroup(Alignment.LEADING).addGroup(clientsJPanelLayout.createSequentialGroup().addContainerGap().addGroup(clientsJPanelLayout.createParallelGroup(Alignment.LEADING).addGroup(clientsJPanelLayout.createSequentialGroup().addGroup(clientsJPanelLayout.createParallelGroup(Alignment.LEADING).addComponent(removeClientJButton).addComponent(jScrollPane5, GroupLayout.PREFERRED_SIZE, 245, GroupLayout.PREFERRED_SIZE)).addPreferredGap(ComponentPlacement.RELATED, 95, Short.MAX_VALUE).addComponent(clientFieldsJPanel, GroupLayout.PREFERRED_SIZE, 324, GroupLayout.PREFERRED_SIZE)).addComponent(clientsJLabel)).addContainerGap()));
@@ -751,10 +754,10 @@ public class GUIForm extends javax.swing.JFrame {
 
 		contentJTabbedPane.addTab("", new javax.swing.ImageIcon(getClass().getResource("/be/artesis/timelog/gui/icons/ClientsNeonIcon.png")), clientsJPanel, "Clients");
 
-		scheduleJPanel.setBackground(Color.WHITE);
+		scheduleJPanel.setBackground(new Color(211, 211, 211));
 
 		scheduleJLabel.setFont(new java.awt.Font("Tw Cen MT", 1, 14));
-		scheduleJLabel.setForeground(Color.CYAN);
+		scheduleJLabel.setForeground(new Color(70, 130, 180));
 		scheduleJLabel.setText("Schedule");
 
 		contentJTabbedPane.addTab("", new javax.swing.ImageIcon(getClass().getResource("/be/artesis/timelog/gui/icons/CalendarNeonIcon.png")), scheduleJPanel, "Schedule");
@@ -762,7 +765,7 @@ public class GUIForm extends javax.swing.JFrame {
 		scheduleJPanel.add(scheduleJLabel);
 
 		importExportJPanel = new JPanel();
-		importExportJPanel.setBackground(Color.WHITE);
+		importExportJPanel.setBackground(new Color(211, 211, 211));
 		contentJTabbedPane.addTab("", new ImageIcon(GUIForm.class.getResource("/be/artesis/timelog/gui/icons/ImportExportNeonIcon.png")), importExportJPanel, "Import / Export");
 		importExportJPanel.setLayout(null);
 
@@ -774,7 +777,7 @@ public class GUIForm extends javax.swing.JFrame {
 		importExportJPanel.add(importExportTabbedPane);
 
 		exportJPanel = new JPanel();
-		exportJPanel.setBackground(SystemColor.textHighlight);
+		exportJPanel.setBackground(Color.DARK_GRAY);
 		exportJPanel.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
 		importExportTabbedPane.addTab("Export", null, exportJPanel, "Export your tasks here");
 		importExportTabbedPane.setForegroundAt(0, Color.CYAN);
@@ -802,7 +805,7 @@ public class GUIForm extends javax.swing.JFrame {
 		importExportTabbedPane.setBackgroundAt(0, new Color(30, 144, 255));
 
 		importJPanel = new JPanel();
-		importJPanel.setBackground(new Color(30, 144, 255));
+		importJPanel.setBackground(Color.DARK_GRAY);
 		importJPanel.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
 		importExportTabbedPane.addTab("Import", null, importJPanel, "Import tasks here");
 		importExportTabbedPane.setForegroundAt(1, Color.CYAN);
@@ -844,21 +847,17 @@ public class GUIForm extends javax.swing.JFrame {
 		importToProjectJButton.setBounds(280, 333, 181, 23);
 		importJPanel.add(importToProjectJButton);
 
-		optionsJPanel.setBackground(Color.WHITE);
-
-		settingsJLabel.setFont(new java.awt.Font("Tw Cen MT", 1, 14));
-		settingsJLabel.setForeground(new java.awt.Color(255, 255, 255));
-		settingsJLabel.setText("Settings");
+		optionsJPanel.setBackground(new Color(211, 211, 211));
 
 		settingsJTabbedPane = new JTabbedPane(JTabbedPane.TOP);
 		settingsJTabbedPane.setBackground(Color.GRAY);
 
 		javax.swing.GroupLayout optionsJPanelLayout = new javax.swing.GroupLayout(optionsJPanel);
-		optionsJPanelLayout.setHorizontalGroup(optionsJPanelLayout.createParallelGroup(Alignment.LEADING).addGroup(optionsJPanelLayout.createSequentialGroup().addContainerGap().addGroup(optionsJPanelLayout.createParallelGroup(Alignment.LEADING).addComponent(settingsJLabel).addComponent(settingsJTabbedPane, GroupLayout.PREFERRED_SIZE, 667, GroupLayout.PREFERRED_SIZE)).addContainerGap(18, Short.MAX_VALUE)));
-		optionsJPanelLayout.setVerticalGroup(optionsJPanelLayout.createParallelGroup(Alignment.LEADING).addGroup(optionsJPanelLayout.createSequentialGroup().addContainerGap().addComponent(settingsJLabel).addGap(18).addComponent(settingsJTabbedPane, GroupLayout.PREFERRED_SIZE, 391, GroupLayout.PREFERRED_SIZE).addContainerGap(15, Short.MAX_VALUE)));
+		optionsJPanelLayout.setHorizontalGroup(optionsJPanelLayout.createParallelGroup(Alignment.LEADING).addGroup(optionsJPanelLayout.createSequentialGroup().addContainerGap().addComponent(settingsJTabbedPane, GroupLayout.PREFERRED_SIZE, 667, GroupLayout.PREFERRED_SIZE).addContainerGap(18, Short.MAX_VALUE)));
+		optionsJPanelLayout.setVerticalGroup(optionsJPanelLayout.createParallelGroup(Alignment.LEADING).addGroup(optionsJPanelLayout.createSequentialGroup().addContainerGap().addComponent(settingsJTabbedPane, GroupLayout.PREFERRED_SIZE, 425, GroupLayout.PREFERRED_SIZE).addContainerGap(15, Short.MAX_VALUE)));
 
 		userSettingsJPanel = new JPanel();
-		userSettingsJPanel.setBackground(new Color(30, 144, 255));
+		userSettingsJPanel.setBackground(Color.DARK_GRAY);
 		settingsJTabbedPane.addTab("User Settings", null, userSettingsJPanel, null);
 		settingsJTabbedPane.setForegroundAt(0, Color.CYAN);
 		userSettingsJPanel.setLayout(null);
@@ -983,7 +982,7 @@ public class GUIForm extends javax.swing.JFrame {
 
 		contentJTabbedPane.addTab("", new javax.swing.ImageIcon(getClass().getResource("/be/artesis/timelog/gui/icons/SettingsNeonIcon.png")), optionsJPanel, "Settings");
 
-		headerJPanel.setBackground(SystemColor.inactiveCaption);
+		headerJPanel.setBackground(new Color(70, 130, 180));
 
 		titleLabel.setFont(new java.awt.Font("Tempus Sans ITC", 1, 18));
 		titleLabel.setForeground(new java.awt.Color(255, 255, 255));
@@ -1451,7 +1450,10 @@ public class GUIForm extends javax.swing.JFrame {
 		emailJTextField.setCaretPosition(0);
 	}
 
-	// Load info from PROJECT with index parameter
+	/**
+	 * Load info from PROJECT
+	 * @param	index	the list index (should equal arraylist index from projects) from the project to be loaded
+	 */
 	private void loadProjectInfo(int index) {
 		if (index != -1) {
 			Project p = UserInterface.getProject(index);
@@ -1465,7 +1467,10 @@ public class GUIForm extends javax.swing.JFrame {
 		}
 	}
 
-	// Load info from TASK with index parameter
+	/**
+	 * Load info from TASK
+	 * @param	index	the list index (should equal arraylist index from tasks) from the task to be loaded
+	 */
 	private void loadTaskInfo(int index) throws GUIException {
 		if (index != -1) {
 			Taak t = (Taak) tasksJList.getSelectedValue();
@@ -1489,7 +1494,10 @@ public class GUIForm extends javax.swing.JFrame {
 		}
 	}
 
-	// Load info from CLIENT with index parameter
+	/**
+	 * Load info from CLIENT
+	 * @param	index	the list index (should equal arraylist index from clients) from the client to be loaded
+	 */
 	private void loadClientInfo(int index) {
 		if (index != -1) {
 			Opdrachtgever o = (Opdrachtgever) clientsJList.getSelectedValue();
@@ -1502,14 +1510,17 @@ public class GUIForm extends javax.swing.JFrame {
 	}
 
 	// ================================================================================
-	// Other methods, FIXME nakijken
+	// GUI methods
 	// ================================================================================
 
-	private void workClicked(java.awt.event.MouseEvent evt) {
+	/**
+	 * Open a new work dialog if current project is set and contains running tasks
+	 */
+	private void openWorkDialog() {
 		try {
 			Project p = UserInterface.getCurrentProject();
 			if (!p.tasksAvailable()) {
-				throw new GUIException("Current project contains no available tasks");
+				throw new GUIException("Current project contains no running tasks");
 			}
 			setVisible(false);
 			WorkDialog work = new WorkDialog(this, true, validator);
@@ -1521,12 +1532,7 @@ public class GUIForm extends javax.swing.JFrame {
 			ex.printStackTrace();
 			JOptionPane.showMessageDialog(this, ex.getMessage());
 		}
-		this.invalidate();
 	}
-
-	// ================================================================================
-	// GUI methods
-	// ================================================================================
 
 	/**
 	 * CLEAR ALL FIELDS on the panels in parameter
@@ -1555,7 +1561,10 @@ public class GUIForm extends javax.swing.JFrame {
 		}
 	}
 
-	// Set the CURRENT PROJECT with GUI responding right
+	/**
+	 * Set the CURRENT PROJECT with GUI responding right
+	 * @param 	index	the index (GUI list and arraylist) from the project that's going to be the current project
+	 */
 	private void setCurrentProjectGUI(int index) {
 		try {
 			UserInterface.setCurrentProjectIndex(index);
@@ -1572,7 +1581,9 @@ public class GUIForm extends javax.swing.JFrame {
 		}
 	}
 
-	// Log user out and show new loginForm
+	/**
+	 * Log user out and show new loginForm
+	 */
 	private void logout() {
 		try {
 			WinRegistry.deleteKey(WinRegistry.HKEY_CURRENT_USER, "SOFTWARE\\ChronoMatic");
@@ -1806,7 +1817,6 @@ public class GUIForm extends javax.swing.JFrame {
 	private javax.swing.JLabel scheduleJLabel;
 	private javax.swing.JPanel scheduleJPanel;
 	private javax.swing.JButton setCurrentProjectJButton;
-	private javax.swing.JLabel settingsJLabel;
 	private javax.swing.JLabel startdatecompJLabel;
 	private javax.swing.JLabel tasksJLabel;
 	private javax.swing.JPanel tasksJPanel;
