@@ -51,10 +51,8 @@ public class InserterLocal {
 	}
 
 	public static int inputTaak(Taak taak, int projectID) throws MalformedURLException, IOException, WebserviceException, JSONException {
-		taak.setId(++taakId);					
-		
-		JSONObject jTaak = Converter.converteer(taak, projectID);
-		
+		taak.setId(++taakId);							
+		JSONObject jTaak = Converter.converteer(taak, projectID);		
 		LocalDatabaseWriter.schrijfweg(voegToe(jTaak,JVelden.TAKEN),Commando.INSERT);
 					
 		return taakId;

@@ -1411,49 +1411,6 @@ public class GUIForm extends javax.swing.JFrame {
 	}
 
 	// ================================================================================
-	// Other methods, FIXME nakijken
-	// ================================================================================
-
-	private void setCurrentProjectGUI(int index) {
-		try {
-			UserInterface.setCurrentProjectIndex(index);
-			currentProjectJLabel.setText("Current project: " + UserInterface.getCurrentProject().getNaam());
-			saveTaskJButton.setText("Save to " + UserInterface.getCurrentProject().getNaam());
-			projectsJList.setSelectedIndex(index);
-			refreshProjectsList(projectsJList, homeProjectsJList);
-			refreshTasksList(UserInterface.getCurrentProject(), tasksJList);
-			clearFieldsOnPanel(taskFieldsJPanel);
-			selectNewItem(tasksJList);
-		} catch (GUIException ex) {
-			ex.printStackTrace();
-			JOptionPane.showMessageDialog(this, ex.getMessage());
-		}
-	}
-
-	private void workClicked(java.awt.event.MouseEvent evt) {
-		try {
-			Project p = UserInterface.getCurrentProject();
-			if (!p.tasksAvailable()) {
-				throw new GUIException("Current project contains no available tasks");
-			}
-			setVisible(false);
-			WorkDialog work = new WorkDialog(this, true, validator);
-			work.setVisible(true);
-			setVisible(true);
-			loadTaskInfo(tasksJList.getSelectedIndex());
-			toggleButtonStates();
-		} catch (GUIException ex) {
-			ex.printStackTrace();
-			JOptionPane.showMessageDialog(this, ex.getMessage());
-		}
-	}
-
-	//FIXME nog invullen
-	private void logout() {
-
-	}
-
-	// ================================================================================
 	// Event handlers, FIXME afsplitsen!
 	// ================================================================================
 

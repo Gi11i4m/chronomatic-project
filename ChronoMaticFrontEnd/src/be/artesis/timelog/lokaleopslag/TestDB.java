@@ -6,6 +6,7 @@ import java.security.NoSuchAlgorithmException;
 import org.json.JSONArray;
 import org.json.JSONException;
 
+import be.artesis.timelog.controller.DeleterServer;
 import be.artesis.timelog.controller.InserterLocal;
 import be.artesis.timelog.controller.UpdaterLocal;
 import be.artesis.timelog.model.Validator;
@@ -84,8 +85,10 @@ public class TestDB {
 				Validator v = Validator.getInstance();
 			
 				try {
+					System.out.println("nieuw");
 					v.login("p", "4ba7e14b8176fb8163d903fbca711799");
 					LocalDatabaseSynch lds = new LocalDatabaseSynch(v);
+					//DeleterServer.deleteProject(v.getSessionKey(), 30);
 					lds.synch();
 				} catch (IOException | JSONException | WebserviceException e) {
 					// TODO Auto-generated catch block

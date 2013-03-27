@@ -1,5 +1,6 @@
 package be.artesis.timelog.lokaleopslag;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
 
@@ -44,12 +45,12 @@ public class LocalDatabaseSynch {
 	}
 	private void synchCommando(Commando c) throws JSONException, IOException, WebserviceException{		
 		
-			JSONObject file = LocalDatabaseReader.LeesBestand( LocalDatabaseWriter.URL+ c +".txt");
-			if (file!=null){
-				jarrOpdrachtgevers = file.getJSONArray(JVelden.OPDRACHTGEVERS.toString().toLowerCase());
-				jarrProjecten =  file.getJSONArray(JVelden.PROJECTEN.toString().toLowerCase());		
-				jarrTaken = file.getJSONArray(JVelden.TAKEN.toString().toLowerCase());
-				jarrTijdspannes = file.getJSONArray(JVelden.TIJDSPANNES.toString().toLowerCase());
+		JSONObject file = LocalDatabaseReader.LeesBestand( LocalDatabaseWriter.URL+ c +".txt");
+		if (file!=null){
+			jarrOpdrachtgevers = file.getJSONArray(JVelden.OPDRACHTGEVERS.toString().toLowerCase());
+			jarrProjecten =  file.getJSONArray(JVelden.PROJECTEN.toString().toLowerCase());		
+			jarrTaken = file.getJSONArray(JVelden.TAKEN.toString().toLowerCase());
+			jarrTijdspannes = file.getJSONArray(JVelden.TIJDSPANNES.toString().toLowerCase());
 			if (c == Commando.INSERT){
 				if (!jarrOpdrachtgevers.isNull(0)){insertJarr(JVelden.OPDRACHTGEVERS, jarrOpdrachtgevers, jarrProjecten);}
 				if (!jarrProjecten.isNull(0)){insertJarr(JVelden.PROJECTEN,jarrProjecten,jarrTaken);}
@@ -66,7 +67,9 @@ public class LocalDatabaseSynch {
 				if (!jarrTaken.isNull(0)){deleteJarr(JVelden.TAKEN, jarrTaken);}
 				if (!jarrTijdspannes.isNull(0)){deleteJarr(JVelden.TIJDSPANNES, jarrTijdspannes);}
 			}
-		}		
+		}
+		File f = new File(LocalDatabaseWriter.URL+ c +".txt");
+		f.delete();
 	}
 	
 	private void insertJarr(JVelden jVeld, JSONArray jarr, JSONArray jarrLager) throws MalformedURLException, JSONException, IOException, WebserviceException{
@@ -127,12 +130,16 @@ public class LocalDatabaseSynch {
 		switch (jVeld) {
 		case OPDRACHTGEVERS:
 			updateOpdrachtgever(jObj);
+			break;
 		case TAKEN:
 			updateTaak(jObj);
+			break;
 		case PROJECTEN:
-			updateProject(jObj);	
+			updateProject(jObj);
+			break;
 		case TIJDSPANNES:
 			updateTijdspanne(jObj);
+			break;
 		}		
 	}
 	private void delete(JVelden jVeld,int id) throws MalformedURLException, JSONException, IOException, WebserviceException{
@@ -140,12 +147,16 @@ public class LocalDatabaseSynch {
 		switch (jVeld) {
 		case OPDRACHTGEVERS:
 			deleteOpdrachtgever(id);
+			break;
 		case TAKEN:
 			deleteTaak(id);
+			break;
 		case PROJECTEN:
-			deleteProject(id);	
+			deleteProject(id);
+			break;
 		case TIJDSPANNES:
 			deleteTijdspanne(id);
+			break;
 		}		
 	}
 	

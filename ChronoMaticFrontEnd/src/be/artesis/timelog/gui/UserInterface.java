@@ -7,7 +7,7 @@ import java.util.ArrayList;
 
 import org.json.JSONException;
 
-import be.artesis.timelog.controller.DeleterLocaal;
+import be.artesis.timelog.controller.DeleterLocal;
 import be.artesis.timelog.controller.InserterLocal;
 import be.artesis.timelog.controller.UpdaterLocal;
 import be.artesis.timelog.model.Validator;
@@ -269,23 +269,23 @@ public class UserInterface {
 				throw new GUIException("This client is associated with a project");
 			}
 		}
-		DeleterLocaal.deleteOpdrachtgever( c);
+		DeleterLocal.deleteOpdrachtgever( c);
 		getClients().remove(c);
 	}
 	
 	public static void deleteProject(Project p)
 			throws MalformedURLException, IOException, WebserviceException, JSONException{
-		DeleterLocaal.deleteProject( p);
+		DeleterLocal.deleteProject( p);
         getProjects().remove(p);
 	}
 	
 	public static void deleteTask(Taak t)throws MalformedURLException, IOException, WebserviceException, GUIException, JSONException{
-		DeleterLocaal.deleteTaak( t);
+		DeleterLocal.deleteTaak( t);
         getCurrentTasks().remove(t);
 	}
 	
 	public static void deleteTimespan(Tijdspanne ts, Taak t) throws MalformedURLException, IOException, WebserviceException, JSONException{
-		DeleterLocaal.deleteTijdSpanne(ts);
+		DeleterLocal.deleteTijdSpanne(ts);
 		t.getGewerkteTijd().remove(ts);
 	}
 	
