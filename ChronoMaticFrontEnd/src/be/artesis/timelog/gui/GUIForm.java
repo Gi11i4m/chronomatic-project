@@ -82,6 +82,7 @@ public class GUIForm extends javax.swing.JFrame {
 	// Properties
 	// ================================================================================
 
+	
 	Validator validator;
 	boolean creatingProject;
 	final String NEWCLIENTITEM = "< New client >";
