@@ -111,7 +111,7 @@ public class LoginForm extends javax.swing.JFrame implements ActionListener {
 		this.validator = validator;
 		this.setTitle("Login");
 		this.setSize(720, 520);
-
+		
 		// set dialog in center
 		final Toolkit toolkit = Toolkit.getDefaultToolkit();
 		final Dimension screenSize = toolkit.getScreenSize();
@@ -123,7 +123,6 @@ public class LoginForm extends javax.swing.JFrame implements ActionListener {
 		layout = new CardLayout();
 		pane.setBackground(Color.WHITE);
 		pane.setLayout(layout);
-
 		basisPanel = new JFXPanel();
 		browserPanel = new JFXPanel();
 		newUserPanel = new NewUserPanel(this);
@@ -160,7 +159,7 @@ public class LoginForm extends javax.swing.JFrame implements ActionListener {
             		WinRegistry.writeStringValue(WinRegistry.HKEY_CURRENT_USER, "SOFTWARE\\ChronoMatic", "username", usernameJTextField.getText());
             		WinRegistry.writeStringValue(WinRegistry.HKEY_CURRENT_USER, "SOFTWARE\\ChronoMatic", "password", password);
         		}
-            	this.dispose();
+            	this.setVisible(false);
 
                 parent.setVisible(true);
             } else {
@@ -176,6 +175,7 @@ public class LoginForm extends javax.swing.JFrame implements ActionListener {
 	
 	public void generateLoginExtern(String accessToken) {
 		String email = null;
+		
 		JSONObject userInfoJSONObj = null;
 		try {
 		MD5Generator MD5 = new MD5Generator();
@@ -201,7 +201,9 @@ public class LoginForm extends javax.swing.JFrame implements ActionListener {
 			
 			String email = userInfoJSONObj.getString("email");
 			// als gebruiker nog niet bestaat..
-			if (ExistingUsernames.check(email)) {
+			
+			//System.out.println(ExistingUsernames.check("extern",email));
+			if (!ExistingUsernames.check("extern",email)) {
 				InserterServer.CreateUserExtern(userInfoJSONObj.getString("naam"), userInfoJSONObj.getString("voornaam"), email);
 			}
 
@@ -213,7 +215,8 @@ public class LoginForm extends javax.swing.JFrame implements ActionListener {
             		WinRegistry.writeStringValue(WinRegistry.HKEY_CURRENT_USER, "SOFTWARE\\ChronoMatic", "username", email);
         		}
 				parent.setVisible(true);
-				this.dispose();
+				//this.dispose();
+				this.setVisible(false);
 			} else {
 				JOptionPane.showMessageDialog(this, "Login failed");
 			}

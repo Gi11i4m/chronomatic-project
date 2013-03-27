@@ -188,20 +188,25 @@ public class Gebruiker {
 	}
 	
 	@GET
-	@Path("checkExists/{username}")
+	@Path("checkExists/{soort}/{username}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public static String checkExists(@PathParam("username") String username) {
+	public static String checkExists(@PathParam("username") String username, @PathParam("soort") String soort) {
 		Connection con = DatabaseContainer.getConnection();
 
-		String query =  "SELECT Count(1) FROM gebruikers WHERE gebruikersnaam = '" + username + "'";
-		
+		String query = null;
+		if(soort.equals("intern")) {
+			query =  "SELECT Count(1) FROM gebruikers WHERE gebruikersnaam = '" + username + "'";
+		}
+		else {
+			query =  "SELECT Count(1) FROM gebruikers WHERE email = '" + username + "'";
+		}
 		try{
 			ResultSet rs = Database.executeQuery(con, query); 
 			if(rs.next()) {
 				
 				rs.previous();
 				JSONArray returnObject = ResultsetConverter.convert(rs);
-				
+				//System.out.println(returnObject);
 				return returnObject.toString();
 			}
 			else { 

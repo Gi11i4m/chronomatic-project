@@ -20,7 +20,7 @@ CREATE  TABLE IF NOT EXISTS `chrono_matic`.`gebruikers` (
   `gebruikerscol` VARCHAR(45) NULL ,
   PRIMARY KEY (`ID`) )
 ENGINE = InnoDB
-AUTO_INCREMENT = 3
+AUTO_INCREMENT = 1003
 DEFAULT CHARACTER SET = utf8
 COLLATE = utf8_unicode_ci;
 
@@ -44,7 +44,7 @@ CREATE  TABLE IF NOT EXISTS `chrono_matic`.`opdrachtgevers` (
     ON DELETE CASCADE
     ON UPDATE CASCADE)
 ENGINE = InnoDB
-AUTO_INCREMENT = 3
+AUTO_INCREMENT = 1003
 DEFAULT CHARACTER SET = utf8
 COLLATE = utf8_unicode_ci;
 
@@ -73,7 +73,7 @@ CREATE  TABLE IF NOT EXISTS `chrono_matic`.`projecten` (
     ON DELETE CASCADE
     ON UPDATE CASCADE)
 ENGINE = InnoDB
-AUTO_INCREMENT = 3
+AUTO_INCREMENT = 1003
 DEFAULT CHARACTER SET = utf8
 COLLATE = utf8_unicode_ci;
 
@@ -97,7 +97,7 @@ CREATE  TABLE IF NOT EXISTS `chrono_matic`.`taken` (
     ON DELETE CASCADE
     ON UPDATE CASCADE)
 ENGINE = InnoDB
-AUTO_INCREMENT = 3
+AUTO_INCREMENT = 1003
 DEFAULT CHARACTER SET = utf8
 COLLATE = utf8_unicode_ci;
 
@@ -119,7 +119,7 @@ CREATE  TABLE IF NOT EXISTS `chrono_matic`.`tijdspanne` (
     ON DELETE CASCADE
     ON UPDATE CASCADE)
 ENGINE = InnoDB
-AUTO_INCREMENT = 3
+AUTO_INCREMENT = 1003
 DEFAULT CHARACTER SET = utf8
 COLLATE = utf8_unicode_ci;
 
@@ -141,6 +141,7 @@ CREATE  TABLE IF NOT EXISTS `chrono_matic`.`sessies` (
     ON DELETE CASCADE
     ON UPDATE CASCADE)
 ENGINE = InnoDB
+AUTO_INCREMENT = 1030
 DEFAULT CHARACTER SET = utf8
 COLLATE = utf8_unicode_ci;
 
@@ -155,8 +156,8 @@ SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
 -- -----------------------------------------------------
 START TRANSACTION;
 USE `chrono_matic`;
-INSERT INTO `chrono_matic`.`gebruikers` (`ID`, `naam`, `voornaam`, `gebruikersnaam`, `passwoord`, `email`, `telefoonnummer`, `gebruikerscol`) VALUES (1, 'Possemiers', 'Philippe', 'p', 'p', 'philippe.possemiers@artesis.be', '0903696969', NULL);
-INSERT INTO `chrono_matic`.`gebruikers` (`ID`, `naam`, `voornaam`, `gebruikersnaam`, `passwoord`, `email`, `telefoonnummer`, `gebruikerscol`) VALUES (2, 'Naam1', 'Voornaam1', 'leeg', 'leeg', 'Email1@email.email', '0000000000', NULL);
+INSERT INTO `chrono_matic`.`gebruikers` (`ID`, `naam`, `voornaam`, `gebruikersnaam`, `passwoord`, `email`, `telefoonnummer`, `gebruikerscol`) VALUES (1001, 'Possemiers', 'Philippe', 'p', 'p', 'philippe.possemiers@artesis.be', '0903696969', NULL);
+INSERT INTO `chrono_matic`.`gebruikers` (`ID`, `naam`, `voornaam`, `gebruikersnaam`, `passwoord`, `email`, `telefoonnummer`, `gebruikerscol`) VALUES (1002, 'Naam1', 'Voornaam1', 'leeg', 'leeg', 'Email1@email.email', '0000000000', NULL);
 
 COMMIT;
 
@@ -165,12 +166,12 @@ COMMIT;
 -- -----------------------------------------------------
 START TRANSACTION;
 USE `chrono_matic`;
-INSERT INTO `chrono_matic`.`opdrachtgevers` (`ID`, `bedrijfsnaam`, `naam`, `voornaam`, `email`, `telefoonnummer`, `gebruikers_ID`) VALUES (1, 'Apple', 'Jobs', 'Steve', 'steve@apple.com', '555066554', 1);
-INSERT INTO `chrono_matic`.`opdrachtgevers` (`ID`, `bedrijfsnaam`, `naam`, `voornaam`, `email`, `telefoonnummer`, `gebruikers_ID`) VALUES (2, 'Microsoft', 'Grenouille', 'Jean-Claude', 'jean@microsoft.com', '555648524', 1);
-INSERT INTO `chrono_matic`.`opdrachtgevers` (`ID`, `bedrijfsnaam`, `naam`, `voornaam`, `email`, `telefoonnummer`, `gebruikers_ID`) VALUES (3, 'Google', 'Uitdebroek', 'Piet', 'piet@gmail.com', '000045454', 1);
-INSERT INTO `chrono_matic`.`opdrachtgevers` (`ID`, `bedrijfsnaam`, `naam`, `voornaam`, `email`, `telefoonnummer`, `gebruikers_ID`) VALUES (4, 'Samsung', 'Hiruyashi', 'Ntongo', 'ntongo@samsung.com', '090369696', 1);
-INSERT INTO `chrono_matic`.`opdrachtgevers` (`ID`, `bedrijfsnaam`, `naam`, `voornaam`, `email`, `telefoonnummer`, `gebruikers_ID`) VALUES (5, 'Philips', 'Philips', 'Gerard', 'gerard@philips.com', '111111111', 1);
-INSERT INTO `chrono_matic`.`opdrachtgevers` (`ID`, `bedrijfsnaam`, `naam`, `voornaam`, `email`, `telefoonnummer`, `gebruikers_ID`) VALUES (6, 'Sony', 'Chubachi', 'Ryoji', 'baas@sony.com', '99988741112', 1);
+INSERT INTO `chrono_matic`.`opdrachtgevers` (`ID`, `bedrijfsnaam`, `naam`, `voornaam`, `email`, `telefoonnummer`, `gebruikers_ID`) VALUES (1001, 'Apple', 'Jobs', 'Steve', 'steve@apple.com', '555066554', 1);
+INSERT INTO `chrono_matic`.`opdrachtgevers` (`ID`, `bedrijfsnaam`, `naam`, `voornaam`, `email`, `telefoonnummer`, `gebruikers_ID`) VALUES (1002, 'Microsoft', 'Grenouille', 'Jean-Claude', 'jean@microsoft.com', '555648524', 1);
+INSERT INTO `chrono_matic`.`opdrachtgevers` (`ID`, `bedrijfsnaam`, `naam`, `voornaam`, `email`, `telefoonnummer`, `gebruikers_ID`) VALUES (1003, 'Google', 'Uitdebroek', 'Piet', 'piet@gmail.com', '000045454', 1);
+INSERT INTO `chrono_matic`.`opdrachtgevers` (`ID`, `bedrijfsnaam`, `naam`, `voornaam`, `email`, `telefoonnummer`, `gebruikers_ID`) VALUES (1004, 'Samsung', 'Hiruyashi', 'Ntongo', 'ntongo@samsung.com', '090369696', 1);
+INSERT INTO `chrono_matic`.`opdrachtgevers` (`ID`, `bedrijfsnaam`, `naam`, `voornaam`, `email`, `telefoonnummer`, `gebruikers_ID`) VALUES (1005, 'Philips', 'Philips', 'Gerard', 'gerard@philips.com', '111111111', 1);
+INSERT INTO `chrono_matic`.`opdrachtgevers` (`ID`, `bedrijfsnaam`, `naam`, `voornaam`, `email`, `telefoonnummer`, `gebruikers_ID`) VALUES (1006, 'Sony', 'Chubachi', 'Ryoji', 'baas@sony.com', '99988741112', 1);
 
 COMMIT;
 
@@ -179,10 +180,10 @@ COMMIT;
 -- -----------------------------------------------------
 START TRANSACTION;
 USE `chrono_matic`;
-INSERT INTO `chrono_matic`.`projecten` (`ID`, `naam`, `start_datum`, `eind_datum`, `gebruikers_ID`, `opdrachtgevers_ID`) VALUES (1, 'Java', 1349845200, 1355724000, 1, 3);
-INSERT INTO `chrono_matic`.`projecten` (`ID`, `naam`, `start_datum`, `eind_datum`, `gebruikers_ID`, `opdrachtgevers_ID`) VALUES (2, 'Licht module', 1349499600, 1357020000, 1, 5);
-INSERT INTO `chrono_matic`.`projecten` (`ID`, `naam`, `start_datum`, `eind_datum`, `gebruikers_ID`, `opdrachtgevers_ID`) VALUES (3, 'Android App', 1349672400, 1357020000, 1, 3);
-INSERT INTO `chrono_matic`.`projecten` (`ID`, `naam`, `start_datum`, `eind_datum`, `gebruikers_ID`, `opdrachtgevers_ID`) VALUES (4, 'Galaxy S3', 1357020000, 1420092000, 1, 4);
+INSERT INTO `chrono_matic`.`projecten` (`ID`, `naam`, `start_datum`, `eind_datum`, `gebruikers_ID`, `opdrachtgevers_ID`) VALUES (1001, 'Java', 1349845200, 1355724000, 1001, 1003);
+INSERT INTO `chrono_matic`.`projecten` (`ID`, `naam`, `start_datum`, `eind_datum`, `gebruikers_ID`, `opdrachtgevers_ID`) VALUES (1002, 'Licht module', 1349499600, 1357020000, 1001, 1005);
+INSERT INTO `chrono_matic`.`projecten` (`ID`, `naam`, `start_datum`, `eind_datum`, `gebruikers_ID`, `opdrachtgevers_ID`) VALUES (1003, 'Android App', 1349672400, 1357020000, 1001, 1003);
+INSERT INTO `chrono_matic`.`projecten` (`ID`, `naam`, `start_datum`, `eind_datum`, `gebruikers_ID`, `opdrachtgevers_ID`) VALUES (1004, 'Galaxy S3', 1357020000, 1420092000, 1001, 1004);
 
 COMMIT;
 
@@ -191,10 +192,10 @@ COMMIT;
 -- -----------------------------------------------------
 START TRANSACTION;
 USE `chrono_matic`;
-INSERT INTO `chrono_matic`.`taken` (`ID`, `naam`, `begin_tijd`, `verwacht_eind`, `commentaar`, `voltooid`, `projecten_ID`) VALUES (1, 'Oefen1', 1349845200, 1355292000, 'Oefening reeks 1', false, 1);
-INSERT INTO `chrono_matic`.`taken` (`ID`, `naam`, `begin_tijd`, `verwacht_eind`, `commentaar`, `voltooid`, `projecten_ID`) VALUES (2, 'Oefen2', 1349845200, 1349845200, 'Oefening reeks 2', true, 1);
-INSERT INTO `chrono_matic`.`taken` (`ID`, `naam`, `begin_tijd`, `verwacht_eind`, `commentaar`, `voltooid`, `projecten_ID`) VALUES (3, 'App1', 1349672400, 1349672400, 'Begin app', true, 3);
-INSERT INTO `chrono_matic`.`taken` (`ID`, `naam`, `begin_tijd`, `verwacht_eind`, `commentaar`, `voltooid`, `projecten_ID`) VALUES (4, 'App2', 1355119200, 1356847200, 'App maken 2', false, 3);
+INSERT INTO `chrono_matic`.`taken` (`ID`, `naam`, `begin_tijd`, `verwacht_eind`, `commentaar`, `voltooid`, `projecten_ID`) VALUES (1001, 'Oefen1', 1349845200, 1355292000, 'Oefening reeks 1', false, 1001);
+INSERT INTO `chrono_matic`.`taken` (`ID`, `naam`, `begin_tijd`, `verwacht_eind`, `commentaar`, `voltooid`, `projecten_ID`) VALUES (1002, 'Oefen2', 1349845200, 1349845200, 'Oefening reeks 2', true, 1001);
+INSERT INTO `chrono_matic`.`taken` (`ID`, `naam`, `begin_tijd`, `verwacht_eind`, `commentaar`, `voltooid`, `projecten_ID`) VALUES (1003, 'App1', 1349672400, 1349672400, 'Begin app', true, 1003);
+INSERT INTO `chrono_matic`.`taken` (`ID`, `naam`, `begin_tijd`, `verwacht_eind`, `commentaar`, `voltooid`, `projecten_ID`) VALUES (1004, 'App2', 1355119200, 1356847200, 'App maken 2', false, 1003);
 
 COMMIT;
 
@@ -203,11 +204,11 @@ COMMIT;
 -- -----------------------------------------------------
 START TRANSACTION;
 USE `chrono_matic`;
-INSERT INTO `chrono_matic`.`tijdspanne` (`ID`, `begin_uur`, `eind_uur`, `pauze`, `taken_ID`) VALUES (1, 1349881200, 1349909100, false, 2);
-INSERT INTO `chrono_matic`.`tijdspanne` (`ID`, `begin_uur`, `eind_uur`, `pauze`, `taken_ID`) VALUES (2, 1349888400, 1349892000, true, 2);
-INSERT INTO `chrono_matic`.`tijdspanne` (`ID`, `begin_uur`, `eind_uur`, `pauze`, `taken_ID`) VALUES (3, 1349730000, 1349744400, false, 3);
-INSERT INTO `chrono_matic`.`tijdspanne` (`ID`, `begin_uur`, `eind_uur`, `pauze`, `taken_ID`) VALUES (4, 1355173200, 1355187600, false, 4);
-INSERT INTO `chrono_matic`.`tijdspanne` (`ID`, `begin_uur`, `eind_uur`, `pauze`, `taken_ID`) VALUES (5, 1355175060, 1355175960, true, 4);
-INSERT INTO `chrono_matic`.`tijdspanne` (`ID`, `begin_uur`, `eind_uur`, `pauze`, `taken_ID`) VALUES (6, 1355184612, 1355185855, true, 4);
+INSERT INTO `chrono_matic`.`tijdspanne` (`ID`, `begin_uur`, `eind_uur`, `pauze`, `taken_ID`) VALUES (1001, 1349881200, 1349909100, false, 1002);
+INSERT INTO `chrono_matic`.`tijdspanne` (`ID`, `begin_uur`, `eind_uur`, `pauze`, `taken_ID`) VALUES (1002, 1349888400, 1349892000, true, 1002);
+INSERT INTO `chrono_matic`.`tijdspanne` (`ID`, `begin_uur`, `eind_uur`, `pauze`, `taken_ID`) VALUES (1003, 1349730000, 1349744400, false, 1003);
+INSERT INTO `chrono_matic`.`tijdspanne` (`ID`, `begin_uur`, `eind_uur`, `pauze`, `taken_ID`) VALUES (1004, 1355173200, 1355187600, false, 1004);
+INSERT INTO `chrono_matic`.`tijdspanne` (`ID`, `begin_uur`, `eind_uur`, `pauze`, `taken_ID`) VALUES (1005, 1355175060, 1355175960, true, 1004);
+INSERT INTO `chrono_matic`.`tijdspanne` (`ID`, `begin_uur`, `eind_uur`, `pauze`, `taken_ID`) VALUES (1006, 1355184612, 1355185855, true, 1004);
 
 COMMIT;

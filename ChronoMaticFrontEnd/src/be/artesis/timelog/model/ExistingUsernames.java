@@ -7,10 +7,10 @@ import org.json.JSONObject;
 
 public class ExistingUsernames {
 
-	public static boolean check(String gebruikersnaam) {
+	public static boolean check(String mode, String gebruikersnaam) {
 		JSONObject jObject = null;
 		try {
-			jObject = Connection.getObject("gebruiker/checkExists/" + gebruikersnaam);
+			jObject = Connection.getObject("gebruiker/checkExists/" + mode + "/" + gebruikersnaam);
 		} catch (IOException | JSONException e) {
 			e.printStackTrace();
 		}
