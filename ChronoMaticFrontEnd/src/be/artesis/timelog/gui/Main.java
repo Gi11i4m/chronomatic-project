@@ -2,6 +2,8 @@ package be.artesis.timelog.gui;
 
 import java.lang.reflect.InvocationTargetException;
 
+import javafx.application.Platform;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -20,12 +22,12 @@ public class Main {
     		WinRegistry.deleteValue(WinRegistry.HKEY_CURRENT_USER, "SOFTWARE\\ChronoMatic", "password");
     	}
     	*/
-    	
+    	Platform.setImplicitExit(false);
     	
     	Validator validator = Validator.getInstance();
         GUIForm gui = new GUIForm(validator);
         LoginForm login = new LoginForm(gui, validator);
-        
+        Platform.setImplicitExit(false);
         
         // Auto Login
 		String username;
