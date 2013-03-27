@@ -100,7 +100,8 @@ public class LoginForm extends javax.swing.JFrame implements ActionListener {
 	private ImageIcon microsoftIcon;
 	private ImageIcon twitterIcon;
 	private ImageIcon linkedinIcon;
-	private JCheckBox autoLoginNormalCheckBox;
+	private JCheckBox autoLoginInternCheckBox;
+	private JCheckBox autoLoginExternCheckBox;
 
 	public LoginForm(java.awt.Frame parent, Validator validator) {
 		setResizable(false);
@@ -132,21 +133,6 @@ public class LoginForm extends javax.swing.JFrame implements ActionListener {
 
 		initComponents();
 		
-		
-		// Vul de user data in, uit register
-
-		try {
-			usernameJTextField.setText(WinRegistry.readString(WinRegistry.HKEY_CURRENT_USER, "SOFTWARE\\ChronoMatic", "username"));
-			basisPanel.setFocusTraversalPolicy(new FocusTraversalOnArray(new Component[]{usernameJTextField, passwordJPasswordField, aanmeldenButton}));
-			String autologin = "";
-			autologin = WinRegistry.readString(WinRegistry.HKEY_CURRENT_USER, "SOFTWARE\\ChronoMatic", "autologin");
-			if(autologin.equals("true")) {
-				autoLoginNormalCheckBox.setSelected(true);
-			}
-		} catch (IllegalArgumentException | IllegalAccessException | InvocationTargetException e) {
-			e.printStackTrace();
-		}
-		
 	}
 
 	public void displayTab(String name) {
@@ -157,16 +143,10 @@ public class LoginForm extends javax.swing.JFrame implements ActionListener {
 
 		//this.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
 		try {
-			
-			
 			// Maak key in registry
 			WinRegistry.createKey(WinRegistry.HKEY_CURRENT_USER, "SOFTWARE\\ChronoMatic");
 			
 			// Opslaan username
-			WinRegistry.writeStringValue(WinRegistry.HKEY_CURRENT_USER, "SOFTWARE\\ChronoMatic", "username", usernameJTextField.getText());
-			
-			//Pasw uit register
-			//paswoord = WinRegistry.readString (WinRegistry.HKEY_CURRENT_USER, "SOFTWARE\\ChronoMatic", "password");
 			
 			System.out.println(username+" | "+ password);
             
@@ -174,20 +154,13 @@ public class LoginForm extends javax.swing.JFrame implements ActionListener {
             	loadUserData();
             	
             	//paswoord opslaan
-            	if(autoLoginNormalCheckBox.isSelected()) {
-            		WinRegistry.writeStringValue(WinRegistry.HKEY_CURRENT_USER, "SOFTWARE\\ChronoMatic", "autologin", "true");
+            	if(autoLoginInternCheckBox.isSelected()) {
+            		WinRegistry.writeStringValue(WinRegistry.HKEY_CURRENT_USER, "SOFTWARE\\ChronoMatic", "autologin", "intern");
+            		WinRegistry.writeStringValue(WinRegistry.HKEY_CURRENT_USER, "SOFTWARE\\ChronoMatic", "username", usernameJTextField.getText());
             		WinRegistry.writeStringValue(WinRegistry.HKEY_CURRENT_USER, "SOFTWARE\\ChronoMatic", "password", password);
         		}
-            	//paswoord deleten
-            	else {
-            		WinRegistry.writeStringValue(WinRegistry.HKEY_CURRENT_USER, "SOFTWARE\\ChronoMatic", "password", "");
-            		WinRegistry.writeStringValue(WinRegistry.HKEY_CURRENT_USER, "SOFTWARE\\ChronoMatic", "autologin", "false");
-					//WinRegistry.deleteValue(WinRegistry.HKEY_CURRENT_USER, "SOFTWARE\\ChronoMatic", "password");
-            	}
-            	this.setVisible(false);
-            	//this.dispose();
-            	
-                
+            	this.dispose();
+
                 parent.setVisible(true);
             } else {
 
@@ -202,8 +175,11 @@ public class LoginForm extends javax.swing.JFrame implements ActionListener {
 
 	public void loginExtern(String accessToken) {
 		try {
+			// Maak key
+			WinRegistry.createKey(WinRegistry.HKEY_CURRENT_USER, "SOFTWARE\\ChronoMatic");
+			
 			MD5Generator MD5 = new MD5Generator();
-			// Facebook moet geen Access token aanvragen, de rest wel
+			// Facebook moet geen Access token aanvragen, de rest wel (omwille van oude Oauth)
 			if (!social.toString().equals("facebook")) {
 				accessToken = AccessToken.request(accessToken, social);
 			}
@@ -219,13 +195,19 @@ public class LoginForm extends javax.swing.JFrame implements ActionListener {
 
 			if (validator.loginExtern(email)) {
 				loadUserData();
+				
+				//if(autoLoginExternCheckBox.isSelected()) {
+            	//	WinRegistry.writeStringValue(WinRegistry.HKEY_CURRENT_USER, "SOFTWARE\\ChronoMatic", "autologin", "extern");
+            	//	WinRegistry.writeStringValue(WinRegistry.HKEY_CURRENT_USER, "SOFTWARE\\ChronoMatic", "username", email);
+        		//}
+				
 				parent.setVisible(true);
 				this.dispose();
 			} else {
 				JOptionPane.showMessageDialog(this, "Login failed");
 			}
 
-		} catch (IOException | JSONException | WebserviceException | ParserConfigurationException | SAXException e) {
+		} catch (IOException | JSONException | WebserviceException | ParserConfigurationException | SAXException | IllegalArgumentException | IllegalAccessException | InvocationTargetException e) {
 			e.printStackTrace();
 		}
 	}
@@ -287,7 +269,7 @@ public class LoginForm extends javax.swing.JFrame implements ActionListener {
 		passwordJPasswordField = new JPasswordField();
 		newAccountJLabel = new JLabel("Of maak een account aan");
 		socialMediaJLabel = new JLabel("Of meld u aan bij");
-		browserGoBackButtonJLabel = new JLabel("<< Aanmelden met een andere account");
+		browserGoBackButtonJLabel = new JLabel("< Aanmelden met een andere account");
 		googleJButton = new JButton(googleIcon);
 		googleJButton.setName("google");
 		facebookJButton = new JButton(facebookIcon);
@@ -298,7 +280,8 @@ public class LoginForm extends javax.swing.JFrame implements ActionListener {
 		linkedinJButton.setName("linkedin");
 		//twitterJButton = new JButton(twitterIcon);
 		//twitterJButton.setName("twitter");
-		autoLoginNormalCheckBox = new JCheckBox("Automatisch aanmelden als Chronomatic start");
+		autoLoginInternCheckBox = new JCheckBox("Automatisch aanmelden als Chronomatic start");
+		autoLoginExternCheckBox = new JCheckBox("Automatisch aanmelden");
 		
 		usernameJLabel.setBounds(31, 124, 138, 16);
 		paswoordJLabel.setBounds(31, 227, 138, 16);
@@ -313,14 +296,15 @@ public class LoginForm extends javax.swing.JFrame implements ActionListener {
 		microsoftJButton.setBounds(520, 301, 48, 48);
 		linkedinJButton.setBounds(520, 368, 48, 48);
 		//twitterJButton.setBounds(493, 334, 48, 48);
-		autoLoginNormalCheckBox.setBounds(27, 283, 300, 25);
+		autoLoginInternCheckBox.setBounds(27, 283, 300, 25);
+		autoLoginExternCheckBox.setBounds(450, 456, 200, 25);
 		
 		// Backgrounds socialmedia buttons
 		googleJButton.setBackground(Color.WHITE);
 		facebookJButton.setBackground(Color.WHITE);
 		microsoftJButton.setBackground(Color.WHITE);
 		linkedinJButton.setBackground(Color.WHITE);
-		autoLoginNormalCheckBox.setBackground(Color.WHITE);
+		autoLoginInternCheckBox.setBackground(Color.WHITE);
 		
 		// set label fonts
 		browserGoBackButtonJLabel.setFont(new Font("Tahoma", Font.BOLD, 14));
@@ -349,8 +333,9 @@ public class LoginForm extends javax.swing.JFrame implements ActionListener {
 		basisPanel.add(microsoftJButton);
 		//basisPanel.add(twitterJButton);
 		basisPanel.add(linkedinJButton);
-		basisPanel.add(autoLoginNormalCheckBox);
+		basisPanel.add(autoLoginInternCheckBox);
 		browserPanel.add(browserGoBackButtonJLabel);
+		browserPanel.add(autoLoginExternCheckBox);
 
 		// Action listeners
 		try {
@@ -451,7 +436,7 @@ public class LoginForm extends javax.swing.JFrame implements ActionListener {
 
 		switch (sender.getName()) {
 		case "google":
-			social = new Google();
+			social = new Github();
 			break;
 		case "facebook":
 			social = new Facebook();
