@@ -165,7 +165,7 @@ public class GUIForm extends javax.swing.JFrame {
 		homeJLabel.setForeground(new java.awt.Color(255, 255, 255));
 		homeJLabel.setText("Home");
 
-		workJButton.setBackground(SystemColor.textHighlight);
+		workJButton.setBackground(new Color(30, 144, 255));
 		workJButton.setFont(new java.awt.Font("Tahoma", 1, 18));
 		workJButton.setForeground(new java.awt.Color(204, 204, 204));
 		workJButton.setText("Work");
@@ -181,7 +181,7 @@ public class GUIForm extends javax.swing.JFrame {
 		homeJPanel.add(homeJLabel);
 
 		homeFieldsJPanel = new JPanel();
-		homeFieldsJPanel.setBackground(SystemColor.textHighlight);
+		homeFieldsJPanel.setBackground(new Color(30, 144, 255));
 		homeFieldsJPanel.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
 		homeFieldsJPanel.setBounds(10, 86, 352, 354);
 		homeJPanel.add(homeFieldsJPanel);
@@ -295,7 +295,7 @@ public class GUIForm extends javax.swing.JFrame {
 		projectEditFieldsJPanel = new JPanel();
 		projectEditFieldsJPanel.setBounds(112, 0, 338, 175);
 		projectFieldsJPanel.add(projectEditFieldsJPanel);
-		projectEditFieldsJPanel.setBackground(SystemColor.textHighlight);
+		projectEditFieldsJPanel.setBackground(new Color(30, 144, 255));
 		projectEditFieldsJPanel.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
 		projectEditFieldsJPanel.setLayout(new FormLayout(new ColumnSpec[] { FormFactory.UNRELATED_GAP_COLSPEC, ColumnSpec.decode("65px"), FormFactory.LABEL_COMPONENT_GAP_COLSPEC, ColumnSpec.decode("max(53dlu;default):grow"), FormFactory.RELATED_GAP_COLSPEC, ColumnSpec.decode("123px"), FormFactory.RELATED_GAP_COLSPEC, FormFactory.DEFAULT_COLSPEC, }, new RowSpec[] { FormFactory.UNRELATED_GAP_ROWSPEC, RowSpec.decode("20px"), FormFactory.LINE_GAP_ROWSPEC, FormFactory.PREF_ROWSPEC, FormFactory.LINE_GAP_ROWSPEC, FormFactory.PREF_ROWSPEC, FormFactory.UNRELATED_GAP_ROWSPEC, RowSpec.decode("20px"), FormFactory.LINE_GAP_ROWSPEC, RowSpec.decode("21px"), RowSpec.decode("23px"), }));
 		namecompJLabel = new javax.swing.JLabel();
@@ -343,7 +343,7 @@ public class GUIForm extends javax.swing.JFrame {
 		saveProjectJButton.setEnabled(false);
 
 		projectStatusFieldsJPanel = new JPanel();
-		projectStatusFieldsJPanel.setBackground(Color.GRAY);
+		projectStatusFieldsJPanel.setBackground(new Color(128, 128, 128));
 		projectStatusFieldsJPanel.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
 		projectStatusFieldsJPanel.setBounds(112, 186, 338, 167);
 		projectFieldsJPanel.add(projectStatusFieldsJPanel);
@@ -461,7 +461,7 @@ public class GUIForm extends javax.swing.JFrame {
 		taskEditFieldsJPanel.setBounds(0, 0, 399, 219);
 		taskFieldsJPanel.add(taskEditFieldsJPanel);
 		taskEditFieldsJPanel.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
-		taskEditFieldsJPanel.setBackground(SystemColor.textHighlight);
+		taskEditFieldsJPanel.setBackground(new Color(30, 144, 255));
 		taskEditFieldsJPanel.setLayout(new FormLayout(new ColumnSpec[] { FormFactory.UNRELATED_GAP_COLSPEC, ColumnSpec.decode("56px"), FormFactory.UNRELATED_GAP_COLSPEC, ColumnSpec.decode("1px"), FormFactory.LABEL_COMPONENT_GAP_COLSPEC, ColumnSpec.decode("110px:grow"), FormFactory.DEFAULT_COLSPEC, FormFactory.RELATED_GAP_COLSPEC, ColumnSpec.decode("55px"), ColumnSpec.decode("51px"), FormFactory.RELATED_GAP_COLSPEC, ColumnSpec.decode("max(27dlu;default)"), FormFactory.RELATED_GAP_COLSPEC, ColumnSpec.decode("max(15dlu;default)"), }, new RowSpec[] { FormFactory.UNRELATED_GAP_ROWSPEC, RowSpec.decode("20px"), FormFactory.RELATED_GAP_ROWSPEC, RowSpec.decode("20px:grow"), FormFactory.RELATED_GAP_ROWSPEC, RowSpec.decode("20px:grow"), RowSpec.decode("38px"), RowSpec.decode("51px"), FormFactory.UNRELATED_GAP_ROWSPEC, RowSpec.decode("51px"), FormFactory.RELATED_GAP_ROWSPEC, RowSpec.decode("37px"), FormFactory.UNRELATED_GAP_ROWSPEC, RowSpec.decode("23px"), FormFactory.UNRELATED_GAP_ROWSPEC, FormFactory.DEFAULT_ROWSPEC, FormFactory.UNRELATED_GAP_ROWSPEC, RowSpec.decode("41px"), }));
 
 		label_5 = new JLabel();
@@ -554,7 +554,7 @@ public class GUIForm extends javax.swing.JFrame {
 		taskEditFieldsJPanel.add(saveTaskJButton, "6, 10, 7, 1, fill, top");
 
 		taskStatusFieldsJPanel = new JPanel();
-		taskStatusFieldsJPanel.setBackground(Color.GRAY);
+		taskStatusFieldsJPanel.setBackground(new Color(128, 128, 128));
 		taskStatusFieldsJPanel.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
 		taskStatusFieldsJPanel.setBounds(0, 230, 399, 170);
 		taskFieldsJPanel.add(taskStatusFieldsJPanel);
@@ -612,7 +612,7 @@ public class GUIForm extends javax.swing.JFrame {
 
 		clientFieldsJPanel = new JPanel();
 		clientFieldsJPanel.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
-		clientFieldsJPanel.setBackground(SystemColor.textHighlight);
+		clientFieldsJPanel.setBackground(new Color(30, 144, 255));
 
 		javax.swing.GroupLayout clientsJPanelLayout = new javax.swing.GroupLayout(clientsJPanel);
 		clientsJPanelLayout.setHorizontalGroup(clientsJPanelLayout.createParallelGroup(Alignment.LEADING).addGroup(clientsJPanelLayout.createSequentialGroup().addContainerGap().addGroup(clientsJPanelLayout.createParallelGroup(Alignment.LEADING).addGroup(clientsJPanelLayout.createSequentialGroup().addGroup(clientsJPanelLayout.createParallelGroup(Alignment.LEADING).addComponent(removeClientJButton).addComponent(jScrollPane5, GroupLayout.PREFERRED_SIZE, 245, GroupLayout.PREFERRED_SIZE)).addPreferredGap(ComponentPlacement.RELATED, 95, Short.MAX_VALUE).addComponent(clientFieldsJPanel, GroupLayout.PREFERRED_SIZE, 324, GroupLayout.PREFERRED_SIZE)).addComponent(clientsJLabel)).addContainerGap()));
@@ -737,9 +737,9 @@ public class GUIForm extends javax.swing.JFrame {
 		importExportJPanel.setLayout(null);
 
 		importExportTabbedPane = new JTabbedPane(SwingConstants.TOP);
-		importExportTabbedPane.setForeground(Color.GRAY);
+		importExportTabbedPane.setForeground(Color.WHITE);
 		importExportTabbedPane.setBorder(null);
-		importExportTabbedPane.setBackground(Color.GRAY);
+		importExportTabbedPane.setBackground(Color.WHITE);
 		importExportTabbedPane.setBounds(10, 11, 664, 429);
 		importExportJPanel.add(importExportTabbedPane);
 
@@ -769,10 +769,10 @@ public class GUIForm extends javax.swing.JFrame {
 		exportJButton.setBounds(550, 11, 99, 23);
 		exportJPanel.add(exportJButton);
 
-		importExportTabbedPane.setBackgroundAt(0, Color.DARK_GRAY);
+		importExportTabbedPane.setBackgroundAt(0, new Color(30, 144, 255));
 
 		importJPanel = new JPanel();
-		importJPanel.setBackground(SystemColor.textHighlight);
+		importJPanel.setBackground(new Color(30, 144, 255));
 		importJPanel.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
 		importExportTabbedPane.addTab("Import", null, importJPanel, "Import tasks here");
 		importExportTabbedPane.setForegroundAt(1, Color.CYAN);
@@ -828,7 +828,7 @@ public class GUIForm extends javax.swing.JFrame {
 		optionsJPanelLayout.setVerticalGroup(optionsJPanelLayout.createParallelGroup(Alignment.LEADING).addGroup(optionsJPanelLayout.createSequentialGroup().addContainerGap().addComponent(settingsJLabel).addGap(18).addComponent(settingsJTabbedPane, GroupLayout.PREFERRED_SIZE, 391, GroupLayout.PREFERRED_SIZE).addContainerGap(15, Short.MAX_VALUE)));
 
 		userSettingsJPanel = new JPanel();
-		userSettingsJPanel.setBackground(SystemColor.textHighlight);
+		userSettingsJPanel.setBackground(new Color(30, 144, 255));
 		settingsJTabbedPane.addTab("User Settings", null, userSettingsJPanel, null);
 		settingsJTabbedPane.setForegroundAt(0, Color.CYAN);
 		userSettingsJPanel.setLayout(null);
@@ -1365,22 +1365,6 @@ public class GUIForm extends javax.swing.JFrame {
 	// Other methods, FIXME nakijken
 	// ================================================================================
 
-	private void setCurrentProjectGUI(int index) {
-		try {
-			UserInterface.setCurrentProjectIndex(index);
-			currentProjectJLabel.setText("Current project: " + UserInterface.getCurrentProject().getNaam());
-			saveTaskJButton.setText("Save to " + UserInterface.getCurrentProject().getNaam());
-			projectsJList.setSelectedIndex(index);
-			refreshProjectsList(projectsJList, homeProjectsJList);
-			refreshTasksList(UserInterface.getCurrentProject(), tasksJList);
-			clearFieldsOnPanel(taskFieldsJPanel);
-			selectNewItem(tasksJList);
-		} catch (GUIException ex) {
-			ex.printStackTrace();
-			JOptionPane.showMessageDialog(this, ex.getMessage());
-		}
-	}
-
 	private void workClicked(java.awt.event.MouseEvent evt) {
 		try {
 			Project p = UserInterface.getCurrentProject();
@@ -1400,23 +1384,11 @@ public class GUIForm extends javax.swing.JFrame {
 		this.invalidate();
 	}
 
-	private void logout() {
-		try {
-			WinRegistry.deleteKey(WinRegistry.HKEY_CURRENT_USER, "SOFTWARE\\ChronoMatic");
-			LoginForm f = new LoginForm(this, validator);
-			this.dispose();
-			f.setVisible(true);
-
-		} catch (IllegalArgumentException | IllegalAccessException | InvocationTargetException e) {
-			e.printStackTrace();
-		}
-	}
-
 	// ================================================================================
 	// GUI methods
 	// ================================================================================
 
-	// Clear all fields on the panels in parameter
+	// CLEAR ALL FIELDS on the panels in parameter
 	private void clearFieldsOnPanel(JPanel panel) {
 		Component[] panelComponents = panel.getComponents();
 		for (Component c : panelComponents) {
@@ -1437,6 +1409,36 @@ public class GUIForm extends javax.swing.JFrame {
 			} else if (c instanceof JProgressBar) {
 				((JProgressBar) c).setValue(0);
 			}
+		}
+	}
+
+	// Set the CURRENT PROJECT with GUI responding right
+	private void setCurrentProjectGUI(int index) {
+		try {
+			UserInterface.setCurrentProjectIndex(index);
+			currentProjectJLabel.setText("Current project: " + UserInterface.getCurrentProject().getNaam());
+			saveTaskJButton.setText("Save to " + UserInterface.getCurrentProject().getNaam());
+			projectsJList.setSelectedIndex(index);
+			refreshProjectsList(projectsJList, homeProjectsJList);
+			refreshTasksList(UserInterface.getCurrentProject(), tasksJList);
+			clearFieldsOnPanel(taskFieldsJPanel);
+			selectNewItem(tasksJList);
+		} catch (GUIException ex) {
+			ex.printStackTrace();
+			JOptionPane.showMessageDialog(this, ex.getMessage());
+		}
+	}
+
+	// Log user out and show new loginForm
+	private void logout() {
+		try {
+			WinRegistry.deleteKey(WinRegistry.HKEY_CURRENT_USER, "SOFTWARE\\ChronoMatic");
+			LoginForm f = new LoginForm(this, validator);
+			this.dispose();
+			f.setVisible(true);
+
+		} catch (IllegalArgumentException | IllegalAccessException | InvocationTargetException e) {
+			e.printStackTrace();
 		}
 	}
 
@@ -1748,4 +1750,3 @@ public class GUIForm extends javax.swing.JFrame {
 	private JPanel projectStatusFieldsJPanel;
 	private JPanel taskStatusFieldsJPanel;
 }
-// EOF
