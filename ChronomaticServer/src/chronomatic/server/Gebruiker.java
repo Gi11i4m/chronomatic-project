@@ -39,12 +39,10 @@ public class Gebruiker {
 			}
 			else { 
 				// Geen projecten
-				JSONArray error = new JSONArray();
-				JSONObject obj = new JSONObject();
-				obj.put("najam", "piet");
-				error.put(obj);
+				JSONObject error = new JSONObject();
+				error.put("error","Geen projecten");
 				
-				return error.toString();
+				return "["+error.toString()+"]";
 			}
 		}
 		catch (Exception e){
@@ -77,7 +75,7 @@ public class Gebruiker {
 				JSONObject error = new JSONObject();
 				error.put("error","Geen opdrachtgevers");
 				
-				return error.toString();
+				return "["+error.toString()+"]";
 			}
 		}
 		catch(Exception e)

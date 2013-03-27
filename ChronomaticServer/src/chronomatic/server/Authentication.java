@@ -64,8 +64,7 @@ public class Authentication {
 				String sessionKey = generateSessionID();
 				
 				long unixTimestamp = System.currentTimeMillis()/1000;
-				String sessionQuery = "INSERT INTO sessies (session_key,time_out,last_activity,begin,gebruiker_ID) VALUES ('" + sessionKey + "',3600," + unixTimestamp + "," + unixTimestamp + ", " + rs.getInt(1) + ")";
-				System.out.println(sessionQuery);
+				String sessionQuery = "INSERT INTO sessies (session_key,time_out,last_activity,begin,gebruiker_ID) VALUES ('" + sessionKey + "',3600," + unixTimestamp + "," + unixTimestamp + ", " + rs.getInt(1) + ")";				
 				String checkedUsername = rs.getString(2);
 				
 				// Opslaan van sessie

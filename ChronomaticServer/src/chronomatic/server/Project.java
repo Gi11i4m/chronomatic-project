@@ -94,8 +94,7 @@ public class Project {
 	{ 
 		Connection con = DatabaseContainer.getConnection();
 		int userID = Authentication.getUserId(sessionKey);
-		String query = "UPDATE projecten SET  eind_datum = "+endDate+", naam = '" + projectName + ", opdrachtgevers_ID = " + opdrachtgeversID + "', start_datum = "+startDate+" WHERE ID = "+projectID+" AND gebruikers_ID = " + userID;
-		System.out.println(query);
+		String query = "UPDATE projecten SET  eind_datum = "+endDate+", naam = '" + projectName + "', opdrachtgevers_ID = " + opdrachtgeversID + ", start_datum = "+startDate+" WHERE ID = "+projectID+" AND gebruikers_ID = " + userID;		
 		JSONObject returnObject = new JSONObject();
 		try {
 			returnObject.put("result", Database.executeNullQuery(con, query));
