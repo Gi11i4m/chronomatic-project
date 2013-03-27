@@ -174,20 +174,17 @@ public class LoginForm extends javax.swing.JFrame implements ActionListener {
 	}
 	
 	public void generateLoginExtern(String accessToken) {
-		String email = null;
+		
 		
 		JSONObject userInfoJSONObj = null;
 		try {
-		MD5Generator MD5 = new MD5Generator();
-		// Facebook moet geen Access token aanvragen, de rest wel (omwille van oude Oauth)
+			// Facebook moet geen Access token aanvragen, de rest wel (omwille van oude Oauth)
 			if (!social.toString().equals("facebook")) {
-				
 				accessToken = AccessToken.request(accessToken, social);
-				
+			}
 				userInfoJSONObj = GetUserInfo.request(accessToken, social);
 
 				loginExtern(userInfoJSONObj);
-			}
 		} catch (IOException | JSONException | ParserConfigurationException | SAXException e) {
 			e.printStackTrace();
 		}
@@ -203,7 +200,7 @@ public class LoginForm extends javax.swing.JFrame implements ActionListener {
 			// als gebruiker nog niet bestaat..
 			
 			//System.out.println(ExistingUsernames.check("extern",email));
-			if (ExistingUsernames.check("extern",email)) {
+			if (!ExistingUsernames.check("extern",email)) {
 				InserterServer.CreateUserExtern(userInfoJSONObj.getString("naam"), userInfoJSONObj.getString("voornaam"), email);
 			}
 
