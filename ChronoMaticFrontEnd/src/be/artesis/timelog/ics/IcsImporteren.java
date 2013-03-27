@@ -36,7 +36,9 @@ public class IcsImporteren {
 		Project p = new Project("Imported tasks",0,0,0);
 		Taak[] taken = new Taak[importTasks(url).size()];
 		p.setTaken(importTasks(url).toArray(taken));
-		return null;				
+		ArrayList<Project> projects = new ArrayList<Project>();
+		projects.add(p);
+		return projects;				
 	}
 	
 	private static Calendar inlezen(String url) throws IOException, ParserException{

@@ -234,7 +234,7 @@ public class GUIForm extends javax.swing.JFrame {
 		setCurrentProjectJButton.setEnabled(false);
 		setCurrentProjectJButton.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
-				setCurrentProjectJButtonActionPerformed(evt);
+				setCurrentProjectGUI(((JList) evt.getSource()).getSelectedIndex());
 			}
 		});
 
@@ -979,7 +979,6 @@ public class GUIForm extends javax.swing.JFrame {
 	// ================================================================================
 
 	// Update user info
-
 	private void updateUser(String firstName, String lastName, String email) {
 		try {
 			UserInterface.updateUser(firstName, lastName, email);
@@ -991,7 +990,7 @@ public class GUIForm extends javax.swing.JFrame {
 		}
 	}
 
-	// Create new project
+	// Create new PROJECT
 	private void createProject(String name, long startdate, long enddate, int opdrachtgeverID) {
 		try {
 			UserInterface.createProject(name, startdate, enddate, opdrachtgeverID);
@@ -1003,7 +1002,7 @@ public class GUIForm extends javax.swing.JFrame {
 		}
 	}
 
-	// Update existing project
+	// Update existing PROJECT
 	private void updateProject(String name, long startdate, long enddate, int opdrachtgeverID) {
 		try {
 			UserInterface.updateProject(projectsJList.getSelectedIndex(), name, startdate, enddate, opdrachtgeverID);
@@ -1015,7 +1014,7 @@ public class GUIForm extends javax.swing.JFrame {
 		}
 	}
 
-	// Create new task
+	// Create new TASK
 	private void createTask(String name, long startdate, long enddate, String comment, boolean completed) {
 		try {
 			UserInterface.createTask(name, startdate, enddate, comment, completed);
@@ -1027,7 +1026,7 @@ public class GUIForm extends javax.swing.JFrame {
 		}
 	}
 
-	// Update existing task
+	// Update existing TASK
 	private void updateTask(String name, long startdate, long enddate, String comment, boolean completed) {
 		try {
 			UserInterface.updateTask(tasksJList.getSelectedIndex(), name, startdate, enddate, comment, completed);
@@ -1039,7 +1038,7 @@ public class GUIForm extends javax.swing.JFrame {
 		}
 	}
 
-	// Create new client
+	// Create new CLIENT
 	private void createClient(String naam, String voornaam, String bedrijfsnaam, String email, String telefoonnummer) {
 		Opdrachtgever o = null;
 		try {
@@ -1062,7 +1061,7 @@ public class GUIForm extends javax.swing.JFrame {
 		}
 	}
 
-	// Update existing client
+	// Update existing CLIENT
 	private void updateClient(String naam, String voornaam, String bedrijfsnaam, String email, String telefoonnummer) {
 		try {
 			UserInterface.updateClient(clientsJList.getSelectedIndex(), voornaam, voornaam, bedrijfsnaam, email, telefoonnummer);
@@ -1214,7 +1213,7 @@ public class GUIForm extends javax.swing.JFrame {
 		}
 	}
 
-	// Refresh CLIENTS combobox
+	// Refresh all CLIENTS comboboxes
 	private void refreshClientsComboBox(Project p, JComboBox... boxes) {
 		for (JComboBox box : boxes) {
 			DefaultComboBoxModel listmodel = new DefaultComboBoxModel();
@@ -1231,6 +1230,7 @@ public class GUIForm extends javax.swing.JFrame {
 		}
 	}
 
+	// Refresh IMPORT & EXPORT trees
 	private void refreshTree(JTree tree, ArrayList<Project> projects) {
 		DefaultMutableTreeNode root = new DefaultMutableTreeNode("Project");
 		for (Project p : projects) {
@@ -1247,11 +1247,10 @@ public class GUIForm extends javax.swing.JFrame {
 	}
 
 	// ================================================================================
-	// Loading methods
+	// Loading info into GUI methods
 	// ================================================================================
 
-	// Load user info
-
+	// Load USER info
 	private void loadUserInfo() {
 		Gebruiker u = UserInterface.getUser();
 		usernameJTextField.setText(u.getGebruikersnaam());
@@ -1312,49 +1311,6 @@ public class GUIForm extends javax.swing.JFrame {
 	}
 
 	// ================================================================================
-	// Other methods, FIXME nakijken
-	// ================================================================================
-
-	private void setCurrentProjectGUI(int index) {
-		try {
-			UserInterface.setCurrentProjectIndex(index);
-			currentProjectJLabel.setText("Current project: " + UserInterface.getCurrentProject().getNaam());
-			saveTaskJButton.setText("Save to " + UserInterface.getCurrentProject().getNaam());
-			projectsJList.setSelectedIndex(index);
-			refreshProjectsList(projectsJList, homeProjectsJList);
-			refreshTasksList(UserInterface.getCurrentProject(), tasksJList);
-			clearFieldsOnPanel(taskFieldsJPanel);
-			selectNewItem(tasksJList);
-		} catch (GUIException ex) {
-			ex.printStackTrace();
-			JOptionPane.showMessageDialog(this, ex.getMessage());
-		}
-	}
-
-	private void workClicked(java.awt.event.MouseEvent evt) {
-		try {
-			Project p = UserInterface.getCurrentProject();
-			if (!p.tasksAvailable()) {
-				throw new GUIException("Current project contains no available tasks");
-			}
-			setVisible(false);
-			WorkDialog work = new WorkDialog(this, true, validator);
-			work.setVisible(true);
-			setVisible(true);
-			loadTaskInfo(tasksJList.getSelectedIndex());
-			toggleButtonStates();
-		} catch (GUIException ex) {
-			ex.printStackTrace();
-			JOptionPane.showMessageDialog(this, ex.getMessage());
-		}
-	}
-
-	//FIXME nog invullen
-	private void logout() {
-
-	}
-
-	// ================================================================================
 	// GUI methods
 	// ================================================================================
 
@@ -1399,12 +1355,51 @@ public class GUIForm extends javax.swing.JFrame {
 	}
 
 	// ================================================================================
-	// Event handlers, FIXME afsplitsen!
+	// Other methods, FIXME nakijken
 	// ================================================================================
 
-	private void setCurrentProjectJButtonActionPerformed(java.awt.event.ActionEvent evt) {
-		setCurrentProjectGUI(projectsJList.getSelectedIndex());
+	private void setCurrentProjectGUI(int index) {
+		try {
+			UserInterface.setCurrentProjectIndex(index);
+			currentProjectJLabel.setText("Current project: " + UserInterface.getCurrentProject().getNaam());
+			saveTaskJButton.setText("Save to " + UserInterface.getCurrentProject().getNaam());
+			projectsJList.setSelectedIndex(index);
+			refreshProjectsList(projectsJList, homeProjectsJList);
+			refreshTasksList(UserInterface.getCurrentProject(), tasksJList);
+			clearFieldsOnPanel(taskFieldsJPanel);
+			selectNewItem(tasksJList);
+		} catch (GUIException ex) {
+			ex.printStackTrace();
+			JOptionPane.showMessageDialog(this, ex.getMessage());
+		}
 	}
+
+	private void workClicked(java.awt.event.MouseEvent evt) {
+		try {
+			Project p = UserInterface.getCurrentProject();
+			if (!p.tasksAvailable()) {
+				throw new GUIException("Current project contains no available tasks");
+			}
+			setVisible(false);
+			WorkDialog work = new WorkDialog(this, true, validator);
+			work.setVisible(true);
+			setVisible(true);
+			loadTaskInfo(tasksJList.getSelectedIndex());
+			toggleButtonStates();
+		} catch (GUIException ex) {
+			ex.printStackTrace();
+			JOptionPane.showMessageDialog(this, ex.getMessage());
+		}
+	}
+
+	//FIXME nog invullen
+	private void logout() {
+
+	}
+
+	// ================================================================================
+	// Event handlers, FIXME afsplitsen!
+	// ================================================================================
 
 	private void clientsJListValueChanged(ListSelectionEvent arg0) {
 		if (clientsJList.getSelectedIndex() != -1) {
@@ -1450,10 +1445,10 @@ public class GUIForm extends javax.swing.JFrame {
 			list.setSelectedIndex(list.getModel().getSize() - 1);
 			list.ensureIndexIsVisible(list.getSelectedIndex());
 		}
-		// FIXME refresh export view
+		refreshTree(exportJCheckBoxTree, UserInterface.getProjects());
 	}
 
-	// Event handlers for all the edit fields
+	// Event handlers for all the edit fields, FIXME
 	private void editFieldsFocused(java.awt.event.FocusEvent evt) {
 		toggleButtonStates();
 	}
@@ -1546,6 +1541,9 @@ public class GUIForm extends javax.swing.JFrame {
 		}
 	}
 
+	// ================================================================================
+	// Component variable declaration
+	// ================================================================================
 	private javax.swing.JTabbedPane contentJTabbedPane;
 	private javax.swing.JLabel clientcompJLabel1;
 	private javax.swing.JLabel clientsJLabel;
@@ -1659,3 +1657,4 @@ public class GUIForm extends javax.swing.JFrame {
 	private JButton logoutJButton;
 	private CheckboxTree importJCheckBoxTree;
 }
+// EOF
