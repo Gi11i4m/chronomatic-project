@@ -349,7 +349,7 @@ public class WorkDialog extends javax.swing.JDialog {
 			try {
 				pauseStart = clock.pauseToggle();
 
-				getContentPane().setBackground(Color.LIGHT_GRAY);
+				getContentPane().setBackground(Color.GRAY);
 				startPauseJButton.setText("Resume");
 				this.setTitle("Total worked: " + Clock.longTimeToString(clock.getRuntime() - totalPause, false));
 			} catch (ClockException ex) {

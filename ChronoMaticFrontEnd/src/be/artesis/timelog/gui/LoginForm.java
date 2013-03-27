@@ -167,7 +167,7 @@ public class LoginForm extends javax.swing.JFrame implements ActionListener {
             }
 		} catch (HeadlessException | IOException | JSONException | WebserviceException | IllegalArgumentException | IllegalAccessException | InvocationTargetException e) {
 			e.printStackTrace();
-			JOptionPane.showMessageDialog(this, "Error connecting to server");
+			JOptionPane.showMessageDialog(this, "Error connecting to server \n" + e.getMessage());
 			this.dispose();
 		}
 
