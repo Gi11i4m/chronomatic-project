@@ -222,7 +222,7 @@ public class GUIForm extends javax.swing.JFrame {
 				JList list = (JList) arg0.getSource();
 				if (arg0.getClickCount() == 2) {
 					int index = list.locationToIndex(arg0.getPoint());
-					if (index != -1) {
+					if (index != -1 && list.getSelectedValue().getClass().equals(Project.class)) {
 						setCurrentProjectGUI(index);
 					}
 				}
@@ -279,7 +279,7 @@ public class GUIForm extends javax.swing.JFrame {
 				JList list = (JList) arg0.getSource();
 				if (arg0.getClickCount() == 2) {
 					int index = list.locationToIndex(arg0.getPoint());
-					if (index != -1) {
+					if (index != -1 && list.getSelectedValue().getClass().equals(Project.class)) {
 						setCurrentProjectGUI(index);
 					}
 				}
@@ -294,17 +294,7 @@ public class GUIForm extends javax.swing.JFrame {
 		jScrollPane1.setViewportView(projectsJList);
 
 		projectsJList.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
-		projectsJList.setModel(new AbstractListModel() {
-			String[] values = new String[] { "Add a new project here" };
-
-			public int getSize() {
-				return values.length;
-			}
-
-			public Object getElementAt(int index) {
-				return values[index];
-			}
-		});
+		
 		projectsJList.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
 			public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
 				projectsJListValueChanged(evt);
@@ -464,17 +454,10 @@ public class GUIForm extends javax.swing.JFrame {
 		tasksJPanel.add(jScrollPane3);
 
 		tasksJList = new JList();
-		tasksJList.setModel(new AbstractListModel() {
-			String[] values = new String[] { "Select a current project first!" };
-
-			public int getSize() {
-				return values.length;
-			}
-
-			public Object getElementAt(int index) {
-				return values[index];
-			}
-		});
+		DefaultListModel tasksListmodel = new DefaultListModel();
+		tasksListmodel.addElement("Select a current project first!");
+		tasksJList.setModel(tasksListmodel);
+		
 		tasksJList.addListSelectionListener(new ListSelectionListener() {
 			public void valueChanged(ListSelectionEvent arg0) {
 				taskJListValueChanged(arg0);
@@ -632,6 +615,15 @@ public class GUIForm extends javax.swing.JFrame {
 		taskStatusFieldsJPanel.add(taskTotalPauseJTextField);
 		taskTotalPauseJTextField.setEditable(false);
 		taskTotalPauseJTextField.setColumns(10);
+		
+		addTimeJButton = new JButton("Add time");
+		addTimeJButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				//FIXME add tijdspanne aan taak
+			}
+		});
+		addTimeJButton.setBounds(287, 108, 89, 23);
+		taskStatusFieldsJPanel.add(addTimeJButton);
 		clientsJPanel = new javax.swing.JPanel();
 		clientsJPanel.setForeground(new Color(211, 211, 211));
 		clientsJLabel = new javax.swing.JLabel();
@@ -1556,7 +1548,10 @@ public class GUIForm extends javax.swing.JFrame {
 
 	/**
 	 * Set the CURRENT PROJECT with GUI responding right
-	 * @param 	index	the index (GUI list and arraylist) from the project that's going to be the current project
+	 * 
+	 * @param index
+	 *            the index (GUI list and arraylist) from the project that's
+	 *            going to be the current project
 	 */
 	private void setCurrentProjectGUI(int index) {
 		try {
@@ -1772,7 +1767,7 @@ public class GUIForm extends javax.swing.JFrame {
 	private void clientsJComboBoxValueChanged(ActionEvent arg0) {
 		JComboBox combobox = (JComboBox) arg0.getSource();
 		if (combobox.getSelectedIndex() != -1) {
-			if (combobox.getSelectedItem().getClass().equals(String.class)) {
+			if (combobox.getSelectedItem().equals(NEWCLIENTITEM)) {
 				creatingProject = true;
 				contentJTabbedPane.setSelectedIndex(3);
 				selectNewItem(clientsJList);
@@ -1781,8 +1776,9 @@ public class GUIForm extends javax.swing.JFrame {
 	}
 
 	private void setCurrentProjectWithEnter(KeyEvent arg0) {
-		if (arg0.getKeyCode() == KeyEvent.VK_ENTER) {
-			setCurrentProjectGUI(((JList) arg0.getSource()).getSelectedIndex());
+		JList list = (JList) arg0.getSource();
+		if (arg0.getKeyCode() == KeyEvent.VK_ENTER && list.getSelectedValue().getClass().equals(Project.class)) {
+			setCurrentProjectGUI(list.getSelectedIndex());
 		}
 	}
 
@@ -1905,4 +1901,5 @@ public class GUIForm extends javax.swing.JFrame {
 	private JPanel projectStatusFieldsJPanel;
 	private JPanel taskStatusFieldsJPanel;
 	private JButton syncButton;
+	private JButton addTimeJButton;
 }
