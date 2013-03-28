@@ -584,6 +584,9 @@ public class GUIForm extends javax.swing.JFrame {
 				} finally {
 					toggleButtonStates();
 					loadProjectInfo(projectsJList.getSelectedIndex());
+					refreshProjectsList(homeProjectsJList);
+					if (projectsJList.getSelectedValue() instanceof Project)
+						refreshTasksList((Project) projectsJList.getSelectedValue(), homeTasksJList);
 				}
 			}
 		});
@@ -754,7 +757,6 @@ public class GUIForm extends javax.swing.JFrame {
 			}
 		});
 		saveClientJButton.setText("Save");
-		saveClientJButton.setEnabled(false);
 		clientFieldsJPanel.add(saveClientJButton, "2, 14, 2, 1, fill, top");
 		clientsJPanel.setLayout(clientsJPanelLayout);
 
@@ -1028,7 +1030,7 @@ public class GUIForm extends javax.swing.JFrame {
 		syncButton = new JButton("Sync");
 		syncButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				sync();
+				// sync();
 			}
 		});
 
@@ -1401,16 +1403,15 @@ public class GUIForm extends javax.swing.JFrame {
 	 */
 	private void refreshTree(JTree tree, ArrayList<Project> projects) {
 		DefaultMutableTreeNode root = new DefaultMutableTreeNode("Project");
-		if (!projects.isEmpty()) {
-			for (Project p : projects) {
-				if (!p.getTaken().isEmpty()) {
-					DefaultMutableTreeNode project = new DefaultMutableTreeNode(p);
-					for (Taak t : p.getTaken()) {
-						project.add(new DefaultMutableTreeNode(t));
-					}
-					root.add(project);
+		for (Project p : projects) {
+			if (p != null && !p.getTaken().isEmpty()) {
+				DefaultMutableTreeNode project = new DefaultMutableTreeNode(p);
+				for (Taak t : p.getTaken()) {
+					project.add(new DefaultMutableTreeNode(t));
 				}
+				root.add(project);
 			}
+
 		}
 		DefaultTreeModel treeModel = new DefaultTreeModel(root);
 		tree.setModel(treeModel);
@@ -1588,20 +1589,20 @@ public class GUIForm extends javax.swing.JFrame {
 		}
 	}
 
-	// FIXME methode maken met 2 parameters en overal waar deze aangeroepen wordt de juiste parameters meegeven
+	// FIXME methode maken met 2 parameters (variabel # buttons laatst) en overal waar deze aangeroepen wordt de juiste parameters meegeven
 	// Change button states (enabled / disabled) looking at selected indexes
 	private void toggleButtonStates() {
 		boolean taskSelected = tasksJList.getSelectedIndex() != -1;
 		boolean projectSelected = projectsJList.getSelectedIndex() != -1;
 		boolean newItemSelected = projectsJList.getSelectedIndex() != -1 && !projectsJList.getSelectedValue().equals(NEWPROJECTITEM);
-		boolean clientSelected = clientsJList.getSelectedIndex() != -1;
+		//boolean clientSelected = clientsJList.getSelectedIndex() != -1;
 		saveTaskJButton.setEnabled(taskSelected);
-		removeTaskJButton.setEnabled(taskSelected);
+		//removeTaskJButton.setEnabled(taskSelected);
 		setCurrentProjectJButton.setEnabled(projectSelected && newItemSelected);
 		saveProjectJButton.setEnabled(projectSelected);
 		removeProjectJButton.setEnabled(projectSelected && newItemSelected);
-		saveClientJButton.setEnabled(clientSelected);
-		removeClientJButton.setEnabled(clientSelected);
+		//saveClientJButton.setEnabled(clientSelected);
+		//removeClientJButton.setEnabled(clientSelected);
 	}
 
 	// ================================================================================
@@ -1657,7 +1658,7 @@ public class GUIForm extends javax.swing.JFrame {
 		}
 	}
 
-	// Initialiseer statusvelden (linksboven) en project en client lijsten
+	// Initialiseer statusvelden (linksboven) en project en client lijsten, FIXME overbodige methodes weg!
 	private void guiOpened(WindowEvent evt) {
 		ingelogdJLabel.setText(UserInterface.getUser().getVolledigeNaam());
 		ingelogdJLabel.setForeground(Color.GREEN);
