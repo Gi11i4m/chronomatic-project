@@ -229,7 +229,7 @@ public class LoginForm extends javax.swing.JFrame implements ActionListener {
 			UserInterface.getUser().setProjects(CreatorFromJSON.createProjecten(validator.getSessionKey()));
 			//System.out.println(UserInterface.getUser().getProject(0) + " PIEEEEEET");
 			
-			if(UserInterface.getUser().getProject(0) != null) {
+			if(!UserInterface.getProjects().isEmpty()) {
 				UserInterface.getUser().setOpdrachtgevers(CreatorFromJSON.createOpdrachtgevers(validator.getSessionKey()));
 				
 				for (int i = 0; i < UserInterface.getUser().getProjects().size(); i++) {

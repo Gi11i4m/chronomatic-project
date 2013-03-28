@@ -1661,6 +1661,10 @@ public class GUIForm extends javax.swing.JFrame {
 	private void guiOpened(WindowEvent evt) {
 		ingelogdJLabel.setText(UserInterface.getUser().getVolledigeNaam());
 		ingelogdJLabel.setForeground(Color.GREEN);
+		for (Project p : UserInterface.getProjects()) {
+			System.out.println("UserInterface project: " + p);
+		}
+		
 		refreshProjectsList(projectsJList, homeProjectsJList);
 		refreshClientsList(clientsJList);
 		removeClientJButton.setEnabled(false);
