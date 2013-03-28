@@ -15,7 +15,8 @@ public class CreatorFromJSON
 
 
         public static Gebruiker createGebruiker(String sessionKey) throws JSONException, IOException {
-		JSONObject Jgebruiker = JSONOverdrager.getGebruiker(sessionKey);;
+		JSONObject Jgebruiker = JSONOverdrager.getGebruiker(sessionKey);
+
 		Gebruiker gebruiker = new Gebruiker(Jgebruiker.getString("naam"), Jgebruiker.getString("voornaam"), Jgebruiker.getString("gebruikersnaam"), Jgebruiker.getString("email"), Jgebruiker.getInt("ID"));
 
 		return gebruiker;
@@ -28,7 +29,7 @@ public class CreatorFromJSON
 
 		Project[] project = new Project[Jproject.length];
 		
-		//FIXME errors door-throwen
+		//if(!Jproject[0].getString("error").equals("Geen projecten")) {
 		if(!Jproject[0].has("error")) {
 	        int i = 0;
 	        for(JSONObject Jobject: Jproject)
@@ -36,9 +37,7 @@ public class CreatorFromJSON
 	        	project[i++] =  new Project(Jobject.getString("naam"), Jobject.getInt("opdrachtgevers_ID"), Jobject.getLong("start_datum"),Jobject.getLong("eind_datum"), Jobject.getInt("ID"));
 	    	}
 		}
-		else{
-			project = new Project[0];
-		}
+
 		return project;
 	}
 

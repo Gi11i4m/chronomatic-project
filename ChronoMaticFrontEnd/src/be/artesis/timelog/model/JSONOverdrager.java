@@ -14,6 +14,7 @@ public class JSONOverdrager
 	}
        
     public static JSONObject[] getProjectenVanGebruiker(String sessionKey) throws IOException, JSONException {
+    	System.out.println(Connection.getArray("gebruiker/projecten/" + sessionKey ));
 		return JArrayToJSONArrayArray(Connection.getArray("gebruiker/projecten/" + sessionKey ));		
 	}
 	

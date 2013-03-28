@@ -33,7 +33,9 @@ public class InserterServer {
 	}
 
 	public static int inputTaak(String sessionKey, String naam, long begindatum, long geschatteEinddatum, String commentaar, boolean completed  , int projectID) throws MalformedURLException, IOException, WebserviceException, JSONException {
-        JSONObject key = Connection.getObject("task/create/" + sessionKey + "/" + naam + "/" + begindatum + "/" + geschatteEinddatum + "/" + commentaar + "/" + projectID + "/" + completed);
+        System.out.println(Connection.getObject("task/create/" + sessionKey + "/" + naam + "/" + begindatum + "/" + geschatteEinddatum + "/" + commentaar + "/" + projectID + "/" + completed));
+		JSONObject key = Connection.getObject("task/create/" + sessionKey + "/" + naam + "/" + begindatum + "/" + geschatteEinddatum + "/" + commentaar + "/" + projectID + "/" + completed);
+        
         return key.getInt("GENERATED_KEY");
     }
 }

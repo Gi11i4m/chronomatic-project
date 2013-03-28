@@ -119,20 +119,20 @@ public class GUIForm extends javax.swing.JFrame {
 		projectsJLabel.setBackground(new Color(70, 130, 180));
 		projectsJLabel.setBounds(10, 11, 204, 16);
 		jScrollPane1 = new javax.swing.JScrollPane();
-		jScrollPane1.setBounds(10, 33, 204, 336);
+		jScrollPane1.setBounds(10, 40, 200, 330);
 		setCurrentProjectJButton = new javax.swing.JButton();
-		setCurrentProjectJButton.setBounds(10, 404, 204, 36);
+		setCurrentProjectJButton.setBounds(10, 417, 200, 23);
 		filler2 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 32767));
 		filler2.setBounds(220, 152, 0, 0);
 		removeProjectJButton = new javax.swing.JButton();
-		removeProjectJButton.setBounds(10, 375, 204, 23);
+		removeProjectJButton.setBounds(10, 380, 200, 23);
 		tasksJPanel = new javax.swing.JPanel();
 		tasksJLabel = new javax.swing.JLabel();
 		tasksJLabel.setBounds(10, 14, 204, 16);
 		jScrollPane3 = new javax.swing.JScrollPane();
-		jScrollPane3.setBounds(10, 40, 204, 366);
+		jScrollPane3.setBounds(10, 40, 200, 360);
 		removeTaskJButton = new javax.swing.JButton();
-		removeTaskJButton.setBounds(10, 417, 204, 23);
+		removeTaskJButton.setBounds(10, 411, 200, 29);
 		scheduleJPanel = new javax.swing.JPanel();
 		scheduleJLabel = new javax.swing.JLabel();
 		scheduleJLabel.setBounds(10, 11, 66, 19);
@@ -272,7 +272,14 @@ public class GUIForm extends javax.swing.JFrame {
 				deleteProject((Project) projectsJList.getSelectedValue());
 			}
 		});
+
+		contentJTabbedPane.addTab("", new javax.swing.ImageIcon(getClass().getResource("/be/artesis/timelog/gui/icons/ProjectsNeonIcon.png")), projectsJPanel, "Projects");
+		projectsJPanel.setLayout(null);
+		projectsJPanel.add(removeProjectJButton);
+		projectsJPanel.add(setCurrentProjectJButton);
+		projectsJPanel.add(jScrollPane1);
 		projectsJList = new javax.swing.JList();
+		jScrollPane1.setViewportView(projectsJList);
 		projectsJList.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
@@ -291,7 +298,6 @@ public class GUIForm extends javax.swing.JFrame {
 				setCurrentProjectWithEnter(arg0);
 			}
 		});
-		jScrollPane1.setViewportView(projectsJList);
 
 		projectsJList.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
 		
@@ -300,24 +306,18 @@ public class GUIForm extends javax.swing.JFrame {
 				projectsJListValueChanged(evt);
 			}
 		});
-
-		contentJTabbedPane.addTab("", new javax.swing.ImageIcon(getClass().getResource("/be/artesis/timelog/gui/icons/ProjectsNeonIcon.png")), projectsJPanel, "Projects");
-		projectsJPanel.setLayout(null);
-		projectsJPanel.add(removeProjectJButton);
-		projectsJPanel.add(setCurrentProjectJButton);
-		projectsJPanel.add(jScrollPane1);
 		projectsJPanel.add(filler2);
 		projectsJPanel.add(projectsJLabel);
 
 		projectFieldsJPanel = new JPanel();
 		projectFieldsJPanel.setBorder(null);
 		projectFieldsJPanel.setBackground(new Color(211, 211, 211));
-		projectFieldsJPanel.setBounds(224, 33, 450, 407);
+		projectFieldsJPanel.setBounds(224, 11, 461, 429);
 		projectsJPanel.add(projectFieldsJPanel);
 		projectFieldsJPanel.setLayout(null);
 
 		projectEditFieldsJPanel = new JPanel();
-		projectEditFieldsJPanel.setBounds(51, 0, 399, 175);
+		projectEditFieldsJPanel.setBounds(62, 0, 399, 175);
 		projectFieldsJPanel.add(projectEditFieldsJPanel);
 		projectEditFieldsJPanel.setBackground(Color.DARK_GRAY);
 		projectEditFieldsJPanel.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
@@ -369,7 +369,7 @@ public class GUIForm extends javax.swing.JFrame {
 		projectStatusFieldsJPanel = new JPanel();
 		projectStatusFieldsJPanel.setBackground(new Color(128, 128, 128));
 		projectStatusFieldsJPanel.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
-		projectStatusFieldsJPanel.setBounds(51, 186, 399, 221);
+		projectStatusFieldsJPanel.setBounds(62, 186, 399, 221);
 		projectFieldsJPanel.add(projectStatusFieldsJPanel);
 		projectStatusFieldsJPanel.setLayout(null);
 
@@ -394,43 +394,11 @@ public class GUIForm extends javax.swing.JFrame {
 		percentageCompleteJProgressBar = new javax.swing.JProgressBar();
 		percentageCompleteJProgressBar.setBounds(113, 11, 215, 21);
 		projectStatusFieldsJPanel.add(percentageCompleteJProgressBar);
-		//percentageCompleteJProgressBar.
 		percentageCompleteJProgressBar.setToolTipText("Displays the percentage of completion of the project");
 		percentageCompleteJProgressBar.setStringPainted(true);
 		saveProjectJButton.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent evt) { // FIXME code naar methode verplaatsen
-				try {
-					String name = projectNameJTextField.getText();
-					long startdate;
-					long enddate;
-					try {
-						startdate = projectStartDateChooser.getDate().getTime() / 1000;
-						enddate = projectEndDateChooser.getDate().getTime() / 1000;
-					} catch (NullPointerException e) {
-						throw new DataInputException("Please choose a valid date");
-					}
-					if (projectClientsJComboBox.getSelectedIndex() == -1 || projectClientsJComboBox.getSelectedItem().equals(NEWCLIENTITEM)) {
-						throw new DataInputException("Select or create a client first");
-					}
-					Opdrachtgever o = (Opdrachtgever) projectClientsJComboBox.getSelectedItem();
-					int opdrachtgeverID = o.getID();
-
-					if (projectsJList.getSelectedValue().equals(NEWPROJECTITEM)) {
-						createProject(name, startdate, enddate, opdrachtgeverID);
-					} else {
-						updateProject(name, startdate, enddate, opdrachtgeverID);
-					}
-				} catch (DataInputException e) {
-					JOptionPane.showMessageDialog(GUIForm.this, e.getMessage());
-					e.printStackTrace();
-				}
-				toggleButtonStates();
-			}
-		});
-
-		projectNameJTextField.addFocusListener(new java.awt.event.FocusAdapter() {
-			public void focusGained(java.awt.event.FocusEvent evt) {
-				editFieldsFocused(evt);
+				saveProjectButtonClicked();
 			}
 		});
 
@@ -464,22 +432,21 @@ public class GUIForm extends javax.swing.JFrame {
 			}
 		});
 		tasksJList.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
-		jScrollPane3.setViewportView(tasksJList);
 		tasksJPanel.add(removeTaskJButton);
 
 		taskFieldsJPanel = new JPanel();
 		taskFieldsJPanel.setBorder(null);
 		taskFieldsJPanel.setBackground(new Color(211, 211, 211));
-		taskFieldsJPanel.setBounds(284, 40, 401, 400);
+		taskFieldsJPanel.setBounds(284, 14, 401, 426);
 		tasksJPanel.add(taskFieldsJPanel);
 		taskFieldsJPanel.setLayout(null);
 
 		taskEditFieldsJPanel = new JPanel();
-		taskEditFieldsJPanel.setBounds(0, 0, 399, 219);
+		taskEditFieldsJPanel.setBounds(0, 0, 399, 245);
 		taskFieldsJPanel.add(taskEditFieldsJPanel);
 		taskEditFieldsJPanel.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
 		taskEditFieldsJPanel.setBackground(Color.DARK_GRAY);
-		taskEditFieldsJPanel.setLayout(new FormLayout(new ColumnSpec[] { FormFactory.UNRELATED_GAP_COLSPEC, ColumnSpec.decode("56px"), FormFactory.UNRELATED_GAP_COLSPEC, ColumnSpec.decode("1px"), FormFactory.LABEL_COMPONENT_GAP_COLSPEC, ColumnSpec.decode("110px:grow"), FormFactory.DEFAULT_COLSPEC, FormFactory.RELATED_GAP_COLSPEC, ColumnSpec.decode("55px"), ColumnSpec.decode("51px"), FormFactory.RELATED_GAP_COLSPEC, ColumnSpec.decode("max(27dlu;default)"), FormFactory.RELATED_GAP_COLSPEC, ColumnSpec.decode("max(15dlu;default)"), }, new RowSpec[] { FormFactory.UNRELATED_GAP_ROWSPEC, RowSpec.decode("20px"), FormFactory.RELATED_GAP_ROWSPEC, RowSpec.decode("20px:grow"), FormFactory.RELATED_GAP_ROWSPEC, RowSpec.decode("20px:grow"), RowSpec.decode("38px"), RowSpec.decode("51px"), FormFactory.UNRELATED_GAP_ROWSPEC, RowSpec.decode("51px"), FormFactory.RELATED_GAP_ROWSPEC, RowSpec.decode("37px"), FormFactory.UNRELATED_GAP_ROWSPEC, RowSpec.decode("23px"), FormFactory.UNRELATED_GAP_ROWSPEC, FormFactory.DEFAULT_ROWSPEC, FormFactory.UNRELATED_GAP_ROWSPEC, RowSpec.decode("41px"), }));
+		taskEditFieldsJPanel.setLayout(new FormLayout(new ColumnSpec[] { FormFactory.UNRELATED_GAP_COLSPEC, ColumnSpec.decode("56px"), FormFactory.UNRELATED_GAP_COLSPEC, ColumnSpec.decode("1px"), FormFactory.LABEL_COMPONENT_GAP_COLSPEC, ColumnSpec.decode("110px:grow"), FormFactory.DEFAULT_COLSPEC, FormFactory.RELATED_GAP_COLSPEC, ColumnSpec.decode("55px"), ColumnSpec.decode("51px"), FormFactory.RELATED_GAP_COLSPEC, ColumnSpec.decode("max(27dlu;default)"), FormFactory.RELATED_GAP_COLSPEC, ColumnSpec.decode("max(15dlu;default)"), }, new RowSpec[] { FormFactory.UNRELATED_GAP_ROWSPEC, RowSpec.decode("20px"), FormFactory.RELATED_GAP_ROWSPEC, RowSpec.decode("20px:grow"), FormFactory.RELATED_GAP_ROWSPEC, RowSpec.decode("20px:grow"), RowSpec.decode("38px"), RowSpec.decode("51px"), FormFactory.RELATED_GAP_ROWSPEC, FormFactory.DEFAULT_ROWSPEC, FormFactory.UNRELATED_GAP_ROWSPEC, RowSpec.decode("51px"), FormFactory.RELATED_GAP_ROWSPEC, RowSpec.decode("37px"), FormFactory.UNRELATED_GAP_ROWSPEC, RowSpec.decode("23px"), FormFactory.UNRELATED_GAP_ROWSPEC, FormFactory.DEFAULT_ROWSPEC, FormFactory.UNRELATED_GAP_ROWSPEC, RowSpec.decode("41px"), }));
 
 		label_5 = new JLabel();
 		label_5.setText("Name");
@@ -487,12 +454,6 @@ public class GUIForm extends javax.swing.JFrame {
 		taskEditFieldsJPanel.add(label_5, "2, 2, fill, center");
 
 		taskNameJTextField = new JTextField();
-		taskNameJTextField.addFocusListener(new FocusAdapter() {
-			@Override
-			public void focusGained(FocusEvent e) {
-				editFieldsFocused(e);
-			}
-		});
 		taskEditFieldsJPanel.add(taskNameJTextField, "6, 2, 7, 1, fill, top");
 
 		label_6 = new JLabel();
@@ -510,12 +471,6 @@ public class GUIForm extends javax.swing.JFrame {
 		taskEditFieldsJPanel.add(label_7, "9, 4, 2, 1, center, center");
 
 		taskCompletedJCheckBox = new JCheckBox();
-		taskCompletedJCheckBox.addFocusListener(new FocusAdapter() {
-			@Override
-			public void focusGained(FocusEvent arg0) {
-				editFieldsFocused(arg0);
-			}
-		});
 		taskCompletedJCheckBox.setBackground(Color.DARK_GRAY);
 		taskEditFieldsJPanel.add(taskCompletedJCheckBox, "12, 4, left, center");
 
@@ -534,58 +489,27 @@ public class GUIForm extends javax.swing.JFrame {
 		taskEditFieldsJPanel.add(label_9, "2, 8, fill, top");
 
 		taskCommentJTextArea = new JTextArea();
-		taskCommentJTextArea.addFocusListener(new FocusAdapter() {
-			@Override
-			public void focusGained(FocusEvent e) {
-				editFieldsFocused(e);
-			}
-		});
 		taskEditFieldsJPanel.add(taskCommentJTextArea, "6, 8, 7, 1, fill, fill");
 
 		saveTaskJButton = new JButton();
 		saveTaskJButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				try {
-					String name = taskNameJTextField.getText();
-					String comment = taskCommentJTextArea.getText();
-					boolean completed = taskCompletedJCheckBox.isSelected();
-					long startdate = taskStartDateChooser.getDate().getTime() / 1000;
-					long enddate = taskEndDateChooser.getDate().getTime() / 1000;
-					int projectId = UserInterface.getCurrentProject().getId();
-
-					if (tasksJList.getSelectedValue().equals(NEWTASKITEM)) {
-						createTask(name, startdate, enddate, comment, completed);
-					} else {
-						updateTask(name, startdate, enddate, comment, completed, projectId);
-					}
-				} catch (NullPointerException ex) {
-					ex.printStackTrace();
-					JOptionPane.showMessageDialog(GUIForm.this, "Please choose a valid date");
-				} catch (GUIException e1) {
-					e1.printStackTrace();
-					JOptionPane.showMessageDialog(GUIForm.this, e1.getMessage());
-				} finally {
-					toggleButtonStates();
-					loadProjectInfo(projectsJList.getSelectedIndex());
-					refreshProjectsList(homeProjectsJList);
-					if (projectsJList.getSelectedValue() instanceof Project)
-						refreshTasksList((Project) projectsJList.getSelectedValue(), homeTasksJList);
-				}
+				saveTaskButtonClicked();
 			}
 		});
 		saveTaskJButton.setText("Save");
 		saveTaskJButton.setEnabled(false);
-		taskEditFieldsJPanel.add(saveTaskJButton, "6, 10, 7, 1, fill, top");
+		taskEditFieldsJPanel.add(saveTaskJButton, "6, 12, 7, 1, fill, top");
 
 		taskStatusFieldsJPanel = new JPanel();
 		taskStatusFieldsJPanel.setBackground(new Color(128, 128, 128));
 		taskStatusFieldsJPanel.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
-		taskStatusFieldsJPanel.setBounds(0, 230, 399, 170);
+		taskStatusFieldsJPanel.setBounds(0, 256, 399, 170);
 		taskFieldsJPanel.add(taskStatusFieldsJPanel);
 		taskStatusFieldsJPanel.setLayout(null);
 
 		lblWorked = new JLabel();
-		lblWorked.setBounds(10, 11, 68, 14);
+		lblWorked.setBounds(10, 12, 68, 14);
 		taskStatusFieldsJPanel.add(lblWorked);
 		lblWorked.setText("Worked");
 		lblWorked.setForeground(Color.WHITE);
@@ -653,6 +577,7 @@ public class GUIForm extends javax.swing.JFrame {
 		clientsJPanelLayout.setVerticalGroup(clientsJPanelLayout.createParallelGroup(Alignment.TRAILING).addGroup(clientsJPanelLayout.createSequentialGroup().addGroup(clientsJPanelLayout.createParallelGroup(Alignment.LEADING).addGroup(clientsJPanelLayout.createSequentialGroup().addGap(33).addComponent(clientFieldsJPanel, GroupLayout.DEFAULT_SIZE, 378, Short.MAX_VALUE)).addGroup(clientsJPanelLayout.createSequentialGroup().addContainerGap().addComponent(clientsJLabel).addPreferredGap(ComponentPlacement.RELATED).addComponent(jScrollPane5, GroupLayout.DEFAULT_SIZE, 378, Short.MAX_VALUE))).addPreferredGap(ComponentPlacement.RELATED).addComponent(removeClientJButton, GroupLayout.PREFERRED_SIZE, 23, GroupLayout.PREFERRED_SIZE).addContainerGap()));
 
 		clientsJList = new JList();
+		clientsJList.setSelectedIndex(0);
 		clientsJList.addListSelectionListener(new ListSelectionListener() {
 			public void valueChanged(ListSelectionEvent arg0) {
 				clientsJListValueChanged(arg0);
@@ -667,12 +592,6 @@ public class GUIForm extends javax.swing.JFrame {
 		clientFieldsJPanel.add(label, "2, 2, fill, center");
 
 		clientNameJTextField = new JTextField();
-		clientNameJTextField.addFocusListener(new FocusAdapter() {
-			@Override
-			public void focusGained(FocusEvent e) {
-				editFieldsFocused(e);
-			}
-		});
 		clientFieldsJPanel.add(clientNameJTextField, "3, 2, fill, top");
 
 		JLabel label_1 = new JLabel();
@@ -681,12 +600,6 @@ public class GUIForm extends javax.swing.JFrame {
 		clientFieldsJPanel.add(label_1, "2, 4, fill, center");
 
 		clientFirstNameJTextField = new JTextField();
-		clientFirstNameJTextField.addFocusListener(new FocusAdapter() {
-			@Override
-			public void focusGained(FocusEvent e) {
-				editFieldsFocused(e);
-			}
-		});
 		clientFieldsJPanel.add(clientFirstNameJTextField, "3, 4, fill, top");
 
 		JLabel label_2 = new JLabel();
@@ -695,12 +608,6 @@ public class GUIForm extends javax.swing.JFrame {
 		clientFieldsJPanel.add(label_2, "2, 6, fill, center");
 
 		clientCompanyJTextField = new JTextField();
-		clientCompanyJTextField.addFocusListener(new FocusAdapter() {
-			@Override
-			public void focusGained(FocusEvent e) {
-				editFieldsFocused(e);
-			}
-		});
 		clientFieldsJPanel.add(clientCompanyJTextField, "3, 6, fill, top");
 
 		JLabel label_3 = new JLabel();
@@ -709,12 +616,6 @@ public class GUIForm extends javax.swing.JFrame {
 		clientFieldsJPanel.add(label_3, "2, 8, fill, center");
 
 		clientEmailJTextField = new JTextField();
-		clientEmailJTextField.addFocusListener(new FocusAdapter() {
-			@Override
-			public void focusGained(FocusEvent e) {
-				editFieldsFocused(e);
-			}
-		});
 		clientFieldsJPanel.add(clientEmailJTextField, "3, 8, fill, top");
 
 		JLabel lblPhone = new JLabel();
@@ -723,29 +624,12 @@ public class GUIForm extends javax.swing.JFrame {
 		clientFieldsJPanel.add(lblPhone, "2, 10, fill, center");
 
 		clientPhoneNumberJTextField = new JTextField();
-		clientPhoneNumberJTextField.addFocusListener(new FocusAdapter() {
-			@Override
-			public void focusGained(FocusEvent e) {
-				editFieldsFocused(e);
-			}
-		});
 		clientFieldsJPanel.add(clientPhoneNumberJTextField, "3, 10, fill, top");
 
 		saveClientJButton = new JButton();
 		saveClientJButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				String naam = clientNameJTextField.getText();
-				String voornaam = clientFirstNameJTextField.getText();
-				String bedrijfsnaam = clientCompanyJTextField.getText();
-				String email = clientEmailJTextField.getText();
-				String telefoonnummer = clientPhoneNumberJTextField.getText();
-
-				if (clientsJList.getSelectedValue().equals(NEWCLIENTITEM)) {
-					createClient(naam, voornaam, bedrijfsnaam, email, telefoonnummer);
-				} else {
-					updateClient(naam, voornaam, bedrijfsnaam, email, telefoonnummer);
-				}
-				toggleButtonStates();
+				saveClientButtonClicked();
 			}
 		});
 		saveClientJButton.setText("Save");
@@ -1217,7 +1101,6 @@ public class GUIForm extends javax.swing.JFrame {
 						JOptionPane.showMessageDialog(this, ex.getMessage());
 					} finally {
 						clearFieldsOnPanel(projectFieldsJPanel);
-						toggleButtonStates();
 						selectNewItem(projectsJList, tasksJList);
 					}
 				}
@@ -1244,7 +1127,6 @@ public class GUIForm extends javax.swing.JFrame {
 				JOptionPane.showMessageDialog(this, ex.getMessage());
 			} finally {
 				clearFieldsOnPanel(taskFieldsJPanel);
-				toggleButtonStates();
 			}
 		}
 	}
@@ -1260,7 +1142,6 @@ public class GUIForm extends javax.swing.JFrame {
 				UserInterface.deleteClient(client);
 				refreshClientsList(clientsJList);
 				clearFieldsOnPanel(clientFieldsJPanel);
-				toggleButtonStates();
 				selectNewItem(clientsJList);
 				JOptionPane.showMessageDialog(this, "Client removed!");
 			} catch (GUIException | IOException | WebserviceException | JSONException ex) {
@@ -1512,7 +1393,6 @@ public class GUIForm extends javax.swing.JFrame {
 			work.setVisible(true);
 			setVisible(true);
 			loadTaskInfo(tasksJList.getSelectedIndex());
-			toggleButtonStates();
 		} catch (GUIException ex) {
 			ex.printStackTrace();
 			JOptionPane.showMessageDialog(this, ex.getMessage());
@@ -1575,8 +1455,8 @@ public class GUIForm extends javax.swing.JFrame {
 	private void logout() {
 		try {
 			WinRegistry.deleteKey(WinRegistry.HKEY_CURRENT_USER, "SOFTWARE\\ChronoMatic");
-			LoginForm f = new LoginForm(this, validator);
 			this.dispose();
+			LoginForm f = new LoginForm(new GUIForm(validator), validator);
 			f.setVisible(true);
 
 		} catch (IllegalArgumentException | IllegalAccessException | InvocationTargetException e) {
@@ -1584,20 +1464,14 @@ public class GUIForm extends javax.swing.JFrame {
 		}
 	}
 
-	// FIXME methode maken met 2 parameters (variabel # buttons laatst) en overal waar deze aangeroepen wordt de juiste parameters meegeven
-	// Change button states (enabled / disabled) looking at selected indexes
-	private void toggleButtonStates() {
-		boolean taskSelected = tasksJList.getSelectedIndex() != -1;
-		boolean projectSelected = projectsJList.getSelectedIndex() != -1;
-		boolean newItemSelected = projectsJList.getSelectedIndex() != -1 && !projectsJList.getSelectedValue().equals(NEWPROJECTITEM);
-		//boolean clientSelected = clientsJList.getSelectedIndex() != -1;
-		saveTaskJButton.setEnabled(taskSelected);
-		//removeTaskJButton.setEnabled(taskSelected);
-		setCurrentProjectJButton.setEnabled(projectSelected && newItemSelected);
-		saveProjectJButton.setEnabled(projectSelected);
-		removeProjectJButton.setEnabled(projectSelected && newItemSelected);
-		//saveClientJButton.setEnabled(clientSelected);
-		//removeClientJButton.setEnabled(clientSelected);
+	/**
+	 * Toggle all button states in the GUI
+	 * @param 	enabled		the dependency if the button(s) should be enabled
+	 * @param	buttons		the buttons that should be dependent on 'enabled'
+	 */
+	private void toggleButtonStates(boolean disabled, JButton... buttons) {
+		for (JButton b : buttons)
+			b.setEnabled(!disabled);
 	}
 
 	// ================================================================================
@@ -1641,15 +1515,18 @@ public class GUIForm extends javax.swing.JFrame {
 
 	private void projectsJListValueChanged(javax.swing.event.ListSelectionEvent evt) {
 		if (projectsJList.getSelectedIndex() != -1) {
-			if (projectsJList.getSelectedValue().equals(NEWPROJECTITEM)) {
+			boolean newSelected = projectsJList.getSelectedValue().equals(NEWPROJECTITEM);
+			if (newSelected) {
 				clearFieldsOnPanel(projectFieldsJPanel);
 				refreshClientsComboBox(null, projectClientsJComboBox);
+				toggleButtonStates(newSelected, setCurrentProjectJButton, removeProjectJButton);
 				saveProjectJButton.setText("Save [new]");
 			} else {
 				loadProjectInfo(projectsJList.getSelectedIndex());
+				toggleButtonStates(newSelected, setCurrentProjectJButton, removeProjectJButton);
 				saveProjectJButton.setText("Save");
 			}
-			toggleButtonStates();
+
 		}
 	}
 
@@ -1657,10 +1534,6 @@ public class GUIForm extends javax.swing.JFrame {
 	private void guiOpened(WindowEvent evt) {
 		ingelogdJLabel.setText(UserInterface.getUser().getVolledigeNaam());
 		ingelogdJLabel.setForeground(Color.GREEN);
-		for (Project p : UserInterface.getProjects()) {
-			System.out.println("UserInterface project: " + p);
-		}
-		
 		refreshProjectsList(projectsJList, homeProjectsJList);
 		refreshClientsList(clientsJList);
 		removeClientJButton.setEnabled(false);
@@ -1677,11 +1550,6 @@ public class GUIForm extends javax.swing.JFrame {
 			list.ensureIndexIsVisible(list.getSelectedIndex());
 		}
 		refreshTree(exportJCheckBoxTree, UserInterface.getProjects());
-	}
-
-	// Event handlers for all the edit fields, FIXME
-	private void editFieldsFocused(java.awt.event.FocusEvent evt) {
-		toggleButtonStates();
 	}
 
 	// FIXME, samenvoegen met andere listvaluechanged event handlers
@@ -1743,24 +1611,94 @@ public class GUIForm extends javax.swing.JFrame {
 		}
 	}
 
-	private void taskJListValueChanged(ListSelectionEvent arg0) {
-		if (tasksJList.getSelectedIndex() != -1) {
-			if (tasksJList.getSelectedValue().getClass().equals(String.class)) {
-				clearFieldsOnPanel(taskFieldsJPanel);
-				saveTaskJButton.setText("Save [new]");
-				removeTaskJButton.setEnabled(false);
-			} else {
-				try {
-					loadTaskInfo(((JList) arg0.getSource()).getSelectedIndex());
-					removeTaskJButton.setEnabled(true);
-					toggleButtonStates();
-				} catch (GUIException e) {
-					e.printStackTrace();
-					JOptionPane.showMessageDialog(this, e.getMessage());
-				} finally {
-					saveTaskJButton.setText("Save");
-				}
+	private void saveClientButtonClicked() {
+		String naam = clientNameJTextField.getText();
+		String voornaam = clientFirstNameJTextField.getText();
+		String bedrijfsnaam = clientCompanyJTextField.getText();
+		String email = clientEmailJTextField.getText();
+		String telefoonnummer = clientPhoneNumberJTextField.getText();
+
+		if (clientsJList.getSelectedValue().equals(NEWCLIENTITEM)) {
+			createClient(naam, voornaam, bedrijfsnaam, email, telefoonnummer);
+		} else {
+			updateClient(naam, voornaam, bedrijfsnaam, email, telefoonnummer);
+		}
+	}
+
+	private void saveProjectButtonClicked() {
+		try {
+			String name = projectNameJTextField.getText();
+			long startdate;
+			long enddate;
+			try {
+				startdate = projectStartDateChooser.getDate().getTime() / 1000;
+				enddate = projectEndDateChooser.getDate().getTime() / 1000;
+			} catch (NullPointerException e) {
+				throw new DataInputException("Please choose a valid date");
 			}
+			if (projectClientsJComboBox.getSelectedIndex() == -1 || projectClientsJComboBox.getSelectedItem().equals(NEWCLIENTITEM)) {
+				throw new DataInputException("Select or create a client first");
+			}
+			Opdrachtgever o = (Opdrachtgever) projectClientsJComboBox.getSelectedItem();
+			int opdrachtgeverID = o.getID();
+
+			if (projectsJList.getSelectedValue().equals(NEWPROJECTITEM)) {
+				createProject(name, startdate, enddate, opdrachtgeverID);
+			} else {
+				updateProject(name, startdate, enddate, opdrachtgeverID);
+			}
+		} catch (DataInputException e) {
+			JOptionPane.showMessageDialog(GUIForm.this, e.getMessage());
+			e.printStackTrace();
+		}
+	}
+
+	private void saveTaskButtonClicked() {
+		try {
+			String name = taskNameJTextField.getText();
+			String comment = taskCommentJTextArea.getText();
+			boolean completed = taskCompletedJCheckBox.isSelected();
+			long startdate = taskStartDateChooser.getDate().getTime() / 1000;
+			long enddate = taskEndDateChooser.getDate().getTime() / 1000;
+			int projectId = UserInterface.getCurrentProject().getId();
+
+			if (tasksJList.getSelectedValue().equals(NEWTASKITEM)) {
+				createTask(name, startdate, enddate, comment, completed);
+			} else {
+				updateTask(name, startdate, enddate, comment, completed, projectId);
+			}
+		} catch (NullPointerException ex) {
+			ex.printStackTrace();
+			JOptionPane.showMessageDialog(GUIForm.this, "Please choose a valid date");
+		} catch (GUIException e1) {
+			e1.printStackTrace();
+			JOptionPane.showMessageDialog(GUIForm.this, e1.getMessage());
+		} finally {
+			loadProjectInfo(projectsJList.getSelectedIndex());
+			refreshProjectsList(homeProjectsJList);
+			if (projectsJList.getSelectedValue() instanceof Project)
+				refreshTasksList((Project) projectsJList.getSelectedValue(), homeTasksJList);
+		}
+	}
+
+	private void taskJListValueChanged(ListSelectionEvent arg0) {
+		try {
+			boolean stringItemSelected = tasksJList.getSelectedValue().getClass().equals(String.class);
+			if (stringItemSelected) {
+				if (tasksJList.getSelectedValue().equals(NEWTASKITEM)) {
+					clearFieldsOnPanel(taskFieldsJPanel);
+					saveTaskJButton.setText("Save [new]");
+				} else {
+					clearFieldsOnPanel(taskFieldsJPanel);
+				}
+			} else {
+				loadTaskInfo(((JList) arg0.getSource()).getSelectedIndex());
+				saveTaskJButton.setText("Save");
+			}
+			toggleButtonStates(stringItemSelected, removeTaskJButton);
+		} catch (GUIException e) {
+			e.printStackTrace();
+			JOptionPane.showMessageDialog(this, e.getMessage());
 		}
 	}
 

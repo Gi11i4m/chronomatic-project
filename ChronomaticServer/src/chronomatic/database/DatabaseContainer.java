@@ -11,7 +11,7 @@ import java.sql.*;
 public class DatabaseContainer {
 	private static String host = "127.0.0.1";
 	private static String user = "root";
-	private static String password = "root";
+	private static String password = "";
 	private static String db_name = "chrono_matic";
 	
 	public static Connection getConnection() {

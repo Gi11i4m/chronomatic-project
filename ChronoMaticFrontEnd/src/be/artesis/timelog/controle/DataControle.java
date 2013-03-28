@@ -1,5 +1,7 @@
 package be.artesis.timelog.controle;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -7,6 +9,10 @@ public abstract class DataControle {
 
 	public static SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 
+	public static String urlEncode(String value) throws UnsupportedEncodingException {
+		return URLEncoder.encode(value, "UTF-8");
+	}
+	
 	public static String formatNaam(String naam) {
 		if (naam.contains(" ")) {
 			StringBuilder s = new StringBuilder();
