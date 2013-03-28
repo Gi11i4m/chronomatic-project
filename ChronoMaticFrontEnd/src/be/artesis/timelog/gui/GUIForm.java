@@ -1462,8 +1462,8 @@ public class GUIForm extends javax.swing.JFrame {
 	private void logout() {
 		try {
 			WinRegistry.deleteKey(WinRegistry.HKEY_CURRENT_USER, "SOFTWARE\\ChronoMatic");
-			LoginForm f = new LoginForm(this, validator);
 			this.dispose();
+			LoginForm f = new LoginForm(new GUIForm(validator), validator);
 			f.setVisible(true);
 
 		} catch (IllegalArgumentException | IllegalAccessException | InvocationTargetException e) {

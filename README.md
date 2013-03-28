@@ -1,5 +1,5 @@
 ChronoMatic
-===========
+============
 
 Inleiding:
 Chronomatic is een systeem voor timemanagement, het loggen van tijd die aan bepaalde taken van een project worden gespendeerd.

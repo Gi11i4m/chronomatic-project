@@ -30,9 +30,10 @@ public class Taak {
 		
 		Connection con = DatabaseContainer.getConnection();
 		int userID = Authentication.getUserId(sessionKey);
-		String query = "INSERT INTO taken (naam, begin_tijd,verwacht_eind,commentaar,projecten_ID,voltooid) VALUES('" + naam + "',"  + beginTijd + "," + estimatedEnd + ",'" + commentaar + "','" + projectID + "','" + userID + "')";
+		String query = "INSERT INTO taken (naam, begin_tijd,verwacht_eind,commentaar,projecten_ID,voltooid) VALUES('" + naam + "',"  + beginTijd + "," + estimatedEnd + ",'" + commentaar + "','" + projectID + "'," + voltooid + ")";
 		
 		JSONArray returnObject = new JSONArray();
+		System.out.println("obj: "+returnObject);
 		
 		try{
 			if(userID > 0) { 

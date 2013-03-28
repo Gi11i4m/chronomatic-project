@@ -141,13 +141,11 @@ public class NewUserPanel extends javax.swing.JPanel {
             }
             
             //check of username al bestaat
-            if (ExistingUsernames.check("intern",username)) {
+            if (ExistingUsernames.check(username)) {
             	throw new DataInputException("Username already exists");
 				
 			}
-            InserterServer.CreateUser(firstName, name, username, email, password);
-            // 
-            //}
+            
             if (!password.equals(repeatPassword)) {
                 throw new DataInputException("Passwords do not match");
             }
