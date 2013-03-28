@@ -45,7 +45,7 @@ public class UpdaterLocal {
 		checkUpdate(Converter.converteer(tijdspanne,taakId), JVelden.TIJDSPANNES);
 	}
 	private static void checkUpdate(JSONObject jTest, JVelden veld) throws JSONException, IOException{
-			
+		
 		JSONObject jFile = LocalDatabaseReader.LeesBestand(LocalDatabaseWriter.URL + Commando.INSERT + LocalDatabaseWriter.EXTENSIE);
 		boolean gevonden = false;
 		if (jFile != null){				
