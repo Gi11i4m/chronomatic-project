@@ -1030,7 +1030,7 @@ public class GUIForm extends javax.swing.JFrame {
 		syncButton = new JButton("Sync");
 		syncButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				sync();
+				// sync();
 			}
 		});
 
@@ -1403,16 +1403,15 @@ public class GUIForm extends javax.swing.JFrame {
 	 */
 	private void refreshTree(JTree tree, ArrayList<Project> projects) {
 		DefaultMutableTreeNode root = new DefaultMutableTreeNode("Project");
-		if (!projects.isEmpty()) {
-			for (Project p : projects) {
-				if (!p.getTaken().isEmpty()) {
-					DefaultMutableTreeNode project = new DefaultMutableTreeNode(p);
-					for (Taak t : p.getTaken()) {
-						project.add(new DefaultMutableTreeNode(t));
-					}
-					root.add(project);
+		for (Project p : projects) {
+			if (p != null && !p.getTaken().isEmpty()) {
+				DefaultMutableTreeNode project = new DefaultMutableTreeNode(p);
+				for (Taak t : p.getTaken()) {
+					project.add(new DefaultMutableTreeNode(t));
 				}
+				root.add(project);
 			}
+
 		}
 		DefaultTreeModel treeModel = new DefaultTreeModel(root);
 		tree.setModel(treeModel);
