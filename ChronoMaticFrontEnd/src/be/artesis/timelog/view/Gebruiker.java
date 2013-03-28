@@ -14,7 +14,7 @@ public class Gebruiker {
     private String gebruikersnaam;
     private String email;
     private int id;
-    private ArrayList<Project> projects = new ArrayList<Project>();
+    private ArrayList<Project> projects;
     private ArrayList<Opdrachtgever> opdrachtgevers;
 
     //================================================================================

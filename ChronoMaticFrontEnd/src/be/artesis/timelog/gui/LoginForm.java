@@ -200,7 +200,7 @@ public class LoginForm extends javax.swing.JFrame implements ActionListener {
 			// als gebruiker nog niet bestaat..
 			
 			//System.out.println(ExistingUsernames.check("extern",email));
-			if (!ExistingUsernames.check("extern",email)) {
+			if (!ExistingUsernames.check(email)) {
 				InserterServer.CreateUserExtern(userInfoJSONObj.getString("naam"), userInfoJSONObj.getString("voornaam"), email);
 			}
 
@@ -229,7 +229,7 @@ public class LoginForm extends javax.swing.JFrame implements ActionListener {
 			UserInterface.getUser().setProjects(CreatorFromJSON.createProjecten(validator.getSessionKey()));
 			//System.out.println(UserInterface.getUser().getProject(0) + " PIEEEEEET");
 			
-			if(!UserInterface.getProjects().isEmpty()) {
+			if(UserInterface.getUser().getProject(0) != null) {
 				UserInterface.getUser().setOpdrachtgevers(CreatorFromJSON.createOpdrachtgevers(validator.getSessionKey()));
 				
 				for (int i = 0; i < UserInterface.getUser().getProjects().size(); i++) {

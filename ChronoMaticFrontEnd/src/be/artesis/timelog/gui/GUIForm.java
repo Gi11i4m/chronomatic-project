@@ -1580,8 +1580,8 @@ public class GUIForm extends javax.swing.JFrame {
 	private void logout() {
 		try {
 			WinRegistry.deleteKey(WinRegistry.HKEY_CURRENT_USER, "SOFTWARE\\ChronoMatic");
-			LoginForm f = new LoginForm(this, validator);
 			this.dispose();
+			LoginForm f = new LoginForm(new GUIForm(validator), validator);
 			f.setVisible(true);
 
 		} catch (IllegalArgumentException | IllegalAccessException | InvocationTargetException e) {
@@ -1662,10 +1662,6 @@ public class GUIForm extends javax.swing.JFrame {
 	private void guiOpened(WindowEvent evt) {
 		ingelogdJLabel.setText(UserInterface.getUser().getVolledigeNaam());
 		ingelogdJLabel.setForeground(Color.GREEN);
-		for (Project p : UserInterface.getProjects()) {
-			System.out.println("UserInterface project: " + p);
-		}
-		
 		refreshProjectsList(projectsJList, homeProjectsJList);
 		refreshClientsList(clientsJList);
 		removeClientJButton.setEnabled(false);
