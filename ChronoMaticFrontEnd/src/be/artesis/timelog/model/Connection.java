@@ -16,15 +16,15 @@ import org.json.JSONObject;
 
 public class Connection {
         
-        //private static final String server = "http://chronomatic-artesisti.rhcloud.com/ChronomaticServer/";
-        private static final String server = "http://localhost:8080/ChronomaticServer/";
-        public static URL normalize(String commando) throws MalformedURLException, UnsupportedEncodingException {
-            return new URL((server + commando).replaceAll(" ", "%20"));
-        }
+    //private static final String server = "http://chronomatic-artesisti.rhcloud.com/ChronomaticServer/";
+    private static final String server = "http://localhost:8080/ChronomaticServer/";
+    
+    public static URL normalize(String commando) throws MalformedURLException, UnsupportedEncodingException {
+        return new URL((server + commando).replaceAll(" ", "%20"));
+    }
 
 	public static boolean execute(String commando) throws IOException, WebserviceException{
             URL url = normalize(commando);
-            System.out.println(url);
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setRequestMethod("GET");
             conn.setRequestProperty("Accept", "application/json");
@@ -37,7 +37,6 @@ public class Connection {
 	public static JSONObject getObject(String commando) throws IOException, JSONException{
             JSONObject jObject = null;
             URL url = normalize(commando);
-            System.out.println(url);
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setRequestMethod("GET");
             conn.setRequestProperty("Accept", "application/json");
@@ -56,7 +55,6 @@ public class Connection {
         public static JSONArray getArray(String commando) throws IOException, JSONException{		
             JSONArray Jarray = null;
             URL url = normalize(commando);
-            System.out.println(url);
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setRequestMethod("GET");
             conn.setRequestProperty("Accept", "application/json");
