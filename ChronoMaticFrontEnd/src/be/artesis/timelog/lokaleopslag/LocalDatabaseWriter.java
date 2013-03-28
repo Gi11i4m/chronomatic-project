@@ -1,5 +1,6 @@
 package be.artesis.timelog.lokaleopslag;
 
+import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 
@@ -10,7 +11,8 @@ import org.json.JSONObject;
 public class LocalDatabaseWriter {
 	//hier aant troubleshooten. Het opslaan en opvragen van shit van begin tot eind door de lokale db
 	
-		public static final String URL = "C:\\Users\\Yolan\\Desktop\\";		
+		public static final File file = new File("db\\");		
+		public static final String URL = file.getAbsolutePath() + "\\" ;		
 		public static final String EXTENSIE = ".txt";									
 			
 		public static void schrijfweg(JSONObject j, Commando c) throws IOException{							
