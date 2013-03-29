@@ -29,4 +29,5 @@ yolan:
 	als er nen server error is sluit den dialog automatisch, iznogood
 
 gilliam:
-	bestanden zonder extensie exporteren gaat niet
+	- addTaak error (DataInputException) bij Stoppen van klok bij een nieuwe taak
+	- Errors in label (user exp)
