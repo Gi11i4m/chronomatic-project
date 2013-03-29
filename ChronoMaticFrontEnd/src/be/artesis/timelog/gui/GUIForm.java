@@ -398,7 +398,7 @@ public class GUIForm extends javax.swing.JFrame {
 		percentageCompleteJProgressBar.setToolTipText("Displays the percentage of completion of the project");
 		percentageCompleteJProgressBar.setStringPainted(true);
 		saveProjectJButton.addActionListener(new java.awt.event.ActionListener() {
-			public void actionPerformed(java.awt.event.ActionEvent evt) { // FIXME code naar methode verplaatsen
+			public void actionPerformed(java.awt.event.ActionEvent evt) {
 				saveProjectButtonClicked();
 			}
 		});
@@ -1328,6 +1328,8 @@ public class GUIForm extends javax.swing.JFrame {
 		lastNameJTextField.setText(u.getNaam());
 		emailJTextField.setText(u.getEmail());
 		emailJTextField.setCaretPosition(0);
+		ingelogdJLabel.setText(UserInterface.getUser().getVolledigeNaam());
+		ingelogdJLabel.setForeground(Color.GREEN);
 	}
 
 	/**
@@ -1389,6 +1391,9 @@ public class GUIForm extends javax.swing.JFrame {
 		}
 	}
 
+	/**
+	 * Sync local changes with the database, NOT USED YET
+	 */
 	private void sync() {
 		try {
 			LocalDatabaseSynch lds = new LocalDatabaseSynch(Validator.getInstance());
@@ -1453,9 +1458,8 @@ public class GUIForm extends javax.swing.JFrame {
 	/**
 	 * Set the CURRENT PROJECT with GUI responding right
 	 * 
-	 * @param index
-	 *            the index (GUI list and arraylist) from the project that's
-	 *            going to be the current project
+	 * @param index	the index (GUI list and arraylist) from the project that's
+	 *            	going to be the current project
 	 */
 	private void setCurrentProjectGUI(int index) {
 		try {
@@ -1505,7 +1509,7 @@ public class GUIForm extends javax.swing.JFrame {
 	 */
 	private void showGUIMessage(String message, boolean isError) {
 		Color c = (isError) ? Color.RED : Color.GREEN;
-		long showTime = (isError) ? 4000 : 2000;
+		long showTime = (isError) ? 6000 : 4000;
 		errorJLabel.setForeground(c);
 		errorJLabel.setText(message);
 		errorJLabel.setVisible(true);
@@ -1577,12 +1581,8 @@ public class GUIForm extends javax.swing.JFrame {
 
 	// Initialiseer statusvelden (linksboven) en project en client lijsten, FIXME overbodige methodes weg!
 	private void guiOpened(WindowEvent evt) {
-		ingelogdJLabel.setText(UserInterface.getUser().getVolledigeNaam());
-		ingelogdJLabel.setForeground(Color.GREEN);
 		refreshProjectsList(projectsJList, homeProjectsJList);
 		refreshClientsList(clientsJList);
-		removeClientJButton.setEnabled(false);
-		removeTaskJButton.setEnabled(false);
 		refreshTree(exportJCheckBoxTree, UserInterface.getProjects());
 		loadUserInfo();
 		selectNewItem(projectsJList, tasksJList, clientsJList);
