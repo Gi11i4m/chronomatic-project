@@ -30,4 +30,4 @@ yolan:
 
 gilliam:
 	- addTaak error (DataInputException) bij Stoppen van klok bij een nieuwe taak
-	- Errors in label (user exp)
+	- Error bij saven van Client..?

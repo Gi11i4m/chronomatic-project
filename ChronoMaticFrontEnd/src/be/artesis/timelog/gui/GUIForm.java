@@ -18,6 +18,8 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import javax.swing.AbstractListModel;
 import javax.swing.DefaultComboBoxModel;
@@ -300,7 +302,7 @@ public class GUIForm extends javax.swing.JFrame {
 		});
 
 		projectsJList.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
-		
+
 		projectsJList.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
 			public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
 				projectsJListValueChanged(evt);
@@ -364,7 +366,6 @@ public class GUIForm extends javax.swing.JFrame {
 		projectEditFieldsJPanel.add(saveProjectJButton, "2, 11, 5, 1, fill, top");
 
 		saveProjectJButton.setText("Save");
-		saveProjectJButton.setEnabled(false);
 
 		projectStatusFieldsJPanel = new JPanel();
 		projectStatusFieldsJPanel.setBackground(new Color(128, 128, 128));
@@ -422,10 +423,24 @@ public class GUIForm extends javax.swing.JFrame {
 		tasksJPanel.add(jScrollPane3);
 
 		tasksJList = new JList();
+		tasksJList.setModel(new AbstractListModel() {
+			String[] values = new String[] { "Select a current project first!" };
+
+			public int getSize() {
+				return values.length;
+			}
+
+			public Object getElementAt(int index) {
+				return values[index];
+			}
+		});
+		jScrollPane3.setViewportView(tasksJList);
+
+		tasksJList = new JList();
 		DefaultListModel tasksListmodel = new DefaultListModel();
 		tasksListmodel.addElement("Select a current project first!");
 		tasksJList.setModel(tasksListmodel);
-		
+
 		tasksJList.addListSelectionListener(new ListSelectionListener() {
 			public void valueChanged(ListSelectionEvent arg0) {
 				taskJListValueChanged(arg0);
@@ -498,7 +513,6 @@ public class GUIForm extends javax.swing.JFrame {
 			}
 		});
 		saveTaskJButton.setText("Save");
-		saveTaskJButton.setEnabled(false);
 		taskEditFieldsJPanel.add(saveTaskJButton, "6, 12, 7, 1, fill, top");
 
 		taskStatusFieldsJPanel = new JPanel();
@@ -539,7 +553,7 @@ public class GUIForm extends javax.swing.JFrame {
 		taskStatusFieldsJPanel.add(taskTotalPauseJTextField);
 		taskTotalPauseJTextField.setEditable(false);
 		taskTotalPauseJTextField.setColumns(10);
-		
+
 		addTimeJButton = new JButton("Add time");
 		addTimeJButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
@@ -906,13 +920,23 @@ public class GUIForm extends javax.swing.JFrame {
 		syncButton = new JButton("Sync");
 		syncButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
+				showGUIMessage("Test", true);
 				// sync();
 			}
 		});
 
+		errorJLabel = new JLabel("");
+		errorJLabel.setFont(new Font("Tahoma", Font.BOLD, 11));
+		errorJLabel.setHorizontalAlignment(SwingConstants.CENTER);
+		errorJLabel.setBackground(Color.WHITE);
+		errorJLabel.setOpaque(true);
+		errorJLabel.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.LOWERED));
+		errorJLabel.setForeground(Color.RED);
+		errorJLabel.setVisible(false);
+
 		javax.swing.GroupLayout headerJPanelLayout = new javax.swing.GroupLayout(headerJPanel);
-		headerJPanelLayout.setHorizontalGroup(headerJPanelLayout.createParallelGroup(Alignment.TRAILING).addGroup(headerJPanelLayout.createSequentialGroup().addContainerGap().addGroup(headerJPanelLayout.createParallelGroup(Alignment.LEADING, false).addComponent(currentProjectJLabel, GroupLayout.DEFAULT_SIZE, 201, Short.MAX_VALUE).addComponent(ingelogdJLabel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)).addPreferredGap(ComponentPlacement.RELATED).addComponent(logoutJButton).addPreferredGap(ComponentPlacement.RELATED, 215, Short.MAX_VALUE).addComponent(syncButton, GroupLayout.PREFERRED_SIZE, 68, GroupLayout.PREFERRED_SIZE).addPreferredGap(ComponentPlacement.UNRELATED).addComponent(titleLabel).addGap(18).addComponent(clockJLabel).addGap(6)));
-		headerJPanelLayout.setVerticalGroup(headerJPanelLayout.createParallelGroup(Alignment.LEADING).addGroup(headerJPanelLayout.createSequentialGroup().addContainerGap().addGroup(headerJPanelLayout.createParallelGroup(Alignment.LEADING).addComponent(titleLabel, GroupLayout.DEFAULT_SIZE, 63, Short.MAX_VALUE).addComponent(clockJLabel, Alignment.TRAILING).addGroup(headerJPanelLayout.createSequentialGroup().addGroup(headerJPanelLayout.createParallelGroup(Alignment.BASELINE).addComponent(ingelogdJLabel).addComponent(logoutJButton, GroupLayout.PREFERRED_SIZE, 22, GroupLayout.PREFERRED_SIZE).addComponent(syncButton)).addPreferredGap(ComponentPlacement.UNRELATED).addComponent(currentProjectJLabel).addGap(0, 10, Short.MAX_VALUE))).addContainerGap()));
+		headerJPanelLayout.setHorizontalGroup(headerJPanelLayout.createParallelGroup(Alignment.TRAILING).addGroup(headerJPanelLayout.createSequentialGroup().addContainerGap().addGroup(headerJPanelLayout.createParallelGroup(Alignment.LEADING, false).addComponent(currentProjectJLabel, GroupLayout.DEFAULT_SIZE, 201, Short.MAX_VALUE).addComponent(ingelogdJLabel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)).addPreferredGap(ComponentPlacement.RELATED).addGroup(headerJPanelLayout.createParallelGroup(Alignment.TRAILING).addGroup(headerJPanelLayout.createSequentialGroup().addComponent(logoutJButton).addPreferredGap(ComponentPlacement.RELATED, 215, Short.MAX_VALUE).addComponent(syncButton, GroupLayout.PREFERRED_SIZE, 68, GroupLayout.PREFERRED_SIZE)).addComponent(errorJLabel, GroupLayout.DEFAULT_SIZE, 348, Short.MAX_VALUE)).addPreferredGap(ComponentPlacement.UNRELATED).addComponent(titleLabel).addGap(18).addComponent(clockJLabel).addGap(6)));
+		headerJPanelLayout.setVerticalGroup(headerJPanelLayout.createParallelGroup(Alignment.TRAILING).addGroup(headerJPanelLayout.createSequentialGroup().addContainerGap().addGroup(headerJPanelLayout.createParallelGroup(Alignment.LEADING).addComponent(titleLabel, GroupLayout.DEFAULT_SIZE, 64, Short.MAX_VALUE).addComponent(clockJLabel).addGroup(headerJPanelLayout.createSequentialGroup().addGroup(headerJPanelLayout.createParallelGroup(Alignment.BASELINE).addComponent(ingelogdJLabel).addComponent(logoutJButton, GroupLayout.PREFERRED_SIZE, 22, GroupLayout.PREFERRED_SIZE).addComponent(syncButton)).addPreferredGap(ComponentPlacement.UNRELATED).addGroup(headerJPanelLayout.createParallelGroup(Alignment.BASELINE).addComponent(currentProjectJLabel).addComponent(errorJLabel, GroupLayout.PREFERRED_SIZE, 20, GroupLayout.PREFERRED_SIZE)))).addContainerGap()));
 		headerJPanel.setLayout(headerJPanelLayout);
 
 		clockJLabel.getAccessibleContext().setAccessibleName("iconJLabel");
@@ -946,11 +970,11 @@ public class GUIForm extends javax.swing.JFrame {
 	private void updateUser(String firstName, String lastName, String email) {
 		try {
 			UserInterface.updateUser(firstName, lastName, email);
-			JOptionPane.showMessageDialog(this, "User information updated!");
+			showGUIMessage("User information updated!", false);
 			loadUserInfo();
 		} catch (DataInputException | IOException | WebserviceException e) {
-			JOptionPane.showMessageDialog(this, e.getMessage());
 			e.printStackTrace();
+			showGUIMessage(e.getMessage(), true);
 		}
 	}
 
@@ -964,11 +988,11 @@ public class GUIForm extends javax.swing.JFrame {
 	private void createProject(String name, long startdate, long enddate, int opdrachtgeverID) {
 		try {
 			UserInterface.createProject(name, startdate, enddate, opdrachtgeverID);
-			JOptionPane.showMessageDialog(this, "Project added!");
+			showGUIMessage("Project added!", false);
 			refreshProjectsList(projectsJList, homeProjectsJList);
 		} catch (DataInputException | ParseException | IOException | WebserviceException | JSONException e) {
-			JOptionPane.showMessageDialog(this, e.getMessage());
 			e.printStackTrace();
+			showGUIMessage(e.getMessage(), true);
 		}
 	}
 
@@ -982,11 +1006,11 @@ public class GUIForm extends javax.swing.JFrame {
 	private void updateProject(String name, long startdate, long enddate, int opdrachtgeverID) {
 		try {
 			UserInterface.updateProject(projectsJList.getSelectedIndex(), name, startdate, enddate, opdrachtgeverID);
-			JOptionPane.showMessageDialog(this, "Project edited!");
+			showGUIMessage("Project edited!", false);
 			refreshProjectsList(projectsJList, homeProjectsJList);
 		} catch (DataInputException | IOException | WebserviceException | ParseException | JSONException e) {
-			JOptionPane.showMessageDialog(this, e.getMessage());
 			e.printStackTrace();
+			showGUIMessage(e.getMessage(), true);
 		}
 	}
 
@@ -1001,11 +1025,11 @@ public class GUIForm extends javax.swing.JFrame {
 	private void createTask(String name, long startdate, long enddate, String comment, boolean completed) {
 		try {
 			UserInterface.createTask(name, startdate, enddate, comment, completed, UserInterface.getCurrentProject().getId());
-			JOptionPane.showMessageDialog(this, "Task added!");
+			showGUIMessage("Task added!", false);
 			refreshTasksList(UserInterface.getCurrentProject(), tasksJList);
 		} catch (DataInputException | ParseException | GUIException | IOException | WebserviceException | JSONException e) {
-			JOptionPane.showMessageDialog(this, e.getMessage());
 			e.printStackTrace();
+			showGUIMessage(e.getMessage(), true);
 		}
 	}
 
@@ -1021,11 +1045,11 @@ public class GUIForm extends javax.swing.JFrame {
 	private void updateTask(String name, long startdate, long enddate, String comment, boolean completed, int projectId) {
 		try {
 			UserInterface.updateTask(tasksJList.getSelectedIndex(), name, startdate, enddate, comment, completed, projectId);
-			JOptionPane.showMessageDialog(this, "Task edited!");
+			showGUIMessage("Task edited!", false);
 			refreshTasksList(UserInterface.getCurrentProject(), tasksJList);
 		} catch (GUIException | DataInputException | ParseException | IOException | WebserviceException | JSONException e) {
-			JOptionPane.showMessageDialog(this, e.getMessage());
 			e.printStackTrace();
+			showGUIMessage(e.getMessage(), true);
 		}
 	}
 
@@ -1041,7 +1065,7 @@ public class GUIForm extends javax.swing.JFrame {
 		Opdrachtgever o = null;
 		try {
 			o = UserInterface.createClient(naam, voornaam, bedrijfsnaam, email, telefoonnummer);
-			JOptionPane.showMessageDialog(this, "Client added!");
+			showGUIMessage("Client added!", false);
 			if (projectsJList.getSelectedValue().equals(NEWPROJECTITEM)) {
 				refreshClientsComboBox(null, projectClientsJComboBox);
 			} else {
@@ -1054,8 +1078,8 @@ public class GUIForm extends javax.swing.JFrame {
 				creatingProject = false;
 			}
 		} catch (DataInputException | JSONException | IOException | WebserviceException e) {
-			JOptionPane.showMessageDialog(this, e.getMessage());
 			e.printStackTrace();
+			showGUIMessage(e.getMessage(), true);
 		}
 	}
 
@@ -1070,11 +1094,11 @@ public class GUIForm extends javax.swing.JFrame {
 	private void updateClient(String naam, String voornaam, String bedrijfsnaam, String email, String telefoonnummer) {
 		try {
 			UserInterface.updateClient(clientsJList.getSelectedIndex(), voornaam, voornaam, bedrijfsnaam, email, telefoonnummer);
-			JOptionPane.showMessageDialog(this, "Client edited!");
+			showGUIMessage("Client edited!", false);
 			refreshClientsList(clientsJList);
 		} catch (DataInputException | IOException | WebserviceException | JSONException e) {
-			JOptionPane.showMessageDialog(this, e.getMessage());
 			e.printStackTrace();
+			showGUIMessage(e.getMessage(), true);
 		}
 	}
 
@@ -1089,7 +1113,7 @@ public class GUIForm extends javax.swing.JFrame {
 	private void deleteProject(Project project) {
 		try {
 			if (UserInterface.getCurrentProjectIndex() != -1 && project == UserInterface.getCurrentProject()) {
-				JOptionPane.showMessageDialog(this, "Can't remove current project");
+				showGUIMessage("Can't remove current project", true);
 			} else {
 				int result = JOptionPane.showConfirmDialog(this, "Are you sure you want to delete this project?", null, JOptionPane.YES_NO_OPTION);
 				if (result == JOptionPane.YES_OPTION) {
@@ -1098,7 +1122,7 @@ public class GUIForm extends javax.swing.JFrame {
 						refreshProjectsList(projectsJList, homeProjectsJList);
 					} catch (IOException | WebserviceException | JSONException ex) {
 						ex.printStackTrace();
-						JOptionPane.showMessageDialog(this, ex.getMessage());
+						showGUIMessage(ex.getMessage(), true);
 					} finally {
 						clearFieldsOnPanel(projectFieldsJPanel);
 						selectNewItem(projectsJList, tasksJList);
@@ -1121,10 +1145,10 @@ public class GUIForm extends javax.swing.JFrame {
 				UserInterface.deleteTask(task);
 				refreshTasksList(UserInterface.getCurrentProject(), tasksJList);
 				selectNewItem(tasksJList);
-				JOptionPane.showMessageDialog(this, "Task removed!");
+				showGUIMessage("Task removed!", false);
 			} catch (GUIException | IOException | WebserviceException | JSONException ex) {
 				ex.printStackTrace();
-				JOptionPane.showMessageDialog(this, ex.getMessage());
+				showGUIMessage(ex.getMessage(), true);
 			} finally {
 				clearFieldsOnPanel(taskFieldsJPanel);
 			}
@@ -1143,10 +1167,10 @@ public class GUIForm extends javax.swing.JFrame {
 				refreshClientsList(clientsJList);
 				clearFieldsOnPanel(clientFieldsJPanel);
 				selectNewItem(clientsJList);
-				JOptionPane.showMessageDialog(this, "Client removed!");
+				showGUIMessage("Client removed!", true);
 			} catch (GUIException | IOException | WebserviceException | JSONException ex) {
 				ex.printStackTrace();
-				JOptionPane.showMessageDialog(this, ex.getMessage());
+				showGUIMessage(ex.getMessage(), true);
 			}
 		}
 	}
@@ -1370,8 +1394,8 @@ public class GUIForm extends javax.swing.JFrame {
 			LocalDatabaseSynch lds = new LocalDatabaseSynch(Validator.getInstance());
 			lds.synch();
 		} catch (JSONException | IOException | WebserviceException e) {
-			JOptionPane.showMessageDialog(this, e.getMessage());
 			e.printStackTrace();
+			showGUIMessage(e.getMessage(), true);
 		}
 	}
 
@@ -1395,7 +1419,7 @@ public class GUIForm extends javax.swing.JFrame {
 			loadTaskInfo(tasksJList.getSelectedIndex());
 		} catch (GUIException ex) {
 			ex.printStackTrace();
-			JOptionPane.showMessageDialog(this, ex.getMessage());
+			showGUIMessage(ex.getMessage(), true);
 		}
 	}
 
@@ -1445,7 +1469,7 @@ public class GUIForm extends javax.swing.JFrame {
 			selectNewItem(tasksJList);
 		} catch (GUIException ex) {
 			ex.printStackTrace();
-			JOptionPane.showMessageDialog(this, ex.getMessage());
+			showGUIMessage(ex.getMessage(), true);
 		}
 	}
 
@@ -1472,6 +1496,27 @@ public class GUIForm extends javax.swing.JFrame {
 	private void toggleButtonStates(boolean disabled, JButton... buttons) {
 		for (JButton b : buttons)
 			b.setEnabled(!disabled);
+	}
+
+	/**
+	 * Show a nice looking GUI message
+	 * @param 	message		the error message
+	 * @param 	isError		specifies if this is an error message or just a notification
+	 */
+	private void showGUIMessage(String message, boolean isError) {
+		Color c = (isError) ? Color.RED : Color.GREEN;
+		long showTime = (isError) ? 4000 : 2000;
+		errorJLabel.setForeground(c);
+		errorJLabel.setText(message);
+		errorJLabel.setVisible(true);
+		TimerTask task = new TimerTask() {
+			@Override
+			public void run() {
+				errorJLabel.setVisible(false);
+			}
+		};
+		Timer t = new Timer();
+		t.schedule(task, showTime);
 	}
 
 	// ================================================================================
@@ -1582,13 +1627,13 @@ public class GUIForm extends javax.swing.JFrame {
 				Taak[] t = new Taak[toExport.size()];
 				if (fileChooser.getSelectedFile() != null)
 					IcsExporteren.export(toExport.toArray(t), fileChooser.getSelectedFile().toPath().toString());
-				JOptionPane.showMessageDialog(this, "Tasks exported");
+				showGUIMessage("Tasks exported", false);
 			} else {
-				JOptionPane.showMessageDialog(this, "Select tasks to export");
+				showGUIMessage("Select tasks to export", true);
 			}
 		} catch (IOException | ValidationException | GUIException e) {
 			e.printStackTrace();
-			JOptionPane.showMessageDialog(this, e.getMessage());
+			showGUIMessage(e.getMessage(), true);
 		}
 	}
 
@@ -1607,7 +1652,7 @@ public class GUIForm extends javax.swing.JFrame {
 			}
 		} catch (IOException | ParserException e) {
 			e.printStackTrace();
-			JOptionPane.showMessageDialog(this, e.getMessage());
+			showGUIMessage(e.getMessage(), true);
 		}
 	}
 
@@ -1648,8 +1693,8 @@ public class GUIForm extends javax.swing.JFrame {
 				updateProject(name, startdate, enddate, opdrachtgeverID);
 			}
 		} catch (DataInputException e) {
-			JOptionPane.showMessageDialog(GUIForm.this, e.getMessage());
 			e.printStackTrace();
+			showGUIMessage(e.getMessage(), true);
 		}
 	}
 
@@ -1669,10 +1714,10 @@ public class GUIForm extends javax.swing.JFrame {
 			}
 		} catch (NullPointerException ex) {
 			ex.printStackTrace();
-			JOptionPane.showMessageDialog(GUIForm.this, "Please choose a valid date");
+			showGUIMessage("Please choose a valid date", true);
 		} catch (GUIException e1) {
 			e1.printStackTrace();
-			JOptionPane.showMessageDialog(GUIForm.this, e1.getMessage());
+			showGUIMessage(e1.getMessage(), true);
 		} finally {
 			loadProjectInfo(projectsJList.getSelectedIndex());
 			refreshProjectsList(homeProjectsJList);
@@ -1698,7 +1743,7 @@ public class GUIForm extends javax.swing.JFrame {
 			toggleButtonStates(stringItemSelected, removeTaskJButton);
 		} catch (GUIException e) {
 			e.printStackTrace();
-			JOptionPane.showMessageDialog(this, e.getMessage());
+			showGUIMessage(e.getMessage(), true);
 		}
 	}
 
@@ -1779,7 +1824,6 @@ public class GUIForm extends javax.swing.JFrame {
 	private JTextArea taskCommentJTextArea;
 	private JList workedTimeJList;
 	private JPanel projectEditFieldsJPanel;
-	private JList tasksJList;
 	private JList projectTasksJList;
 	private JDateChooser taskStartDateChooser;
 	private JDateChooser taskEndDateChooser;
@@ -1840,4 +1884,6 @@ public class GUIForm extends javax.swing.JFrame {
 	private JPanel taskStatusFieldsJPanel;
 	private JButton syncButton;
 	private JButton addTimeJButton;
+	private JLabel errorJLabel;
+	private JList tasksJList;
 }
