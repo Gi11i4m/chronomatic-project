@@ -16,14 +16,21 @@ import java.awt.Font;
 import java.util.Date;
 
 import com.toedter.components.JSpinField;
+import javax.swing.SpinnerModel;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 
 public class addTimeDialog extends JDialog {
 
 	private final JPanel contentPanel = new JPanel();
 	private JLabel beginJLabel;
 	private JLabel endJLabel;
-	private JDateChooser dateChooser;
-	private JSpinner timeSpinner;
+	private JDateChooser endDateChooser;
+	private JDateChooser beginDateChooser;
+	private JSpinner beginTimeSpinner;
+	private JSpinner endTimeSpinner;
+	private JLabel dateJLabel;
+	private JLabel timeJLabel;
 
 	/**
 	 * Launch the application.
@@ -42,40 +49,63 @@ public class addTimeDialog extends JDialog {
 	 * Create the dialog.
 	 */
 	public addTimeDialog() {
-		setBounds(100, 100, 350, 250);
+		setBounds(100, 100, 500, 250);
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
 		contentPanel.setLayout(null);
-		{
-			JDateChooser beginDateChooser = new JDateChooser();
-			beginDateChooser.setBounds(10, 42, 89, 20);
-			contentPanel.add(beginDateChooser);
-		}
 		
 		beginJLabel = new JLabel("Begin");
 		beginJLabel.setFont(new Font("Tahoma", Font.BOLD, 13));
 		beginJLabel.setHorizontalAlignment(SwingConstants.CENTER);
-		beginJLabel.setBounds(27, 11, 51, 20);
+		beginJLabel.setBounds(141, 11, 51, 20);
 		contentPanel.add(beginJLabel);
 		
 		endJLabel = new JLabel("End");
 		endJLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		endJLabel.setFont(new Font("Tahoma", Font.BOLD, 13));
-		endJLabel.setBounds(204, 11, 51, 20);
+		endJLabel.setBounds(318, 11, 51, 20);
 		contentPanel.add(endJLabel);
 		
-		timeSpinner = new JSpinner( new SpinnerDateModel() );
-		JSpinner.DateEditor timeEditor = new JSpinner.DateEditor(timeSpinner, "HH:mm:ss");
-		timeSpinner.setEditor(timeEditor);
-		timeSpinner.setValue(new Date());
-		timeSpinner.setBounds(27, 100, 50, 20);
-		contentPanel.add(timeSpinner);
-		//FIXME
+		beginTimeSpinner = new JSpinner( new SpinnerDateModel() );
+		beginTimeSpinner.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyPressed(KeyEvent arg0) {
+				checkTimeSpinner(arg0);
+			}
+		});
+		JSpinner.DateEditor timeEditor = new JSpinner.DateEditor(beginTimeSpinner, "HH:mm");
+		beginTimeSpinner.setEditor(timeEditor);
+		beginTimeSpinner.setValue(new Date());
+		beginTimeSpinner.setBounds(124, 100, 51, 20);
+		contentPanel.add(beginTimeSpinner);
+
+		endTimeSpinner = new JSpinner( new SpinnerDateModel() );
+		JSpinner.DateEditor timeEditor2 = new JSpinner.DateEditor(endTimeSpinner, "HH:mm");
+		endTimeSpinner.setEditor(timeEditor2);
+		endTimeSpinner.setValue(new Date());
+		endTimeSpinner.setBounds(299, 100, 51, 20);
+		contentPanel.add(endTimeSpinner);
 		
-		dateChooser = new JDateChooser();
-		dateChooser.setBounds(185, 42, 89, 20);
-		contentPanel.add(dateChooser);
+		beginDateChooser = new JDateChooser();
+		beginDateChooser.setDateFormatString("dd/MM/yyyy");
+		beginDateChooser.setDate(new Date());
+		beginDateChooser.setBounds(124, 42, 89, 20);
+		contentPanel.add(beginDateChooser);
+		
+		endDateChooser = new JDateChooser();
+		endDateChooser.setDateFormatString("dd/MM/yyyy");
+		endDateChooser.setDate(new Date());
+		endDateChooser.setBounds(299, 42, 89, 20);
+		contentPanel.add(endDateChooser);
+		
+		dateJLabel = new JLabel("Date");
+		dateJLabel.setBounds(37, 48, 46, 14);
+		contentPanel.add(dateJLabel);
+		
+		timeJLabel = new JLabel("Time");
+		timeJLabel.setBounds(37, 103, 46, 14);
+		contentPanel.add(timeJLabel);
 		{
 			JPanel buttonPane = new JPanel();
 			buttonPane.setLayout(new FlowLayout(FlowLayout.RIGHT));
@@ -93,4 +123,14 @@ public class addTimeDialog extends JDialog {
 			}
 		}
 	}
+
+	private void checkTimeSpinner(KeyEvent arg0){
+		JSpinner spinner = (JSpinner) arg0.getSource();
+		System.out.println("test");
+		Date d = (Date) spinner.getValue();
+		if (true) {
+			System.out.println(d);
+		}
+	}
+	
 }
