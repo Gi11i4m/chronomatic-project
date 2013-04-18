@@ -24,3 +24,7 @@ yolan:
 	drag and drop functionaliteiten
 	login form: op enter duwen om aan te melden zou tof zijn
 	als er nen server error is sluit den dialog automatisch, iznogood
+
+gilliam:
+	- addTaak error (DataInputException) bij Stoppen van klok bij een nieuwe taak
+	- Error bij saven van Client..?
