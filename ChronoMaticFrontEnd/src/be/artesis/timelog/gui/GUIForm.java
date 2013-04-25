@@ -415,7 +415,7 @@ public class GUIForm extends javax.swing.JFrame {
 		tasksJPanel.setLayout(null);
 		tasksJPanel.add(tasksJLabel);
 		tasksJPanel.add(jScrollPane3);
-
+		
 		tasksJList = new JList();
 		tasksJList.setModel(new AbstractListModel() {
 			String[] values = new String[] { "Select a current project first!" };
@@ -1229,13 +1229,18 @@ public class GUIForm extends javax.swing.JFrame {
 				Taak t = it.next();
 				listmodel.addElement(t);
 			}
-
+			
 			if (list.equals(tasksJList)) {
 				listmodel.addElement(NEWTASKITEM);
 				list.setModel(listmodel);
 			} else {
 				list.setModel(listmodel);
 			}
+
+			if (selectedIndex == -1) {
+				selectedIndex = list.getModel().getSize() - 1;
+			}
+			
 			list.setCellRenderer(new TaskCellRenderer());
 			list.setSelectedIndex(selectedIndex);
 		}
@@ -1331,7 +1336,6 @@ public class GUIForm extends javax.swing.JFrame {
 	 * @param	index	the list index (should equal arraylist index from projects) from the project to be loaded
 	 */
 	private void loadProjectInfo(int index) {
-		if (index != -1) {
 			Project p = UserInterface.getProject(index);
 			projectNameJTextField.setText(p.getNaam());
 			projectStartDateChooser.setDate(new Date(p.getBegindatum() * 1000));
@@ -1340,7 +1344,6 @@ public class GUIForm extends javax.swing.JFrame {
 			refreshClientsComboBox(p, projectClientsJComboBox);
 			refreshTasksList(p, projectTasksJList);
 			percentageCompleteJProgressBar.setValue((int) (((Project) projectsJList.getSelectedValue()).getPercentageComplete() * 100));
-		}
 	}
 
 	/**
@@ -1348,7 +1351,6 @@ public class GUIForm extends javax.swing.JFrame {
 	 * @param	index	the list index (should equal arraylist index from tasks) from the task to be loaded
 	 */
 	private void loadTaskInfo(int index) throws GUIException {
-		if (index != -1) {
 			Taak t = (Taak) tasksJList.getSelectedValue();
 			taskNameJTextField.setText(t.getNaam());
 			taskStartDateChooser.setDate(new Date(t.getBegindatum() * 1000));
@@ -1367,7 +1369,6 @@ public class GUIForm extends javax.swing.JFrame {
 			workedTimeJList.setModel(listmodel);
 			taskTotalWorkedJTextField.setText(Clock.longTimeToString(t.getTotaleWerktijd(), false));
 			taskTotalPauseJTextField.setText(Clock.longTimeToString(t.getTotalePauze(), false));
-		}
 	}
 
 	/**
@@ -1375,14 +1376,12 @@ public class GUIForm extends javax.swing.JFrame {
 	 * @param	index	the list index (should equal arraylist index from clients) from the client to be loaded
 	 */
 	private void loadClientInfo(int index) {
-		if (index != -1) {
 			Opdrachtgever o = (Opdrachtgever) clientsJList.getSelectedValue();
 			clientNameJTextField.setText(o.getNaam());
 			clientFirstNameJTextField.setText(o.getVoornaam());
 			clientCompanyJTextField.setText(o.getBedrijfsnaam());
 			clientEmailJTextField.setText(o.getEmail());
 			clientPhoneNumberJTextField.setText(o.getTelefoonnummer());
-		}
 	}
 
 	/**
