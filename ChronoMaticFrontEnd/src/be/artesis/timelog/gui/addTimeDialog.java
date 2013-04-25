@@ -4,11 +4,19 @@ import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 
 import javax.swing.JButton;
+import javax.swing.JComponent;
 import javax.swing.JDialog;
+import javax.swing.JFormattedTextField;
 import javax.swing.JPanel;
 import javax.swing.JSpinner;
 import javax.swing.SpinnerDateModel;
 import javax.swing.border.EmptyBorder;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
+import javax.swing.text.DefaultFormatter;
+
+import be.artesis.timelog.model.Validator;
+
 import com.toedter.calendar.JDateChooser;
 import javax.swing.JLabel;
 import javax.swing.SwingConstants;
@@ -31,24 +39,16 @@ public class addTimeDialog extends JDialog {
 	private JSpinner endTimeSpinner;
 	private JLabel dateJLabel;
 	private JLabel timeJLabel;
-
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		try {
-			addTimeDialog dialog = new addTimeDialog();
-			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-			dialog.setVisible(true);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-
+	private Validator validator;
+	
 	/**
 	 * Create the dialog.
 	 */
-	public addTimeDialog() {
+	public addTimeDialog(java.awt.Frame parent, boolean modal, Validator validator) {
+		super(parent, modal);
+		setUndecorated(false);
+		setLocationRelativeTo(parent);
+		this.validator = validator;
 		setBounds(100, 100, 500, 250);
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -68,12 +68,16 @@ public class addTimeDialog extends JDialog {
 		contentPanel.add(endJLabel);
 		
 		beginTimeSpinner = new JSpinner( new SpinnerDateModel() );
-		beginTimeSpinner.addKeyListener(new KeyAdapter() {
-			@Override
-			public void keyPressed(KeyEvent arg0) {
-				checkTimeSpinner(arg0);
-			}
-		});
+		beginTimeSpinner.addKeyListener(new KeyAdapter() {  
+	         public void keyTyped(KeyEvent e) {  
+	             char c = e.getKeyChar();  
+	             if (!(Character.isDigit(c) ||  
+	                (c == KeyEvent.VK_BACK_SPACE) ||  
+	                (c == KeyEvent.VK_DELETE))) {  
+	                  e.consume();  
+	                }  
+	           }  
+	         }); 
 		JSpinner.DateEditor timeEditor = new JSpinner.DateEditor(beginTimeSpinner, "HH:mm");
 		beginTimeSpinner.setEditor(timeEditor);
 		beginTimeSpinner.setValue(new Date());
@@ -122,15 +126,11 @@ public class addTimeDialog extends JDialog {
 				buttonPane.add(cancelButton);
 			}
 		}
-	}
-
-	private void checkTimeSpinner(KeyEvent arg0){
-		JSpinner spinner = (JSpinner) arg0.getSource();
-		System.out.println("test");
-		Date d = (Date) spinner.getValue();
-		if (true) {
-			System.out.println(d);
-		}
+		
+		JComponent comp = beginTimeSpinner.getEditor();
+	    JFormattedTextField field = (JFormattedTextField) comp.getComponent(0);
+	    DefaultFormatter formatter = (DefaultFormatter) field.getFormatter();
+	    formatter.setCommitsOnValidEdit(true);
 	}
 	
 }

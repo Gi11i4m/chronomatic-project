@@ -421,25 +421,12 @@ public class GUIForm extends javax.swing.JFrame {
 		tasksJPanel.setLayout(null);
 		tasksJPanel.add(tasksJLabel);
 		tasksJPanel.add(jScrollPane3);
-		
-		tasksJList = new JList();
-		tasksJList.setModel(new AbstractListModel() {
-			String[] values = new String[] { "Select a current project first!" };
-
-			public int getSize() {
-				return values.length;
-			}
-
-			public Object getElementAt(int index) {
-				return values[index];
-			}
-		});
-		jScrollPane3.setViewportView(tasksJList);
 
 		tasksJList = new JList();
 		DefaultListModel tasksListmodel = new DefaultListModel();
 		tasksListmodel.addElement("Select a current project first!");
 		tasksJList.setModel(tasksListmodel);
+		jScrollPane3.add(tasksJList);
 
 		tasksJList.addListSelectionListener(new ListSelectionListener() {
 			public void valueChanged(ListSelectionEvent arg0) {
@@ -447,6 +434,8 @@ public class GUIForm extends javax.swing.JFrame {
 			}
 		});
 		tasksJList.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
+		
+		jScrollPane3.setViewportView(tasksJList);
 		tasksJPanel.add(removeTaskJButton);
 
 		taskFieldsJPanel = new JPanel();
@@ -557,7 +546,8 @@ public class GUIForm extends javax.swing.JFrame {
 		addTimeJButton = new JButton("Add time");
 		addTimeJButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				//FIXME add tijdspanne aan taak
+				//FIXME taak meegeven?
+				openAddTimeDialog();
 			}
 		});
 		addTimeJButton.setBounds(287, 108, 89, 23);
@@ -1229,6 +1219,7 @@ public class GUIForm extends javax.swing.JFrame {
 	private void refreshTasksList(Project p, JList... lists) {
 		for (JList list : lists) {
 			int selectedIndex = list.getSelectedIndex();
+			
 			DefaultListModel listmodel = new DefaultListModel();
 
 			for (Iterator<Taak> it = p.getTaken().iterator(); it.hasNext();) {
@@ -1242,13 +1233,14 @@ public class GUIForm extends javax.swing.JFrame {
 			} else {
 				list.setModel(listmodel);
 			}
-
-			if (selectedIndex == -1) {
-				selectedIndex = list.getModel().getSize() - 1;
-			}
 			
 			list.setCellRenderer(new TaskCellRenderer());
-			list.setSelectedIndex(selectedIndex);
+			if (selectedIndex != -1) {
+				list.setSelectedIndex(selectedIndex);
+			}
+			else {
+				selectNewItem(tasksJList);
+			}
 		}
 		refreshTree(exportJCheckBoxTree, UserInterface.getProjects());
 	}
@@ -1427,6 +1419,13 @@ public class GUIForm extends javax.swing.JFrame {
 		}
 	}
 
+	private void openAddTimeDialog(){
+		setVisible(false);
+		addTimeDialog addTime = new addTimeDialog(this, true, validator);
+		addTime.setVisible(true);
+		setVisible(true);
+	}
+	
 	/**
 	 * CLEAR ALL FIELDS on the panels in parameter
 	 * @param 	panel	the panel on which to clear the components
@@ -1465,11 +1464,9 @@ public class GUIForm extends javax.swing.JFrame {
 			UserInterface.setCurrentProjectIndex(index);
 			currentProjectJLabel.setText("Current project: " + UserInterface.getCurrentProject().getNaam());
 			saveTaskJButton.setText("Save to " + UserInterface.getCurrentProject().getNaam());
-			projectsJList.setSelectedIndex(index);
 			refreshProjectsList(projectsJList, homeProjectsJList);
 			refreshTasksList(UserInterface.getCurrentProject(), tasksJList);
 			clearFieldsOnPanel(taskFieldsJPanel);
-			selectNewItem(tasksJList);
 		} catch (GUIException ex) {
 			ex.printStackTrace();
 			showGUIMessage(ex.getMessage(), true);
@@ -1727,6 +1724,12 @@ public class GUIForm extends javax.swing.JFrame {
 
 	private void taskJListValueChanged(ListSelectionEvent arg0) {
 		try {
+			JList list = (JList) arg0.getSource();
+			int selectedIndex = list.getSelectedIndex();
+			if (selectedIndex == -1) {
+				System.out.println("lol");
+				return;
+			}
 			boolean stringItemSelected = tasksJList.getSelectedValue().getClass().equals(String.class);
 			if (stringItemSelected) {
 				if (tasksJList.getSelectedValue().equals(NEWTASKITEM)) {
