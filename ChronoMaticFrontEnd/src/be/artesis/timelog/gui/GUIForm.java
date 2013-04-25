@@ -221,13 +221,7 @@ public class GUIForm extends javax.swing.JFrame {
 		homeProjectsJList.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
-				JList list = (JList) arg0.getSource();
-				if (arg0.getClickCount() == 2) {
-					int index = list.locationToIndex(arg0.getPoint());
-					if (index != -1 && list.getSelectedValue().getClass().equals(Project.class)) {
-						setCurrentProjectGUI(index);
-					}
-				}
+				setCurrentProjectWithMouse(arg0);
 			}
 		});
 		homeProjectsJList.addKeyListener(new KeyAdapter() {
@@ -1429,7 +1423,7 @@ public class GUIForm extends javax.swing.JFrame {
 	}
 
 	/**
-	 * CLEAR ALL FIELDS on the panels in parameter
+	 * CLEAR ALL FIELDS on the panels in parameter except for labels and buttons
 	 * @param 	panel	the panel on which to clear the components
 	 */
 	private void clearFieldsOnPanel(JPanel panel) {
@@ -1527,21 +1521,35 @@ public class GUIForm extends javax.swing.JFrame {
 	// Event handlers, FIXME afsplitsen!
 	// ================================================================================
 
-	private void clientsJListValueChanged(ListSelectionEvent arg0) {
-		if (clientsJList.getSelectedIndex() != -1) {
-			if (clientsJList.getSelectedValue().equals(NEWCLIENTITEM)) {
-				clearFieldsOnPanel(clientFieldsJPanel);
-				saveClientJButton.setText("Save [new]");
-				removeClientJButton.setEnabled(false);
-			} else {
-				loadClientInfo(clientsJList.getSelectedIndex());
-				saveClientJButton.setText("Save");
-				removeClientJButton.setEnabled(true);
+	/**
+	 * Call the setCurrenProjectGUI method when enter is pressed in the home screen
+	 * @param 	arg0
+	 */
+	private void setCurrentProjectWithEnter(KeyEvent arg0) {
+		JList list = (JList) arg0.getSource();
+		if (arg0.getKeyCode() == KeyEvent.VK_ENTER && list.getSelectedValue().getClass().equals(Project.class)) {
+			setCurrentProjectGUI(list.getSelectedIndex());
+		}
+	}
+
+	/**
+	 * Call the setCurrenProjectGUI method when project is double clicked in home screen
+	 * @param 	arg0
+	 */
+	private void setCurrentProjectWithMouse(MouseEvent arg0) {
+		JList list = (JList) arg0.getSource();
+		if (arg0.getClickCount() == 2) {
+			int index = list.locationToIndex(arg0.getPoint());
+			if (index != -1 && list.getSelectedValue().getClass().equals(Project.class)) {
+				setCurrentProjectGUI(index);
 			}
 		}
 	}
 
-	// Save IMPORTED TASKS TO PROJECT
+	/**
+	 * Save the imported tasks to a project when the saveToProjectButton is clicked
+	 * @param 	arg0
+	 */
 	private void saveToProjectButtonClicked(ActionEvent arg0) {
 		ArrayList<Taak> toSave = new ArrayList();
 		TreePath[] paths = importJCheckBoxTree.getCheckingPaths();
@@ -1562,24 +1570,39 @@ public class GUIForm extends javax.swing.JFrame {
 		}
 	}
 
-	private void projectsJListValueChanged(javax.swing.event.ListSelectionEvent evt) {
-		if (projectsJList.getSelectedIndex() != -1) {
-			boolean newSelected = projectsJList.getSelectedValue().equals(NEWPROJECTITEM);
-			if (newSelected) {
-				clearFieldsOnPanel(projectFieldsJPanel);
-				refreshClientsComboBox(null, projectClientsJComboBox);
-				toggleButtonStates(newSelected, setCurrentProjectJButton, removeProjectJButton);
-				saveProjectJButton.setText("Save [new]");
-			} else {
-				loadProjectInfo(projectsJList.getSelectedIndex());
-				toggleButtonStates(newSelected, setCurrentProjectJButton, removeProjectJButton);
-				saveProjectJButton.setText("Save");
-			}
-
+	/**
+	 * Refresh the task list on the home screen when a new project gets selected
+	 * @param evt
+	 */
+	private void homeProjectListValueChanged(ListSelectionEvent evt) {
+		if (homeProjectsJList.getSelectedIndex() != -1) {
+			refreshTasksList((Project) homeProjectsJList.getSelectedValue(), homeTasksJList);
 		}
 	}
 
-	// Initialiseer statusvelden (linksboven) en project en client lijsten, FIXME overbodige methodes weg!
+	/**
+	 * Check if new item is selected when projectsJList selected index changes and
+	 * clear fields and set buttons accordingly
+	 * @param 	evt
+	 */
+	private void projectsJListValueChanged(ListSelectionEvent evt) {
+		boolean newSelected = projectsJList.getSelectedValue().equals(NEWPROJECTITEM);
+		if (newSelected) {
+			clearFieldsOnPanel(projectFieldsJPanel);
+			refreshClientsComboBox(null, projectClientsJComboBox);
+			toggleButtonStates(newSelected, setCurrentProjectJButton, removeProjectJButton);
+			saveProjectJButton.setText("Save [new]");
+		} else {
+			loadProjectInfo(projectsJList.getSelectedIndex());
+			toggleButtonStates(newSelected, setCurrentProjectJButton, removeProjectJButton);
+			saveProjectJButton.setText("Save");
+		}
+	}
+
+	/**
+	 * Initialiseer statusvelden (linksboven) en project en client lijsten
+	 * @param evt
+	 */
 	private void guiOpened(WindowEvent evt) {
 		refreshProjectsList(projectsJList, homeProjectsJList);
 		refreshClientsList(clientsJList);
@@ -1588,23 +1611,65 @@ public class GUIForm extends javax.swing.JFrame {
 		selectNewItem(projectsJList, tasksJList, clientsJList);
 	}
 
-	// sets selected item to < new ... >
+	/**
+	 * Load client info when the selected index changes, and change button states
+	 * @param 	arg0
+	 */
+	private void clientsJListValueChanged(ListSelectionEvent arg0) {
+		if (clientsJList.getSelectedIndex() != -1) {
+			if (clientsJList.getSelectedValue().equals(NEWCLIENTITEM)) {
+				clearFieldsOnPanel(clientFieldsJPanel);
+				saveClientJButton.setText("Save [new]");
+				removeClientJButton.setEnabled(false);
+			} else {
+				loadClientInfo(clientsJList.getSelectedIndex());
+				saveClientJButton.setText("Save");
+				removeClientJButton.setEnabled(true);
+			}
+		}
+	}
+
+	/**
+	 * Load task info or clear panels and change buttons according to
+	 * selected value in taskJList when selected value changes
+	 * @param arg0
+	 */
+	private void taskJListValueChanged(ListSelectionEvent arg0) {
+		try {
+			boolean stringItemSelected = tasksJList.getSelectedValue().getClass().equals(String.class);
+			if (stringItemSelected) {
+				if (tasksJList.getSelectedValue().equals(NEWTASKITEM)) {
+					clearFieldsOnPanel(taskFieldsJPanel);
+					saveTaskJButton.setText("Save [new]");
+				} else {
+					clearFieldsOnPanel(taskFieldsJPanel);
+				}
+			} else {
+				loadTaskInfo(((JList) arg0.getSource()).getSelectedIndex());
+				saveTaskJButton.setText("Save");
+			}
+			toggleButtonStates(stringItemSelected, removeTaskJButton);
+		} catch (GUIException e) {
+			e.printStackTrace();
+			showGUIMessage(e.getMessage(), true);
+		}
+	}
+
+	/**
+	 * Sets selected item to < new ... >
+	 * @param 	lists	the lists in which the selected item should be set to < new ... >
+	 */
 	private void selectNewItem(JList... lists) {
 		for (JList list : lists) {
 			list.setSelectedIndex(list.getModel().getSize() - 1);
 			list.ensureIndexIsVisible(list.getSelectedIndex());
 		}
-		refreshTree(exportJCheckBoxTree, UserInterface.getProjects());
 	}
 
-	// FIXME, samenvoegen met andere listvaluechanged event handlers
-	private void homeProjectListValueChanged(ListSelectionEvent evt) {
-		if (homeProjectsJList.getSelectedIndex() != -1) {
-			refreshTasksList((Project) homeProjectsJList.getSelectedValue(), homeTasksJList);
-		}
-	}
-
-	// Button voor exporteren van taken
+	/**
+	 * Export selected tasks to selected location when exportButton is pressed
+	 * @param arg0
+	 */
 	private void exportButtonClicked(ActionEvent arg0) {
 		try {
 			ArrayList<Taak> toExport = new ArrayList();
@@ -1637,7 +1702,10 @@ public class GUIForm extends javax.swing.JFrame {
 		}
 	}
 
-	// Button voor importeren van taken
+	/**
+	 * Import selected tasks to selected project when importButton is pressed
+	 * @param arg0
+	 */
 	private void importButtonClicked(ActionEvent arg0) {
 		try {
 			JFileChooser fileChooser = new JFileChooser();
@@ -1656,6 +1724,22 @@ public class GUIForm extends javax.swing.JFrame {
 		}
 	}
 
+	private void clientsJComboBoxValueChanged(ActionEvent arg0) {
+		JComboBox combobox = (JComboBox) arg0.getSource();
+		if (combobox.getSelectedIndex() != -1) {
+			if (combobox.getSelectedItem().equals(NEWCLIENTITEM)) {
+				creatingProject = true;
+				contentJTabbedPane.setSelectedIndex(3);
+				selectNewItem(clientsJList);
+			}
+		}
+	}
+
+	// Event handlers for save buttons
+
+	/**
+	 * Save or update client (dependent on selected value in clientsJList)
+	 */
 	private void saveClientButtonClicked() {
 		String naam = clientNameJTextField.getText();
 		String voornaam = clientFirstNameJTextField.getText();
@@ -1670,6 +1754,9 @@ public class GUIForm extends javax.swing.JFrame {
 		}
 	}
 
+	/**
+	 * Save or update project (dependent on selected value in projectsJList)
+	 */
 	private void saveProjectButtonClicked() {
 		try {
 			String name = projectNameJTextField.getText();
@@ -1698,6 +1785,9 @@ public class GUIForm extends javax.swing.JFrame {
 		}
 	}
 
+	/**
+	 * Save or update task (dependent on selected value in tasksJList)
+	 */
 	private void saveTaskButtonClicked() {
 		try {
 			String name = taskNameJTextField.getText();
@@ -1723,45 +1813,6 @@ public class GUIForm extends javax.swing.JFrame {
 			refreshProjectsList(homeProjectsJList);
 			if (projectsJList.getSelectedValue() instanceof Project)
 				refreshTasksList((Project) projectsJList.getSelectedValue(), homeTasksJList);
-		}
-	}
-
-	private void taskJListValueChanged(ListSelectionEvent arg0) {
-		try {
-			boolean stringItemSelected = tasksJList.getSelectedValue().getClass().equals(String.class);
-			if (stringItemSelected) {
-				if (tasksJList.getSelectedValue().equals(NEWTASKITEM)) {
-					clearFieldsOnPanel(taskFieldsJPanel);
-					saveTaskJButton.setText("Save [new]");
-				} else {
-					clearFieldsOnPanel(taskFieldsJPanel);
-				}
-			} else {
-				loadTaskInfo(((JList) arg0.getSource()).getSelectedIndex());
-				saveTaskJButton.setText("Save");
-			}
-			toggleButtonStates(stringItemSelected, removeTaskJButton);
-		} catch (GUIException e) {
-			e.printStackTrace();
-			showGUIMessage(e.getMessage(), true);
-		}
-	}
-
-	private void clientsJComboBoxValueChanged(ActionEvent arg0) {
-		JComboBox combobox = (JComboBox) arg0.getSource();
-		if (combobox.getSelectedIndex() != -1) {
-			if (combobox.getSelectedItem().equals(NEWCLIENTITEM)) {
-				creatingProject = true;
-				contentJTabbedPane.setSelectedIndex(3);
-				selectNewItem(clientsJList);
-			}
-		}
-	}
-
-	private void setCurrentProjectWithEnter(KeyEvent arg0) {
-		JList list = (JList) arg0.getSource();
-		if (arg0.getKeyCode() == KeyEvent.VK_ENTER && list.getSelectedValue().getClass().equals(Project.class)) {
-			setCurrentProjectGUI(list.getSelectedIndex());
 		}
 	}
 
