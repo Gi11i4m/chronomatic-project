@@ -1220,14 +1220,18 @@ public class GUIForm extends javax.swing.JFrame {
 				Taak t = it.next();
 				listmodel.addElement(t);
 			}
-			
+
 			if (list.equals(tasksJList)) {
 				listmodel.addElement(NEWTASKITEM);
 				list.setModel(listmodel);
 			} else {
 				list.setModel(listmodel);
 			}
-			
+
+			if (selectedIndex == -1) {
+				selectedIndex = list.getModel().getSize() - 1;
+			}
+
 			list.setCellRenderer(new TaskCellRenderer());
 			if (selectedIndex != -1) {
 				list.setSelectedIndex(selectedIndex);
@@ -1328,14 +1332,14 @@ public class GUIForm extends javax.swing.JFrame {
 	 * @param	index	the list index (should equal arraylist index from projects) from the project to be loaded
 	 */
 	private void loadProjectInfo(int index) {
-			Project p = UserInterface.getProject(index);
-			projectNameJTextField.setText(p.getNaam());
-			projectStartDateChooser.setDate(new Date(p.getBegindatum() * 1000));
-			projectEndDateChooser.setDate(new Date(p.getEinddatum() * 1000));
+		Project p = UserInterface.getProject(index);
+		projectNameJTextField.setText(p.getNaam());
+		projectStartDateChooser.setDate(new Date(p.getBegindatum() * 1000));
+		projectEndDateChooser.setDate(new Date(p.getEinddatum() * 1000));
 
-			refreshClientsComboBox(p, projectClientsJComboBox);
-			refreshTasksList(p, projectTasksJList);
-			percentageCompleteJProgressBar.setValue((int) (((Project) projectsJList.getSelectedValue()).getPercentageComplete() * 100));
+		refreshClientsComboBox(p, projectClientsJComboBox);
+		refreshTasksList(p, projectTasksJList);
+		percentageCompleteJProgressBar.setValue((int) (((Project) projectsJList.getSelectedValue()).getPercentageComplete() * 100));
 	}
 
 	/**
@@ -1343,24 +1347,24 @@ public class GUIForm extends javax.swing.JFrame {
 	 * @param	index	the list index (should equal arraylist index from tasks) from the task to be loaded
 	 */
 	private void loadTaskInfo(int index) throws GUIException {
-			Taak t = (Taak) tasksJList.getSelectedValue();
-			taskNameJTextField.setText(t.getNaam());
-			taskStartDateChooser.setDate(new Date(t.getBegindatum() * 1000));
-			taskEndDateChooser.setDate(new Date(t.getGeschatteEinddatum() * 1000));
-			taskCommentJTextArea.setText(t.getCommentaar());
-			taskCompletedJCheckBox.setSelected(t.getCompleted());
-			DefaultListModel listmodel = new DefaultListModel();
+		Taak t = (Taak) tasksJList.getSelectedValue();
+		taskNameJTextField.setText(t.getNaam());
+		taskStartDateChooser.setDate(new Date(t.getBegindatum() * 1000));
+		taskEndDateChooser.setDate(new Date(t.getGeschatteEinddatum() * 1000));
+		taskCommentJTextArea.setText(t.getCommentaar());
+		taskCompletedJCheckBox.setSelected(t.getCompleted());
+		DefaultListModel listmodel = new DefaultListModel();
 
-			for (Iterator<Tijdspanne> it = t.getTotaleTijd().iterator(); it.hasNext();) {
-				Tijdspanne ts = it.next();
-				if (!ts.isPauze()) {
-					listmodel.addElement(ts);
-				}
+		for (Iterator<Tijdspanne> it = t.getTotaleTijd().iterator(); it.hasNext();) {
+			Tijdspanne ts = it.next();
+			if (!ts.isPauze()) {
+				listmodel.addElement(ts);
 			}
+		}
 
-			workedTimeJList.setModel(listmodel);
-			taskTotalWorkedJTextField.setText(Clock.longTimeToString(t.getTotaleWerktijd(), false));
-			taskTotalPauseJTextField.setText(Clock.longTimeToString(t.getTotalePauze(), false));
+		workedTimeJList.setModel(listmodel);
+		taskTotalWorkedJTextField.setText(Clock.longTimeToString(t.getTotaleWerktijd(), false));
+		taskTotalPauseJTextField.setText(Clock.longTimeToString(t.getTotalePauze(), false));
 	}
 
 	/**
@@ -1368,12 +1372,12 @@ public class GUIForm extends javax.swing.JFrame {
 	 * @param	index	the list index (should equal arraylist index from clients) from the client to be loaded
 	 */
 	private void loadClientInfo(int index) {
-			Opdrachtgever o = (Opdrachtgever) clientsJList.getSelectedValue();
-			clientNameJTextField.setText(o.getNaam());
-			clientFirstNameJTextField.setText(o.getVoornaam());
-			clientCompanyJTextField.setText(o.getBedrijfsnaam());
-			clientEmailJTextField.setText(o.getEmail());
-			clientPhoneNumberJTextField.setText(o.getTelefoonnummer());
+		Opdrachtgever o = (Opdrachtgever) clientsJList.getSelectedValue();
+		clientNameJTextField.setText(o.getNaam());
+		clientFirstNameJTextField.setText(o.getVoornaam());
+		clientCompanyJTextField.setText(o.getBedrijfsnaam());
+		clientEmailJTextField.setText(o.getEmail());
+		clientPhoneNumberJTextField.setText(o.getTelefoonnummer());
 	}
 
 	/**
@@ -1514,7 +1518,7 @@ public class GUIForm extends javax.swing.JFrame {
 	}
 
 	// ================================================================================
-	// Event handlers, FIXME afsplitsen!
+	// Event handlers
 	// ================================================================================
 
 	/**
