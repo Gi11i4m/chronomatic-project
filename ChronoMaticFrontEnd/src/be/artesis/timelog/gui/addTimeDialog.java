@@ -33,11 +33,8 @@ public class addTimeDialog extends JDialog {
 	private final JPanel contentPanel = new JPanel();
 	private JLabel beginJLabel;
 	private JLabel endJLabel;
-	private JDateChooser endDateChooser;
-	private JDateChooser beginDateChooser;
 	private JSpinner beginTimeSpinner;
 	private JSpinner endTimeSpinner;
-	private JLabel dateJLabel;
 	private JLabel timeJLabel;
 	private Validator validator;
 	
@@ -71,44 +68,27 @@ public class addTimeDialog extends JDialog {
 		beginTimeSpinner.addKeyListener(new KeyAdapter() {  
 	         public void keyTyped(KeyEvent e) {  
 	             char c = e.getKeyChar();  
-	             if (!(Character.isDigit(c) ||  
-	                (c == KeyEvent.VK_BACK_SPACE) ||  
-	                (c == KeyEvent.VK_DELETE))) {  
+	             if (!(Character.isDigit(c))) {  
+	            	 System.out.println("test");
 	                  e.consume();  
 	                }  
 	           }  
 	         }); 
-		JSpinner.DateEditor timeEditor = new JSpinner.DateEditor(beginTimeSpinner, "HH:mm");
+		JSpinner.DateEditor timeEditor = new JSpinner.DateEditor(beginTimeSpinner, "HH:mm dd/MM/yyyy");
 		beginTimeSpinner.setEditor(timeEditor);
 		beginTimeSpinner.setValue(new Date());
-		beginTimeSpinner.setBounds(124, 100, 51, 20);
+		beginTimeSpinner.setBounds(143, 42, 116, 20);
 		contentPanel.add(beginTimeSpinner);
 
 		endTimeSpinner = new JSpinner( new SpinnerDateModel() );
-		JSpinner.DateEditor timeEditor2 = new JSpinner.DateEditor(endTimeSpinner, "HH:mm");
+		JSpinner.DateEditor timeEditor2 = new JSpinner.DateEditor(endTimeSpinner, "HH:mm dd/MM/yyyy");
 		endTimeSpinner.setEditor(timeEditor2);
 		endTimeSpinner.setValue(new Date());
-		endTimeSpinner.setBounds(299, 100, 51, 20);
+		endTimeSpinner.setBounds(141, 82, 116, 20);
 		contentPanel.add(endTimeSpinner);
 		
-		beginDateChooser = new JDateChooser();
-		beginDateChooser.setDateFormatString("dd/MM/yyyy");
-		beginDateChooser.setDate(new Date());
-		beginDateChooser.setBounds(124, 42, 89, 20);
-		contentPanel.add(beginDateChooser);
-		
-		endDateChooser = new JDateChooser();
-		endDateChooser.setDateFormatString("dd/MM/yyyy");
-		endDateChooser.setDate(new Date());
-		endDateChooser.setBounds(299, 42, 89, 20);
-		contentPanel.add(endDateChooser);
-		
-		dateJLabel = new JLabel("Date");
-		dateJLabel.setBounds(37, 48, 46, 14);
-		contentPanel.add(dateJLabel);
-		
 		timeJLabel = new JLabel("Time");
-		timeJLabel.setBounds(37, 103, 46, 14);
+		timeJLabel.setBounds(56, 45, 46, 14);
 		contentPanel.add(timeJLabel);
 		{
 			JPanel buttonPane = new JPanel();

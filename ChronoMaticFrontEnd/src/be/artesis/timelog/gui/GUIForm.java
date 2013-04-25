@@ -1812,45 +1812,6 @@ public class GUIForm extends javax.swing.JFrame {
 		}
 	}
 
-	private void taskJListValueChanged(ListSelectionEvent arg0) {
-		try {
-			boolean stringItemSelected = tasksJList.getSelectedValue().getClass().equals(String.class);
-			if (stringItemSelected) {
-				if (tasksJList.getSelectedValue().equals(NEWTASKITEM)) {
-					clearFieldsOnPanel(taskFieldsJPanel);
-					saveTaskJButton.setText("Save [new]");
-				} else {
-					clearFieldsOnPanel(taskFieldsJPanel);
-				}
-			} else {
-				loadTaskInfo(((JList) arg0.getSource()).getSelectedIndex());
-				saveTaskJButton.setText("Save");
-			}
-			toggleButtonStates(stringItemSelected, removeTaskJButton);
-		} catch (GUIException e) {
-			e.printStackTrace();
-			showGUIMessage(e.getMessage(), true);
-		}
-	}
-
-	private void clientsJComboBoxValueChanged(ActionEvent arg0) {
-		JComboBox combobox = (JComboBox) arg0.getSource();
-		if (combobox.getSelectedIndex() != -1) {
-			if (combobox.getSelectedItem().equals(NEWCLIENTITEM)) {
-				creatingProject = true;
-				contentJTabbedPane.setSelectedIndex(3);
-				selectNewItem(clientsJList);
-			}
-		}
-	}
-
-	private void setCurrentProjectWithEnter(KeyEvent arg0) {
-		JList list = (JList) arg0.getSource();
-		if (arg0.getKeyCode() == KeyEvent.VK_ENTER && list.getSelectedValue().getClass().equals(Project.class)) {
-			setCurrentProjectGUI(list.getSelectedIndex());
-		}
-	}
-
 	// ================================================================================
 	// Component variable declaration
 	// ================================================================================
