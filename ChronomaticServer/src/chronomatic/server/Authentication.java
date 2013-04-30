@@ -5,9 +5,12 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+
+import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.sql.Connection;
 import java.sql.ResultSet;
+import java.util.Random;
 import java.math.BigInteger;
 import chronomatic.database.*;
 
@@ -55,7 +58,7 @@ public class Authentication {
 		JSONObject returnObject = new JSONObject();
 		ResultSet rs = null;
 		
-		String query = "SELECT ID,gebruikersnaam FROM gebruikers WHERE gebruikersnaam = '" + username + "' AND passwoord = '" + password + "'";
+		String query = "SELECT ID,gebruikersnaam,validated FROM gebruikers WHERE gebruikersnaam = '" + username + "' AND passwoord = '" + password + "'";
 		try{
 			if(password != null) {
 				rs = Database.executeQuery(con, query); 
@@ -66,14 +69,20 @@ public class Authentication {
 				long unixTimestamp = System.currentTimeMillis()/1000;
 				String sessionQuery = "INSERT INTO sessies (session_key,time_out,last_activity,begin,gebruiker_ID) VALUES ('" + sessionKey + "',3600," + unixTimestamp + "," + unixTimestamp + ", " + rs.getInt(1) + ")";				
 				String checkedUsername = rs.getString(2);
-				
-				// Opslaan van sessie
-				if(Database.executeNullQuery(con, sessionQuery))  {
-					returnObject.put("username", checkedUsername);
-					returnObject.put("key", sessionKey);
+				//System.out.println(rs.getInt(3));
+				if(rs.getInt(3) != 0) {
+					// Opslaan van sessie
+					if(Database.executeNullQuery(con, sessionQuery))  {
+						returnObject.put("username", checkedUsername);
+						returnObject.put("key", sessionKey);
+					}
+					else {
+						returnObject.put("error","Error saving session data");
+					}
 				}
-				else 
-					returnObject.put("error","Error saving session data");
+				else {
+					returnObject.put("error","Your account has nog been activated");
+				}
 			}
 			else { 
 				// Foutieve login
@@ -81,9 +90,7 @@ public class Authentication {
 			}
 		}
 		catch (Exception e){
-			//System.out.println(e.toString());
 		}
-		System.out.println(returnObject.toString() );
 		return "[" + returnObject.toString() + "]";
 	}
 	
@@ -106,7 +113,7 @@ public class Authentication {
 				
 				long unixTimestamp = System.currentTimeMillis()/1000;
 				String sessionQuery = "INSERT INTO sessies (session_key,time_out,last_activity,begin,gebruiker_ID) VALUES ('" + sessionKey + "',3600," + unixTimestamp + "," + unixTimestamp + ", " + rs.getInt(1) + ")";
-				System.out.println(sessionQuery);
+				//System.out.println(sessionQuery);
 				String checkedUsername = rs.getString(2);
 				
 				// Opslaan van sessie
@@ -146,6 +153,31 @@ public class Authentication {
 		return null;
 	}
 	
+	/**
+	 * Versturen van nieuw paswoord naar gebruiker email
+	 * @param username
+	 * @param email
+	 * @return
+	 * Email message with new credentials
+	 */
+	@GET
+	@Path("resetpassword/{username}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public String resetPassword(@PathParam("username") String username) {
+		Connection con = DatabaseContainer.getConnection();
+		Random ran = new Random();
+		String query = null;
+		try {
+			query = "UPDATE gebruikers SET passwoord = '"+ RandomMD5.generate(Integer.toString(ran.nextInt())) +"' WHERE gebruikersnaam='"+ username +"'";
+		} catch (NoSuchAlgorithmException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		Database.executeNullQuery(con, query);
+		
+		return "";
+	}
 	
 	private String generateSessionID() { 
 		SecureRandom random = new SecureRandom();

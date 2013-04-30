@@ -33,7 +33,6 @@ public class IcsExporteren {
 		
 		for(Taak taak : taken){			
 			cal.getComponents().add(maakVEvent(taak));
-			//System.out.println(taak);
 		}			
 		
 		url = DataControle.icsPathCorrect(url);
@@ -55,27 +54,21 @@ public class IcsExporteren {
 	}
 	private static VEvent maakVEvent(Taak taak) throws SocketException{
 		
-		//System.out.println(taak.getBegindatum());
+
 		//Timestamp tBegin = new Timestamp(taak.getBegindatum() * 1000);		
 		java.util.Calendar cBegin = GregorianCalendar.getInstance();
 		cBegin.setTimeInMillis((taak.getBegindatum() * 1000)- 21600000);
-		System.out.println(cBegin.getTime());
 		
 		//Timestamp tEind = new Timestamp(taak.getGeschatteEinddatum() * 1000);
 		java.util.Calendar cEind= GregorianCalendar.getInstance();
-		cEind.setTimeInMillis((taak.getGeschatteEinddatum() * 1000)- 21600000);
-		System.out.println(cEind.getTime());				 
-		
+		cEind.setTimeInMillis((taak.getGeschatteEinddatum() * 1000)- 21600000);		 
 	
 		DateTime dBegin = new DateTime(cBegin.getTime()); 
 		DateTime dEind = new DateTime(cEind.getTime()); 
-		//System.out.println("start: " + startDate.getTime());
-		//System.out.println("eind: " + eindDate.getTime());
 		
 		VEvent event = new VEvent(dBegin, dEind, taak.getNaam());
 		
 		event.getProperties().add(new Description(taak.getCommentaar()));
-		//System.out.println(event.getDescription());
 		// Generate a UID for the event..
 		UidGenerator ug = new UidGenerator("1");
 		event.getProperties().add(ug.generateUid());
@@ -87,7 +80,6 @@ public class IcsExporteren {
 	private static void schrijfWeg(Calendar cal, String url) throws IOException, ValidationException{
 		// agenda/calendar wegschrijven
 		FileOutputStream fout = new FileOutputStream(url);
-		// System.out.println(url);
 		CalendarOutputter outputter = new CalendarOutputter();
 		outputter.output(cal, fout);
 		fout.flush();

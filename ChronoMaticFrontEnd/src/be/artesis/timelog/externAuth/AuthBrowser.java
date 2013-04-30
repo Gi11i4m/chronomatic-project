@@ -52,7 +52,6 @@ public class AuthBrowser {
         params.append("&redirect_uri=").append(social.getRedirectUrl());
         
         Url = params.toString();
-        //System.out.println(Url);
     }
 	
 	public void initBrowser(final JFXPanel browserPanel) {
@@ -76,10 +75,6 @@ public class AuthBrowser {
         webEngine = webView.getEngine();
         webEngine.load(Url);
         
-        //webEngine.javaScriptEnabledProperty();
-        //Document doc = webEngine.getDocument();
-        //System.out.println(doc.getLocalName());
-        
         webEngine.locationProperty().addListener(new ChangeListener<String>() {
             @Override
             public void changed(ObservableValue<? extends String> ov, String oldValue, final String newValue) {
@@ -89,40 +84,20 @@ public class AuthBrowser {
 
                         //Google
                         if(url != null && url.startsWith("https://www.google.be/oauth2callback")) {
-                        	//System.out.println(url.substring(42));
-                        	/*try {
-								URL i = new URL(url);
-								i.getQuery();
-								System.out.println(i);
-								int kk = url.indexOf("code=");
-								System.out.println(kk);
-							} catch (MalformedURLException e) {
-								// TODO Auto-generated catch block
-								e.printStackTrace();
-							}*/exit();// Platform.setImplicitExit(false);
+                        	exit();
                             loginDialog.generateLoginExtern(url.substring(70));
-                            //exit(); 
                         }
                         //Linkedin
                         if(url != null && url.startsWith("http://www.linkedin.com/chronomatic?code=")) {
-                        	//System.out.println(url.substring(41,156));
-                        	System.out.println(url.substring(40,157));
                             loginDialog.generateLoginExtern(url.substring(41,156));
-                            //exit(); 
-                            
                         }
                         //Facebook
                         if(url != null && url.startsWith("https://www.facebook.com/connect/login_success.html")) {
-                        	//System.out.println(url.substring(65));
-                            loginDialog.generateLoginExtern(url.substring(93));
-                            //exit(); 
-                            System.out.println(url.substring(93));
+                            loginDialog.generateLoginExtern(url.substring(65));
                         }
                         //Micosoft
                         if(url != null && url.startsWith("http://www.dvl-sanitair.be/")) {
-                        	//System.out.println(url.substring(33,69));
                             loginDialog.generateLoginExtern(url.substring(33, 69));
-                            //exit(); 
                         }
                     }
                 });
@@ -134,14 +109,11 @@ public class AuthBrowser {
         Platform.runLater( new Runnable(){
             @Override 
             public void run(){
-                //System.err.println( "exit/runLater/run" );
                 webEngine.getLoadWorker().cancel();
                 Platform.exit();
                 SwingUtilities.invokeLater( new Runnable(){ 
                     @Override 
                     public void run() {
-                        //System.err.println( "exit/invokeLater/run" );
-                        //loginDialog.dispose();
                     }
                 });
             }

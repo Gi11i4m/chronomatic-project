@@ -50,7 +50,7 @@ public class Database {
 				Statement s =  con.createStatement();
 				//ResultSet rs = s.executeUpdate(query, Statement.RETURN_GENERATED_KEYS);
 				s.executeUpdate(query, Statement.RETURN_GENERATED_KEYS);
-				System.out.println(s.getGeneratedKeys());
+				//System.out.println(s.getGeneratedKeys());
 				ResultSet rs = s.getGeneratedKeys();
 				return rs;
 			}

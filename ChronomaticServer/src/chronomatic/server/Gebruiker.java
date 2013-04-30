@@ -1,7 +1,11 @@
 package chronomatic.server;
 
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
 import java.sql.Connection;
 import java.sql.ResultSet;
+import java.util.Random;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -15,6 +19,7 @@ import org.json.ResultsetConverter;
 
 import chronomatic.database.Database;
 import chronomatic.database.DatabaseContainer;
+import chronomatic.email.Mailer;
 
 @Path("gebruiker/")
 public class Gebruiker {
@@ -120,14 +125,20 @@ public class Gebruiker {
 	}
 	
 	@GET
-	@Path("create/{naam}/{voornaam}/{gebruikersnaam}/{passwoord}/{email}")
+	@Path("create/{naam}/{voornaam}/{gebruikersnaam}/{password}/{email}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public String create(@PathParam("naam") String naam,@PathParam("voornaam") String voornaam,@PathParam("gebruikersnaam") String gebruikersnaam,@PathParam("passwoord") String passwoord,@PathParam("email") String email) 
+	public String create(@PathParam("naam") String naam,@PathParam("voornaam") String voornaam,@PathParam("gebruikersnaam") String gebruikersnaam,@PathParam("password") String password,@PathParam("email") String email) 
 	{
+		
 		Connection con = DatabaseContainer.getConnection();
-		
-		String query = "INSERT INTO gebruikers (naam,voornaam,gebruikersnaam,passwoord,email) VALUES ('"+naam+"','"+ voornaam +"','"+gebruikersnaam+"','" + passwoord + "','" + email + "')";
-		
+		String hash = null;
+		Random ran = new Random();
+		try {
+			hash = RandomMD5.generate((Integer.toString((ran.nextInt()))));
+		} catch (NoSuchAlgorithmException e1) {
+			e1.printStackTrace();
+		}
+		String query = "INSERT INTO gebruikers (naam,voornaam,gebruikersnaam,passwoord,email, hash, validated) VALUES ('"+naam+"','"+ voornaam +"','"+gebruikersnaam+"','" + password + "','" + email + "','" + hash + "','0')";
 		JSONObject returnObject = new JSONObject();
 		
 		try {
@@ -138,6 +149,7 @@ public class Gebruiker {
 			e.printStackTrace();
 		}
 		
+		Mailer.sendMail(gebruikersnaam, email, hash);
 		
 		return "["+returnObject.toString()+"]";
 	}
@@ -153,7 +165,7 @@ public class Gebruiker {
 		String query = "INSERT INTO gebruikers (naam,voornaam,gebruikersnaam,email) VALUES ('"+naam+"','"+ voornaam +"',' ','"+email+"')";
 		
 		JSONObject returnObject = new JSONObject();
-		
+		//Mailer.sendMail(email);
 		try {
 			returnObject.put("result", Database.executeNullQuery(con, query));
 			
