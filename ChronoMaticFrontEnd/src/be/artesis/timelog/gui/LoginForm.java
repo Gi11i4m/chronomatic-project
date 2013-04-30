@@ -82,13 +82,15 @@ public class LoginForm extends javax.swing.JFrame implements ActionListener {
 	private JFXPanel basisPanel;
 	private JFXPanel browserPanel;
 	private JPanel newUserPanel;
-
+	private JPanel resetPassPanel;
+	
 	private JTextField usernameJTextField;
 	private JPasswordField passwordJPasswordField;
 	private JLabel usernameJLabel;
 	private JLabel paswoordJLabel;
 	private JButton aanmeldenButton;
 	private JLabel newAccountJLabel;
+	private JLabel resetPassJLabel;
 	private JLabel socialMediaJLabel;
 	private JButton googleJButton;
 	private JButton facebookJButton;
@@ -128,10 +130,12 @@ public class LoginForm extends javax.swing.JFrame implements ActionListener {
 		basisPanel = new JFXPanel();
 		browserPanel = new JFXPanel();
 		newUserPanel = new NewUserPanel(this);
-
+		resetPassPanel = new ResetPasswordPanel(this);
+		
 		pane.add(basisPanel, "BASISPANEL");
 		pane.add(browserPanel, "BROWSERPANEL");
 		pane.add(newUserPanel, "NEWUSERPANEL");
+		pane.add(resetPassPanel, "RESETPASSPANEL");
 
 		initComponents();
 		
@@ -283,6 +287,7 @@ public class LoginForm extends javax.swing.JFrame implements ActionListener {
 		usernameJTextField = new JTextField();
 		passwordJPasswordField = new JPasswordField();
 		newAccountJLabel = new JLabel("Or create an account");
+		resetPassJLabel = new JLabel("Forgot your password?");
 		socialMediaJLabel = new JLabel("Or use your favorite social media to login");
 		browserGoBackButtonJLabel = new JLabel("< Login with a different account");
 		logoLabel = new JLabel(logo);
@@ -305,6 +310,7 @@ public class LoginForm extends javax.swing.JFrame implements ActionListener {
 		usernameJTextField.setBounds(31, 153, 247, 22);
 		passwordJPasswordField.setBounds(31, 256, 247, 22);
 		newAccountJLabel.setBounds(140, 351, 160, 16);
+		resetPassJLabel.setBounds(31, 390, 160, 16);
 		socialMediaJLabel.setBounds(380, 124, 300, 50);
 		browserGoBackButtonJLabel.setBounds(20, 456, 300, 25);
 		logoLabel.setBounds(170, 0, 380, 100);
@@ -344,6 +350,7 @@ public class LoginForm extends javax.swing.JFrame implements ActionListener {
 		basisPanel.add(usernameJTextField);
 		basisPanel.add(passwordJPasswordField);
 		basisPanel.add(newAccountJLabel);
+		basisPanel.add(resetPassJLabel);
 		basisPanel.add(socialMediaJLabel);
 		basisPanel.add(logoLabel);
 		basisPanel.add(googleJButton);
@@ -406,6 +413,23 @@ public class LoginForm extends javax.swing.JFrame implements ActionListener {
 				l.setForeground(Color.BLACK);
 			}
 		});
+		
+		resetPassJLabel.addMouseListener(new java.awt.event.MouseAdapter() {
+			public void mouseClicked(java.awt.event.MouseEvent evt) {
+				displayTab("RESETPASSPANEL");
+			}
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				JLabel l = (JLabel) e.getSource();
+				l.setForeground(Color.BLUE);
+			}
+			@Override
+			public void mouseExited(MouseEvent e) {
+				JLabel l = (JLabel) e.getSource();
+				l.setForeground(Color.BLACK);
+			}
+		});
+		
 		
 		/*savePasswordCheckBox.addActionListener(new ActionListener(){
 

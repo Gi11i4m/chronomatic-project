@@ -48,7 +48,6 @@ public class Mailer {
 			});
  
 		try {
-			Random ran = new Random();
 			Message message = new MimeMessage(session);
 			message.setFrom(new InternetAddress("info@chronomatic.be"));
 			message.setRecipients(Message.RecipientType.TO,

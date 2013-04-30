@@ -13,6 +13,7 @@ import java.sql.ResultSet;
 import java.util.Random;
 import java.math.BigInteger;
 import chronomatic.database.*;
+import chronomatic.email.Mailer;
 
 import org.json.*;
 
@@ -166,17 +167,19 @@ public class Authentication {
 	public String resetPassword(@PathParam("username") String username) {
 		Connection con = DatabaseContainer.getConnection();
 		Random ran = new Random();
+		String newPassword = Integer.toString(ran.nextInt());
 		String query = null;
 		try {
-			query = "UPDATE gebruikers SET passwoord = '"+ RandomMD5.generate(Integer.toString(ran.nextInt())) +"' WHERE gebruikersnaam='"+ username +"'";
+			query = "UPDATE gebruikers SET passwoord = '"+ RandomMD5.generate(newPassword) +"' WHERE gebruikersnaam='"+ username +"'";
 		} catch (NoSuchAlgorithmException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
 		Database.executeNullQuery(con, query);
+		//Mailer.sendMail(email, newPassword);
 		
-		return "";
+		return null;
 	}
 	
 	private String generateSessionID() { 
