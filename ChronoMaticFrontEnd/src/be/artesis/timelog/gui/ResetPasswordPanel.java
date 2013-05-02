@@ -56,7 +56,7 @@ public class ResetPasswordPanel extends javax.swing.JPanel {
 	}
 	
 	private void sendJButtonClicked(java.awt.event.MouseEvent evt) throws IOException, WebserviceException {
-		Connection.execute("resetpassword/" + usernameJTextField.getText());
+		Connection.execute("gebruiker/resetpassword/" + usernameJTextField.getText());
     	parent.displayTab("BASISPANEL");
     }
 	

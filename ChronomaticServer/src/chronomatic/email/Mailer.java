@@ -15,6 +15,7 @@ public class Mailer {
 	String email;
 	String hash;
 	final String host = "http://localhost:8080/ChronomaticServer/";
+	//final String host = "http://chronomatic-artesisti.rhcloud.com/ChronomaticServer/";
 	final String SMTPusername = "dvlsanit";
 	final String SMTPpassword = "bZDtNd7f";
 	

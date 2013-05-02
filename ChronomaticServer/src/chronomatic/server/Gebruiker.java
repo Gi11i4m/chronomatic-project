@@ -1,5 +1,6 @@
 package chronomatic.server;
 
+import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
@@ -19,6 +20,7 @@ import org.json.ResultsetConverter;
 
 import chronomatic.database.Database;
 import chronomatic.database.DatabaseContainer;
+import chronomatic.email.MailLostPassword;
 import chronomatic.email.MailNewUser;
 import chronomatic.email.Mailer;
 
@@ -230,6 +232,50 @@ public class Gebruiker {
 		}
 		
 		return "error";
+	}
+	
+	/**
+	 * Versturen van nieuw paswoord naar gebruiker email
+	 * @param username
+	 * @param email
+	 * @return
+	 * Email message with new credentials
+	 */
+	@GET
+	@Path("resetpassword/{username}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public String resetPassword(@PathParam("username") String username) {
+		Connection con = DatabaseContainer.getConnection();
+		SecureRandom random = new SecureRandom();
+		String newPassword = new BigInteger(130, random).toString(32);
+		final String secret = "|@#[{^è644.4654f 4r-CHRONOMATIC-e4f8r7ù$^,;:='è--@#^!846^{è !{!è";
+		String newPasswordSecret = newPassword+secret;
+		String query = null;
+		String query2 = null;
+		String email = null;
+		Mailer mailer = null;
+		
+		try {
+			query = "SELECT email FROM gebruikers WHERE gebruikersnaam = '"+ username +"'";
+			query2 = " UPDATE gebruikers SET passwoord = '"+ RandomMD5.generate(newPasswordSecret) +"' WHERE gebruikersnaam='"+ username +"'";
+			
+			ResultSet rs = Database.executeQuery(con, query); 
+			
+			
+			if(rs.next()) {
+				email = (String) rs.getObject(1);
+			}
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		Database.executeNullQuery(con, query2);
+		if (email != null) {
+			mailer = new MailLostPassword(email, newPassword);
+			mailer.sendMail();
+		}
+		return "Password reset";
 	}
 
 }

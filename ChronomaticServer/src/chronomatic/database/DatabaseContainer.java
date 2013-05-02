@@ -20,6 +20,7 @@ public class DatabaseContainer {
 	private static String password = "";
 	private static String db_name = "chrono_matic";
 	
+	
 	public static Connection getConnection() {
 		return Database.getConnection(host,user,password,db_name);
 	}

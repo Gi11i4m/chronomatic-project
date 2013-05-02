@@ -155,34 +155,7 @@ public class Authentication {
 		return null;
 	}
 	
-	/**
-	 * Versturen van nieuw paswoord naar gebruiker email
-	 * @param username
-	 * @param email
-	 * @return
-	 * Email message with new credentials
-	 */
-	@GET
-	@Path("resetpassword/{username}")
-	@Produces(MediaType.APPLICATION_JSON)
-	public String resetPassword(@PathParam("username") String username) {
-		Connection con = DatabaseContainer.getConnection();
-		Random ran = new Random();
-		String newPassword = Integer.toString(ran.nextInt());
-		String query = null;
-		try {
-			query = "UPDATE gebruikers SET passwoord = '"+ RandomMD5.generate(newPassword) +"' WHERE gebruikersnaam='"+ username +"'";
-		} catch (NoSuchAlgorithmException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-		Database.executeNullQuery(con, query);
-		Mailer mailer = new MailLostPassword(username, newPassword); // moet email worden!!!
-		mailer.sendMail();
-		
-		return null;
-	}
+	
 	
 	private String generateSessionID() { 
 		SecureRandom random = new SecureRandom();
