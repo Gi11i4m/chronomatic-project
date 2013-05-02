@@ -9,10 +9,17 @@ import java.sql.*;
  *
  */
 public class DatabaseContainer {
+	/*private static String host = "127.4.109.129";
+	private static String user = "admin4VATmAC";
+	private static String password = "8yK1xX8kJXTe";
+	private static String db_name = "chrono_matic";
+	*/
+	
 	private static String host = "127.0.0.1";
 	private static String user = "root";
 	private static String password = "root";
 	private static String db_name = "chrono_matic";
+	
 	
 	public static Connection getConnection() {
 		return Database.getConnection(host,user,password,db_name);

@@ -55,7 +55,6 @@ public class UpdaterLocal {
 			for (int i = 0; i < jArr.length(); i++) {					
 				JSONObject jObjCheck =  (JSONObject) jArr.get(i);
 				if(jObjCheck.getInt("id")== jTest.getInt("id")){
-					System.out.println("gevonden");
 					jArr.put(i,jTest);
 					jFile.remove(veld.toString().toLowerCase());
 					jFile.put(veld.toString().toLowerCase(),jArr);					

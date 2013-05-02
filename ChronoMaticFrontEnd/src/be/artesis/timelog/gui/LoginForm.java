@@ -82,24 +82,28 @@ public class LoginForm extends javax.swing.JFrame implements ActionListener {
 	private JFXPanel basisPanel;
 	private JFXPanel browserPanel;
 	private JPanel newUserPanel;
-
+	private JPanel resetPassPanel;
+	
 	private JTextField usernameJTextField;
 	private JPasswordField passwordJPasswordField;
 	private JLabel usernameJLabel;
 	private JLabel paswoordJLabel;
 	private JButton aanmeldenButton;
 	private JLabel newAccountJLabel;
+	private JLabel resetPassJLabel;
 	private JLabel socialMediaJLabel;
 	private JButton googleJButton;
 	private JButton facebookJButton;
 	private JLabel browserGoBackButtonJLabel;
 	private JButton microsoftJButton;
-	private JButton twitterJButton;
+	//private JButton twitterJButton;
 	private JButton linkedinJButton;
+	private JLabel logoLabel;
+	private ImageIcon logo;
 	private ImageIcon googleIcon;
 	private ImageIcon facebookIcon;
 	private ImageIcon microsoftIcon;
-	private ImageIcon twitterIcon;
+	//private ImageIcon twitterIcon;
 	private ImageIcon linkedinIcon;
 	private JCheckBox autoLoginInternCheckBox;
 	private JCheckBox autoLoginExternCheckBox;
@@ -109,10 +113,10 @@ public class LoginForm extends javax.swing.JFrame implements ActionListener {
 		this.parent = parent;
 		setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 		this.validator = validator;
-		this.setTitle("Login");
+		this.setTitle("Chronomatic Login");
 		this.setSize(720, 520);
 		
-		// set dialog in center
+		// set dialog in center screen
 		final Toolkit toolkit = Toolkit.getDefaultToolkit();
 		final Dimension screenSize = toolkit.getScreenSize();
 		final int x = (screenSize.width - this.getWidth()) / 2;
@@ -126,10 +130,12 @@ public class LoginForm extends javax.swing.JFrame implements ActionListener {
 		basisPanel = new JFXPanel();
 		browserPanel = new JFXPanel();
 		newUserPanel = new NewUserPanel(this);
-
+		resetPassPanel = new ResetPasswordPanel(this);
+		
 		pane.add(basisPanel, "BASISPANEL");
 		pane.add(browserPanel, "BROWSERPANEL");
 		pane.add(newUserPanel, "NEWUSERPANEL");
+		pane.add(resetPassPanel, "RESETPASSPANEL");
 
 		initComponents();
 		
@@ -145,10 +151,6 @@ public class LoginForm extends javax.swing.JFrame implements ActionListener {
 		try {
 			// Maak key in registry
 			WinRegistry.createKey(WinRegistry.HKEY_CURRENT_USER, "SOFTWARE\\ChronoMatic");
-			
-			// Opslaan username
-			
-			System.out.println(username+" | "+ password);
             
             if (validator.login(username, password)) {
             	loadUserData();
@@ -174,11 +176,9 @@ public class LoginForm extends javax.swing.JFrame implements ActionListener {
 	}
 	
 	public void generateLoginExtern(String accessToken) {
-		
-		
 		JSONObject userInfoJSONObj = null;
 		try {
-			// Facebook moet geen Access token aanvragen, de rest wel (omwille van oude Oauth)
+			// Facebook moet geen Access token aanvragen, de rest wel (omwille van oude versie Oauth)
 			if (!social.toString().equals("facebook")) {
 				accessToken = AccessToken.request(accessToken, social);
 			}
@@ -195,11 +195,9 @@ public class LoginForm extends javax.swing.JFrame implements ActionListener {
 			// Maak key
 			WinRegistry.createKey(WinRegistry.HKEY_CURRENT_USER, "SOFTWARE\\ChronoMatic");
 			
-			
 			String email = userInfoJSONObj.getString("email");
 			// als gebruiker nog niet bestaat..
 			
-			//System.out.println(ExistingUsernames.check("extern",email));
 			if (!ExistingUsernames.check(email)) {
 				InserterServer.CreateUserExtern(userInfoJSONObj.getString("naam"), userInfoJSONObj.getString("voornaam"), email);
 			}
@@ -227,7 +225,6 @@ public class LoginForm extends javax.swing.JFrame implements ActionListener {
 		try {
 			UserInterface.setUser(CreatorFromJSON.createGebruiker(validator.getSessionKey()));
 			UserInterface.getUser().setProjects(CreatorFromJSON.createProjecten(validator.getSessionKey()));
-			//System.out.println(UserInterface.getUser().getProject(0) + " PIEEEEEET");
 			
 			if(UserInterface.getUser().getProject(0) != null) {
 				UserInterface.getUser().setOpdrachtgevers(CreatorFromJSON.createOpdrachtgevers(validator.getSessionKey()));
@@ -263,6 +260,10 @@ public class LoginForm extends javax.swing.JFrame implements ActionListener {
 		lijntjeBrowserJLabel.setBounds(0, 450, 715, 5);
 		browserPanel.add(lijntjeBrowserJLabel);
 		
+		//logo
+		logo = new ImageIcon(Toolkit.getDefaultToolkit().getImage(
+				getClass().getResource("/be/artesis/timelog/gui/icons/logo.png")));
+		
 		// socialmedia icons
 		googleIcon = new ImageIcon(Toolkit.getDefaultToolkit().getImage(
 				getClass().getResource("/be/artesis/timelog/gui/icons/google.png")));
@@ -270,21 +271,23 @@ public class LoginForm extends javax.swing.JFrame implements ActionListener {
 				getClass().getResource("/be/artesis/timelog/gui/icons/facebook.png")));
 		microsoftIcon = new ImageIcon(Toolkit.getDefaultToolkit().getImage(
 				getClass().getResource("/be/artesis/timelog/gui/icons/microsoft.png")));
-		twitterIcon = new ImageIcon(Toolkit.getDefaultToolkit().getImage(
-				getClass().getResource("/be/artesis/timelog/gui/icons/twitter.png")));
+		//twitterIcon = new ImageIcon(Toolkit.getDefaultToolkit().getImage(
+		//		getClass().getResource("/be/artesis/timelog/gui/icons/twitter.png")));
 		linkedinIcon = new ImageIcon(Toolkit.getDefaultToolkit().getImage(
 				getClass().getResource("/be/artesis/timelog/gui/icons/linkedin.png")));
 
 
 		// initialize fields
-		usernameJLabel = new JLabel("Gebruikersnaam:");
-		paswoordJLabel = new JLabel("Wachtwoord:");
-		aanmeldenButton = new JButton("Aanmelden");
+		usernameJLabel = new JLabel("Username:");
+		paswoordJLabel = new JLabel("Password:");
+		aanmeldenButton = new JButton("Log in");
 		usernameJTextField = new JTextField();
 		passwordJPasswordField = new JPasswordField();
-		newAccountJLabel = new JLabel("Of maak een account aan");
-		socialMediaJLabel = new JLabel("Of meld u aan bij");
-		browserGoBackButtonJLabel = new JLabel("< Aanmelden met een andere account");
+		newAccountJLabel = new JLabel("Or create an account");
+		resetPassJLabel = new JLabel("Forgot your password?");
+		socialMediaJLabel = new JLabel("Or use your favorite social media to login");
+		browserGoBackButtonJLabel = new JLabel("< Login with a different account");
+		logoLabel = new JLabel(logo);
 		googleJButton = new JButton(googleIcon);
 		googleJButton.setName("google");
 		facebookJButton = new JButton(facebookIcon);
@@ -295,8 +298,8 @@ public class LoginForm extends javax.swing.JFrame implements ActionListener {
 		linkedinJButton.setName("linkedin");
 		//twitterJButton = new JButton(twitterIcon);
 		//twitterJButton.setName("twitter");
-		autoLoginInternCheckBox = new JCheckBox("Automatisch aanmelden als Chronomatic start");
-		autoLoginExternCheckBox = new JCheckBox("Automatisch aanmelden");
+		autoLoginInternCheckBox = new JCheckBox("Sign me in when Chronomatic starts");
+		autoLoginExternCheckBox = new JCheckBox("Login automatically");
 		
 		usernameJLabel.setBounds(31, 124, 138, 16);
 		paswoordJLabel.setBounds(31, 227, 138, 16);
@@ -304,8 +307,10 @@ public class LoginForm extends javax.swing.JFrame implements ActionListener {
 		usernameJTextField.setBounds(31, 153, 247, 22);
 		passwordJPasswordField.setBounds(31, 256, 247, 22);
 		newAccountJLabel.setBounds(140, 351, 160, 16);
-		socialMediaJLabel.setBounds(464, 124, 130, 20);
+		resetPassJLabel.setBounds(31, 390, 160, 16);
+		socialMediaJLabel.setBounds(380, 124, 300, 50);
 		browserGoBackButtonJLabel.setBounds(20, 456, 300, 25);
+		logoLabel.setBounds(170, 0, 380, 100);
 		googleJButton.setBounds(520, 175, 48, 48);
 		facebookJButton.setBounds(520, 238, 48, 48);
 		microsoftJButton.setBounds(520, 301, 48, 48);
@@ -342,7 +347,9 @@ public class LoginForm extends javax.swing.JFrame implements ActionListener {
 		basisPanel.add(usernameJTextField);
 		basisPanel.add(passwordJPasswordField);
 		basisPanel.add(newAccountJLabel);
+		basisPanel.add(resetPassJLabel);
 		basisPanel.add(socialMediaJLabel);
+		basisPanel.add(logoLabel);
 		basisPanel.add(googleJButton);
 		basisPanel.add(facebookJButton);
 		basisPanel.add(microsoftJButton);
@@ -361,40 +368,15 @@ public class LoginForm extends javax.swing.JFrame implements ActionListener {
 						MD5Generator MD5 = new MD5Generator();
 						login(usernameJTextField.getText(), MD5.gen(new String(passwordJPasswordField.getPassword())));
 					} catch (NoSuchAlgorithmException e) {
-						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
-
-					//Thread voor het loading gifke
-					/*Thread loginLoadingThread = new Thread() {
-						public void run() {
-							SwingUtilities.invokeLater(new Runnable() {
-								public void run() {
-									displayTab("loading");
-								}
-							});
-							login();
-						}
-					};*/
-
-					//loginLoadingThread.start();
-
-					//parent.setVisible(true);
 				}
 			});
 		} catch (Exception e) {
 
 			e.printStackTrace();
-		} finally {
-			//JOptionPane.showMessageDialog(this, "Login mislukt");			
+		} finally {		
 		}
-
-		/*browserGoBackJButton.addActionListener(new java.awt.event.ActionListener() {
-			public void actionPerformed(java.awt.event.ActionEvent evt) {
-				Platform.exit();
-				displayTab("BASISPANEL");
-			}
-		});*/
 		browserGoBackButtonJLabel.addMouseListener(new java.awt.event.MouseAdapter() {
 			public void mouseClicked(java.awt.event.MouseEvent evt) {
 				Platform.exit();
@@ -429,40 +411,23 @@ public class LoginForm extends javax.swing.JFrame implements ActionListener {
 			}
 		});
 		
-		/*savePasswordCheckBox.addActionListener(new ActionListener(){
-
+		resetPassJLabel.addMouseListener(new java.awt.event.MouseAdapter() {
+			public void mouseClicked(java.awt.event.MouseEvent evt) {
+				displayTab("RESETPASSPANEL");
+			}
 			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				if(!savePasswordCheckBox.isSelected()) {
-					passwordJPasswordField.setText("");
-					try {
-						WinRegistry.writeStringValue(WinRegistry.HKEY_CURRENT_USER, "SOFTWARE\\ChronoMatic", "password", "");
-					} catch (IllegalArgumentException | IllegalAccessException
-							| InvocationTargetException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-				}
-				
-			}});
+			public void mouseEntered(MouseEvent e) {
+				JLabel l = (JLabel) e.getSource();
+				l.setForeground(Color.BLUE);
+			}
+			@Override
+			public void mouseExited(MouseEvent e) {
+				JLabel l = (JLabel) e.getSource();
+				l.setForeground(Color.BLACK);
+			}
+			
+		});
 		
-		passwordJPasswordField.getDocument().addDocumentListener(new DocumentListener(){
-			@Override
-			public void changedUpdate(DocumentEvent arg0) {
-
-			}
-
-			@Override
-			public void insertUpdate(DocumentEvent arg0) {
-				//paswoordChanged = true;
-				//System.out.println("insert");
-			}
-
-			@Override
-			public void removeUpdate(DocumentEvent arg0) {
-				
-			}});*/
-
 	}
 
 	@Override
@@ -480,9 +445,9 @@ public class LoginForm extends javax.swing.JFrame implements ActionListener {
 		case "microsoft":
 			social = new Microsoft();
 			break;
-		case "twitter":
-			social = new Twitter();
-			break;
+		//case "twitter":
+		//	social = new Twitter();
+		//	break;
 		case "linkedin":
 			social = new Linkedin();
 			break;
@@ -500,6 +465,5 @@ public class LoginForm extends javax.swing.JFrame implements ActionListener {
 		browser.buildUrl();
 		browser.initBrowser(browserPanel);
 		this.displayTab("BROWSERPANEL");
-		//this.setSize(820, 620);
 	}
 }
