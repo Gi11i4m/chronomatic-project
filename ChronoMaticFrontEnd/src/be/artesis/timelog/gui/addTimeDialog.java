@@ -7,6 +7,7 @@ import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JDialog;
 import javax.swing.JFormattedTextField;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JSpinner;
 import javax.swing.JTextField;
@@ -28,6 +29,8 @@ import com.toedter.components.JSpinField;
 import javax.swing.SpinnerModel;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class addTimeDialog extends JDialog {
 
@@ -132,6 +135,11 @@ public class addTimeDialog extends JDialog {
 			getContentPane().add(buttonPane, BorderLayout.SOUTH);
 			{
 				JButton okButton = new JButton("OK");
+				okButton.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent arg0) {
+						okPressed();
+					}
+				});
 				okButton.setActionCommand("OK");
 				buttonPane.add(okButton);
 				getRootPane().setDefaultButton(okButton);
@@ -147,5 +155,19 @@ public class addTimeDialog extends JDialog {
 		JFormattedTextField field = (JFormattedTextField) comp.getComponent(0);
 		DefaultFormatter formatter = (DefaultFormatter) field.getFormatter();
 		formatter.setCommitsOnValidEdit(true);
+	}
+	
+	public void okPressed(){
+		long d1 = beginDateChooser.getDate().getTime() / 1000;
+		long d2 = endDateChooser.getDate().getTime() / 1000;
+		
+		long t1 = (long) beginTimeSpinner.getValue();
+		long t2 = (long) beginTimeSpinner.getValue();
+		
+		long begin = d1 + t1;
+		long end = d2 + t2;
+		
+		System.out.println(d1 + ", " + t1 + " = " + begin);
+		System.out.println(d2 + ", " + t2 + " = " + end);
 	}
 }
