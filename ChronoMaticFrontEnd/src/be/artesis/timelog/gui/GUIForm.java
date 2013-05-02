@@ -428,7 +428,7 @@ public class GUIForm extends javax.swing.JFrame {
 			}
 		});
 		tasksJList.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
-		
+
 		jScrollPane3.setViewportView(tasksJList);
 		tasksJPanel.add(removeTaskJButton);
 
@@ -1213,7 +1213,7 @@ public class GUIForm extends javax.swing.JFrame {
 	private void refreshTasksList(Project p, JList... lists) {
 		for (JList list : lists) {
 			int selectedIndex = list.getSelectedIndex();
-			
+
 			DefaultListModel listmodel = new DefaultListModel();
 
 			for (Iterator<Taak> it = p.getTaken().iterator(); it.hasNext();) {
@@ -1235,8 +1235,7 @@ public class GUIForm extends javax.swing.JFrame {
 			list.setCellRenderer(new TaskCellRenderer());
 			if (selectedIndex != -1) {
 				list.setSelectedIndex(selectedIndex);
-			}
-			else {
+			} else {
 				selectNewItem(tasksJList);
 			}
 		}
@@ -1303,7 +1302,6 @@ public class GUIForm extends javax.swing.JFrame {
 				}
 				root.add(project);
 			}
-
 		}
 		DefaultTreeModel treeModel = new DefaultTreeModel(root);
 		tree.setModel(treeModel);
@@ -1417,13 +1415,13 @@ public class GUIForm extends javax.swing.JFrame {
 		}
 	}
 
-	private void openAddTimeDialog(){
+	private void openAddTimeDialog() {
 		setVisible(false);
 		addTimeDialog addTime = new addTimeDialog(this, true, validator);
 		addTime.setVisible(true);
 		setVisible(true);
 	}
-	
+
 	/**
 	 * CLEAR ALL FIELDS on the panels in parameter except for labels and buttons
 	 * @param 	panel	the panel on which to clear the components
@@ -1586,13 +1584,13 @@ public class GUIForm extends javax.swing.JFrame {
 	 * @param 	evt
 	 */
 	private void projectsJListValueChanged(ListSelectionEvent evt) {
-		boolean newSelected = projectsJList.getSelectedValue().equals(NEWPROJECTITEM);
+		boolean newSelected = NEWPROJECTITEM.equals(projectsJList.getSelectedValue());
 		if (newSelected) {
 			clearFieldsOnPanel(projectFieldsJPanel);
 			refreshClientsComboBox(null, projectClientsJComboBox);
 			toggleButtonStates(newSelected, setCurrentProjectJButton, removeProjectJButton);
 			saveProjectJButton.setText("Save [new]");
-		} else {
+		} else if (projectsJList.getSelectedValue() != null) {
 			loadProjectInfo(projectsJList.getSelectedIndex());
 			toggleButtonStates(newSelected, setCurrentProjectJButton, removeProjectJButton);
 			saveProjectJButton.setText("Save");
@@ -1636,19 +1634,21 @@ public class GUIForm extends javax.swing.JFrame {
 	 */
 	private void taskJListValueChanged(ListSelectionEvent arg0) {
 		try {
-			boolean stringItemSelected = tasksJList.getSelectedValue().getClass().equals(String.class);
-			if (stringItemSelected) {
-				if (tasksJList.getSelectedValue().equals(NEWTASKITEM)) {
-					clearFieldsOnPanel(taskFieldsJPanel);
-					saveTaskJButton.setText("Save [new]");
+			if (tasksJList.getSelectedIndex() != -1) {
+				boolean stringItemSelected = tasksJList.getSelectedValue().getClass().equals(String.class);
+				if (stringItemSelected) {
+					if (tasksJList.getSelectedValue().equals(NEWTASKITEM)) {
+						clearFieldsOnPanel(taskFieldsJPanel);
+						saveTaskJButton.setText("Save [new]");
+					} else {
+						clearFieldsOnPanel(taskFieldsJPanel);
+					}
 				} else {
-					clearFieldsOnPanel(taskFieldsJPanel);
+					loadTaskInfo(((JList) arg0.getSource()).getSelectedIndex());
+					saveTaskJButton.setText("Save");
 				}
-			} else {
-				loadTaskInfo(((JList) arg0.getSource()).getSelectedIndex());
-				saveTaskJButton.setText("Save");
+				toggleButtonStates(stringItemSelected, removeTaskJButton);
 			}
-			toggleButtonStates(stringItemSelected, removeTaskJButton);
 		} catch (GUIException e) {
 			e.printStackTrace();
 			showGUIMessage(e.getMessage(), true);
