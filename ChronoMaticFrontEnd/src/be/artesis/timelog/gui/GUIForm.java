@@ -951,6 +951,8 @@ public class GUIForm extends javax.swing.JFrame {
 	 * @param	lastName	last name of the user to be updated
 	 * @param	email		email of the user to be updated
 	 */
+	
+	//FIXME resterende info updaten
 	private void updateUser(String firstName, String lastName, String email) {
 		try {
 			UserInterface.updateUser(firstName, lastName, email);
@@ -1416,10 +1418,10 @@ public class GUIForm extends javax.swing.JFrame {
 	}
 
 	private void openAddTimeDialog() {
-		setVisible(false);
-		addTimeDialog addTime = new addTimeDialog(this, true, validator);
+		addTimeDialog addTime = new addTimeDialog(this, true, (Taak) tasksJList.getSelectedValue());
+		addTime.setLocationRelativeTo(this);
 		addTime.setVisible(true);
-		setVisible(true);
+		
 	}
 
 	/**
