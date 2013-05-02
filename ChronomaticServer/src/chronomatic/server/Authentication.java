@@ -13,6 +13,7 @@ import java.sql.ResultSet;
 import java.util.Random;
 import java.math.BigInteger;
 import chronomatic.database.*;
+import chronomatic.email.MailLostPassword;
 import chronomatic.email.Mailer;
 
 import org.json.*;
@@ -177,7 +178,8 @@ public class Authentication {
 		}
 		
 		Database.executeNullQuery(con, query);
-		//Mailer.sendMail(email, newPassword);
+		Mailer mailer = new MailLostPassword(username, newPassword); // moet email worden!!!
+		mailer.sendMail();
 		
 		return null;
 	}

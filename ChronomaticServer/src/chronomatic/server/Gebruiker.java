@@ -19,6 +19,7 @@ import org.json.ResultsetConverter;
 
 import chronomatic.database.Database;
 import chronomatic.database.DatabaseContainer;
+import chronomatic.email.MailNewUser;
 import chronomatic.email.Mailer;
 
 @Path("gebruiker/")
@@ -148,8 +149,8 @@ public class Gebruiker {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
-		Mailer.sendMail(gebruikersnaam, email, hash);
+		Mailer mailer = new MailNewUser(gebruikersnaam, email, hash);
+		mailer.sendMail();
 		
 		return "["+returnObject.toString()+"]";
 	}
@@ -162,7 +163,7 @@ public class Gebruiker {
 	{
 		Connection con = DatabaseContainer.getConnection();
 		
-		String query = "INSERT INTO gebruikers (naam,voornaam,gebruikersnaam,email) VALUES ('"+naam+"','"+ voornaam +"',' ','"+email+"')";
+		String query = "INSERT INTO gebruikers (naam,voornaam,gebruikersnaam,email) VALUES ('"+naam+"','"+ voornaam +"','"+email+" ','"+email+"')";
 		
 		JSONObject returnObject = new JSONObject();
 		//Mailer.sendMail(email);

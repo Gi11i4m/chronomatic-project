@@ -1,5 +1,10 @@
 package be.artesis.timelog.gui;
 
+import java.io.IOException;
+
+import be.artesis.timelog.model.Connection;
+import be.artesis.timelog.model.WebserviceException;
+
 @SuppressWarnings("serial")
 public class ResetPasswordPanel extends javax.swing.JPanel {
 
@@ -10,28 +15,36 @@ public class ResetPasswordPanel extends javax.swing.JPanel {
     }
 	private void initComponents() {
 		this.setLayout(null);
-		
 		usernameJLabel = new javax.swing.JLabel();
 		usernameJTextField = new javax.swing.JTextField();
 		goBackJButton = new javax.swing.JButton();
 		sendJButton = new javax.swing.JButton();
+		Text1JLabel = new javax.swing.JLabel();
+		
 		usernameJLabel.setText("Username:");
 		goBackJButton.setText("Go back");
 		sendJButton.setText("Send e-mail");
+		Text1JLabel.setText("To reset your password, enter the username you use to sign in to Chronomatic.");
 		
 		this.add(usernameJLabel);
 		this.add(usernameJTextField);
 		this.add(goBackJButton);
 		this.add(sendJButton);
+		this.add(Text1JLabel);
 		
-		this.usernameJLabel.setBounds(48,42,112,25);
-        this.usernameJTextField.setBounds(48,80,200,25);
+		this.usernameJLabel.setBounds(48,52,112,25);
+        this.usernameJTextField.setBounds(48,90,200,25);
         this.goBackJButton.setBounds(48,436,112,25);
-        this.sendJButton.setBounds(48,130,112,25);
-		
+        this.sendJButton.setBounds(48,140,112,25);
+        this.Text1JLabel.setBounds(48,20,600,25);
+        
 		sendJButton.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                sendJButtonClicked(evt);
+                try {
+					sendJButtonClicked(evt);
+				} catch (IOException | WebserviceException e) {
+					e.printStackTrace();
+				}
             }
         });
         
@@ -42,8 +55,8 @@ public class ResetPasswordPanel extends javax.swing.JPanel {
         });
 	}
 	
-	private void sendJButtonClicked(java.awt.event.MouseEvent evt) {
-		
+	private void sendJButtonClicked(java.awt.event.MouseEvent evt) throws IOException, WebserviceException {
+		Connection.execute("resetpassword/" + usernameJTextField.getText());
     	parent.displayTab("BASISPANEL");
     }
 	
@@ -55,4 +68,5 @@ public class ResetPasswordPanel extends javax.swing.JPanel {
 	private javax.swing.JTextField usernameJTextField;
 	private javax.swing.JButton goBackJButton;
 	private javax.swing.JButton sendJButton;
+	private javax.swing.JLabel Text1JLabel;
 }

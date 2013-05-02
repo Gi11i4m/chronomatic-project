@@ -146,8 +146,8 @@ public class NewUserPanel extends javax.swing.JPanel {
             }
             MD5Generator MD = new MD5Generator();
             InserterServer.CreateUser(name, firstName, username, MD.gen(password), email);
-            JOptionPane.showMessageDialog(this, "Thank you for registering. A confirmation email has been"
-            									+"sent to the address you supplied. Follow the instructions in the"
+            JOptionPane.showMessageDialog(this, "Thank you for registering. A confirmation email has been \n "
+            									+"sent to the address you supplied. Follow the instructions in the \n "
             									+"email to complete the registration process.");
             
             parent.displayTab("BASISPANEL");

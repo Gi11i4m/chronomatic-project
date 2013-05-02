@@ -96,14 +96,14 @@ public class LoginForm extends javax.swing.JFrame implements ActionListener {
 	private JButton facebookJButton;
 	private JLabel browserGoBackButtonJLabel;
 	private JButton microsoftJButton;
-	private JButton twitterJButton;
+	//private JButton twitterJButton;
 	private JButton linkedinJButton;
 	private JLabel logoLabel;
 	private ImageIcon logo;
 	private ImageIcon googleIcon;
 	private ImageIcon facebookIcon;
 	private ImageIcon microsoftIcon;
-	private ImageIcon twitterIcon;
+	//private ImageIcon twitterIcon;
 	private ImageIcon linkedinIcon;
 	private JCheckBox autoLoginInternCheckBox;
 	private JCheckBox autoLoginExternCheckBox;
@@ -113,10 +113,10 @@ public class LoginForm extends javax.swing.JFrame implements ActionListener {
 		this.parent = parent;
 		setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 		this.validator = validator;
-		this.setTitle("Login");
+		this.setTitle("Chronomatic Login");
 		this.setSize(720, 520);
 		
-		// set dialog in center
+		// set dialog in center screen
 		final Toolkit toolkit = Toolkit.getDefaultToolkit();
 		final Dimension screenSize = toolkit.getScreenSize();
 		final int x = (screenSize.width - this.getWidth()) / 2;
@@ -176,11 +176,9 @@ public class LoginForm extends javax.swing.JFrame implements ActionListener {
 	}
 	
 	public void generateLoginExtern(String accessToken) {
-		
-		
 		JSONObject userInfoJSONObj = null;
 		try {
-			// Facebook moet geen Access token aanvragen, de rest wel (omwille van oude Oauth)
+			// Facebook moet geen Access token aanvragen, de rest wel (omwille van oude versie Oauth)
 			if (!social.toString().equals("facebook")) {
 				accessToken = AccessToken.request(accessToken, social);
 			}
@@ -196,7 +194,6 @@ public class LoginForm extends javax.swing.JFrame implements ActionListener {
 		try {
 			// Maak key
 			WinRegistry.createKey(WinRegistry.HKEY_CURRENT_USER, "SOFTWARE\\ChronoMatic");
-			
 			
 			String email = userInfoJSONObj.getString("email");
 			// als gebruiker nog niet bestaat..
@@ -274,8 +271,8 @@ public class LoginForm extends javax.swing.JFrame implements ActionListener {
 				getClass().getResource("/be/artesis/timelog/gui/icons/facebook.png")));
 		microsoftIcon = new ImageIcon(Toolkit.getDefaultToolkit().getImage(
 				getClass().getResource("/be/artesis/timelog/gui/icons/microsoft.png")));
-		twitterIcon = new ImageIcon(Toolkit.getDefaultToolkit().getImage(
-				getClass().getResource("/be/artesis/timelog/gui/icons/twitter.png")));
+		//twitterIcon = new ImageIcon(Toolkit.getDefaultToolkit().getImage(
+		//		getClass().getResource("/be/artesis/timelog/gui/icons/twitter.png")));
 		linkedinIcon = new ImageIcon(Toolkit.getDefaultToolkit().getImage(
 				getClass().getResource("/be/artesis/timelog/gui/icons/linkedin.png")));
 
@@ -428,42 +425,9 @@ public class LoginForm extends javax.swing.JFrame implements ActionListener {
 				JLabel l = (JLabel) e.getSource();
 				l.setForeground(Color.BLACK);
 			}
+			
 		});
 		
-		
-		/*savePasswordCheckBox.addActionListener(new ActionListener(){
-
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				if(!savePasswordCheckBox.isSelected()) {
-					passwordJPasswordField.setText("");
-					try {
-						WinRegistry.writeStringValue(WinRegistry.HKEY_CURRENT_USER, "SOFTWARE\\ChronoMatic", "password", "");
-					} catch (IllegalArgumentException | IllegalAccessException
-							| InvocationTargetException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-				}
-				
-			}});
-		
-		passwordJPasswordField.getDocument().addDocumentListener(new DocumentListener(){
-			@Override
-			public void changedUpdate(DocumentEvent arg0) {
-
-			}
-
-			@Override
-			public void insertUpdate(DocumentEvent arg0) {
-				//paswoordChanged = true;
-			}
-
-			@Override
-			public void removeUpdate(DocumentEvent arg0) {
-				
-			}});*/
-
 	}
 
 	@Override
@@ -481,9 +445,9 @@ public class LoginForm extends javax.swing.JFrame implements ActionListener {
 		case "microsoft":
 			social = new Microsoft();
 			break;
-		case "twitter":
-			social = new Twitter();
-			break;
+		//case "twitter":
+		//	social = new Twitter();
+		//	break;
 		case "linkedin":
 			social = new Linkedin();
 			break;
@@ -501,6 +465,5 @@ public class LoginForm extends javax.swing.JFrame implements ActionListener {
 		browser.buildUrl();
 		browser.initBrowser(browserPanel);
 		this.displayTab("BROWSERPANEL");
-		//this.setSize(820, 620);
 	}
 }
