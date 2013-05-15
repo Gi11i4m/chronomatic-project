@@ -1,6 +1,7 @@
 package be.artesis.timelog.gui;
 
 import java.awt.BorderLayout;
+import java.awt.Cursor;
 
 import be.artesis.timelog.controller.InserterLocal;
 import be.artesis.timelog.controller.InserterServer;
@@ -116,6 +117,7 @@ public class NewUserPanel extends javax.swing.JPanel {
     private void registerJButtonClicked(java.awt.event.MouseEvent evt) {
         // maak een nieuwe gebruiker aan aan de hand van volgende velden:
         try {
+        	this.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
             String firstName = firstNameJTextField.getText();
             String name = nameJTextField.getText();
             String username = usernameJTextField.getText();
@@ -150,10 +152,12 @@ public class NewUserPanel extends javax.swing.JPanel {
             									+"sent to the address you supplied. Follow the instructions in the \n "
             									+"email to complete the registration process.");
             
-            parent.displayTab("BASISPANEL");
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(this, ex.getMessage());
-        }
+        } finally {
+			  this.setCursor(Cursor.getDefaultCursor());
+			  parent.displayTab("BASISPANEL");
+		}
     }
 
     private void passwordJPasswordFieldKeyReleased(java.awt.event.KeyEvent evt) {

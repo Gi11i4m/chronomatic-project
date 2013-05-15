@@ -146,9 +146,9 @@ public class LoginForm extends javax.swing.JFrame implements ActionListener {
 	}
 	
 	public void login(String username, String password) {
-
-		//this.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+		
 		try {
+			this.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
 			// Maak key in registry
 			WinRegistry.createKey(WinRegistry.HKEY_CURRENT_USER, "SOFTWARE\\ChronoMatic");
             
@@ -169,8 +169,9 @@ public class LoginForm extends javax.swing.JFrame implements ActionListener {
             }
 		} catch (HeadlessException | IOException | JSONException | WebserviceException | IllegalArgumentException | IllegalAccessException | InvocationTargetException e) {
 			e.printStackTrace();
-			JOptionPane.showMessageDialog(this, "Error connecting to server \n" + e.getMessage());
-			this.dispose();
+			JOptionPane.showMessageDialog(this, "Error! We have no clue what's wrong. \nJust go play outside and wait for a while");
+		} finally {
+			  this.setCursor(Cursor.getDefaultCursor());
 		}
 
 	}
@@ -379,8 +380,7 @@ public class LoginForm extends javax.swing.JFrame implements ActionListener {
 		}
 		browserGoBackButtonJLabel.addMouseListener(new java.awt.event.MouseAdapter() {
 			public void mouseClicked(java.awt.event.MouseEvent evt) {
-				Platform.exit();
-				displayTab("BASISPANEL");
+				browserGoBackButtonJLabelClicked();
 			}
 
 			@Override
@@ -429,6 +429,12 @@ public class LoginForm extends javax.swing.JFrame implements ActionListener {
 		});
 		
 	}
+	
+	private void browserGoBackButtonJLabelClicked() {
+		this.setCursor(Cursor.getDefaultCursor());
+		Platform.exit();
+		displayTab("BASISPANEL");
+	}
 
 	@Override
 	public void actionPerformed(ActionEvent evt) {
@@ -455,12 +461,11 @@ public class LoginForm extends javax.swing.JFrame implements ActionListener {
 			social = new Google();
 			break;
 		}
-		//this.displayTab("loading");
-
 		loginProviderJButtonClicked();
 	}
 
 	private void loginProviderJButtonClicked() {
+		this.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
 		AuthBrowser browser = new AuthBrowser(this, social);
 		browser.buildUrl();
 		browser.initBrowser(browserPanel);

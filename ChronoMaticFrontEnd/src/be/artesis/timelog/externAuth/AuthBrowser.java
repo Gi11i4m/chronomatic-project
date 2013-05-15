@@ -1,5 +1,6 @@
 package be.artesis.timelog.externAuth;
 
+import java.awt.Cursor;
 import java.net.MalformedURLException;
 import java.net.URL;
 

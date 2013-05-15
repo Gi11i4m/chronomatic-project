@@ -1,6 +1,9 @@
 package be.artesis.timelog.gui;
 
+import java.awt.Cursor;
 import java.io.IOException;
+
+import javax.swing.JOptionPane;
 
 import be.artesis.timelog.model.Connection;
 import be.artesis.timelog.model.WebserviceException;
@@ -56,8 +59,18 @@ public class ResetPasswordPanel extends javax.swing.JPanel {
 	}
 	
 	private void sendJButtonClicked(java.awt.event.MouseEvent evt) throws IOException, WebserviceException {
-		Connection.execute("gebruiker/resetpassword/" + usernameJTextField.getText());
-    	parent.displayTab("BASISPANEL");
+		try {
+			this.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+			Connection.execute("gebruiker/resetpassword/" + usernameJTextField.getText());
+			JOptionPane.showMessageDialog(this, "An email has been sent to the accounts email address.");
+		}
+		catch (Exception ex) {
+			JOptionPane.showMessageDialog(this, "Error! We have no clue what's wrong. \nJust go play outside and wait for a while");
+		}
+		finally {
+			  this.setCursor(Cursor.getDefaultCursor());
+			  parent.displayTab("BASISPANEL");
+		}
     }
 	
 	private void goBackJButtonClicked(java.awt.event.MouseEvent evt) {
