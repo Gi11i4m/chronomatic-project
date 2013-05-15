@@ -105,7 +105,7 @@ public abstract class DataControle {
     public static boolean naamBestaat(ArrayList<?> objectList ,Object newObject) {
         String s = newObject.toString().toLowerCase();
         for (Object o : objectList) {
-            if (o.toString().toLowerCase().equals(s)) {
+            if (o != null && o.toString().toLowerCase().equals(s)) {
                 return true;
             }
         }

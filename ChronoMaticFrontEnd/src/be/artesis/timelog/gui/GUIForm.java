@@ -160,7 +160,7 @@ public class GUIForm extends javax.swing.JFrame {
 
 			@Override
 			public void windowClosing(WindowEvent arg0) {
-				// sync();
+				sync();
 			}
 		});
 
@@ -1527,10 +1527,12 @@ public class GUIForm extends javax.swing.JFrame {
 				clearFieldsOnPanel(projectFieldsJPanel);
 				refreshClientsComboBox(null, projectClientsJComboBox);
 				toggleButtonStates(newSelected, setCurrentProjectJButton, removeProjectJButton);
+				toggleButtonStates(!newSelected, saveProjectJButton);
 				saveProjectJButton.setText("Save [new]");
 			} else {
 				loadProjectInfo(projectsJList.getSelectedIndex());
 				toggleButtonStates(newSelected, setCurrentProjectJButton, removeProjectJButton);
+				toggleButtonStates(!newSelected, saveProjectJButton);
 				saveProjectJButton.setText("Save");
 			}
 
