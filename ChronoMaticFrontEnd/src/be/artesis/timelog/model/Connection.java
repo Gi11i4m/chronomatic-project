@@ -22,6 +22,7 @@ public class Connection {
     // Lokale server
     private static final String server = "http://localhost:8080/ChronomaticServer/";
     
+    
     public static URL normalize(String commando) throws MalformedURLException, UnsupportedEncodingException {
         return new URL((server + commando).replaceAll(" ", "%20"));
     }

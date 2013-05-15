@@ -93,7 +93,7 @@ public class WorkDialog extends javax.swing.JDialog {
 
 		try {
 			for (Taak task : UserInterface.getCurrentProject().getTaken()) {
-				if (!task.overTijd()) {
+				if (!task.overTijd() && !task.isGepland()) {
 					tasksJComboBox.addItem(task);
 				}
 			}
