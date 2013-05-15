@@ -231,7 +231,9 @@ public class UserInterface {
     
 	public static Tijdspanne createTimespan(long start, long stop, Taak t, boolean isPause)
 			throws DataInputException, IOException, WebserviceException, JSONException{
-		Tijdspanne ts = new Tijdspanne(start, stop);
+		Tijdspanne ts = new Tijdspanne();
+		ts.setBeginTijd(start);
+		ts.setEindTijd(stop);
 		ts.setPauze(isPause);
 		t.addBestedeTijd(ts);
 		try {

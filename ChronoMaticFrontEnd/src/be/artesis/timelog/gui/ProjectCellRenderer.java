@@ -36,7 +36,6 @@ class ProjectCellRenderer extends JLabel implements ListCellRenderer {
 
 			try {
 				if (p.equals(UserInterface.getCurrentProject())) {
-					// FIXME andere kleur?
 					renderer.setForeground(new Color(25, 97, 252));
 				}
 			} catch (GUIException ex) {

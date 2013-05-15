@@ -157,7 +157,7 @@ public class GUIForm extends JFrame {
 
 			@Override
 			public void windowClosing(WindowEvent arg0) {
-				sync();
+				//sync();
 			}
 		});
 
@@ -1453,7 +1453,12 @@ public class GUIForm extends JFrame {
 		addTimeDialog addTime = new addTimeDialog(this, true, (Taak) tasksJList.getSelectedValue());
 		addTime.setLocationRelativeTo(this);
 		addTime.setVisible(true);
-		
+		try {
+			loadTaskInfo(tasksJList.getSelectedIndex());
+		} catch (GUIException e) {
+			e.printStackTrace();
+			showGUIMessage(e.getMessage(), true);
+		}
 	}
 
 	/**
