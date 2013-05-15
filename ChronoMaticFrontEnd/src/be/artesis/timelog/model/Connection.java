@@ -1,5 +1,6 @@
 package be.artesis.timelog.model;
-
+import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -7,9 +8,7 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
+
 
 public class Connection {
         
@@ -41,7 +40,12 @@ public class Connection {
                 throw new RuntimeException("Failed : HTTP error code : " + conn.getResponseCode());
             }
             BufferedReader br = new BufferedReader(new InputStreamReader((conn.getInputStream())));
+
+			//sjonarray.addString
+			//om het probleem op te vangen in de connection class dat ge gene string in de constructor kunt toevoegen
             JSONArray jArray = new JSONArray(br.readLine());
+            JSONArray jArray = new JSONArray();
+            
             for(int i=0;i<jArray.length();i++)
             {
                 jObject = jArray.getJSONObject(i);

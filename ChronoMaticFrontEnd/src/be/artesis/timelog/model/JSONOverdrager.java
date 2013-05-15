@@ -1,5 +1,7 @@
 package be.artesis.timelog.model;
 
+import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -7,37 +9,35 @@ import org.json.*;
 
 public class JSONOverdrager
 {
-    public static JSONObject getGebruiker(String sessionKey) throws IOException, JSONException {
+    public static JSONObject getGebruiker(String sessionKey) throws IOException {
 	
     	JSONObject jObject = Connection.getObject("gebruiker/read/" + sessionKey);
 		return jObject;
 	}
        
-    public static JSONObject[] getProjectenVanGebruiker(String sessionKey) throws IOException, JSONException {
+    public static JSONObject[] getProjectenVanGebruiker(String sessionKey) throws IOException {
 		return JArrayToJSONArrayArray(Connection.getArray("gebruiker/projecten/" + sessionKey ));		
 	}
 	
-	public static JSONObject[] getTakenVanProject(String sessionKey, int projectID) throws IOException, JSONException {
+	public static JSONObject[] getTakenVanProject(String sessionKey, int projectID) throws IOException {
 		return  JArrayToJSONArrayArray(Connection.getArray("project/tasks/" + sessionKey + "/" + projectID ));		
 	}               
 	
         
-	public static JSONObject[] getOpdrachtgeverVanGebruiker(String sessionKey) throws IOException, JSONException {
+	public static JSONObject[] getOpdrachtgeverVanGebruiker(String sessionKey) throws IOException {
 		return JArrayToJSONArrayArray(Connection.getArray("gebruiker/opdrachtgevers/" + sessionKey ));
 	}
 	
-    public static JSONObject[] getTijdspannesVanTaak(String sessionKey, int taakID, boolean pauze) throws IOException, JSONException {
+    public static JSONObject[] getTijdspannesVanTaak(String sessionKey, int taakID, boolean pauze) throws IOException {
     	return JArrayToJSONArrayArray(Connection.getArray("task/tijdspannes/" + sessionKey + "/" + taakID + "/" + pauze ));		
 	}        	
 	
     private static JSONObject[] JArrayToJSONArrayArray(JSONArray jArray) {
-    	JSONObject[] JSONArray = new JSONObject[jArray.length()];
-        for(int i=0;i<jArray.length();i++) {
-            try {
+    	JSONObject[] JSONArray = new JSONObject[jArray.size()];
+        for(int i=0;i<jArray.size();i++) {
+            
                 JSONArray[i] = jArray.getJSONObject(i);
-            } catch (JSONException ex) {
-                Logger.getLogger(JSONOverdrager.class.getName()).log(Level.SEVERE, null, ex);
-            }
+           
         }
         return JSONArray;
     }

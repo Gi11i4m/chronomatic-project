@@ -1,5 +1,5 @@
 package be.artesis.timelog.model;
-
+import net.sf.json.JSONObject;
 //import be.artesis.timelog.model.JSONOverdrager;
 import be.artesis.timelog.view.Gebruiker;
 import be.artesis.timelog.view.Opdrachtgever;
@@ -14,7 +14,7 @@ public class CreatorFromJSON
 {
 
 
-        public static Gebruiker createGebruiker(String sessionKey) throws JSONException, IOException {
+        public static Gebruiker createGebruiker(String sessionKey) throws IOException {
 		JSONObject Jgebruiker = JSONOverdrager.getGebruiker(sessionKey);
 
 		Gebruiker gebruiker = new Gebruiker(Jgebruiker.getString("naam"), Jgebruiker.getString("voornaam"), Jgebruiker.getString("gebruikersnaam"), Jgebruiker.getString("email"), Jgebruiker.getInt("ID"));
@@ -23,7 +23,7 @@ public class CreatorFromJSON
 
 	}
 
-	public static Project[] createProjecten(String sessionKey) throws JSONException, IOException {
+	public static Project[] createProjecten(String sessionKey) throws IOException {
             //een project maken vanuit de database
 		JSONObject[] Jproject = JSONOverdrager.getProjectenVanGebruiker(sessionKey);
 
@@ -43,7 +43,7 @@ public class CreatorFromJSON
 
 
 
-	public static Opdrachtgever[] createOpdrachtgevers(String sessionKey) throws JSONException, IOException {
+	public static Opdrachtgever[] createOpdrachtgevers(String sessionKey) throws IOException {
 		JSONObject[] Jopdrachtgever = JSONOverdrager.getOpdrachtgeverVanGebruiker(sessionKey);
 
 		Opdrachtgever[] opdrachtgever = new Opdrachtgever[Jopdrachtgever.length];
@@ -57,7 +57,7 @@ public class CreatorFromJSON
         return opdrachtgever;
 	}
 
-	public static Taak[] createTaken(String sessionKey,int projectID) throws JSONException, IOException {
+	public static Taak[] createTaken(String sessionKey,int projectID) throws IOException {
 		JSONObject Jtaken[] = JSONOverdrager.getTakenVanProject(sessionKey,projectID);
 
 		Taak[] taken = new Taak[Jtaken.length];
@@ -71,7 +71,7 @@ public class CreatorFromJSON
 
 	}
 
-	public static Tijdspanne[] createTijdspannes(String sessionKey, int taakID, boolean pauze) throws JSONException, IOException {
+	public static Tijdspanne[] createTijdspannes(String sessionKey, int taakID, boolean pauze) throws IOException {
 		JSONObject[] Jtijdspannes = JSONOverdrager.getTijdspannesVanTaak(sessionKey, taakID, pauze);
 
 		Tijdspanne[] tijdspannes = new Tijdspanne[Jtijdspannes.length];
