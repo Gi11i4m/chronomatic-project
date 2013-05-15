@@ -106,8 +106,8 @@ public class UserInterface {
 		return getClient(getProject(projectindex).getOpdrachtgeverId());
 	}
 
-	public static Opdrachtgever getClient(int index) throws DataInputException {
-		return user.getOpdrachtgever(index);
+	public static Opdrachtgever getClient(int id) throws DataInputException {
+		return user.getOpdrachtgever(id);
 	}
 
 	public static Tijdspanne getTimespan(int projectindex, int taskindex, int index) {
@@ -231,7 +231,9 @@ public class UserInterface {
     
 	public static Tijdspanne createTimespan(long start, long stop, Taak t, boolean isPause)
 			throws DataInputException, IOException, WebserviceException, JSONException{
-		Tijdspanne ts = new Tijdspanne(start, stop);
+		Tijdspanne ts = new Tijdspanne();
+		ts.setBeginTijd(start);
+		ts.setEindTijd(stop);
 		ts.setPauze(isPause);
 		t.addBestedeTijd(ts);
 		try {

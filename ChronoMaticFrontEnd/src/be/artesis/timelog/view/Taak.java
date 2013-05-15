@@ -249,6 +249,14 @@ public class Taak implements Cloneable {
 
         return diff < 0;
     }
+    
+  //geeft aan of de huidige taak in de toekomst gepland is
+    public boolean isGepland() {
+        long now = Clock.generateUnixTimestamp() - 86400;
+        long diff = begindatum - now;
+
+        return diff > 0;
+    }
 
     @Override
     public String toString() {

@@ -16,7 +16,7 @@ import org.json.JSONObject;
 
 public class Connection {
         
-    // private static final String server = "http://chronomatic-artesisti.rhcloud.com/ChronomaticServer/";
+    //private static final String server = "http://chronomatic-artesisti.rhcloud.com/ChronomaticServer/";
     private static final String server = "http://localhost:8080/ChronomaticServer/";
     
     

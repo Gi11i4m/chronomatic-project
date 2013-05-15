@@ -17,6 +17,10 @@ public class Tijdspanne {
     // Constructor 
     //================================================================================
     
+    public Tijdspanne(){
+    	this(0,0);
+    }
+    
     public Tijdspanne(long beginTijd, long eindTijd) {
         this.beginTijd = beginTijd;
         this.eindTijd = eindTijd;

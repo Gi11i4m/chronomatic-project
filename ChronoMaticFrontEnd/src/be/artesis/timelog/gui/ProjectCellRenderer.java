@@ -25,18 +25,17 @@ class ProjectCellRenderer extends JLabel implements ListCellRenderer {
 	@Override
 	public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
 		JLabel renderer = (JLabel) defaultRenderer.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
-		Font f = list.getFont();
 		if (value == null) {
 			return renderer;
 		}
-		if (value.getClass().equals(String.class)) {
+		Font f = list.getFont();
+		if (String.class.equals(value.getClass())) {
 			renderer.setFont(new Font(f.getName(),f.getStyle() | Font.ITALIC, f.getSize()));
 		} else {
 			p = (Project) value;
 
 			try {
 				if (p.equals(UserInterface.getCurrentProject())) {
-					// FIXME andere kleur?
 					renderer.setForeground(new Color(25, 97, 252));
 				}
 			} catch (GUIException ex) {

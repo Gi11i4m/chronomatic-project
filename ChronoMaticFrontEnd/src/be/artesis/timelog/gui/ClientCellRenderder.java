@@ -33,7 +33,6 @@ public class ClientCellRenderder extends JLabel implements ListCellRenderer {
 			o = (Opdrachtgever) value;
 			try {
 				if (o.getID() == UserInterface.getCurrentProject().getOpdrachtgeverId()) {
-					// FIXME andere kleur?
 					renderer.setForeground(new Color(25, 97, 252));
 				}
 			} catch (GUIException ex) {
