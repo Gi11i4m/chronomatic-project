@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -24,6 +25,7 @@ import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListModel;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
+import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -135,10 +137,9 @@ public class GUIForm extends javax.swing.JFrame {
 		removeTaskJButton.setBounds(10, 411, 200, 29);
 		optionsJPanel = new javax.swing.JPanel();
 		headerJPanel = new javax.swing.JPanel();
-		titleLabel = new javax.swing.JLabel();
+		logoLabel = new javax.swing.JLabel();
 		ingelogdJLabel = new javax.swing.JLabel();
 		currentProjectJLabel = new javax.swing.JLabel();
-		clockJLabel = new javax.swing.JLabel();
 
 		setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 		setTitle("Time Management System");
@@ -403,7 +404,7 @@ public class GUIForm extends javax.swing.JFrame {
 		percentageCompleteJProgressBar.setToolTipText("Displays the percentage of completion of the project");
 		percentageCompleteJProgressBar.setStringPainted(true);
 		saveProjectJButton.addActionListener(new java.awt.event.ActionListener() {
-			public void actionPerformed(java.awt.event.ActionEvent evt) { // FIXME code naar methode verplaatsen
+			public void actionPerformed(java.awt.event.ActionEvent evt) {
 				saveProjectButtonClicked();
 			}
 		});
@@ -675,7 +676,7 @@ public class GUIForm extends javax.swing.JFrame {
 		exportJButton = new JButton("Export");
 		exportJButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				exportButtonClicked(arg0);
+				exportTasks();
 			}
 		});
 		exportJButton.setBounds(550, 11, 99, 23);
@@ -713,7 +714,7 @@ public class GUIForm extends javax.swing.JFrame {
 		importJButton = new JButton("Import");
 		importJButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				importButtonClicked(arg0);
+				importTasks();
 			}
 		});
 		importJButton.setBounds(550, 11, 99, 23);
@@ -872,9 +873,13 @@ public class GUIForm extends javax.swing.JFrame {
 
 		headerJPanel.setBackground(new Color(70, 130, 180));
 
-		titleLabel.setFont(new java.awt.Font("Tempus Sans ITC", 1, 18));
-		titleLabel.setForeground(new java.awt.Color(255, 255, 255));
-		titleLabel.setText("ChronoMatic");
+		// FIXME zorg dat icon effectief gedisplayed wordt
+		logoLabel.setFont(new java.awt.Font("Tempus Sans ITC", 1, 18));
+		ImageIcon ii = new ImageIcon("/be/artesis/timelog/gui/icons/logo.png");
+		Image image = ii.getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH);
+		ImageIcon icon = new ImageIcon(image);
+		logoLabel.setIcon(icon);
+		logoLabel.setForeground(new java.awt.Color(255, 255, 255));
 
 		ingelogdJLabel.setBackground(new java.awt.Color(255, 255, 255));
 		ingelogdJLabel.setFont(new java.awt.Font("Tahoma", 1, 11));
@@ -894,8 +899,6 @@ public class GUIForm extends javax.swing.JFrame {
 		currentProjectJLabel.setName("");
 		currentProjectJLabel.setOpaque(true);
 
-		clockJLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/be/artesis/timelog/gui/icons/ClockNeonIcon.png")));
-
 		logoutJButton = new JButton("Logout");
 		logoutJButton.setToolTipText("Log yourself out so you can log in with another account");
 		logoutJButton.setForeground(Color.DARK_GRAY);
@@ -914,11 +917,9 @@ public class GUIForm extends javax.swing.JFrame {
 		});
 
 		javax.swing.GroupLayout headerJPanelLayout = new javax.swing.GroupLayout(headerJPanel);
-		headerJPanelLayout.setHorizontalGroup(headerJPanelLayout.createParallelGroup(Alignment.TRAILING).addGroup(headerJPanelLayout.createSequentialGroup().addContainerGap().addGroup(headerJPanelLayout.createParallelGroup(Alignment.LEADING, false).addComponent(currentProjectJLabel, GroupLayout.DEFAULT_SIZE, 201, Short.MAX_VALUE).addComponent(ingelogdJLabel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)).addPreferredGap(ComponentPlacement.RELATED).addComponent(logoutJButton).addPreferredGap(ComponentPlacement.RELATED, 215, Short.MAX_VALUE).addComponent(syncButton, GroupLayout.PREFERRED_SIZE, 68, GroupLayout.PREFERRED_SIZE).addPreferredGap(ComponentPlacement.UNRELATED).addComponent(titleLabel).addGap(18).addComponent(clockJLabel).addGap(6)));
-		headerJPanelLayout.setVerticalGroup(headerJPanelLayout.createParallelGroup(Alignment.LEADING).addGroup(headerJPanelLayout.createSequentialGroup().addContainerGap().addGroup(headerJPanelLayout.createParallelGroup(Alignment.LEADING).addComponent(titleLabel, GroupLayout.DEFAULT_SIZE, 63, Short.MAX_VALUE).addComponent(clockJLabel, Alignment.TRAILING).addGroup(headerJPanelLayout.createSequentialGroup().addGroup(headerJPanelLayout.createParallelGroup(Alignment.BASELINE).addComponent(ingelogdJLabel).addComponent(logoutJButton, GroupLayout.PREFERRED_SIZE, 22, GroupLayout.PREFERRED_SIZE).addComponent(syncButton)).addPreferredGap(ComponentPlacement.UNRELATED).addComponent(currentProjectJLabel).addGap(0, 10, Short.MAX_VALUE))).addContainerGap()));
+		headerJPanelLayout.setHorizontalGroup(headerJPanelLayout.createParallelGroup(Alignment.TRAILING).addGroup(headerJPanelLayout.createSequentialGroup().addContainerGap().addGroup(headerJPanelLayout.createParallelGroup(Alignment.LEADING, false).addComponent(currentProjectJLabel, GroupLayout.DEFAULT_SIZE, 201, Short.MAX_VALUE).addComponent(ingelogdJLabel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)).addPreferredGap(ComponentPlacement.RELATED).addComponent(logoutJButton).addPreferredGap(ComponentPlacement.RELATED, 215, Short.MAX_VALUE).addComponent(syncButton, GroupLayout.PREFERRED_SIZE, 68, GroupLayout.PREFERRED_SIZE).addPreferredGap(ComponentPlacement.UNRELATED).addComponent(logoLabel, GroupLayout.PREFERRED_SIZE, 187, GroupLayout.PREFERRED_SIZE).addContainerGap()));
+		headerJPanelLayout.setVerticalGroup(headerJPanelLayout.createParallelGroup(Alignment.LEADING).addGroup(headerJPanelLayout.createSequentialGroup().addContainerGap().addGroup(headerJPanelLayout.createParallelGroup(Alignment.LEADING).addComponent(logoLabel, GroupLayout.DEFAULT_SIZE, 64, Short.MAX_VALUE).addGroup(headerJPanelLayout.createSequentialGroup().addGroup(headerJPanelLayout.createParallelGroup(Alignment.BASELINE).addComponent(ingelogdJLabel).addComponent(logoutJButton, GroupLayout.PREFERRED_SIZE, 22, GroupLayout.PREFERRED_SIZE).addComponent(syncButton)).addPreferredGap(ComponentPlacement.UNRELATED).addComponent(currentProjectJLabel))).addContainerGap()));
 		headerJPanel.setLayout(headerJPanelLayout);
-
-		clockJLabel.getAccessibleContext().setAccessibleName("iconJLabel");
 
 		javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
 		getContentPane().setLayout(layout);
@@ -1475,6 +1476,66 @@ public class GUIForm extends javax.swing.JFrame {
 	}
 
 	// ================================================================================
+	// Import & Export methods
+	// ================================================================================
+
+	/**
+	 * Export all the selected tasks in the export tree to an ics file
+	 */
+	private void exportTasks() {
+		try {
+			ArrayList<Taak> toExport = new ArrayList();
+			TreePath[] paths = exportJCheckBoxTree.getCheckingPaths();
+
+			for (TreePath p : paths) {
+				if (p.getPathCount() == 3) {
+					Project project = UserInterface.getProject(p.getParentPath().getLastPathComponent().toString());
+					Taak toAddTask = UserInterface.getTaak(project, p.getLastPathComponent().toString());
+					toExport.add(toAddTask);
+				}
+			}
+
+			if (!toExport.isEmpty()) {
+				JFileChooser fileChooser = new JFileChooser();
+				fileChooser.setFileFilter(new FileNameExtensionFilter("ics files (*.ics)", "ics"));
+				fileChooser.setDialogTitle("Export tasks");
+				fileChooser.showSaveDialog(this);
+
+				Taak[] t = new Taak[toExport.size()];
+				if (fileChooser.getSelectedFile() != null)
+					IcsExporteren.export(toExport.toArray(t), fileChooser.getSelectedFile().toPath().toString());
+				JOptionPane.showMessageDialog(this, "Tasks exported");
+			} else {
+				JOptionPane.showMessageDialog(this, "Select tasks to export");
+			}
+		} catch (IOException | ValidationException | GUIException e) {
+			e.printStackTrace();
+			JOptionPane.showMessageDialog(this, e.getMessage());
+		}
+	}
+
+	/**
+	 * Import all tasks from selected .ics file
+	 */
+	private void importTasks() {
+		try {
+			JFileChooser fileChooser = new JFileChooser();
+			fileChooser.setFileFilter(new FileNameExtensionFilter("ics files (*.ics)", "ics"));
+			fileChooser.setDialogTitle("Import tasks");
+			fileChooser.showOpenDialog(this);
+			if (fileChooser.getSelectedFile() != null) {
+				importedTasks = IcsImporteren.importTasks(fileChooser.getSelectedFile().toPath().toString());
+				refreshTree(importJCheckBoxTree, IcsImporteren.importTasksInProject(fileChooser.getSelectedFile().toPath().toString()));
+				importToProjectJButton.setEnabled(true);
+				projectsJComboBox.setEnabled(true);
+			}
+		} catch (IOException | ParserException e) {
+			e.printStackTrace();
+			JOptionPane.showMessageDialog(this, e.getMessage());
+		}
+	}
+
+	// ================================================================================
 	// Event handlers, FIXME afsplitsen!
 	// ================================================================================
 
@@ -1555,58 +1616,6 @@ public class GUIForm extends javax.swing.JFrame {
 	private void homeProjectListValueChanged(ListSelectionEvent evt) {
 		if (homeProjectsJList.getSelectedIndex() != -1) {
 			refreshTasksList((Project) homeProjectsJList.getSelectedValue(), homeTasksJList);
-		}
-	}
-
-	// Button voor exporteren van taken
-	private void exportButtonClicked(ActionEvent arg0) {
-		try {
-			ArrayList<Taak> toExport = new ArrayList();
-			TreePath[] paths = exportJCheckBoxTree.getCheckingPaths();
-
-			for (TreePath p : paths) {
-				if (p.getPathCount() == 3) {
-					Project project = UserInterface.getProject(p.getParentPath().getLastPathComponent().toString());
-					Taak toAddTask = UserInterface.getTaak(project, p.getLastPathComponent().toString());
-					toExport.add(toAddTask);
-				}
-			}
-
-			if (!toExport.isEmpty()) {
-				JFileChooser fileChooser = new JFileChooser();
-				fileChooser.setFileFilter(new FileNameExtensionFilter("ics files (*.ics)", "ics"));
-				fileChooser.setDialogTitle("Export tasks");
-				fileChooser.showSaveDialog(this);
-
-				Taak[] t = new Taak[toExport.size()];
-				if (fileChooser.getSelectedFile() != null)
-					IcsExporteren.export(toExport.toArray(t), fileChooser.getSelectedFile().toPath().toString());
-				JOptionPane.showMessageDialog(this, "Tasks exported");
-			} else {
-				JOptionPane.showMessageDialog(this, "Select tasks to export");
-			}
-		} catch (IOException | ValidationException | GUIException e) {
-			e.printStackTrace();
-			JOptionPane.showMessageDialog(this, e.getMessage());
-		}
-	}
-
-	// Button voor importeren van taken
-	private void importButtonClicked(ActionEvent arg0) {
-		try {
-			JFileChooser fileChooser = new JFileChooser();
-			fileChooser.setFileFilter(new FileNameExtensionFilter("ics files (*.ics)", "ics"));
-			fileChooser.setDialogTitle("Import tasks");
-			fileChooser.showOpenDialog(this);
-			if (fileChooser.getSelectedFile() != null) {
-				importedTasks = IcsImporteren.importTasks(fileChooser.getSelectedFile().toPath().toString());
-				refreshTree(importJCheckBoxTree, IcsImporteren.importTasksInProject(fileChooser.getSelectedFile().toPath().toString()));
-				importToProjectJButton.setEnabled(true);
-				projectsJComboBox.setEnabled(true);
-			}
-		} catch (IOException | ParserException e) {
-			e.printStackTrace();
-			JOptionPane.showMessageDialog(this, e.getMessage());
 		}
 	}
 
@@ -1725,7 +1734,6 @@ public class GUIForm extends javax.swing.JFrame {
 	private javax.swing.JLabel clientcompJLabel1;
 	private javax.swing.JLabel clientsJLabel;
 	private javax.swing.JPanel clientsJPanel;
-	private javax.swing.JLabel clockJLabel;
 	private javax.swing.JLabel currentProjectJLabel;
 	private javax.swing.JLabel enddatecompJLabel1;
 	private javax.swing.Box.Filler filler2;
@@ -1753,7 +1761,7 @@ public class GUIForm extends javax.swing.JFrame {
 	private javax.swing.JLabel tasksJLabel;
 	private javax.swing.JPanel tasksJPanel;
 	private javax.swing.JLabel taskscompJLabel;
-	private javax.swing.JLabel titleLabel;
+	private javax.swing.JLabel logoLabel;
 	private javax.swing.JButton workJButton;
 	private JTextField clientNameJTextField;
 	private JTextField clientFirstNameJTextField;
