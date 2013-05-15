@@ -106,8 +106,8 @@ public class UserInterface {
 		return getClient(getProject(projectindex).getOpdrachtgeverId());
 	}
 
-	public static Opdrachtgever getClient(int index) throws DataInputException {
-		return user.getOpdrachtgever(index);
+	public static Opdrachtgever getClient(int id) throws DataInputException {
+		return user.getOpdrachtgever(id);
 	}
 
 	public static Tijdspanne getTimespan(int projectindex, int taskindex, int index) {
