@@ -12,6 +12,7 @@ import java.awt.event.FocusEvent;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowEvent;
+import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.text.ParseException;
@@ -53,11 +54,14 @@ import net.fortuna.ical4j.data.ParserException;
 import net.fortuna.ical4j.model.ValidationException;
 
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import be.artesis.timelog.clock.Clock;
 import be.artesis.timelog.ics.IcsExporteren;
 import be.artesis.timelog.ics.IcsImporteren;
+import be.artesis.timelog.lokaleopslag.LocalDatabaseReader;
 import be.artesis.timelog.lokaleopslag.LocalDatabaseSynch;
+import be.artesis.timelog.lokaleopslag.LocalDatabaseWriter;
 import be.artesis.timelog.model.Validator;
 import be.artesis.timelog.model.WebserviceException;
 import be.artesis.timelog.secure.WinRegistry;
@@ -909,7 +913,17 @@ public class GUIForm extends javax.swing.JFrame {
 		syncButton = new JButton("Sync");
 		syncButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				sync();
+				File file = new File( LocalDatabaseWriter.URL);
+				if(file.isDirectory()){
+					if(file.list().length == 0){
+						
+					}else{
+						sync();
+					}
+					
+				}else{
+					//geen directory (wat niet zou mogen kunnen)
+				}
 			}
 		});
 
