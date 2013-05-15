@@ -26,6 +26,7 @@ import com.toedter.calendar.JDateChooser;
 import javax.swing.JLabel;
 import javax.swing.SwingConstants;
 import java.awt.Font;
+import java.util.Calendar;
 import java.util.Date;
 
 import com.toedter.components.JSpinField;
@@ -49,7 +50,8 @@ public class addTimeDialog extends JDialog {
 	private JSpinner endTimeSpinner;
 	private JLabel timeJLabel;
 	private final int MAX_LENGTH = 5;
-	private final Date now = new Date();
+	private final Date date = new Date();
+	private Date today;
 	private JLabel dateJLabel;
 	private JDateChooser beginDateChooser;
 	private JDateChooser endDateChooser;
@@ -68,6 +70,8 @@ public class addTimeDialog extends JDialog {
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
 		contentPanel.setLayout(null);
 
+		today = new Date(date.getYear(), date.getMonth(), date.getDate(), 0, 0, 0);
+		
 		beginJLabel = new JLabel("Begin");
 		beginJLabel.setFont(new Font("Tahoma", Font.BOLD, 13));
 		beginJLabel.setHorizontalAlignment(SwingConstants.CENTER);
@@ -83,14 +87,14 @@ public class addTimeDialog extends JDialog {
 		beginTimeSpinner = new JSpinner(new SpinnerDateModel());
 		JSpinner.DateEditor timeEditor = new JSpinner.DateEditor(beginTimeSpinner, "HH:mm");
 		beginTimeSpinner.setEditor(timeEditor);
-		beginTimeSpinner.setValue(new Date());
+		beginTimeSpinner.setValue(today);
 		beginTimeSpinner.setBounds(141, 86, 75, 20);
 		contentPanel.add(beginTimeSpinner);
 
 		endTimeSpinner = new JSpinner(new SpinnerDateModel());
 		JSpinner.DateEditor timeEditor2 = new JSpinner.DateEditor(endTimeSpinner, "HH:mm");
 		endTimeSpinner.setEditor(timeEditor2);
-		endTimeSpinner.setValue(new Date());
+		endTimeSpinner.setValue(today);
 		endTimeSpinner.setBounds(327, 86, 61, 20);
 		contentPanel.add(endTimeSpinner);
 
@@ -127,13 +131,13 @@ public class addTimeDialog extends JDialog {
 		contentPanel.add(dateJLabel);
 		
 		beginDateChooser = new JDateChooser();
-		beginDateChooser.setDate(now);
+		beginDateChooser.setDate(today);
 		beginDateChooser.setDateFormatString("dd/MM/yyyy");
 		beginDateChooser.setBounds(141, 42, 100, 20);
 		contentPanel.add(beginDateChooser);
 		
 		endDateChooser = new JDateChooser();
-		endDateChooser.setDate(now);
+		endDateChooser.setDate(today);
 		endDateChooser.setDateFormatString("dd/MM/yyyy");
 		endDateChooser.setBounds(328, 42, 100, 20);
 		contentPanel.add(endDateChooser);
@@ -177,17 +181,14 @@ public class addTimeDialog extends JDialog {
 		Date t1 = (Date) beginTimeSpinner.getValue();
 		Date t2 = (Date) endTimeSpinner.getValue();
 		
-		//d1 += t1.getSeconds() + t1.getMinutes() * 60;
-		//d2 += t2.getSeconds() + t2.getMinutes() * 60;
+		Long l1 = (d1.getTime()/1000) + (t1.getMinutes() * 60 + t1.getHours() * 3600);
+		Long l2 = (d2.getTime()/1000) + (t2.getMinutes() * 60 + t2.getHours() * 3600);
 		
-		System.out.println(now);
-		System.out.println(d1);
-		System.out.println(d2);
-		
-		//try {
-			//UserInterface.createTimespan(d1, d2, t, false);
-		//} catch (DataInputException | IOException | WebserviceException | JSONException e) {
-		//	JOptionPane.showMessageDialog(this, e.getMessage());
-		//}
+		try {
+			UserInterface.createTimespan(l1, l2, t, false);
+			
+		} catch (DataInputException | IOException | WebserviceException | JSONException e) {
+			JOptionPane.showMessageDialog(this, e.getMessage());
+		}
 	}
 }

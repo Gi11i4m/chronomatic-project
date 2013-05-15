@@ -510,6 +510,11 @@ public class GUIForm extends JFrame {
 		lblWorked.setForeground(Color.WHITE);
 
 		workedTimeJList = new JList();
+		workedTimeJList.addListSelectionListener(new ListSelectionListener() {
+			public void valueChanged(ListSelectionEvent arg0) {
+				workedTimeJListValueChange(arg0);
+			}
+		});
 		workedTimeJList.setBounds(88, 11, 288, 87);
 		taskStatusFieldsJPanel.add(workedTimeJList);
 
@@ -536,21 +541,23 @@ public class GUIForm extends JFrame {
 		taskTotalPauseJTextField.setColumns(10);
 
 		addTimeJButton = new JButton("Add time");
+		addTimeJButton.setEnabled(false);
 		addTimeJButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				openAddTimeDialog();
 			}
 		});
-		addTimeJButton.setBounds(271, 108, 105, 23);
+		addTimeJButton.setBounds(258, 108, 118, 23);
 		taskStatusFieldsJPanel.add(addTimeJButton);
 		
 		removeTimeButton = new JButton("Remove time");
+		removeTimeButton.setEnabled(false);
 		removeTimeButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				deleteTimeSpan();
 			}
 		});
-		removeTimeButton.setBounds(271, 138, 105, 23);
+		removeTimeButton.setBounds(258, 138, 118, 23);
 		taskStatusFieldsJPanel.add(removeTimeButton);
 		clientsJPanel = new javax.swing.JPanel();
 		clientsJPanel.setForeground(new Color(211, 211, 211));
@@ -1690,14 +1697,22 @@ public class GUIForm extends JFrame {
 				} else {
 					loadTaskInfo(tasksJList.getSelectedIndex());
 					saveTaskJButton.setText("Save");
+					addTimeJButton.setEnabled(true);
 				}
-				toggleButtonStates(newSelected, removeTaskJButton, addTimeJButton, removeTimeButton);
+				toggleButtonStates(newSelected, removeTaskJButton);
 			} else {
 				clearFieldsOnPanel(taskFieldsJPanel);
 			}
+			removeTimeButton.setEnabled(false);
 		} catch (GUIException e) {
 			e.printStackTrace();
 			showGUIMessage(e.getMessage(), true);
+		}
+	}
+	
+	private void workedTimeJListValueChange(ListSelectionEvent arg0) {
+		if (workedTimeJList.getSelectedIndex() != -1) {
+			removeTimeButton.setEnabled(true);
 		}
 	}
 
