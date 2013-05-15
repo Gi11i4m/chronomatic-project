@@ -14,6 +14,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.WindowEvent;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
+import java.net.MalformedURLException;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
@@ -537,12 +538,20 @@ public class GUIForm extends JFrame {
 		addTimeJButton = new JButton("Add time");
 		addTimeJButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				//FIXME taak meegeven?
 				openAddTimeDialog();
 			}
 		});
-		addTimeJButton.setBounds(287, 108, 89, 23);
+		addTimeJButton.setBounds(271, 108, 105, 23);
 		taskStatusFieldsJPanel.add(addTimeJButton);
+		
+		removeTimeButton = new JButton("Remove time");
+		removeTimeButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				deleteTimeSpan();
+			}
+		});
+		removeTimeButton.setBounds(271, 138, 105, 23);
+		taskStatusFieldsJPanel.add(removeTimeButton);
 		clientsJPanel = new javax.swing.JPanel();
 		clientsJPanel.setForeground(new Color(211, 211, 211));
 		clientsJLabel = new javax.swing.JLabel();
@@ -800,33 +809,33 @@ public class GUIForm extends JFrame {
 		userSettingsJPanel.add(personalInfoJLabel);
 
 		vatJTextField = new JTextField();
-		vatJTextField.setBounds(420, 53, 171, 20);
+		vatJTextField.setBounds(420, 84, 171, 20);
 		userSettingsJPanel.add(vatJTextField);
 		vatJTextField.setColumns(10);
 
 		vatJLabel = new JLabel("VAT number");
 		vatJLabel.setForeground(Color.WHITE);
-		vatJLabel.setBounds(330, 56, 80, 14);
+		vatJLabel.setBounds(330, 87, 80, 14);
 		userSettingsJPanel.add(vatJLabel);
 
 		ibanJLabel = new JLabel("IBAN");
 		ibanJLabel.setForeground(Color.WHITE);
-		ibanJLabel.setBounds(330, 87, 80, 14);
+		ibanJLabel.setBounds(330, 118, 80, 14);
 		userSettingsJPanel.add(ibanJLabel);
 
 		ibanJTextField = new JTextField();
-		ibanJTextField.setBounds(420, 84, 171, 20);
+		ibanJTextField.setBounds(420, 115, 171, 20);
 		userSettingsJPanel.add(ibanJTextField);
 		ibanJTextField.setColumns(10);
 
 		bicJTextField = new JTextField();
-		bicJTextField.setBounds(420, 116, 171, 20);
+		bicJTextField.setBounds(420, 147, 171, 20);
 		userSettingsJPanel.add(bicJTextField);
 		bicJTextField.setColumns(10);
 
 		bicJLabel = new JLabel("BIC");
 		bicJLabel.setForeground(Color.WHITE);
-		bicJLabel.setBounds(330, 119, 80, 14);
+		bicJLabel.setBounds(330, 150, 80, 14);
 		userSettingsJPanel.add(bicJLabel);
 
 		businessInfoJLabel = new JLabel("Business info");
@@ -858,6 +867,16 @@ public class GUIForm extends JFrame {
 		usernameJLabel.setForeground(Color.WHITE);
 		usernameJLabel.setBounds(36, 53, 69, 14);
 		userSettingsJPanel.add(usernameJLabel);
+		
+		companyNameJLabel = new JLabel("Company name");
+		companyNameJLabel.setForeground(Color.WHITE);
+		companyNameJLabel.setBounds(330, 56, 91, 14);
+		userSettingsJPanel.add(companyNameJLabel);
+		
+		companyNameJTextField = new JTextField();
+		companyNameJTextField.setColumns(10);
+		companyNameJTextField.setBounds(420, 53, 171, 20);
+		userSettingsJPanel.add(companyNameJTextField);
 		optionsJPanel.setLayout(optionsJPanelLayout);
 
 		contentJTabbedPane.addTab("", new javax.swing.ImageIcon(getClass().getResource("/be/artesis/timelog/gui/icons/SettingsNeonIcon.png")), optionsJPanel, "Settings");
@@ -1158,6 +1177,21 @@ public class GUIForm extends JFrame {
 			}
 		}
 	}
+	
+	private void deleteTimeSpan(){
+		Taak t = (Taak)tasksJList.getSelectedValue();
+		int result = JOptionPane.showConfirmDialog(this, "Are you sure?", "Removing timespan", JOptionPane.YES_NO_OPTION);
+		if (result == JOptionPane.YES_OPTION) {
+			try {
+				UserInterface.deleteTimespan((Tijdspanne)workedTimeJList.getSelectedValue(), t);
+				refreshWorkedTime(t, workedTimeJList);
+				showGUIMessage("Timespan removed", false);
+			} catch (IOException | WebserviceException | JSONException e) {
+				showGUIMessage(e.getMessage(), true);
+				e.printStackTrace();
+			}
+		}
+	}
 
 	// ================================================================================
 	// Refresh methods
@@ -1298,6 +1332,19 @@ public class GUIForm extends JFrame {
 		DefaultTreeModel treeModel = new DefaultTreeModel(root);
 		tree.setModel(treeModel);
 	}
+	
+	private void refreshWorkedTime(Taak t, JList ... lists){
+		for (JList list : lists) {
+			DefaultListModel listmodel = new DefaultListModel();
+			for (Iterator<Tijdspanne> it = t.getTotaleTijd().iterator(); it.hasNext();) {
+				Tijdspanne ts = it.next();
+				if (!ts.isPauze()) {
+					listmodel.addElement(ts);
+				}
+			}
+			list.setModel(listmodel);
+		}
+	}
 
 	// ================================================================================
 	// Loading info into GUI methods
@@ -1343,16 +1390,9 @@ public class GUIForm extends JFrame {
 		taskEndDateChooser.setDate(new Date(t.getGeschatteEinddatum() * 1000));
 		taskCommentJTextArea.setText(t.getCommentaar());
 		taskCompletedJCheckBox.setSelected(t.getCompleted());
-		DefaultListModel listmodel = new DefaultListModel();
 
-		for (Iterator<Tijdspanne> it = t.getTotaleTijd().iterator(); it.hasNext();) {
-			Tijdspanne ts = it.next();
-			if (!ts.isPauze()) {
-				listmodel.addElement(ts);
-			}
-		}
-
-		workedTimeJList.setModel(listmodel);
+		refreshWorkedTime(t, workedTimeJList);
+		
 		taskTotalWorkedJTextField.setText(Clock.longTimeToString(t.getTotaleWerktijd(), false));
 		taskTotalPauseJTextField.setText(Clock.longTimeToString(t.getTotalePauze(), false));
 	}
@@ -1651,7 +1691,7 @@ public class GUIForm extends JFrame {
 					loadTaskInfo(tasksJList.getSelectedIndex());
 					saveTaskJButton.setText("Save");
 				}
-				toggleButtonStates(newSelected, removeTaskJButton);
+				toggleButtonStates(newSelected, removeTaskJButton, addTimeJButton, removeTimeButton);
 			} else {
 				clearFieldsOnPanel(taskFieldsJPanel);
 			}
@@ -1945,4 +1985,7 @@ public class GUIForm extends JFrame {
 	private JButton addTimeJButton;
 	private JLabel errorJLabel;
 	private JList tasksJList;
+	private JButton removeTimeButton;
+	private JLabel companyNameJLabel;
+	private JTextField companyNameJTextField;
 }
