@@ -916,7 +916,7 @@ public class GUIForm extends javax.swing.JFrame {
 		syncButton = new JButton("Sync");
 		syncButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				// sync();
+				sync();
 			}
 		});
 
