@@ -13,9 +13,9 @@ public class TestDB {
 	public static void main(String[] args) throws IOException {
 		// TODO Auto-generated method stub
 		
-		System.out.println(LocalDatabaseWriter.URL);
+		//System.out.println(LocalDatabaseWriter.URL);
 		final File file = new File("db\\piet");	
-		System.out.println(file.getAbsolutePath());
+		//System.out.println(file.getAbsolutePath());
 		//public static final String URL = file.getAbsolutePath();	
 		//File file = new File( "C:\\Users\\Yolan\\Desktop\\piet");
 		FileWriter f = new FileWriter(file);

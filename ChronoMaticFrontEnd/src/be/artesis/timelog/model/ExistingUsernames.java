@@ -14,7 +14,6 @@ public class ExistingUsernames {
 		} catch (IOException | JSONException e) {
 			e.printStackTrace();
 		}
-		System.out.println(jObject);
 		return (jObject.getInt("Count(1)") == 1) ;
 		
 	}

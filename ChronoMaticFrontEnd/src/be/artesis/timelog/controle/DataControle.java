@@ -151,9 +151,4 @@ public abstract class DataControle {
 		}
 		return sterkte;
 	}
-
-//	public static void main(String [ ] args)
-//{
-//	System.out.println(icsPathCorrect("c:\\a\\:"));
-//}
 }

@@ -33,8 +33,7 @@ public class InserterLocal {
 	public static int inputProject( Project project, int opdrachtGeverId) throws MalformedURLException, IOException, WebserviceException, JSONException {
         project.setId(++projectId);                
         
-        JSONObject jProject = Converter.converteer(project);        
-		System.out.println(jProject);		
+        JSONObject jProject = Converter.converteer(project);        	
 		LocalDatabaseWriter.schrijfweg(voegToe(jProject,JVelden.PROJECTEN), Commando.INSERT);	
 		
         return projectId;
@@ -65,7 +64,6 @@ public class InserterLocal {
 			jObj = LocalDatabaseWriter.makeDatabase(Commando.INSERT);
 			
 		}
-		System.out.println(jObj);
 		JSONArray jArr = (JSONArray) jObj.get(veld.toString().toLowerCase());
 		jArr.put(jInsert);
 		

@@ -8,13 +8,11 @@ import org.json.*;
 public class JSONOverdrager
 {
     public static JSONObject getGebruiker(String sessionKey) throws IOException, JSONException {
-	
     	JSONObject jObject = Connection.getObject("gebruiker/read/" + sessionKey);
 		return jObject;
 	}
        
     public static JSONObject[] getProjectenVanGebruiker(String sessionKey) throws IOException, JSONException {
-    	System.out.println(Connection.getArray("gebruiker/projecten/" + sessionKey ));
 		return JArrayToJSONArrayArray(Connection.getArray("gebruiker/projecten/" + sessionKey ));		
 	}
 	

@@ -24,8 +24,6 @@ public class IcsImporteren {
 		//taken in array   doorgeven aan aanroeper
 		
 		Calendar calendar = inlezen(url);
-		
-		//System.out.println(calendar);
 									
 		return genereerArray(calendar);
 		
@@ -69,11 +67,7 @@ public class IcsImporteren {
 		
 		DtStart dtBegin = vevent.getStartDate();
 		DtEnd dtEind =  vevent.getEndDate();
-		
-		//System.out.println("start: " + dtBegin.getValue());
-		//System.out.println("eind: "+dtEind.getValue());
-	    
-		
+
 		java.util.Calendar cBegin= new GregorianCalendar();
 		cBegin.set(java.util.Calendar.MONTH, Integer.parseInt(dtBegin.getValue().substring(4,6))-1);
 		cBegin.set(java.util.Calendar.DAY_OF_MONTH, Integer.parseInt(dtBegin.getValue().substring(6,8)));
@@ -81,7 +75,6 @@ public class IcsImporteren {
 		cBegin.set(java.util.Calendar.HOUR_OF_DAY,Integer.parseInt(dtBegin.getValue().substring(9,11)));
 		cBegin.set(java.util.Calendar.MINUTE,Integer.parseInt(dtBegin.getValue().substring(11,13)));
 		cBegin.set(java.util.Calendar.SECOND,Integer.parseInt(dtBegin.getValue().substring(13,15)));
-		System.out.println("Calendar: " +cBegin.getTime());
 		
 		java.util.Calendar cEind= new GregorianCalendar();
 		cEind.set(java.util.Calendar.MONTH, Integer.parseInt(dtEind.getValue().substring(4,6))-1);
@@ -90,12 +83,9 @@ public class IcsImporteren {
 		cEind.set(java.util.Calendar.HOUR_OF_DAY,Integer.parseInt(dtEind.getValue().substring(9,11)));
 		cEind.set(java.util.Calendar.MINUTE,Integer.parseInt(dtEind.getValue().substring(11,13)));
 		cEind.set(java.util.Calendar.SECOND,Integer.parseInt(dtEind.getValue().substring(13,15)));
-		System.out.println("Calendar: "+ cEind.getTime());
 		
 		long lBegin =(cBegin.getTimeInMillis() /1000)+21600 ;
 		long lEind = (cEind.getTimeInMillis() /1000) +21600;
-		System.out.println("begin: " + lBegin);
-		System.out.println("eind: " + lEind);
 		
 		return new Taak(vevent.getSummary().getValue(),lBegin,lEind,vevent.getDescription().getValue());
 		
