@@ -682,11 +682,16 @@ public class GUIForm extends javax.swing.JFrame {
 		exportJButton.setBounds(550, 11, 99, 23);
 		exportJPanel.add(exportJButton);
 
-		toExportProjectComboBox = new JComboBox();
-		toExportProjectComboBox.setBounds(419, 370, 230, 20);
-		exportJPanel.add(toExportProjectComboBox);
+		toExportProjectJComboBox = new JComboBox();
+		toExportProjectJComboBox.setBounds(419, 370, 230, 20);
+		exportJPanel.add(toExportProjectJComboBox);
 
 		exportToExcelJButton = new JButton("Export project to Excel");
+		exportToExcelJButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				exportProjectToExcel();
+			}
+		});
 		exportToExcelJButton.setBounds(419, 336, 230, 23);
 		exportJPanel.add(exportToExcelJButton);
 
@@ -1184,7 +1189,7 @@ public class GUIForm extends javax.swing.JFrame {
 			list.setSelectedIndex(selectedIndex);
 		}
 		refreshTree(exportJCheckBoxTree, UserInterface.getProjects());
-		refreshProjectsComboBox(projectsJComboBox);
+		refreshProjectsComboBox(projectsJComboBox, toExportProjectJComboBox);
 	}
 
 	/**
@@ -1535,6 +1540,16 @@ public class GUIForm extends javax.swing.JFrame {
 		}
 	}
 
+	/**
+	 * Export the selected project to an Excel file
+	 */
+	private void exportProjectToExcel() {
+		if (toExportProjectJComboBox.getItemCount() != 0) {
+			Project p = ((Project) toExportProjectJComboBox.getSelectedItem());
+			// FIXME export project p to Excel here
+		}
+	}
+
 	// ================================================================================
 	// Event handlers, FIXME afsplitsen!
 	// ================================================================================
@@ -1843,6 +1858,6 @@ public class GUIForm extends javax.swing.JFrame {
 	private JPanel projectStatusFieldsJPanel;
 	private JPanel taskStatusFieldsJPanel;
 	private JButton syncButton;
-	private JComboBox toExportProjectComboBox;
+	private JComboBox toExportProjectJComboBox;
 	private JButton exportToExcelJButton;
 }
