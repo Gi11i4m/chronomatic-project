@@ -58,7 +58,6 @@ public class AccessToken {
         
         test = test.replace(" ","");
         test = test.replace("null", "");
-        //System.out.println(test);
         JSONObject requestedJson = new JSONObject(test);
 
         return requestedJson.getString("access_token");

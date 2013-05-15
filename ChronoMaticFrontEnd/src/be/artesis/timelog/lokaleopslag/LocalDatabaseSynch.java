@@ -75,13 +75,13 @@ public class LocalDatabaseSynch {
 	private void insertJarr(JVelden jVeld, JSONArray jarr, JSONArray jarrLager) throws MalformedURLException, JSONException, IOException, WebserviceException{
 		
 		for(int i = 0 ; i < jarr.length();i++){	
-			System.out.println("i=" + i);
+			//System.out.println("i=" + i);
 			
 			JSONObject jObj =  jarr.getJSONObject(i);
 			int fakeId = jObj.getInt("id");
 			int realId = getId(jVeld,jObj);
-			System.out.println("id= "+realId);
-			System.out.println();
+			//System.out.println("id= "+realId);
+			//System.out.println();
 			if(jarrLager != null){
 				for (int j = 0; j < jarrLager.length(); j++) {
 					

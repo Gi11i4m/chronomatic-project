@@ -47,7 +47,6 @@ public class DeleterLocal {
 		jArr.put(jId);
 		
 		jObj.put(veld.toString().toLowerCase(), jArr);
-		System.out.println(jObj);
 		return jObj;					
 	}
 

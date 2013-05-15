@@ -1,7 +1,12 @@
 package chronomatic.server;
 
+import java.math.BigInteger;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
 import java.sql.Connection;
 import java.sql.ResultSet;
+import java.util.Random;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -15,6 +20,9 @@ import org.json.ResultsetConverter;
 
 import chronomatic.database.Database;
 import chronomatic.database.DatabaseContainer;
+import chronomatic.email.MailLostPassword;
+import chronomatic.email.MailNewUser;
+import chronomatic.email.Mailer;
 
 @Path("gebruiker/")
 public class Gebruiker {
@@ -120,14 +128,20 @@ public class Gebruiker {
 	}
 	
 	@GET
-	@Path("create/{naam}/{voornaam}/{gebruikersnaam}/{passwoord}/{email}")
+	@Path("create/{naam}/{voornaam}/{gebruikersnaam}/{password}/{email}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public String create(@PathParam("naam") String naam,@PathParam("voornaam") String voornaam,@PathParam("gebruikersnaam") String gebruikersnaam,@PathParam("passwoord") String passwoord,@PathParam("email") String email) 
+	public String create(@PathParam("naam") String naam,@PathParam("voornaam") String voornaam,@PathParam("gebruikersnaam") String gebruikersnaam,@PathParam("password") String password,@PathParam("email") String email) 
 	{
+		
 		Connection con = DatabaseContainer.getConnection();
-		
-		String query = "INSERT INTO gebruikers (naam,voornaam,gebruikersnaam,passwoord,email) VALUES ('"+naam+"','"+ voornaam +"','"+gebruikersnaam+"','" + passwoord + "','" + email + "')";
-		
+		String hash = null;
+		Random ran = new Random();
+		try {
+			hash = RandomMD5.generate((Integer.toString((ran.nextInt()))));
+		} catch (NoSuchAlgorithmException e1) {
+			e1.printStackTrace();
+		}
+		String query = "INSERT INTO gebruikers (naam,voornaam,gebruikersnaam,passwoord,email, hash, validated) VALUES ('"+naam+"','"+ voornaam +"','"+gebruikersnaam+"','" + password + "','" + email + "','" + hash + "','0')";
 		JSONObject returnObject = new JSONObject();
 		
 		try {
@@ -137,7 +151,8 @@ public class Gebruiker {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+		Mailer mailer = new MailNewUser(gebruikersnaam, email, hash);
+		mailer.sendMail();
 		
 		return "["+returnObject.toString()+"]";
 	}
@@ -150,10 +165,10 @@ public class Gebruiker {
 	{
 		Connection con = DatabaseContainer.getConnection();
 		
-		String query = "INSERT INTO gebruikers (naam,voornaam,gebruikersnaam,email) VALUES ('"+naam+"','"+ voornaam +"',' ','"+email+"')";
+		String query = "INSERT INTO gebruikers (naam,voornaam,gebruikersnaam,email) VALUES ('"+naam+"','"+ voornaam +"','"+email+" ','"+email+"')";
 		
 		JSONObject returnObject = new JSONObject();
-		
+		//Mailer.sendMail(email);
 		try {
 			returnObject.put("result", Database.executeNullQuery(con, query));
 			
@@ -188,18 +203,13 @@ public class Gebruiker {
 	}
 	
 	@GET
-	@Path("checkExists/{soort}/{username}")
+	@Path("checkExists/{username}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public static String checkExists(@PathParam("username") String username, @PathParam("soort") String soort) {
+	public static String checkExists(@PathParam("username") String username) {
 		Connection con = DatabaseContainer.getConnection();
 
-		String query = null;
-		if(soort.equals("intern")) {
-			query =  "SELECT Count(1) FROM gebruikers WHERE gebruikersnaam = '" + username + "'";
-		}
-		else {
-			query =  "SELECT Count(1) FROM gebruikers WHERE email = '" + username + "'";
-		}
+		String query =  "SELECT Count(1) FROM gebruikers WHERE gebruikersnaam = '" + username + "'";
+
 		try{
 			ResultSet rs = Database.executeQuery(con, query); 
 			if(rs.next()) {
@@ -222,6 +232,50 @@ public class Gebruiker {
 		}
 		
 		return "error";
+	}
+	
+	/**
+	 * Versturen van nieuw paswoord naar gebruiker email
+	 * @param username
+	 * @param email
+	 * @return
+	 * Email message with new credentials
+	 */
+	@GET
+	@Path("resetpassword/{username}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public String resetPassword(@PathParam("username") String username) {
+		Connection con = DatabaseContainer.getConnection();
+		SecureRandom random = new SecureRandom();
+		String newPassword = new BigInteger(130, random).toString(32);
+		final String secret = "|@#[{^è644.4654f 4r-CHRONOMATIC-e4f8r7ù$^,;:='è--@#^!846^{è !{!è";
+		String newPasswordSecret = newPassword+secret;
+		String query = null;
+		String query2 = null;
+		String email = null;
+		Mailer mailer = null;
+		
+		try {
+			query = "SELECT email FROM gebruikers WHERE gebruikersnaam = '"+ username +"'";
+			query2 = " UPDATE gebruikers SET passwoord = '"+ RandomMD5.generate(newPasswordSecret) +"' WHERE gebruikersnaam='"+ username +"'";
+			
+			ResultSet rs = Database.executeQuery(con, query); 
+			
+			
+			if(rs.next()) {
+				email = (String) rs.getObject(1);
+			}
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		Database.executeNullQuery(con, query2);
+		if (email != null) {
+			mailer = new MailLostPassword(email, newPassword);
+			mailer.sendMail();
+		}
+		return "Password reset";
 	}
 
 }
