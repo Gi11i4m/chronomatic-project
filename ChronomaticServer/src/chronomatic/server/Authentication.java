@@ -108,6 +108,7 @@ public class Authentication {
 		
 		String query = "SELECT ID,email FROM gebruikers WHERE email = '" + email + "'";
 		try{
+			returnObject.put("error","connecting to db");
 			rs = Database.executeQuery(con, query); 
 
 			if(rs.next()) {
@@ -120,6 +121,7 @@ public class Authentication {
 				
 				// Opslaan van sessie
 				if(Database.executeNullQuery(con, sessionQuery))  {
+					returnObject.remove("error");
 					returnObject.put("username", checkedUsername);
 					returnObject.put("key", sessionKey);
 				}
@@ -133,6 +135,7 @@ public class Authentication {
 		}
 		catch (Exception e){
 			System.out.println(e.toString());
+			
 		}
 		return "[" + returnObject.toString() + "]";
 	}
