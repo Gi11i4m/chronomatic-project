@@ -25,8 +25,11 @@ class ProjectCellRenderer extends JLabel implements ListCellRenderer {
 	@Override
 	public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
 		JLabel renderer = (JLabel) defaultRenderer.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+		if (value == null) {
+			return renderer;
+		}
 		Font f = list.getFont();
-		if (value.getClass().equals(String.class)) {
+		if (String.class.equals(value.getClass())) {
 			renderer.setFont(new Font(f.getName(),f.getStyle() | Font.ITALIC, f.getSize()));
 		} else {
 			p = (Project) value;
