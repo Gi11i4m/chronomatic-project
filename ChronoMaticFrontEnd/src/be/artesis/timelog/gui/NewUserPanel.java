@@ -134,7 +134,7 @@ public class NewUserPanel extends javax.swing.JPanel {
             }
             
             //check of username al bestaat
-            if (ExistingUsernames.check(username)) {
+            if (ExistingUsernames.check(username, email)) {
             	throw new DataInputException("Username already exists");
 				
 			}

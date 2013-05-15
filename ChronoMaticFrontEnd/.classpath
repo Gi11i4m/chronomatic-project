@@ -13,5 +13,6 @@
 	<classpathentry kind="lib" path="jcalendar-1.4.jar" sourcepath="jcalendar-1.4.jar"/>
 	<classpathentry kind="lib" path="lablib-checkboxtree-4.0-beta-1.jar"/>
 	<classpathentry kind="lib" path="jfxrt.jar"/>
+	<classpathentry kind="lib" path="poi-3.9-20121203.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

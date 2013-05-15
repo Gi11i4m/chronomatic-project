@@ -15,8 +15,11 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 public class Connection {
-        
+    
+	//Online server
     //private static final String server = "http://chronomatic-artesisti.rhcloud.com/ChronomaticServer/";
+    
+    // Lokale server
     private static final String server = "http://localhost:8080/ChronomaticServer/";
     
     
