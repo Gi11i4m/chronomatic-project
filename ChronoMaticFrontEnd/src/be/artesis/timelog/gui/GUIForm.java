@@ -160,7 +160,7 @@ public class GUIForm extends javax.swing.JFrame {
 
 			@Override
 			public void windowClosing(WindowEvent arg0) {
-				// sync();
+				sync();
 			}
 		});
 
@@ -916,7 +916,7 @@ public class GUIForm extends javax.swing.JFrame {
 		syncButton = new JButton("Sync");
 		syncButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				// sync();
+				sync();
 			}
 		});
 
