@@ -133,9 +133,6 @@ public class GUIForm extends javax.swing.JFrame {
 		jScrollPane3.setBounds(10, 40, 200, 360);
 		removeTaskJButton = new javax.swing.JButton();
 		removeTaskJButton.setBounds(10, 411, 200, 29);
-		scheduleJPanel = new javax.swing.JPanel();
-		scheduleJLabel = new javax.swing.JLabel();
-		scheduleJLabel.setBounds(10, 11, 66, 19);
 		optionsJPanel = new javax.swing.JPanel();
 		headerJPanel = new javax.swing.JPanel();
 		titleLabel = new javax.swing.JLabel();
@@ -374,7 +371,6 @@ public class GUIForm extends javax.swing.JFrame {
 		projectEditFieldsJPanel.add(saveProjectJButton, "2, 11, 5, 1, fill, top");
 
 		saveProjectJButton.setText("Save");
-		saveProjectJButton.setEnabled(false);
 
 		projectStatusFieldsJPanel = new JPanel();
 		projectStatusFieldsJPanel.setBackground(new Color(128, 128, 128));
@@ -517,7 +513,6 @@ public class GUIForm extends javax.swing.JFrame {
 			}
 		});
 		saveTaskJButton.setText("Save");
-		saveTaskJButton.setEnabled(false);
 		taskEditFieldsJPanel.add(saveTaskJButton, "6, 12, 7, 1, fill, top");
 
 		taskStatusFieldsJPanel = new JPanel();
@@ -648,16 +643,6 @@ public class GUIForm extends javax.swing.JFrame {
 
 		contentJTabbedPane.addTab("", new javax.swing.ImageIcon(getClass().getResource("/be/artesis/timelog/gui/icons/ClientsNeonIcon.png")), clientsJPanel, "Clients");
 
-		scheduleJPanel.setBackground(new Color(211, 211, 211));
-
-		scheduleJLabel.setFont(new java.awt.Font("Tw Cen MT", 1, 14));
-		scheduleJLabel.setForeground(Color.DARK_GRAY);
-		scheduleJLabel.setText("Schedule");
-
-		contentJTabbedPane.addTab("", new javax.swing.ImageIcon(getClass().getResource("/be/artesis/timelog/gui/icons/CalendarNeonIcon.png")), scheduleJPanel, "Schedule");
-		scheduleJPanel.setLayout(null);
-		scheduleJPanel.add(scheduleJLabel);
-
 		importExportJPanel = new JPanel();
 		importExportJPanel.setBackground(new Color(211, 211, 211));
 		contentJTabbedPane.addTab("", new ImageIcon(GUIForm.class.getResource("/be/artesis/timelog/gui/icons/ImportExportNeonIcon.png")), importExportJPanel, "Import / Export");
@@ -695,6 +680,14 @@ public class GUIForm extends javax.swing.JFrame {
 		});
 		exportJButton.setBounds(550, 11, 99, 23);
 		exportJPanel.add(exportJButton);
+
+		toExportProjectComboBox = new JComboBox();
+		toExportProjectComboBox.setBounds(419, 370, 230, 20);
+		exportJPanel.add(toExportProjectComboBox);
+
+		exportToExcelJButton = new JButton("Export project to Excel");
+		exportToExcelJButton.setBounds(419, 336, 230, 23);
+		exportJPanel.add(exportToExcelJButton);
 
 		importExportTabbedPane.setBackgroundAt(0, new Color(70, 130, 180));
 
@@ -1527,15 +1520,12 @@ public class GUIForm extends javax.swing.JFrame {
 				clearFieldsOnPanel(projectFieldsJPanel);
 				refreshClientsComboBox(null, projectClientsJComboBox);
 				toggleButtonStates(newSelected, setCurrentProjectJButton, removeProjectJButton);
-				toggleButtonStates(!newSelected, saveProjectJButton);
 				saveProjectJButton.setText("Save [new]");
 			} else {
 				loadProjectInfo(projectsJList.getSelectedIndex());
 				toggleButtonStates(newSelected, setCurrentProjectJButton, removeProjectJButton);
-				toggleButtonStates(!newSelected, saveProjectJButton);
 				saveProjectJButton.setText("Save");
 			}
-
 		}
 	}
 
@@ -1758,8 +1748,6 @@ public class GUIForm extends javax.swing.JFrame {
 	private javax.swing.JButton removeProjectJButton;
 	private javax.swing.JButton removeTaskJButton;
 	private javax.swing.JButton saveProjectJButton;
-	private javax.swing.JLabel scheduleJLabel;
-	private javax.swing.JPanel scheduleJPanel;
 	private javax.swing.JButton setCurrentProjectJButton;
 	private javax.swing.JLabel startdatecompJLabel;
 	private javax.swing.JLabel tasksJLabel;
@@ -1847,4 +1835,6 @@ public class GUIForm extends javax.swing.JFrame {
 	private JPanel projectStatusFieldsJPanel;
 	private JPanel taskStatusFieldsJPanel;
 	private JButton syncButton;
+	private JComboBox toExportProjectComboBox;
+	private JButton exportToExcelJButton;
 }
