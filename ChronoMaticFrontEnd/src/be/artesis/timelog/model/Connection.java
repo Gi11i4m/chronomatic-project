@@ -16,8 +16,8 @@ import org.json.JSONObject;
 
 public class Connection {
         
-    //private static final String server = "http://chronomatic-artesisti.rhcloud.com/ChronomaticServer/";
-    private static final String server = "http://localhost:8080/ChronomaticServer/";
+    private static final String server = "http://chronomatic-artesisti.rhcloud.com/ChronomaticServer/";
+    //private static final String server = "http://localhost:8080/ChronomaticServer/";
     
     public static URL normalize(String commando) throws MalformedURLException, UnsupportedEncodingException {
         return new URL((server + commando).replaceAll(" ", "%20"));
