@@ -18,6 +18,9 @@ import javax.swing.event.ChangeListener;
 import javax.swing.text.DefaultFormatter;
 
 import be.artesis.timelog.model.Validator;
+import be.artesis.timelog.model.WebserviceException;
+import be.artesis.timelog.view.DataInputException;
+import be.artesis.timelog.view.Taak;
 
 import com.toedter.calendar.JDateChooser;
 import javax.swing.JLabel;
@@ -27,21 +30,26 @@ import java.util.Date;
 
 import com.toedter.components.JSpinField;
 import javax.swing.SpinnerModel;
+
+import org.json.JSONException;
+
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.io.IOException;
 
 public class addTimeDialog extends JDialog {
 
 	private final JPanel contentPanel = new JPanel();
+	private Taak t;
 	private JLabel beginJLabel;
 	private JLabel endJLabel;
 	private JSpinner beginTimeSpinner;
 	private JSpinner endTimeSpinner;
 	private JLabel timeJLabel;
-	private Validator validator;
 	private final int MAX_LENGTH = 5;
+	private final Date now = new Date();
 	private JLabel dateJLabel;
 	private JDateChooser beginDateChooser;
 	private JDateChooser endDateChooser;
@@ -49,11 +57,11 @@ public class addTimeDialog extends JDialog {
 	/**
 	 * Create the dialog.
 	 */
-	public addTimeDialog(java.awt.Frame parent, boolean modal, Validator validator) {
+	public addTimeDialog(java.awt.Frame parent, boolean modal, Taak t) {
 		super(parent, modal);
 		setUndecorated(false);
 		setLocationRelativeTo(parent);
-		this.validator = validator;
+		this.t = t;
 		setBounds(100, 100, 500, 250);
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -71,6 +79,7 @@ public class addTimeDialog extends JDialog {
 		endJLabel.setFont(new Font("Tahoma", Font.BOLD, 13));
 		endJLabel.setBounds(318, 11, 51, 20);
 		contentPanel.add(endJLabel);
+		
 		beginTimeSpinner = new JSpinner(new SpinnerDateModel());
 		JSpinner.DateEditor timeEditor = new JSpinner.DateEditor(beginTimeSpinner, "HH:mm");
 		beginTimeSpinner.setEditor(timeEditor);
@@ -118,17 +127,17 @@ public class addTimeDialog extends JDialog {
 		contentPanel.add(dateJLabel);
 		
 		beginDateChooser = new JDateChooser();
-		beginDateChooser.setDate(new Date());
+		beginDateChooser.setDate(now);
 		beginDateChooser.setDateFormatString("dd/MM/yyyy");
-		beginDateChooser.setBounds(141, 42, 89, 20);
+		beginDateChooser.setBounds(141, 42, 100, 20);
 		contentPanel.add(beginDateChooser);
 		
 		endDateChooser = new JDateChooser();
+		endDateChooser.setDate(now);
 		endDateChooser.setDateFormatString("dd/MM/yyyy");
-		endDateChooser.setDate(new Date());
-		endDateChooser.setBounds(318, 42, 89, 20);
-		
+		endDateChooser.setBounds(328, 42, 100, 20);
 		contentPanel.add(endDateChooser);
+		
 		{
 			JPanel buttonPane = new JPanel();
 			buttonPane.setLayout(new FlowLayout(FlowLayout.RIGHT));
@@ -146,28 +155,39 @@ public class addTimeDialog extends JDialog {
 			}
 			{
 				JButton cancelButton = new JButton("Cancel");
+				cancelButton.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent arg0) {
+						cancelPressed();
+					}
+				});
 				cancelButton.setActionCommand("Cancel");
 				buttonPane.add(cancelButton);
 			}
 		}
-
-		JComponent comp = beginTimeSpinner.getEditor();
-		JFormattedTextField field = (JFormattedTextField) comp.getComponent(0);
-		DefaultFormatter formatter = (DefaultFormatter) field.getFormatter();
-		formatter.setCommitsOnValidEdit(true);
+	}
+	
+	public void cancelPressed(){
+		this.dispose();
 	}
 	
 	public void okPressed(){
-		long d1 = beginDateChooser.getDate().getTime() / 1000;
-		long d2 = endDateChooser.getDate().getTime() / 1000;
+		Date d1 = beginDateChooser.getDate();
+		Date d2 = endDateChooser.getDate();
 		
-		long t1 = (long) beginTimeSpinner.getValue();
-		long t2 = (long) beginTimeSpinner.getValue();
+		Date t1 = (Date) beginTimeSpinner.getValue();
+		Date t2 = (Date) endTimeSpinner.getValue();
 		
-		long begin = d1 + t1;
-		long end = d2 + t2;
+		//d1 += t1.getSeconds() + t1.getMinutes() * 60;
+		//d2 += t2.getSeconds() + t2.getMinutes() * 60;
 		
-		System.out.println(d1 + ", " + t1 + " = " + begin);
-		System.out.println(d2 + ", " + t2 + " = " + end);
+		System.out.println(now);
+		System.out.println(d1);
+		System.out.println(d2);
+		
+		//try {
+			//UserInterface.createTimespan(d1, d2, t, false);
+		//} catch (DataInputException | IOException | WebserviceException | JSONException e) {
+		//	JOptionPane.showMessageDialog(this, e.getMessage());
+		//}
 	}
 }

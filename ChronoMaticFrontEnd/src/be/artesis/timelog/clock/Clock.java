@@ -162,7 +162,7 @@ public class Clock {
         }
 
         if (output.equals("")) {
-            output = "0 seconds";
+            output = " -";
         }
 
         return output;
