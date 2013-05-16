@@ -21,7 +21,7 @@ CREATE  TABLE IF NOT EXISTS `chrono_matic`.`gebruikers` (
   `validated` TINYINT(1) NULL ,
   PRIMARY KEY (`ID`) )
 ENGINE = InnoDB
-AUTO_INCREMENT = 3
+AUTO_INCREMENT = 100
 DEFAULT CHARACTER SET = utf8
 COLLATE = utf8_unicode_ci;
 
