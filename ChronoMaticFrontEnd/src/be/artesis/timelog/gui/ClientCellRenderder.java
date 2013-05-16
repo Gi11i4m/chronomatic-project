@@ -10,8 +10,8 @@ import javax.swing.JList;
 import javax.swing.ListCellRenderer;
 
 import be.artesis.timelog.view.Opdrachtgever;
-import be.artesis.timelog.view.Project;
 
+@SuppressWarnings({ "serial", "rawtypes" })
 public class ClientCellRenderder extends JLabel implements ListCellRenderer {
 
 	private Opdrachtgever o;

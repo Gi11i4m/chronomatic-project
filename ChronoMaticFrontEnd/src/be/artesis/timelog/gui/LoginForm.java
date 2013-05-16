@@ -1,77 +1,54 @@
 package be.artesis.timelog.gui;
 
-import java.awt.Color;
 import java.awt.CardLayout;
+import java.awt.Color;
+import java.awt.Container;
 import java.awt.Cursor;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.HeadlessException;
 import java.awt.Toolkit;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
+import java.security.NoSuchAlgorithmException;
 
-import javax.imageio.ImageIO;
+import javafx.application.Platform;
+import javafx.embed.swing.JFXPanel;
+
 import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JCheckBox;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JPasswordField;
+import javax.swing.JTextField;
+import javax.xml.parsers.ParserConfigurationException;
 
-import be.artesis.timelog.controller.InserterLocal;
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.xml.sax.SAXException;
+
 import be.artesis.timelog.controller.InserterServer;
-import be.artesis.timelog.externAuth.*;
-import be.artesis.timelog.model.ExistingUsernames;
+import be.artesis.timelog.externAuth.AccessToken;
+import be.artesis.timelog.externAuth.AuthBrowser;
+import be.artesis.timelog.externAuth.Facebook;
+import be.artesis.timelog.externAuth.GetUserInfo;
+import be.artesis.timelog.externAuth.Google;
+import be.artesis.timelog.externAuth.Linkedin;
+import be.artesis.timelog.externAuth.Microsoft;
+import be.artesis.timelog.externAuth.SocialMedia;
 import be.artesis.timelog.model.CreatorFromJSON;
+import be.artesis.timelog.model.ExistingUsernames;
 import be.artesis.timelog.model.Validator;
 import be.artesis.timelog.model.WebserviceException;
 import be.artesis.timelog.secure.MD5Generator;
 import be.artesis.timelog.secure.WinRegistry;
-import be.artesis.timelog.view.DataInputException;
-import be.artesis.timelog.view.Gebruiker;
-import be.artesis.timelog.view.Opdrachtgever;
-import be.artesis.timelog.view.Project;
-import be.artesis.timelog.view.Taak;
-import java.awt.Color;
-import java.awt.HeadlessException;
-import java.io.File;
-import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
-import java.net.ConnectException;
-import java.net.MalformedURLException;
-import java.security.NoSuchAlgorithmException;
-
-import javax.swing.JOptionPane;
-import org.json.JSONException;
-import org.json.JSONObject;
-import org.xml.sax.SAXException;
-//
-import java.awt.Dimension;
-import java.awt.Point;
-
-import javafx.application.Platform;
-import javafx.embed.swing.JFXPanel;
-import javafx.scene.Group;
-import javafx.scene.Scene;
-import javafx.scene.web.WebEngine;
-import javafx.scene.web.WebView;
-import javax.swing.*;
-
-import javax.swing.JPanel;
-import javax.swing.border.Border;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
-import javax.xml.parsers.ParserConfigurationException;
-
-import java.awt.CardLayout;
-import java.awt.Container;
-import java.awt.event.ActionEvent;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
-import java.awt.Font;
-import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.awt.event.WindowEvent;
-import java.awt.event.WindowListener;
-import java.awt.image.BufferedImage;
-import org.eclipse.wb.swing.FocusTraversalOnArray;
-import java.awt.Component;
 
 public class LoginForm extends javax.swing.JFrame implements ActionListener {
-	@SuppressWarnings("unchecked")
 	private static final long serialVersionUID = 1L;
 	public Validator validator;
 	private SocialMedia social;
@@ -83,7 +60,7 @@ public class LoginForm extends javax.swing.JFrame implements ActionListener {
 	private JFXPanel browserPanel;
 	private JPanel newUserPanel;
 	private JPanel resetPassPanel;
-	
+
 	private JTextField usernameJTextField;
 	private JPasswordField passwordJPasswordField;
 	private JLabel usernameJLabel;
@@ -115,7 +92,7 @@ public class LoginForm extends javax.swing.JFrame implements ActionListener {
 		this.validator = validator;
 		this.setTitle("Chronomatic Login");
 		this.setSize(720, 520);
-		
+
 		// set dialog in center screen
 		final Toolkit toolkit = Toolkit.getDefaultToolkit();
 		final Dimension screenSize = toolkit.getScreenSize();
@@ -131,22 +108,22 @@ public class LoginForm extends javax.swing.JFrame implements ActionListener {
 		browserPanel = new JFXPanel();
 		newUserPanel = new NewUserPanel(this);
 		resetPassPanel = new ResetPasswordPanel(this);
-		
+
 		pane.add(basisPanel, "BASISPANEL");
 		pane.add(browserPanel, "BROWSERPANEL");
 		pane.add(newUserPanel, "NEWUSERPANEL");
 		pane.add(resetPassPanel, "RESETPASSPANEL");
 
 		initComponents();
-		
+
 	}
 
 	public void displayTab(String name) {
 		layout.show(pane, name);
 	}
-	
+
 	public void login(String username, String password) {
-		
+
 		try {
 			this.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
 			// Maak key in registry
@@ -163,19 +140,19 @@ public class LoginForm extends javax.swing.JFrame implements ActionListener {
         		}
             	this.setVisible(false);
 
-                parent.setVisible(true);
-            } else {
+				parent.setVisible(true);
+			} else {
 
-            }
+			}
 		} catch (HeadlessException | IOException | JSONException | WebserviceException | IllegalArgumentException | IllegalAccessException | InvocationTargetException e) {
 			e.printStackTrace();
 			JOptionPane.showMessageDialog(this, "Error! We have no clue what's wrong. \nJust go play outside and wait for a while");
 		} finally {
-			  this.setCursor(Cursor.getDefaultCursor());
+			this.setCursor(Cursor.getDefaultCursor());
 		}
 
 	}
-	
+
 	public void generateLoginExtern(String accessToken) {
 		JSONObject userInfoJSONObj = null;
 		try {
@@ -183,9 +160,9 @@ public class LoginForm extends javax.swing.JFrame implements ActionListener {
 			if (!social.toString().equals("facebook")) {
 				accessToken = AccessToken.request(accessToken, social);
 			}
-				userInfoJSONObj = GetUserInfo.request(accessToken, social);
+			userInfoJSONObj = GetUserInfo.request(accessToken, social);
 
-				loginExtern(userInfoJSONObj);
+			loginExtern(userInfoJSONObj);
 		} catch (IOException | JSONException | ParserConfigurationException | SAXException e) {
 			e.printStackTrace();
 		}
@@ -195,10 +172,10 @@ public class LoginForm extends javax.swing.JFrame implements ActionListener {
 		try {
 			// Maak key
 			WinRegistry.createKey(WinRegistry.HKEY_CURRENT_USER, "SOFTWARE\\ChronoMatic");
-			
+
 			String email = userInfoJSONObj.getString("email");
 			// als gebruiker nog niet bestaat..
-			
+
 			if (!ExistingUsernames.check(email, email)) {
 				InserterServer.CreateUserExtern(userInfoJSONObj.getString("naam"), userInfoJSONObj.getString("voornaam"), email);
 			}
@@ -232,28 +209,21 @@ public class LoginForm extends javax.swing.JFrame implements ActionListener {
 		//clockJLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/be/artesis/timelog/gui/icons/ClockNeonIcon.png")));
 
 		ImageIcon lijntjeBrowser = new ImageIcon();
-		lijntjeBrowser = new ImageIcon(Toolkit.getDefaultToolkit().getImage(
-				getClass().getResource("/be/artesis/timelog/gui/icons/lijntje.png")));
+		lijntjeBrowser = new ImageIcon(Toolkit.getDefaultToolkit().getImage(getClass().getResource("/be/artesis/timelog/gui/icons/lijntje.png")));
 		JLabel lijntjeBrowserJLabel = new JLabel(lijntjeBrowser);
 		lijntjeBrowserJLabel.setBounds(0, 450, 715, 5);
 		browserPanel.add(lijntjeBrowserJLabel);
-		
+
 		//logo
-		logo = new ImageIcon(Toolkit.getDefaultToolkit().getImage(
-				getClass().getResource("/be/artesis/timelog/gui/icons/logo.png")));
-		
+		logo = new ImageIcon(Toolkit.getDefaultToolkit().getImage(getClass().getResource("/be/artesis/timelog/gui/icons/logo.png")));
+
 		// socialmedia icons
-		googleIcon = new ImageIcon(Toolkit.getDefaultToolkit().getImage(
-				getClass().getResource("/be/artesis/timelog/gui/icons/google.png")));
-		facebookIcon = new ImageIcon(Toolkit.getDefaultToolkit().getImage(
-				getClass().getResource("/be/artesis/timelog/gui/icons/facebook.png")));
-		microsoftIcon = new ImageIcon(Toolkit.getDefaultToolkit().getImage(
-				getClass().getResource("/be/artesis/timelog/gui/icons/microsoft.png")));
+		googleIcon = new ImageIcon(Toolkit.getDefaultToolkit().getImage(getClass().getResource("/be/artesis/timelog/gui/icons/google.png")));
+		facebookIcon = new ImageIcon(Toolkit.getDefaultToolkit().getImage(getClass().getResource("/be/artesis/timelog/gui/icons/facebook.png")));
+		microsoftIcon = new ImageIcon(Toolkit.getDefaultToolkit().getImage(getClass().getResource("/be/artesis/timelog/gui/icons/microsoft.png")));
 		//twitterIcon = new ImageIcon(Toolkit.getDefaultToolkit().getImage(
 		//		getClass().getResource("/be/artesis/timelog/gui/icons/twitter.png")));
-		linkedinIcon = new ImageIcon(Toolkit.getDefaultToolkit().getImage(
-				getClass().getResource("/be/artesis/timelog/gui/icons/linkedin.png")));
-
+		linkedinIcon = new ImageIcon(Toolkit.getDefaultToolkit().getImage(getClass().getResource("/be/artesis/timelog/gui/icons/linkedin.png")));
 
 		// initialize fields
 		usernameJLabel = new JLabel("Username:");
@@ -278,7 +248,7 @@ public class LoginForm extends javax.swing.JFrame implements ActionListener {
 		//twitterJButton.setName("twitter");
 		autoLoginInternCheckBox = new JCheckBox("Sign me in when Chronomatic starts");
 		autoLoginExternCheckBox = new JCheckBox("Login automatically");
-		
+
 		usernameJLabel.setBounds(31, 124, 138, 16);
 		paswoordJLabel.setBounds(31, 227, 138, 16);
 		aanmeldenButton.setBounds(31, 347, 107, 25);
@@ -296,14 +266,14 @@ public class LoginForm extends javax.swing.JFrame implements ActionListener {
 		//twitterJButton.setBounds(493, 334, 48, 48);
 		autoLoginInternCheckBox.setBounds(27, 283, 300, 25);
 		autoLoginExternCheckBox.setBounds(450, 456, 200, 25);
-		
+
 		// Backgrounds socialmedia buttons
 		googleJButton.setBackground(Color.WHITE);
 		facebookJButton.setBackground(Color.WHITE);
 		microsoftJButton.setBackground(Color.WHITE);
 		linkedinJButton.setBackground(Color.WHITE);
 		autoLoginInternCheckBox.setBackground(Color.WHITE);
-		
+
 		// set label fonts
 		browserGoBackButtonJLabel.setFont(new Font("Tahoma", Font.BOLD, 14));
 		socialMediaJLabel.setFont(new Font("Tahoma", Font.PLAIN, 16));
@@ -341,10 +311,9 @@ public class LoginForm extends javax.swing.JFrame implements ActionListener {
 		try {
 			aanmeldenButton.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent evt) {
-					
+
 					try {
-						MD5Generator MD5 = new MD5Generator();
-						login(usernameJTextField.getText(), MD5.gen(new String(passwordJPasswordField.getPassword())));
+						login(usernameJTextField.getText(), MD5Generator.gen(new String(passwordJPasswordField.getPassword())));
 					} catch (NoSuchAlgorithmException e) {
 						e.printStackTrace();
 					}
@@ -353,7 +322,7 @@ public class LoginForm extends javax.swing.JFrame implements ActionListener {
 		} catch (Exception e) {
 
 			e.printStackTrace();
-		} finally {		
+		} finally {
 		}
 		browserGoBackButtonJLabel.addMouseListener(new java.awt.event.MouseAdapter() {
 			public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -365,6 +334,7 @@ public class LoginForm extends javax.swing.JFrame implements ActionListener {
 				JLabel l = (JLabel) e.getSource();
 				l.setForeground(Color.BLUE);
 			}
+
 			@Override
 			public void mouseExited(MouseEvent e) {
 				JLabel l = (JLabel) e.getSource();
@@ -376,37 +346,41 @@ public class LoginForm extends javax.swing.JFrame implements ActionListener {
 			public void mouseClicked(java.awt.event.MouseEvent evt) {
 				displayTab("NEWUSERPANEL");
 			}
+
 			@Override
 			public void mouseEntered(MouseEvent e) {
 				JLabel l = (JLabel) e.getSource();
 				l.setForeground(Color.BLUE);
 			}
+
 			@Override
 			public void mouseExited(MouseEvent e) {
 				JLabel l = (JLabel) e.getSource();
 				l.setForeground(Color.BLACK);
 			}
 		});
-		
+
 		resetPassJLabel.addMouseListener(new java.awt.event.MouseAdapter() {
 			public void mouseClicked(java.awt.event.MouseEvent evt) {
 				displayTab("RESETPASSPANEL");
 			}
+
 			@Override
 			public void mouseEntered(MouseEvent e) {
 				JLabel l = (JLabel) e.getSource();
 				l.setForeground(Color.BLUE);
 			}
+
 			@Override
 			public void mouseExited(MouseEvent e) {
 				JLabel l = (JLabel) e.getSource();
 				l.setForeground(Color.BLACK);
 			}
-			
+
 		});
-		
+
 	}
-	
+
 	private void browserGoBackButtonJLabelClicked() {
 		this.setCursor(Cursor.getDefaultCursor());
 		Platform.exit();

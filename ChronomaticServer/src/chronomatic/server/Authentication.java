@@ -1,22 +1,21 @@
 package chronomatic.server;
 
+import java.math.BigInteger;
+import java.security.SecureRandom;
+import java.sql.Connection;
+import java.sql.ResultSet;
+
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
-import java.security.NoSuchAlgorithmException;
-import java.security.SecureRandom;
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.util.Random;
-import java.math.BigInteger;
-import chronomatic.database.*;
-import chronomatic.email.MailLostPassword;
-import chronomatic.email.Mailer;
+import org.json.JSONObject;
+import org.json.ResultsetConverter;
 
-import org.json.*;
+import chronomatic.database.Database;
+import chronomatic.database.DatabaseContainer;
 
 @Path("auth/")
 public class Authentication {

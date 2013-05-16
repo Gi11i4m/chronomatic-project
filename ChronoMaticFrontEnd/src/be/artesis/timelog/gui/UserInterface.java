@@ -315,7 +315,7 @@ public class UserInterface {
 		}
 	}
 	public static void reloadUserData(){
-		setUser(null);
+		setUser(null);		
 		loadUserData();
 	}
 	

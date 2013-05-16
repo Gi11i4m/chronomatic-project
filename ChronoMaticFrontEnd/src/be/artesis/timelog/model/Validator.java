@@ -1,11 +1,9 @@
 package be.artesis.timelog.model;
 
 import java.io.IOException;
-import java.security.NoSuchAlgorithmException;
+
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import be.artesis.timelog.secure.MD5Generator;
 
 public class Validator
 {

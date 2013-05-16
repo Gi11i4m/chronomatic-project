@@ -11,6 +11,8 @@ public class Opdrachtgever implements Cloneable{
     private String bedrijfsnaam;
     private String email;
     private String telefoonnummer;
+	private String straat;
+    private String plaats;
     private int id;
 
     //================================================================================
@@ -98,6 +100,26 @@ public class Opdrachtgever implements Cloneable{
             throw new DataInputException("Phone number empty or contains illegal characters");
         }
     }
+    
+    public String getStraat() {
+		return straat;
+	}
+
+	public void setStraat(String straat) {
+		this.straat = straat;
+	}
+
+	public String getPlaats() {
+		return plaats;
+	}
+
+	public void setPlaats(String plaats) {
+		this.plaats = plaats;
+	}
+	
+	public String getAdres(){
+		return straat + ", " + plaats;
+	}
 
     public int getID() {
         return id;
