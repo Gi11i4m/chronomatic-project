@@ -16,6 +16,10 @@ public class Gebruiker {
 	private String telefoonnummer;
 	private String straat;
 	private String plaats;
+	private String VAT;
+	private String companyName;
+	private String IBAN;
+	private String BIC;
 	private int id;
 	private ArrayList<Project> projects;
 	private ArrayList<Opdrachtgever> opdrachtgevers;
@@ -135,6 +139,38 @@ public class Gebruiker {
 	
 	public String getAdres(){
 		return straat + ", " + plaats;
+	}
+
+	public String getVAT() {
+		return VAT;
+	}
+
+	public void setVAT(String vAT) {
+		VAT = vAT;
+	}
+
+	public String getCompanyName() {
+		return companyName;
+	}
+
+	public void setCompanyName(String companyName) {
+		this.companyName = companyName;
+	}
+
+	public String getIBAN() {
+		return IBAN;
+	}
+
+	public void setIBAN(String iBAN) {
+		IBAN = iBAN;
+	}
+
+	public String getBIC() {
+		return BIC;
+	}
+
+	public void setBIC(String bIC) {
+		BIC = bIC;
 	}
 
 	public int getID() {

@@ -803,24 +803,24 @@ public class GUIForm extends JFrame {
 		emailJLabel.setBounds(36, 150, 69, 14);
 		userSettingsJPanel.add(emailJLabel);
 
-		addressJTextField = new JTextField();
-		addressJTextField.setBounds(115, 178, 152, 20);
-		userSettingsJPanel.add(addressJTextField);
-		addressJTextField.setColumns(10);
+		streetJTextField = new JTextField();
+		streetJTextField.setBounds(115, 209, 152, 20);
+		userSettingsJPanel.add(streetJTextField);
+		streetJTextField.setColumns(10);
 
-		addressJLabel = new JLabel("Address");
-		addressJLabel.setForeground(Color.WHITE);
-		addressJLabel.setBounds(36, 181, 69, 14);
-		userSettingsJPanel.add(addressJLabel);
+		streetJLabel = new JLabel("Street");
+		streetJLabel.setForeground(Color.WHITE);
+		streetJLabel.setBounds(36, 212, 69, 14);
+		userSettingsJPanel.add(streetJLabel);
 
 		telephoneJTextField = new JTextField();
-		telephoneJTextField.setBounds(115, 209, 152, 20);
+		telephoneJTextField.setBounds(115, 178, 152, 20);
 		userSettingsJPanel.add(telephoneJTextField);
 		telephoneJTextField.setColumns(10);
 
 		lblTelephone = new JLabel("Telephone");
 		lblTelephone.setForeground(Color.WHITE);
-		lblTelephone.setBounds(36, 212, 69, 14);
+		lblTelephone.setBounds(36, 181, 69, 14);
 		userSettingsJPanel.add(lblTelephone);
 
 		personalInfoJLabel = new JLabel("Personal info");
@@ -831,7 +831,7 @@ public class GUIForm extends JFrame {
 		userSettingsJPanel.add(personalInfoJLabel);
 
 		vatJTextField = new JTextField();
-		vatJTextField.setBounds(420, 84, 171, 20);
+		vatJTextField.setBounds(430, 84, 171, 20);
 		userSettingsJPanel.add(vatJTextField);
 		vatJTextField.setColumns(10);
 
@@ -846,12 +846,12 @@ public class GUIForm extends JFrame {
 		userSettingsJPanel.add(ibanJLabel);
 
 		ibanJTextField = new JTextField();
-		ibanJTextField.setBounds(420, 115, 171, 20);
+		ibanJTextField.setBounds(430, 115, 171, 20);
 		userSettingsJPanel.add(ibanJTextField);
 		ibanJTextField.setColumns(10);
 
 		bicJTextField = new JTextField();
-		bicJTextField.setBounds(420, 147, 171, 20);
+		bicJTextField.setBounds(430, 147, 171, 20);
 		userSettingsJPanel.add(bicJTextField);
 		bicJTextField.setColumns(10);
 
@@ -873,10 +873,17 @@ public class GUIForm extends JFrame {
 				String firstName = firstNameJTextField.getText();
 				String lastName = lastNameJTextField.getText();
 				String email = emailJTextField.getText();
-				updateUser(firstName, lastName, email);
+				String telephonenr = telephoneJTextField.getText();
+				String street = streetJTextField.getText();
+				String location = LocationJTextField.getText();
+				String companyName = companyNameJTextField.getText();
+				String VAT = vatJTextField.getText();
+				String IBAN = ibanJTextField.getText();
+				String BIC = bicJTextField.getText();
+				updateUser(firstName, lastName, email, telephonenr, street, location, companyName, VAT, IBAN, BIC);
 			}
 		});
-		updateUserJButton.setBounds(115, 297, 116, 23);
+		updateUserJButton.setBounds(115, 332, 116, 23);
 		userSettingsJPanel.add(updateUserJButton);
 
 		usernameJTextField = new JTextField();
@@ -897,8 +904,18 @@ public class GUIForm extends JFrame {
 
 		companyNameJTextField = new JTextField();
 		companyNameJTextField.setColumns(10);
-		companyNameJTextField.setBounds(420, 53, 171, 20);
+		companyNameJTextField.setBounds(430, 53, 171, 20);
 		userSettingsJPanel.add(companyNameJTextField);
+		
+		LocationJTextField = new JTextField();
+		LocationJTextField.setColumns(10);
+		LocationJTextField.setBounds(115, 240, 152, 20);
+		userSettingsJPanel.add(LocationJTextField);
+		
+		locationJTextField = new JLabel("Location");
+		locationJTextField.setForeground(Color.WHITE);
+		locationJTextField.setBounds(36, 243, 69, 14);
+		userSettingsJPanel.add(locationJTextField);
 		optionsJPanel.setLayout(optionsJPanelLayout);
 
 		contentJTabbedPane.addTab("", new javax.swing.ImageIcon(getClass().getResource("/be/artesis/timelog/gui/icons/SettingsNeonIcon.png")), optionsJPanel, "Settings");
@@ -1003,9 +1020,9 @@ public class GUIForm extends JFrame {
 	 */
 
 	//TODO resterende info updaten
-	private void updateUser(String firstName, String lastName, String email) {
+	private void updateUser(String firstName, String lastName, String email, String telephonenr, String street, String location, String companyName, String VAT, String IBAN, String BIC) {
 		try {
-			UserInterface.updateUser(firstName, lastName, email);
+			UserInterface.updateUser(firstName, lastName, email, telephonenr, street, location, companyName, VAT, IBAN, BIC);
 			showGUIMessage("User information updated!", false);
 			loadUserInfo();
 		} catch (DataInputException | IOException | WebserviceException e) {
@@ -1458,8 +1475,12 @@ public class GUIForm extends JFrame {
 		try {
 			LocalDatabaseSynch lds = new LocalDatabaseSynch(Validator.getInstance());
 			lds.synch();
-			// LoginForm.loadUserData();
-		} catch (JSONException | IOException | WebserviceException | DataInputException e) {
+			UserInterface.reloadUserData();
+			refreshProjectsList(homeProjectsJList,projectsJList);
+			refreshTasksList(UserInterface.getCurrentProject(), homeTasksJList,tasksJList);
+			refreshClientsList(clientsJList);			
+			
+		} catch (JSONException | IOException | WebserviceException | DataInputException | GUIException e) {
 			e.printStackTrace();
 			showGUIMessage(e.getMessage(), true);
 		}
@@ -2048,8 +2069,8 @@ public class GUIForm extends JFrame {
 	private JLabel firstNameJLabel;
 	private JLabel lastNameJLabel;
 	private JLabel emailJLabel;
-	private JTextField addressJTextField;
-	private JLabel addressJLabel;
+	private JTextField streetJTextField;
+	private JLabel streetJLabel;
 	private JTextField telephoneJTextField;
 	private JLabel lblTelephone;
 	private JLabel personalInfoJLabel;
@@ -2078,4 +2099,6 @@ public class GUIForm extends JFrame {
 	private JComboBox toExportProjectJComboBox;
 	private JButton exportToExcelJButton;
 	private JLabel errorJLabel;
+	private JTextField LocationJTextField;
+	private JLabel locationJTextField;
 }
