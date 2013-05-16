@@ -161,7 +161,7 @@ public class GUIForm extends javax.swing.JFrame {
 
 			@Override
 			public void windowClosing(WindowEvent arg0) {
-				sync();
+				//sync();
 			}
 		});
 
