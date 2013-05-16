@@ -10,6 +10,7 @@ import org.json.JSONException;
 import be.artesis.timelog.controller.DeleterLocal;
 import be.artesis.timelog.controller.InserterLocal;
 import be.artesis.timelog.controller.UpdaterLocal;
+import be.artesis.timelog.model.CreatorFromJSON;
 import be.artesis.timelog.model.Validator;
 import be.artesis.timelog.model.WebserviceException;
 import be.artesis.timelog.view.*;
@@ -311,4 +312,40 @@ public class UserInterface {
 		DeleterLocal.deleteTijdSpanne(ts);
 		t.getGewerkteTijd().remove(ts);
 	}
+	
+	public static void loadUserData() {
+		try {
+			setUser(CreatorFromJSON.createGebruiker(validator.getSessionKey()));
+			getUser().setProjects(CreatorFromJSON.createProjecten(validator.getSessionKey()));
+			
+			if(getUser().getProject(0) != null) {
+				getUser().setOpdrachtgevers(CreatorFromJSON.createOpdrachtgevers(validator.getSessionKey()));
+				
+				for (int i = 0; i < getUser().getProjects().size(); i++) {
+					getUser().getProject(i).addTaken(CreatorFromJSON.createTaken(validator.getSessionKey(), UserInterface.getUser().getProject(i).getId()));
+				}
+	
+				for (int i = 0; i < getUser().getProjects().size(); i++) {
+					for (int j = 0; j < getUser().getProject(i).getTaken().size(); j++) {
+						getUser().getProject(i).getTaak(j).addTotaleTijd(CreatorFromJSON.createTijdspannes(validator.getSessionKey(), UserInterface.getUser().getProject(i).getTaak(j).getID(), false));
+						getUser().getProject(i).getTaak(j).addTotaleTijd(CreatorFromJSON.createTijdspannes(validator.getSessionKey(), UserInterface.getUser().getProject(i).getTaak(j).getID(), true));
+						getUser().getProject(i).getTaak(j).getGewerkteTijd();
+					}
+				}
+			}
+		} catch (JSONException | IOException e) {
+			e.printStackTrace();
+		}
+	}
+	public static void reloadUserData(){
+		setUser(null);		
+		loadUserData();
+	}
+	
+	
+	
+	
+    // Code verplaatst vanwege verwijderde methode
+    // Taak taak = Creator.createTaak();
+    // Inserter.inputTaak(validator.getSessionKey(), t);
 }

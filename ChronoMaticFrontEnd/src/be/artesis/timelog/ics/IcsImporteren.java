@@ -89,14 +89,5 @@ public class IcsImporteren {
 		long lEind = (cEind.getTimeInMillis() /1000) +21600;
 		
 		return new Taak(vevent.getSummary().getValue(),lBegin,lEind,vevent.getDescription().getValue());
-		
-		//return null;
 	}
-
 }
-
-
-
-
-
-

@@ -21,7 +21,7 @@ public class DatabaseContainer {
 	// Lokale server
 	private static String host = "127.0.0.1";
 	private static String user = "root";
-	private static String password = "";
+	private static String password = "root";
 	private static String db_name = "chrono_matic";
 	
 	
