@@ -13,6 +13,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.WindowEvent;
+import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.net.MalformedURLException;
@@ -59,11 +60,14 @@ import net.fortuna.ical4j.data.ParserException;
 import net.fortuna.ical4j.model.ValidationException;
 
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import be.artesis.timelog.clock.Clock;
 import be.artesis.timelog.ics.IcsExporteren;
 import be.artesis.timelog.ics.IcsImporteren;
+import be.artesis.timelog.lokaleopslag.LocalDatabaseReader;
 import be.artesis.timelog.lokaleopslag.LocalDatabaseSynch;
+import be.artesis.timelog.lokaleopslag.LocalDatabaseWriter;
 import be.artesis.timelog.model.Validator;
 import be.artesis.timelog.model.WebserviceException;
 import be.artesis.timelog.secure.WinRegistry;
@@ -925,8 +929,19 @@ public class GUIForm extends JFrame {
 		syncButton = new JButton("Sync");
 		syncButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				showGUIMessage("Test", true);
-				// sync();
+				File file = new File( LocalDatabaseWriter.URL);
+				if(file.isDirectory()){
+					if(file.list().length == 0){
+						showGUIMessage("There is no new localdata te synchronise", false);
+					}else{
+						sync();
+						showGUIMessage("Synchronisation succesfull", false);
+					}
+					
+				}else{
+					showGUIMessage("the hardcoded url in the class localdatabasewriter is(no longer) a directory, contact the developer", true);
+					//geen directory (wat niet zou mogen kunnen)
+				}
 			}
 		});
 
@@ -1425,7 +1440,8 @@ public class GUIForm extends JFrame {
 		try {
 			LocalDatabaseSynch lds = new LocalDatabaseSynch(Validator.getInstance());
 			lds.synch();
-		} catch (JSONException | IOException | WebserviceException e) {
+			LoginForm.loadUserData();
+		} catch (JSONException | IOException | WebserviceException | DataInputException e) {
 			e.printStackTrace();
 			showGUIMessage(e.getMessage(), true);
 		}

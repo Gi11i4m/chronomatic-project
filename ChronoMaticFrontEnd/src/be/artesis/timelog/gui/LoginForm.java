@@ -222,7 +222,7 @@ public class LoginForm extends javax.swing.JFrame implements ActionListener {
 		}
 	}
 
-	private void loadUserData() {
+	public void loadUserData() {
 		try {
 			UserInterface.setUser(CreatorFromJSON.createGebruiker(validator.getSessionKey()));
 			UserInterface.getUser().setProjects(CreatorFromJSON.createProjecten(validator.getSessionKey()));
