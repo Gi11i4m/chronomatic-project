@@ -17,6 +17,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.GregorianCalendar;
 
 public class Excel {
@@ -114,9 +115,8 @@ public class Excel {
 		cell.setCellValue("2000 Antwerpen");
 		
 		//// Gegevens op FACTUUR lijn
-		Calendar now = GregorianCalendar.getInstance();
-		now.set(Calendar.HOUR_OF_DAY, 0);
-		System.out.println(now.getTime());
+		Date date = new Date();
+		System.out.println(date);
 		//datum
 		row = sheet.createRow(6);
 		cell = row.createCell(5);
@@ -238,11 +238,6 @@ public class Excel {
 		cell.setCellFormula("SUM(F"+ cellnum1 +":F"+ cellnum2 +")");
 		cell.setCellStyle(styleeuro);
 		//
-				
-				
-		
-		Cell brutoCell;
-		Cell handerkortingCell;
 		
 		file.close();
 	    //
