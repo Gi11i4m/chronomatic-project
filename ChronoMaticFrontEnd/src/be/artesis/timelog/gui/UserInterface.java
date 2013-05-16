@@ -127,7 +127,7 @@ public class UserInterface {
     // Create + update methods
     //================================================================================
     
-    public static void updateUser(String firstName, String lastName, String email)
+    public static void updateUser(String firstName, String lastName, String email, String telephonenr, String street, String location, String companyName, String VAT, String IBAN, String BIC)
     		throws DataInputException, MalformedURLException, IOException, WebserviceException{
     	Gebruiker u = (Gebruiker) getUser().clone();
     	u.setVoornaam(firstName);
@@ -215,6 +215,12 @@ public class UserInterface {
 			throw e;
 		}
 		return t;
+	}
+	
+	public static void createTasks(ArrayList<Taak> taken, int pId) throws DataInputException, ParseException, GUIException, IOException, WebserviceException, JSONException{
+		for (Taak taak : taken) {
+			createTask(taak.getNaam(), taak.getBegindatum(), taak.getGeschatteEinddatum(), taak.getCommentaar(), taak.getCompleted(), pId);
+		}
 	}
 	
 	public static void updateTask(int index, String name, long startdate, long enddate, String comment, boolean completed,int pId)

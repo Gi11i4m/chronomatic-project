@@ -872,7 +872,14 @@ public class GUIForm extends JFrame {
 				String firstName = firstNameJTextField.getText();
 				String lastName = lastNameJTextField.getText();
 				String email = emailJTextField.getText();
-				updateUser(firstName, lastName, email);
+				String telephonenr = telephoneJTextField.getText();
+				String street = streetJTextField.getText();
+				String location = LocationJTextField.getText();
+				String companyName = companyNameJTextField.getText();
+				String VAT = vatJTextField.getText();
+				String IBAN = ibanJTextField.getText();
+				String BIC = bicJTextField.getText();
+				updateUser(firstName, lastName, email, telephonenr, street, location, companyName, VAT, IBAN, BIC);
 			}
 		});
 		updateUserJButton.setBounds(115, 332, 116, 23);
@@ -1011,9 +1018,9 @@ public class GUIForm extends JFrame {
 	 */
 
 	//TODO resterende info updaten
-	private void updateUser(String firstName, String lastName, String email) {
+	private void updateUser(String firstName, String lastName, String email, String telephonenr, String street, String location, String companyName, String VAT, String IBAN, String BIC) {
 		try {
-			UserInterface.updateUser(firstName, lastName, email);
+			UserInterface.updateUser(firstName, lastName, email, telephonenr, street, location, companyName, VAT, IBAN, BIC);
 			showGUIMessage("User information updated!", false);
 			loadUserInfo();
 		} catch (DataInputException | IOException | WebserviceException e) {
