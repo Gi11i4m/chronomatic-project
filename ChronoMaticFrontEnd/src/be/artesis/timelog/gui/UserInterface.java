@@ -216,9 +216,26 @@ public class UserInterface {
 		return t;
 	}
 	
-	public static void createTasks(ArrayList<Taak> taken, int pId) throws DataInputException, ParseException, GUIException, IOException, WebserviceException, JSONException{
+	public static void createTasks(ArrayList<Taak> taken, Project p) throws DataInputException, ParseException, GUIException, IOException, WebserviceException, JSONException{
 		for (Taak taak : taken) {
-			createTask(taak.getNaam(), taak.getBegindatum(), taak.getGeschatteEinddatum(), taak.getCommentaar(), taak.getCompleted(), pId);
+			Taak t = new Taak();
+			t.setNaam(taak.getNaam());
+			t.setBegindatum(taak.getBegindatum());
+			t.setGeschatteEinddatum(taak.getGeschatteEinddatum());
+			String comment = taak.getCommentaar();
+			if ("".equals(comment)) {
+				comment = " ";
+			}
+			t.setCommentaar(comment);
+	        t.setCompleted(taak.getCompleted());
+	        //Send to Database
+	        p.addTaak(t);
+	        try {
+				t.setId((InserterLocal.inputTaak(t, p.getId())));
+			} catch (IOException | WebserviceException | JSONException e) {
+				getCurrentProject().removeTaak(t);
+				throw e;
+			}
 		}
 	}
 	
