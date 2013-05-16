@@ -49,6 +49,7 @@ import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 import javax.swing.border.BevelBorder;
+import javax.swing.border.LineBorder;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -63,6 +64,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import be.artesis.timelog.clock.Clock;
+import be.artesis.timelog.excel.Excel;
 import be.artesis.timelog.ics.IcsExporteren;
 import be.artesis.timelog.ics.IcsImporteren;
 import be.artesis.timelog.lokaleopslag.LocalDatabaseReader;
@@ -82,6 +84,7 @@ import com.jgoodies.forms.factories.FormFactory;
 import com.jgoodies.forms.layout.ColumnSpec;
 import com.jgoodies.forms.layout.FormLayout;
 import com.jgoodies.forms.layout.RowSpec;
+import com.sun.javafx.scene.layout.region.Border;
 import com.toedter.calendar.JDateChooser;
 
 import eu.floraresearch.lablib.gui.checkboxtree.CheckboxTree;
@@ -119,7 +122,7 @@ public class GUIForm extends JFrame {
 		homeJLabel.setBounds(10, 11, 62, 16);
 		workJButton = new javax.swing.JButton();
 		workJButton.setToolTipText("Open a work dialog and start timing your work");
-		workJButton.setBounds(10, 11, 675, 64);
+		workJButton.setBounds(231, 11, 230, 64);
 		projectsJPanel = new javax.swing.JPanel();
 		projectsJLabel = new javax.swing.JLabel();
 		projectsJLabel.setBackground(new Color(70, 130, 180));
@@ -178,12 +181,23 @@ public class GUIForm extends JFrame {
 		homeJLabel.setText("Home");
 
 		workJButton.setBackground(Color.DARK_GRAY);
+		workJButton.setBorder(new BevelBorder(BevelBorder.RAISED));
 		workJButton.setFont(new java.awt.Font("Tahoma", 1, 18));
 		workJButton.setForeground(new java.awt.Color(204, 204, 204));
-		workJButton.setText("Work");
+		workJButton.setText("Start working");
 		workJButton.addMouseListener(new java.awt.event.MouseAdapter() {
 			public void mouseClicked(java.awt.event.MouseEvent evt) {
 				openWorkDialog();
+			}
+
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				workJButton.setBackground(Color.GRAY);
+			}
+
+			@Override
+			public void mouseExited(MouseEvent e) {
+				workJButton.setBackground(Color.DARK_GRAY);
 			}
 		});
 
@@ -690,11 +704,16 @@ public class GUIForm extends JFrame {
 		exportJButton.setBounds(550, 11, 99, 23);
 		exportJPanel.add(exportJButton);
 
-		toExportProjectComboBox = new JComboBox();
-		toExportProjectComboBox.setBounds(419, 370, 230, 20);
-		exportJPanel.add(toExportProjectComboBox);
+		toExportProjectJComboBox = new JComboBox();
+		toExportProjectJComboBox.setBounds(419, 370, 230, 20);
+		exportJPanel.add(toExportProjectJComboBox);
 
 		exportToExcelJButton = new JButton("Export project to Excel");
+		exportToExcelJButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				exportProjectToExcel();
+			}
+		});
 		exportToExcelJButton.setBounds(419, 336, 230, 23);
 		exportJPanel.add(exportToExcelJButton);
 
@@ -945,19 +964,19 @@ public class GUIForm extends JFrame {
 			}
 		});
 
-		errorJLabel = new JLabel("");
-		errorJLabel.setMaximumSize(new Dimension(348, 0));
-		errorJLabel.setFont(new Font("Tahoma", Font.BOLD, 11));
-		errorJLabel.setHorizontalAlignment(SwingConstants.CENTER);
-		errorJLabel.setBackground(Color.WHITE);
+		errorJLabel = new JLabel();
 		errorJLabel.setOpaque(true);
+		errorJLabel.setName("");
+		errorJLabel.setHorizontalAlignment(SwingConstants.CENTER);
+		errorJLabel.setForeground(new Color(0, 204, 204));
+		errorJLabel.setFont(new Font("Tahoma", Font.BOLD, 11));
 		errorJLabel.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.LOWERED));
-		errorJLabel.setForeground(Color.RED);
+		errorJLabel.setBackground(Color.WHITE);
 		errorJLabel.setVisible(false);
 
 		javax.swing.GroupLayout headerJPanelLayout = new javax.swing.GroupLayout(headerJPanel);
-		headerJPanelLayout.setHorizontalGroup(headerJPanelLayout.createParallelGroup(Alignment.TRAILING).addGroup(headerJPanelLayout.createSequentialGroup().addContainerGap().addGroup(headerJPanelLayout.createParallelGroup(Alignment.LEADING, false).addComponent(currentProjectJLabel, GroupLayout.DEFAULT_SIZE, 201, Short.MAX_VALUE).addComponent(ingelogdJLabel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)).addPreferredGap(ComponentPlacement.RELATED).addComponent(logoutJButton).addPreferredGap(ComponentPlacement.RELATED, 215, Short.MAX_VALUE).addComponent(syncButton, GroupLayout.PREFERRED_SIZE, 68, GroupLayout.PREFERRED_SIZE).addPreferredGap(ComponentPlacement.UNRELATED).addComponent(logoLabel, GroupLayout.PREFERRED_SIZE, 187, GroupLayout.PREFERRED_SIZE).addContainerGap()));
-		headerJPanelLayout.setVerticalGroup(headerJPanelLayout.createParallelGroup(Alignment.LEADING).addGroup(headerJPanelLayout.createSequentialGroup().addContainerGap().addGroup(headerJPanelLayout.createParallelGroup(Alignment.LEADING).addComponent(logoLabel, GroupLayout.DEFAULT_SIZE, 64, Short.MAX_VALUE).addGroup(headerJPanelLayout.createSequentialGroup().addGroup(headerJPanelLayout.createParallelGroup(Alignment.BASELINE).addComponent(ingelogdJLabel).addComponent(logoutJButton, GroupLayout.PREFERRED_SIZE, 22, GroupLayout.PREFERRED_SIZE).addComponent(syncButton)).addPreferredGap(ComponentPlacement.UNRELATED).addComponent(currentProjectJLabel))).addContainerGap()));
+		headerJPanelLayout.setHorizontalGroup(headerJPanelLayout.createParallelGroup(Alignment.TRAILING).addGroup(headerJPanelLayout.createSequentialGroup().addContainerGap().addGroup(headerJPanelLayout.createParallelGroup(Alignment.LEADING, false).addComponent(currentProjectJLabel, GroupLayout.DEFAULT_SIZE, 201, Short.MAX_VALUE).addComponent(ingelogdJLabel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)).addPreferredGap(ComponentPlacement.RELATED).addGroup(headerJPanelLayout.createParallelGroup(Alignment.LEADING).addGroup(headerJPanelLayout.createSequentialGroup().addComponent(logoutJButton).addPreferredGap(ComponentPlacement.RELATED, 215, Short.MAX_VALUE).addComponent(syncButton, GroupLayout.PREFERRED_SIZE, 68, GroupLayout.PREFERRED_SIZE)).addComponent(errorJLabel, GroupLayout.DEFAULT_SIZE, 348, Short.MAX_VALUE)).addPreferredGap(ComponentPlacement.UNRELATED).addComponent(logoLabel, GroupLayout.PREFERRED_SIZE, 187, GroupLayout.PREFERRED_SIZE).addContainerGap()));
+		headerJPanelLayout.setVerticalGroup(headerJPanelLayout.createParallelGroup(Alignment.LEADING).addGroup(headerJPanelLayout.createSequentialGroup().addContainerGap().addGroup(headerJPanelLayout.createParallelGroup(Alignment.LEADING).addComponent(logoLabel, GroupLayout.DEFAULT_SIZE, 64, Short.MAX_VALUE).addGroup(headerJPanelLayout.createSequentialGroup().addGroup(headerJPanelLayout.createParallelGroup(Alignment.BASELINE).addComponent(ingelogdJLabel).addComponent(logoutJButton, GroupLayout.PREFERRED_SIZE, 22, GroupLayout.PREFERRED_SIZE).addComponent(syncButton)).addPreferredGap(ComponentPlacement.UNRELATED).addGroup(headerJPanelLayout.createParallelGroup(Alignment.LEADING).addComponent(errorJLabel, GroupLayout.PREFERRED_SIZE, 20, GroupLayout.PREFERRED_SIZE).addComponent(currentProjectJLabel)))).addContainerGap()));
 		headerJPanel.setLayout(headerJPanelLayout);
 
 		javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -1243,7 +1262,7 @@ public class GUIForm extends JFrame {
 			list.setSelectedIndex(selectedIndex);
 		}
 		refreshTree(exportJCheckBoxTree, UserInterface.getProjects());
-		refreshProjectsComboBox(projectsJComboBox);
+		refreshProjectsComboBox(projectsJComboBox, toExportProjectJComboBox);
 	}
 
 	/**
@@ -1443,7 +1462,7 @@ public class GUIForm extends JFrame {
 		try {
 			LocalDatabaseSynch lds = new LocalDatabaseSynch(Validator.getInstance());
 			lds.synch();
-			//LoginForm.loadUserData();
+			// LoginForm.loadUserData();
 		} catch (JSONException | IOException | WebserviceException | DataInputException e) {
 			e.printStackTrace();
 			showGUIMessage(e.getMessage(), true);
@@ -1657,6 +1676,28 @@ public class GUIForm extends JFrame {
 		}
 	}
 
+	/**
+	 * Export the selected project to an Excel file
+	 */
+	private void exportProjectToExcel() {
+		if (toExportProjectJComboBox.getItemCount() != 0) {
+			Project p = ((Project) toExportProjectJComboBox.getSelectedItem());
+			JFileChooser fileChooser = new JFileChooser();
+			fileChooser.setFileFilter(new FileNameExtensionFilter("excel files (*.xls)", "xls"));
+			fileChooser.setDialogTitle("Export project to excel");
+			fileChooser.showSaveDialog(this);
+			if (fileChooser.getSelectedFile() != null) {
+				Excel excel = new Excel(p, fileChooser.getSelectedFile().toPath().toString());
+				try {
+					excel.makeFile();
+				} catch (IOException | DataInputException e) {
+					e.printStackTrace();
+					showGUIMessage(e.getMessage(), true);
+				}
+			}
+		}
+	}
+
 	// ================================================================================
 	// Event handlers
 	// ================================================================================
@@ -1822,64 +1863,6 @@ public class GUIForm extends JFrame {
 		}
 	}
 
-	/**
-	 * Export selected tasks to selected location when exportButton is pressed
-	 * @param arg0
-	 */
-	private void exportButtonClicked(ActionEvent arg0) {
-		try {
-			ArrayList<Taak> toExport = new ArrayList();
-			TreePath[] paths = exportJCheckBoxTree.getCheckingPaths();
-
-			for (TreePath p : paths) {
-				if (p.getPathCount() == 3) {
-					Project project = UserInterface.getProject(p.getParentPath().getLastPathComponent().toString());
-					Taak toAddTask = UserInterface.getTaak(project, p.getLastPathComponent().toString());
-					toExport.add(toAddTask);
-				}
-			}
-
-			if (!toExport.isEmpty()) {
-				JFileChooser fileChooser = new JFileChooser();
-				fileChooser.setFileFilter(new FileNameExtensionFilter("ics files (*.ics)", "ics"));
-				fileChooser.setDialogTitle("Export tasks");
-				fileChooser.showSaveDialog(this);
-
-				Taak[] t = new Taak[toExport.size()];
-				if (fileChooser.getSelectedFile() != null)
-					IcsExporteren.export(toExport.toArray(t), fileChooser.getSelectedFile().toPath().toString());
-				showGUIMessage("Tasks exported", false);
-			} else {
-				showGUIMessage("Select tasks to export", true);
-			}
-		} catch (IOException | ValidationException | GUIException e) {
-			e.printStackTrace();
-			showGUIMessage(e.getMessage(), true);
-		}
-	}
-
-	/**
-	 * Import selected tasks to selected project when importButton is pressed
-	 * @param arg0
-	 */
-	private void importButtonClicked(ActionEvent arg0) {
-		try {
-			JFileChooser fileChooser = new JFileChooser();
-			fileChooser.setFileFilter(new FileNameExtensionFilter("ics files (*.ics)", "ics"));
-			fileChooser.setDialogTitle("Import tasks");
-			fileChooser.showOpenDialog(this);
-			if (fileChooser.getSelectedFile() != null) {
-				importedTasks = IcsImporteren.importTasks(fileChooser.getSelectedFile().toPath().toString());
-				refreshTree(importJCheckBoxTree, IcsImporteren.importTasksInProject(fileChooser.getSelectedFile().toPath().toString()));
-				importToProjectJButton.setEnabled(true);
-				projectsJComboBox.setEnabled(true);
-			}
-		} catch (IOException | ParserException e) {
-			e.printStackTrace();
-			showGUIMessage(e.getMessage(), true);
-		}
-	}
-
 	private void clientsJComboBoxValueChanged(ActionEvent arg0) {
 		JComboBox combobox = (JComboBox) arg0.getSource();
 		if (combobox.getSelectedIndex() != -1) {
@@ -1891,7 +1874,9 @@ public class GUIForm extends JFrame {
 		}
 	}
 
+	// ================================================================================
 	// Event handlers for save buttons
+	// ================================================================================
 
 	/**
 	 * Save or update client (dependent on selected value in clientsJList)
@@ -2090,11 +2075,11 @@ public class GUIForm extends JFrame {
 	private JPanel taskStatusFieldsJPanel;
 	private JButton syncButton;
 	private JButton addTimeJButton;
-	private JLabel errorJLabel;
 	private JList tasksJList;
 	private JButton removeTimeButton;
 	private JLabel companyNameJLabel;
 	private JTextField companyNameJTextField;
-	private JComboBox toExportProjectComboBox;
+	private JComboBox toExportProjectJComboBox;
 	private JButton exportToExcelJButton;
+	private JLabel errorJLabel;
 }

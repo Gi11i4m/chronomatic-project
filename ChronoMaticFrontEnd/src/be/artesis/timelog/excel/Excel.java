@@ -24,9 +24,7 @@ public class Excel {
 	private Project project;
 	private String fileSavePath;
 	
-	public final File fileLocation = new File("excel\\");  
-	public final String URL = fileLocation.getAbsolutePath() + "\\" ;  
-	public final String EXTENSIE = ".xls";
+	public final File fileLocation = new File("factuur\\sjabloon.chrono"); //Excel .xls sjabloon file
 	
 	public Excel(Project project, String fileSavePath) {
 		this.project = project;
@@ -41,7 +39,6 @@ public class Excel {
 	public void makeFile() throws IOException, DataInputException {
 		
 		UserInterface.getUser().getOpdrachtgever(project.getOpdrachtgeverId());
-		
 		
 		FileInputStream file = new FileInputStream(fileLocation);
 		//Get the workbook instance for XLS file 
@@ -62,61 +59,68 @@ public class Excel {
 		//Firma naam
 		row = sheet.createRow(0);
 		cell = row.createCell(0);
-		cell.setCellValue("VERKOPER");
+		cell.setCellValue(UserInterface.getUser().getVolledigeNaam());
 		
 		//Firma straat
 		row = sheet.createRow(1);
 		cell = row.createCell(0);
-		cell.setCellValue("straat");
+		cell.setCellValue("Bouwmeestersstraat 3"); // No entry in database
 				
 		//Firma plaats
 		row = sheet.createRow(2);
 		cell = row.createCell(0);
-		cell.setCellValue("plaats");
+		cell.setCellValue("2000 Antwerpen"); // No entry in database
 		
 		//Firma telefoon
 		row = sheet.createRow(4);
 		cell = row.createCell(0);
-		cell.setCellValue("plaats");
+		cell.setCellValue("036647440"); // Geen get methode in userinterface
 		
 		//Firma IBAN
 		row = sheet.createRow(5);
 		cell = row.createCell(0);
-		cell.setCellValue("plaats");
+		cell.setCellValue("BE65 456 5644567 45"); // bestaat gewoon Niet
 		
 		//Firma BIC
 		row = sheet.createRow(6);
 		cell = row.createCell(0);
-		cell.setCellValue("plaats");
+		cell.setCellValue("GEBABEBB"); // bestaat gewoon Niet
 		
 		//Firma BTW
 		row = sheet.createRow(7);
 		cell = row.createCell(0);
-		cell.setCellValue("plaats");
+		cell.setCellValue("Be 654.456.123"); // bestaat gewoon Niet
 				
 		// Gegevens opdrachtgever
 		
-		//opdrachtgever naam
+		//opdrachtgever firmanaam
 		row = sheet.createRow(4);
 		cell = row.createCell(5);
-		cell.setCellValue("plaats");
+		cell.setCellValue(UserInterface.getUser().getOpdrachtgever(project.getOpdrachtgeverId()).getBedrijfsnaam());
 		
-		//opdrachtgever straat
+		//opdrachtgever naam
 		row = sheet.createRow(5);
 		cell = row.createCell(5);
-		cell.setCellValue("plaats");
+		cell.setCellValue(UserInterface.getUser().getOpdrachtgever(project.getOpdrachtgeverId()).getNaam());
+		
+		//opdrachtgever adres
+		row = sheet.createRow(6);
+		cell = row.createCell(5);
+		cell.setCellValue("Bouwmeestersstraat 2");
 		
 		//opdrachtgever plaats
 		row = sheet.createRow(6);
 		cell = row.createCell(5);
-		cell.setCellValue("plaats");
+		cell.setCellValue("2000 Antwerpen");
 		
 		//// Gegevens op FACTUUR lijn
 		Calendar now = GregorianCalendar.getInstance();
+		now.set(Calendar.HOUR_OF_DAY, 0);
+		System.out.println(now.getTime());
 		//datum
 		row = sheet.createRow(6);
 		cell = row.createCell(5);
-		cell.setCellValue(now);
+		cell.setCellValue("");
 				
 		//nummer
 		row = sheet.createRow(6);
@@ -171,7 +175,7 @@ public class Excel {
 			cell.setCellStyle(style);*/
 			//Uren cell
 			cell = row.createCell(3);
-			cell.setCellValue(project.getTaken().get(i).getTotaleWerktijd());
+			cell.setCellValue(project.getTaken().get(i).getTotaleWerktijd()/3600);
 			cell.setCellStyle(styleUren);
 			
 			// Bedrag EP cell
