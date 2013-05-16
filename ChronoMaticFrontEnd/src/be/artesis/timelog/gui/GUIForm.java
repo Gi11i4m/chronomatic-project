@@ -161,7 +161,7 @@ public class GUIForm extends JFrame {
 
 			@Override
 			public void windowClosing(WindowEvent arg0) {
-				sync();
+				//sync();
 			}
 		});
 
@@ -929,13 +929,14 @@ public class GUIForm extends JFrame {
 				File file = new File( LocalDatabaseWriter.URL);
 				if(file.isDirectory()){
 					if(file.list().length == 0){
-						
+						showGUIMessage("There is no new localdata te synchronise", false);
 					}else{
 						sync();
+						showGUIMessage("Synchronisation succesfull", false);
 					}
 					
 				}else{
-					showGUIMessage("Test", true);
+					showGUIMessage("the hardcoded url in the class localdatabasewriter is(no longer) a directory, contact the developer", true);
 					//geen directory (wat niet zou mogen kunnen)
 				}
 			}
@@ -1426,14 +1427,12 @@ public class GUIForm extends JFrame {
 		clientPhoneNumberJTextField.setText(o.getTelefoonnummer());
 	}
 
-	/**
-	 * Sync local changes with the database, NOT USED YET
-	 */
 	private void sync() {
 		try {
 			LocalDatabaseSynch lds = new LocalDatabaseSynch(Validator.getInstance());
 			lds.synch();
-		} catch (JSONException | IOException | WebserviceException e) {
+			LoginForm.loadUserData();
+		} catch (JSONException | IOException | WebserviceException | DataInputException e) {
 			e.printStackTrace();
 			showGUIMessage(e.getMessage(), true);
 		}

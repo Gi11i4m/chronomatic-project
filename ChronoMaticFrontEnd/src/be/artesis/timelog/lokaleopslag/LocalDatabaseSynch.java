@@ -11,8 +11,11 @@ import org.json.JSONObject;
 import be.artesis.timelog.controller.DeleterServer;
 import be.artesis.timelog.controller.InserterServer;
 import be.artesis.timelog.controller.UpdaterServer;
+import be.artesis.timelog.gui.GUIForm;
+import be.artesis.timelog.gui.UserInterface;
 import be.artesis.timelog.model.Validator;
 import be.artesis.timelog.model.WebserviceException;
+import be.artesis.timelog.view.DataInputException;
 
 
 public class LocalDatabaseSynch {
@@ -36,14 +39,14 @@ public class LocalDatabaseSynch {
 		this.v = v;
 	}
 	
-	public void synch() throws JSONException, IOException, WebserviceException{
+	public void synch() throws JSONException, IOException, WebserviceException, DataInputException{
 		
 		for ( Commando c :Commando.values()){
 			synchCommando(c);
 		}
 		
 	}
-	private void synchCommando(Commando c) throws JSONException, IOException, WebserviceException{		
+	private void synchCommando(Commando c) throws JSONException, IOException, WebserviceException, DataInputException{		
 		
 		JSONObject file = LocalDatabaseReader.LeesBestand( LocalDatabaseWriter.URL+ c +".txt");
 		if (file!=null){
@@ -72,7 +75,7 @@ public class LocalDatabaseSynch {
 		f.delete();
 	}
 	
-	private void insertJarr(JVelden jVeld, JSONArray jarr, JSONArray jarrLager) throws MalformedURLException, JSONException, IOException, WebserviceException{
+	private void insertJarr(JVelden jVeld, JSONArray jarr, JSONArray jarrLager) throws MalformedURLException, JSONException, IOException, WebserviceException, DataInputException{
 		
 		for(int i = 0 ; i < jarr.length();i++){	
 			//System.out.println("i=" + i);
@@ -87,7 +90,7 @@ public class LocalDatabaseSynch {
 					
 					JSONObject jProject =  (JSONObject) jarrLager.get(j);
 					if(jProject.getInt("linkId") == fakeId){
-						jProject.put("linkId", realId);
+						jProject.put("linkId", realId);						
 					}
 				}
 			}
@@ -111,7 +114,7 @@ public class LocalDatabaseSynch {
 		}
 	}
 	
-	private int getId(JVelden jVeld,JSONObject jObj) throws MalformedURLException, JSONException, IOException, WebserviceException{
+	private int getId(JVelden jVeld,JSONObject jObj) throws MalformedURLException, JSONException, IOException, WebserviceException, DataInputException{
 	
 		switch (jVeld) {
 		case OPDRACHTGEVERS:
@@ -160,15 +163,16 @@ public class LocalDatabaseSynch {
 		}		
 	}
 	
-	private  int insertOpdrachtgever(JSONObject jOpdrachtgever) throws MalformedURLException, JSONException, IOException, WebserviceException{
-		return InserterServer.inputOpdrachtgever(v.getSessionKey(), jOpdrachtgever.getString("bedrijfsnaam"), jOpdrachtgever.getString("naam"), jOpdrachtgever.getString("voornaam"), jOpdrachtgever.getString("email"), jOpdrachtgever.getString("telefoonnummer"));
+	private  int insertOpdrachtgever(JSONObject jOpdrachtgever) throws MalformedURLException, JSONException, IOException, WebserviceException, DataInputException{		
+		return InserterServer.inputOpdrachtgever(v.getSessionKey(), jOpdrachtgever.getString("bedrijfsnaam"), jOpdrachtgever.getString("naam"), jOpdrachtgever.getString("voornaam"), jOpdrachtgever.getString("email"), jOpdrachtgever.getString("telefoonnummer"));		
 	}	
 	
-	private  int insertProject(JSONObject jProject) throws MalformedURLException, IOException, WebserviceException, JSONException{
-		return InserterServer.inputProject(v.getSessionKey(), jProject.getString("naam"), jProject.getLong("beginDatum"), jProject.getLong("eindDatum"), jProject.getInt("linkId"));
+	private  int insertProject(JSONObject jProject) throws MalformedURLException, IOException, WebserviceException, JSONException{		
+		return InserterServer.inputProject(v.getSessionKey(), jProject.getString("naam"), jProject.getLong("beginDatum"), jProject.getLong("eindDatum"), jProject.getInt("linkId"));		
 	}
 	
 	private  int insertTaak(JSONObject jTaak) throws MalformedURLException, IOException, WebserviceException, JSONException {
+
 		return InserterServer.inputTaak(v.getSessionKey(), jTaak.getString("naam"), jTaak.getLong("beginDatum"), jTaak.getLong("eindDatum"), jTaak.getString("commentaar"), jTaak.getBoolean("completed"), jTaak.getInt("linkId"));
 	}
 	private  int insertTijdspanne(JSONObject jTijdspanne) throws MalformedURLException, IOException, WebserviceException, JSONException {
