@@ -11,8 +11,6 @@ import org.json.JSONObject;
 import be.artesis.timelog.controller.DeleterServer;
 import be.artesis.timelog.controller.InserterServer;
 import be.artesis.timelog.controller.UpdaterServer;
-import be.artesis.timelog.gui.GUIForm;
-import be.artesis.timelog.gui.UserInterface;
 import be.artesis.timelog.model.Validator;
 import be.artesis.timelog.model.WebserviceException;
 import be.artesis.timelog.view.DataInputException;

@@ -16,7 +16,6 @@ import java.awt.event.WindowEvent;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
-import java.net.MalformedURLException;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
@@ -28,7 +27,6 @@ import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListModel;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
-import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -49,7 +47,6 @@ import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 import javax.swing.border.BevelBorder;
-import javax.swing.border.LineBorder;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -61,13 +58,11 @@ import net.fortuna.ical4j.data.ParserException;
 import net.fortuna.ical4j.model.ValidationException;
 
 import org.json.JSONException;
-import org.json.JSONObject;
 
 import be.artesis.timelog.clock.Clock;
 import be.artesis.timelog.excel.Excel;
 import be.artesis.timelog.ics.IcsExporteren;
 import be.artesis.timelog.ics.IcsImporteren;
-import be.artesis.timelog.lokaleopslag.LocalDatabaseReader;
 import be.artesis.timelog.lokaleopslag.LocalDatabaseSynch;
 import be.artesis.timelog.lokaleopslag.LocalDatabaseWriter;
 import be.artesis.timelog.model.Validator;
@@ -84,7 +79,6 @@ import com.jgoodies.forms.factories.FormFactory;
 import com.jgoodies.forms.layout.ColumnSpec;
 import com.jgoodies.forms.layout.FormLayout;
 import com.jgoodies.forms.layout.RowSpec;
-import com.sun.javafx.scene.layout.region.Border;
 import com.toedter.calendar.JDateChooser;
 
 import eu.floraresearch.lablib.gui.checkboxtree.CheckboxTree;
@@ -137,7 +131,7 @@ public class GUIForm extends JFrame {
 		removeProjectJButton.setBounds(10, 380, 200, 23);
 		tasksJPanel = new javax.swing.JPanel();
 		tasksJLabel = new javax.swing.JLabel();
-		tasksJLabel.setBounds(10, 14, 204, 16);
+		tasksJLabel.setBounds(10, 11, 200, 16);
 		jScrollPane3 = new javax.swing.JScrollPane();
 		jScrollPane3.setBounds(10, 40, 200, 360);
 		removeTaskJButton = new javax.swing.JButton();
@@ -177,7 +171,7 @@ public class GUIForm extends JFrame {
 		homeJPanel.setForeground(new java.awt.Color(65, 152, 134));
 
 		homeJLabel.setFont(new java.awt.Font("Tw Cen MT", 1, 14));
-		homeJLabel.setForeground(new java.awt.Color(255, 255, 255));
+		homeJLabel.setForeground(Color.DARK_GRAY);
 		homeJLabel.setText("Home");
 
 		workJButton.setBackground(Color.DARK_GRAY);
@@ -320,26 +314,19 @@ public class GUIForm extends JFrame {
 		projectsJPanel.add(filler2);
 		projectsJPanel.add(projectsJLabel);
 
-		projectFieldsJPanel = new JPanel();
-		projectFieldsJPanel.setBorder(null);
-		projectFieldsJPanel.setBackground(new Color(211, 211, 211));
-		projectFieldsJPanel.setBounds(224, 11, 461, 429);
-		projectsJPanel.add(projectFieldsJPanel);
-		projectFieldsJPanel.setLayout(null);
-
 		projectEditFieldsJPanel = new JPanel();
-		projectEditFieldsJPanel.setBounds(62, 0, 399, 175);
-		projectFieldsJPanel.add(projectEditFieldsJPanel);
+		projectEditFieldsJPanel.setBounds(315, 11, 370, 175);
+		projectsJPanel.add(projectEditFieldsJPanel);
 		projectEditFieldsJPanel.setBackground(Color.DARK_GRAY);
 		projectEditFieldsJPanel.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
-		projectEditFieldsJPanel.setLayout(new FormLayout(new ColumnSpec[] { FormFactory.UNRELATED_GAP_COLSPEC, ColumnSpec.decode("65px"), FormFactory.LABEL_COMPONENT_GAP_COLSPEC, ColumnSpec.decode("max(53dlu;default):grow"), FormFactory.RELATED_GAP_COLSPEC, ColumnSpec.decode("123px"), FormFactory.RELATED_GAP_COLSPEC, FormFactory.DEFAULT_COLSPEC, }, new RowSpec[] { FormFactory.UNRELATED_GAP_ROWSPEC, RowSpec.decode("20px"), FormFactory.LINE_GAP_ROWSPEC, FormFactory.PREF_ROWSPEC, FormFactory.LINE_GAP_ROWSPEC, FormFactory.PREF_ROWSPEC, FormFactory.UNRELATED_GAP_ROWSPEC, RowSpec.decode("20px"), FormFactory.LINE_GAP_ROWSPEC, RowSpec.decode("21px"), RowSpec.decode("23px"), }));
+		projectEditFieldsJPanel.setLayout(new FormLayout(new ColumnSpec[] { FormFactory.UNRELATED_GAP_COLSPEC, ColumnSpec.decode("65px"), FormFactory.LABEL_COMPONENT_GAP_COLSPEC, ColumnSpec.decode("max(127dlu;default):grow"), FormFactory.RELATED_GAP_COLSPEC, ColumnSpec.decode("89px"), FormFactory.RELATED_GAP_COLSPEC, FormFactory.DEFAULT_COLSPEC, }, new RowSpec[] { FormFactory.UNRELATED_GAP_ROWSPEC, RowSpec.decode("20px"), FormFactory.LINE_GAP_ROWSPEC, FormFactory.PREF_ROWSPEC, FormFactory.LINE_GAP_ROWSPEC, FormFactory.PREF_ROWSPEC, FormFactory.UNRELATED_GAP_ROWSPEC, RowSpec.decode("20px"), FormFactory.LINE_GAP_ROWSPEC, RowSpec.decode("21px"), RowSpec.decode("23px"), }));
 		namecompJLabel = new javax.swing.JLabel();
 		projectEditFieldsJPanel.add(namecompJLabel, "2, 2, left, center");
 
 		namecompJLabel.setForeground(new java.awt.Color(255, 255, 255));
 		namecompJLabel.setText("Naam");
 		projectNameJTextField = new javax.swing.JTextField();
-		projectEditFieldsJPanel.add(projectNameJTextField, "4, 2, 3, 1, fill, top");
+		projectEditFieldsJPanel.add(projectNameJTextField, "4, 2, 2, 1, fill, top");
 		startdatecompJLabel = new javax.swing.JLabel();
 		projectEditFieldsJPanel.add(startdatecompJLabel, "2, 4, 2, 1, left, center");
 
@@ -370,21 +357,28 @@ public class GUIForm extends JFrame {
 				clientsJComboBoxValueChanged(arg0);
 			}
 		});
-		projectEditFieldsJPanel.add(projectClientsJComboBox, "4, 8, 3, 1, fill, default");
+		projectEditFieldsJPanel.add(projectClientsJComboBox, "4, 8, 2, 1, fill, default");
 		saveProjectJButton = new javax.swing.JButton();
-		projectEditFieldsJPanel.add(saveProjectJButton, "2, 11, 5, 1, fill, top");
+		projectEditFieldsJPanel.add(saveProjectJButton, "3, 11, 3, 1, fill, top");
 
 		saveProjectJButton.setText("Save");
+
+		projectFieldsJPanel = new JPanel();
+		projectFieldsJPanel.setBorder(null);
+		projectFieldsJPanel.setBackground(new Color(211, 211, 211));
+		projectFieldsJPanel.setBounds(224, 11, 461, 429);
+		projectsJPanel.add(projectFieldsJPanel);
+		projectFieldsJPanel.setLayout(null);
 
 		projectStatusFieldsJPanel = new JPanel();
 		projectStatusFieldsJPanel.setBackground(new Color(128, 128, 128));
 		projectStatusFieldsJPanel.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
-		projectStatusFieldsJPanel.setBounds(62, 186, 399, 221);
+		projectStatusFieldsJPanel.setBounds(148, 256, 313, 173);
 		projectFieldsJPanel.add(projectStatusFieldsJPanel);
 		projectStatusFieldsJPanel.setLayout(null);
 
 		projectTasksJList = new JList();
-		projectTasksJList.setBounds(113, 43, 215, 113);
+		projectTasksJList.setBounds(113, 43, 184, 113);
 		projectStatusFieldsJPanel.add(projectTasksJList);
 		projectTasksJList.setEnabled(false);
 		projectTasksJList.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
@@ -402,7 +396,7 @@ public class GUIForm extends JFrame {
 		percentageCompletecompJLabel.setForeground(new java.awt.Color(255, 255, 255));
 		percentageCompletecompJLabel.setText("Complete");
 		percentageCompleteJProgressBar = new javax.swing.JProgressBar();
-		percentageCompleteJProgressBar.setBounds(113, 11, 215, 21);
+		percentageCompleteJProgressBar.setBounds(113, 11, 184, 21);
 		projectStatusFieldsJPanel.add(percentageCompleteJProgressBar);
 		percentageCompleteJProgressBar.setToolTipText("Displays the percentage of completion of the project");
 		percentageCompleteJProgressBar.setStringPainted(true);
@@ -602,7 +596,7 @@ public class GUIForm extends JFrame {
 
 		javax.swing.GroupLayout clientsJPanelLayout = new javax.swing.GroupLayout(clientsJPanel);
 		clientsJPanelLayout.setHorizontalGroup(clientsJPanelLayout.createParallelGroup(Alignment.LEADING).addGroup(clientsJPanelLayout.createSequentialGroup().addContainerGap().addGroup(clientsJPanelLayout.createParallelGroup(Alignment.LEADING).addComponent(clientsJLabel).addGroup(clientsJPanelLayout.createSequentialGroup().addGroup(clientsJPanelLayout.createParallelGroup(Alignment.TRAILING, false).addComponent(removeClientJButton, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE).addComponent(jScrollPane5, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 245, Short.MAX_VALUE)).addPreferredGap(ComponentPlacement.RELATED, 106, Short.MAX_VALUE).addComponent(clientFieldsJPanel, GroupLayout.PREFERRED_SIZE, 324, GroupLayout.PREFERRED_SIZE))).addContainerGap()));
-		clientsJPanelLayout.setVerticalGroup(clientsJPanelLayout.createParallelGroup(Alignment.TRAILING).addGroup(clientsJPanelLayout.createSequentialGroup().addGroup(clientsJPanelLayout.createParallelGroup(Alignment.LEADING).addGroup(clientsJPanelLayout.createSequentialGroup().addGap(33).addComponent(clientFieldsJPanel, GroupLayout.DEFAULT_SIZE, 378, Short.MAX_VALUE)).addGroup(clientsJPanelLayout.createSequentialGroup().addContainerGap().addComponent(clientsJLabel).addPreferredGap(ComponentPlacement.RELATED).addComponent(jScrollPane5, GroupLayout.DEFAULT_SIZE, 378, Short.MAX_VALUE))).addPreferredGap(ComponentPlacement.RELATED).addComponent(removeClientJButton, GroupLayout.PREFERRED_SIZE, 23, GroupLayout.PREFERRED_SIZE).addContainerGap()));
+		clientsJPanelLayout.setVerticalGroup(clientsJPanelLayout.createParallelGroup(Alignment.TRAILING).addGroup(clientsJPanelLayout.createSequentialGroup().addGroup(clientsJPanelLayout.createParallelGroup(Alignment.LEADING).addGroup(clientsJPanelLayout.createSequentialGroup().addContainerGap().addComponent(clientsJLabel).addPreferredGap(ComponentPlacement.RELATED).addComponent(jScrollPane5, GroupLayout.DEFAULT_SIZE, 378, Short.MAX_VALUE).addPreferredGap(ComponentPlacement.RELATED).addComponent(removeClientJButton, GroupLayout.PREFERRED_SIZE, 23, GroupLayout.PREFERRED_SIZE)).addGroup(clientsJPanelLayout.createSequentialGroup().addGap(33).addComponent(clientFieldsJPanel, GroupLayout.PREFERRED_SIZE, 233, GroupLayout.PREFERRED_SIZE))).addContainerGap()));
 
 		clientsJList = new JList();
 		clientsJList.setSelectedIndex(0);
@@ -612,7 +606,7 @@ public class GUIForm extends JFrame {
 			}
 		});
 		jScrollPane5.setViewportView(clientsJList);
-		clientFieldsJPanel.setLayout(new FormLayout(new ColumnSpec[] { FormFactory.UNRELATED_GAP_COLSPEC, ColumnSpec.decode("79px"), ColumnSpec.decode("220px"), }, new RowSpec[] { FormFactory.RELATED_GAP_ROWSPEC, RowSpec.decode("20px"), FormFactory.LINE_GAP_ROWSPEC, RowSpec.decode("20px"), FormFactory.LINE_GAP_ROWSPEC, RowSpec.decode("20px"), FormFactory.LINE_GAP_ROWSPEC, RowSpec.decode("20px"), FormFactory.LINE_GAP_ROWSPEC, RowSpec.decode("20px"), RowSpec.decode("192px"), RowSpec.decode("17px"), FormFactory.RELATED_GAP_ROWSPEC, FormFactory.DEFAULT_ROWSPEC, }));
+		clientFieldsJPanel.setLayout(new FormLayout(new ColumnSpec[] { FormFactory.UNRELATED_GAP_COLSPEC, ColumnSpec.decode("79px"), ColumnSpec.decode("220px"), }, new RowSpec[] { FormFactory.RELATED_GAP_ROWSPEC, RowSpec.decode("20px"), FormFactory.LINE_GAP_ROWSPEC, RowSpec.decode("20px"), FormFactory.LINE_GAP_ROWSPEC, RowSpec.decode("20px"), FormFactory.LINE_GAP_ROWSPEC, RowSpec.decode("20px"), FormFactory.LINE_GAP_ROWSPEC, RowSpec.decode("20px"), RowSpec.decode("46px"), RowSpec.decode("17px"), FormFactory.RELATED_GAP_ROWSPEC, FormFactory.DEFAULT_ROWSPEC, }));
 
 		JLabel label = new JLabel();
 		label.setText("Name");
@@ -921,8 +915,8 @@ public class GUIForm extends JFrame {
 		headerJPanel.setBackground(new Color(70, 130, 180));
 
 		logoLabel.setFont(new java.awt.Font("Tempus Sans ITC", 1, 18));
-		ImageIcon ii = new ImageIcon("/be/artesis/timelog/gui/icons/logo.png");
-		Image image = ii.getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH);
+		ImageIcon ii = new ImageIcon(GUIForm.class.getResource("/be/artesis/timelog/gui/icons/logo.png"));
+		Image image = ii.getImage().getScaledInstance(170, 80, Image.SCALE_SMOOTH);
 		ImageIcon icon = new ImageIcon(image);
 		logoLabel.setIcon(icon);
 		logoLabel.setForeground(new java.awt.Color(255, 255, 255));
@@ -985,14 +979,14 @@ public class GUIForm extends JFrame {
 		errorJLabel.setVisible(false);
 
 		javax.swing.GroupLayout headerJPanelLayout = new javax.swing.GroupLayout(headerJPanel);
-		headerJPanelLayout.setHorizontalGroup(headerJPanelLayout.createParallelGroup(Alignment.TRAILING).addGroup(headerJPanelLayout.createSequentialGroup().addContainerGap().addGroup(headerJPanelLayout.createParallelGroup(Alignment.LEADING, false).addComponent(currentProjectJLabel, GroupLayout.DEFAULT_SIZE, 201, Short.MAX_VALUE).addComponent(ingelogdJLabel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)).addPreferredGap(ComponentPlacement.RELATED).addGroup(headerJPanelLayout.createParallelGroup(Alignment.LEADING).addGroup(headerJPanelLayout.createSequentialGroup().addComponent(logoutJButton).addPreferredGap(ComponentPlacement.RELATED, 215, Short.MAX_VALUE).addComponent(syncButton, GroupLayout.PREFERRED_SIZE, 68, GroupLayout.PREFERRED_SIZE)).addComponent(errorJLabel, GroupLayout.DEFAULT_SIZE, 348, Short.MAX_VALUE)).addPreferredGap(ComponentPlacement.UNRELATED).addComponent(logoLabel, GroupLayout.PREFERRED_SIZE, 187, GroupLayout.PREFERRED_SIZE).addContainerGap()));
-		headerJPanelLayout.setVerticalGroup(headerJPanelLayout.createParallelGroup(Alignment.LEADING).addGroup(headerJPanelLayout.createSequentialGroup().addContainerGap().addGroup(headerJPanelLayout.createParallelGroup(Alignment.LEADING).addComponent(logoLabel, GroupLayout.DEFAULT_SIZE, 64, Short.MAX_VALUE).addGroup(headerJPanelLayout.createSequentialGroup().addGroup(headerJPanelLayout.createParallelGroup(Alignment.BASELINE).addComponent(ingelogdJLabel).addComponent(logoutJButton, GroupLayout.PREFERRED_SIZE, 22, GroupLayout.PREFERRED_SIZE).addComponent(syncButton)).addPreferredGap(ComponentPlacement.UNRELATED).addGroup(headerJPanelLayout.createParallelGroup(Alignment.LEADING).addComponent(errorJLabel, GroupLayout.PREFERRED_SIZE, 20, GroupLayout.PREFERRED_SIZE).addComponent(currentProjectJLabel)))).addContainerGap()));
+		headerJPanelLayout.setHorizontalGroup(headerJPanelLayout.createParallelGroup(Alignment.TRAILING).addGroup(headerJPanelLayout.createSequentialGroup().addContainerGap().addGroup(headerJPanelLayout.createParallelGroup(Alignment.LEADING, false).addComponent(currentProjectJLabel, GroupLayout.DEFAULT_SIZE, 201, Short.MAX_VALUE).addComponent(ingelogdJLabel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)).addPreferredGap(ComponentPlacement.RELATED).addGroup(headerJPanelLayout.createParallelGroup(Alignment.LEADING).addGroup(headerJPanelLayout.createSequentialGroup().addComponent(logoutJButton).addPreferredGap(ComponentPlacement.RELATED, 215, Short.MAX_VALUE).addComponent(syncButton, GroupLayout.PREFERRED_SIZE, 68, GroupLayout.PREFERRED_SIZE)).addComponent(errorJLabel, GroupLayout.DEFAULT_SIZE, 348, Short.MAX_VALUE)).addGap(27).addComponent(logoLabel).addContainerGap()));
+		headerJPanelLayout.setVerticalGroup(headerJPanelLayout.createParallelGroup(Alignment.LEADING).addGroup(headerJPanelLayout.createSequentialGroup().addContainerGap().addGroup(headerJPanelLayout.createParallelGroup(Alignment.LEADING).addComponent(logoLabel, GroupLayout.PREFERRED_SIZE, 52, Short.MAX_VALUE).addGroup(headerJPanelLayout.createSequentialGroup().addGroup(headerJPanelLayout.createParallelGroup(Alignment.BASELINE).addComponent(ingelogdJLabel).addComponent(logoutJButton, GroupLayout.PREFERRED_SIZE, 22, GroupLayout.PREFERRED_SIZE).addComponent(syncButton)).addPreferredGap(ComponentPlacement.UNRELATED).addGroup(headerJPanelLayout.createParallelGroup(Alignment.LEADING).addComponent(errorJLabel, GroupLayout.PREFERRED_SIZE, 20, GroupLayout.PREFERRED_SIZE).addComponent(currentProjectJLabel)))).addContainerGap()));
 		headerJPanel.setLayout(headerJPanelLayout);
 
 		javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+		layout.setHorizontalGroup(layout.createParallelGroup(Alignment.LEADING).addComponent(contentJTabbedPane, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE).addComponent(headerJPanel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE));
+		layout.setVerticalGroup(layout.createParallelGroup(Alignment.LEADING).addGroup(layout.createSequentialGroup().addComponent(headerJPanel, GroupLayout.PREFERRED_SIZE, 74, GroupLayout.PREFERRED_SIZE).addGap(18).addComponent(contentJTabbedPane, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)));
 		getContentPane().setLayout(layout);
-		layout.setHorizontalGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addComponent(headerJPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE).addComponent(contentJTabbedPane));
-		layout.setVerticalGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGroup(layout.createSequentialGroup().addComponent(headerJPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE).addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED).addComponent(contentJTabbedPane)));
 		pack();
 
 		// set form in center

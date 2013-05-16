@@ -8,6 +8,7 @@ package be.artesis.timelog.model;
  *
  * @author Yolan
  */
+@SuppressWarnings("serial")
 public class WebserviceException extends Exception {
     public WebserviceException(String message) { 
         super(message);

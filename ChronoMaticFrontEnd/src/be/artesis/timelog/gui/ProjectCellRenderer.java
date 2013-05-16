@@ -12,15 +12,17 @@ import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.ListCellRenderer;
 
+@SuppressWarnings({ "serial", "rawtypes", "unchecked" })
 class ProjectCellRenderer extends JLabel implements ListCellRenderer {
 
-    private Project p;
-    private static DefaultListCellRenderer defaultRenderer = new DefaultListCellRenderer();
-    // private static LineBorder border = new LineBorder(Color.BLACK, 1);
+	private Project p;
+	private static DefaultListCellRenderer defaultRenderer = new DefaultListCellRenderer();
 
-     public ProjectCellRenderer() {
-         setOpaque(true);
-     }
+	// private static LineBorder border = new LineBorder(Color.BLACK, 1);
+
+	public ProjectCellRenderer() {
+		setOpaque(true);
+	}
 
 	@Override
 	public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
@@ -30,7 +32,7 @@ class ProjectCellRenderer extends JLabel implements ListCellRenderer {
 		}
 		Font f = list.getFont();
 		if (String.class.equals(value.getClass())) {
-			renderer.setFont(new Font(f.getName(),f.getStyle() | Font.ITALIC, f.getSize()));
+			renderer.setFont(new Font(f.getName(), f.getStyle() | Font.ITALIC, f.getSize()));
 		} else {
 			p = (Project) value;
 
@@ -51,4 +53,4 @@ class ProjectCellRenderer extends JLabel implements ListCellRenderer {
 		return renderer;
 	}
 
- }
+}

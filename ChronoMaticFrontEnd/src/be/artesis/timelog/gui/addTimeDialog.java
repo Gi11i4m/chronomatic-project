@@ -2,44 +2,34 @@ package be.artesis.timelog.gui;
 
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
+import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.io.IOException;
+import java.util.Date;
 
 import javax.swing.JButton;
-import javax.swing.JComponent;
 import javax.swing.JDialog;
-import javax.swing.JFormattedTextField;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JSpinner;
 import javax.swing.JTextField;
 import javax.swing.SpinnerDateModel;
+import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
-import javax.swing.text.DefaultFormatter;
 
-import be.artesis.timelog.model.Validator;
+import org.json.JSONException;
+
 import be.artesis.timelog.model.WebserviceException;
 import be.artesis.timelog.view.DataInputException;
 import be.artesis.timelog.view.Taak;
 
 import com.toedter.calendar.JDateChooser;
-import javax.swing.JLabel;
-import javax.swing.SwingConstants;
-import java.awt.Font;
-import java.util.Calendar;
-import java.util.Date;
 
-import com.toedter.components.JSpinField;
-import javax.swing.SpinnerModel;
-
-import org.json.JSONException;
-
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
-import java.io.IOException;
-
+@SuppressWarnings({ "serial", "deprecation" })
 public class addTimeDialog extends JDialog {
 
 	private final JPanel contentPanel = new JPanel();
@@ -71,7 +61,7 @@ public class addTimeDialog extends JDialog {
 		contentPanel.setLayout(null);
 
 		today = new Date(now.getYear(), now.getMonth(), now.getDate(), 0, 0, 0);
-		
+
 		beginJLabel = new JLabel("Begin");
 		beginJLabel.setFont(new Font("Tahoma", Font.BOLD, 13));
 		beginJLabel.setHorizontalAlignment(SwingConstants.CENTER);
@@ -83,7 +73,7 @@ public class addTimeDialog extends JDialog {
 		endJLabel.setFont(new Font("Tahoma", Font.BOLD, 13));
 		endJLabel.setBounds(318, 11, 51, 20);
 		contentPanel.add(endJLabel);
-		
+
 		beginTimeSpinner = new JSpinner(new SpinnerDateModel());
 		JSpinner.DateEditor timeEditor = new JSpinner.DateEditor(beginTimeSpinner, "HH:mm");
 		beginTimeSpinner.setEditor(timeEditor);
@@ -125,23 +115,23 @@ public class addTimeDialog extends JDialog {
 		timeJLabel = new JLabel("Time");
 		timeJLabel.setBounds(55, 89, 75, 14);
 		contentPanel.add(timeJLabel);
-		
+
 		dateJLabel = new JLabel("Date");
 		dateJLabel.setBounds(55, 51, 46, 14);
 		contentPanel.add(dateJLabel);
-		
+
 		beginDateChooser = new JDateChooser();
 		beginDateChooser.setDate(today);
 		beginDateChooser.setDateFormatString("dd/MM/yyyy");
 		beginDateChooser.setBounds(141, 42, 100, 20);
 		contentPanel.add(beginDateChooser);
-		
+
 		endDateChooser = new JDateChooser();
 		endDateChooser.setDate(today);
 		endDateChooser.setDateFormatString("dd/MM/yyyy");
 		endDateChooser.setBounds(328, 42, 100, 20);
 		contentPanel.add(endDateChooser);
-		
+
 		{
 			JPanel buttonPane = new JPanel();
 			buttonPane.setLayout(new FlowLayout(FlowLayout.RIGHT));
@@ -169,22 +159,22 @@ public class addTimeDialog extends JDialog {
 			}
 		}
 	}
-	
-	public void cancelPressed(){
+
+	public void cancelPressed() {
 		this.dispose();
 	}
-	
-	//TODO optie om pauze toe te voegen
-	public void okPressed(){
+
+	//FIXME optie om pauze toe te voegen nodig?
+	public void okPressed() {
 		Date d1 = beginDateChooser.getDate();
 		Date d2 = endDateChooser.getDate();
-		
+
 		Date t1 = (Date) beginTimeSpinner.getValue();
 		Date t2 = (Date) endTimeSpinner.getValue();
-		
-		Long l1 = (d1.getTime()/1000) + (t1.getMinutes() * 60 + t1.getHours() * 3600);
-		Long l2 = (d2.getTime()/1000) + (t2.getMinutes() * 60 + t2.getHours() * 3600);
-		
+
+		Long l1 = (d1.getTime() / 1000) + (t1.getMinutes() * 60 + t1.getHours() * 3600);
+		Long l2 = (d2.getTime() / 1000) + (t2.getMinutes() * 60 + t2.getHours() * 3600);
+
 		try {
 			UserInterface.createTimespan(l1, l2, t, false);
 			this.dispose();

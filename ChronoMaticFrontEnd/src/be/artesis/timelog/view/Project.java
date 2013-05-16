@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 
+@SuppressWarnings({"rawtypes", "unchecked"})
 public class Project implements Cloneable{
 
 	//================================================================================

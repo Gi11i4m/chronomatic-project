@@ -15,6 +15,7 @@ import net.fortuna.ical4j.model.property.DtStart;
 import be.artesis.timelog.view.Project;
 import be.artesis.timelog.view.Taak;
 
+@SuppressWarnings({"rawtypes"})
 public class IcsImporteren {
 	
 	public static ArrayList<Taak> importTasks(String url) throws IOException, ParserException{
