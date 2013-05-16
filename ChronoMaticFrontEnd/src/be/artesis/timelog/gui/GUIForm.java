@@ -160,7 +160,7 @@ public class GUIForm extends JFrame {
 
 			@Override
 			public void windowClosing(WindowEvent arg0) {
-				//sync();
+				sync();
 			}
 		});
 
@@ -1483,7 +1483,9 @@ public class GUIForm extends JFrame {
 			lds.synch();
 			UserInterface.reloadUserData();
 			refreshProjectsList(homeProjectsJList, projectsJList);
-			refreshTasksList(UserInterface.getCurrentProject(), homeTasksJList, tasksJList);
+			if (UserInterface.getCurrentProjectIndex() != -1) {
+				refreshTasksList(UserInterface.getCurrentProject(), homeTasksJList, tasksJList);
+			}
 			refreshClientsList(clientsJList);
 
 		} catch (JSONException | IOException | WebserviceException | DataInputException | GUIException e) {
@@ -1782,6 +1784,7 @@ public class GUIForm extends JFrame {
 		if (!toSave.isEmpty()) {
 			try {
 				UserInterface.createTasks(toSave, ((Project) projectsJComboBox.getSelectedItem()));
+				showGUIMessage("Tasks imported", false);
 			} catch (DataInputException | ParseException | GUIException | IOException | WebserviceException | JSONException e) {
 				e.printStackTrace();
 				showGUIMessage(e.getMessage(), true);
