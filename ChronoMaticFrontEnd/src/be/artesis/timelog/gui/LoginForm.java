@@ -41,7 +41,6 @@ import be.artesis.timelog.externAuth.Google;
 import be.artesis.timelog.externAuth.Linkedin;
 import be.artesis.timelog.externAuth.Microsoft;
 import be.artesis.timelog.externAuth.SocialMedia;
-import be.artesis.timelog.model.CreatorFromJSON;
 import be.artesis.timelog.model.ExistingUsernames;
 import be.artesis.timelog.model.Validator;
 import be.artesis.timelog.model.WebserviceException;
@@ -128,17 +127,17 @@ public class LoginForm extends javax.swing.JFrame implements ActionListener {
 			this.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
 			// Maak key in registry
 			WinRegistry.createKey(WinRegistry.HKEY_CURRENT_USER, "SOFTWARE\\ChronoMatic");
-            
-            if (validator.login(username, password)) {
-            	UserInterface.loadUserData();
-            	
-            	//paswoord opslaan
-            	if(autoLoginInternCheckBox.isSelected()) {
-            		WinRegistry.writeStringValue(WinRegistry.HKEY_CURRENT_USER, "SOFTWARE\\ChronoMatic", "autologin", "intern");
-            		WinRegistry.writeStringValue(WinRegistry.HKEY_CURRENT_USER, "SOFTWARE\\ChronoMatic", "username", usernameJTextField.getText());
-            		WinRegistry.writeStringValue(WinRegistry.HKEY_CURRENT_USER, "SOFTWARE\\ChronoMatic", "password", password);
-        		}
-            	this.setVisible(false);
+
+			if (validator.login(username, password)) {
+				UserInterface.loadUserData();
+
+				//paswoord opslaan
+				if (autoLoginInternCheckBox.isSelected()) {
+					WinRegistry.writeStringValue(WinRegistry.HKEY_CURRENT_USER, "SOFTWARE\\ChronoMatic", "autologin", "intern");
+					WinRegistry.writeStringValue(WinRegistry.HKEY_CURRENT_USER, "SOFTWARE\\ChronoMatic", "username", usernameJTextField.getText());
+					WinRegistry.writeStringValue(WinRegistry.HKEY_CURRENT_USER, "SOFTWARE\\ChronoMatic", "password", password);
+				}
+				this.setVisible(false);
 
 				parent.setVisible(true);
 			} else {
@@ -182,11 +181,11 @@ public class LoginForm extends javax.swing.JFrame implements ActionListener {
 
 			if (validator.loginExtern(email)) {
 				UserInterface.loadUserData();
-				
-				if(autoLoginExternCheckBox.isSelected()) {
-            		WinRegistry.writeStringValue(WinRegistry.HKEY_CURRENT_USER, "SOFTWARE\\ChronoMatic", "autologin", "extern");
-            		WinRegistry.writeStringValue(WinRegistry.HKEY_CURRENT_USER, "SOFTWARE\\ChronoMatic", "username", email);
-        		}
+
+				if (autoLoginExternCheckBox.isSelected()) {
+					WinRegistry.writeStringValue(WinRegistry.HKEY_CURRENT_USER, "SOFTWARE\\ChronoMatic", "autologin", "extern");
+					WinRegistry.writeStringValue(WinRegistry.HKEY_CURRENT_USER, "SOFTWARE\\ChronoMatic", "username", email);
+				}
 				parent.setVisible(true);
 				//this.dispose();
 				this.setVisible(false);
@@ -198,8 +197,6 @@ public class LoginForm extends javax.swing.JFrame implements ActionListener {
 			e.printStackTrace();
 		}
 	}
-
-
 
 	private void initComponents() {
 

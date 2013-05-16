@@ -1,6 +1,10 @@
 package be.artesis.timelog.excel;
 
+import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.util.Date;
 
 import org.apache.poi.hssf.usermodel.HSSFCellStyle;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
@@ -12,13 +16,6 @@ import org.apache.poi.ss.usermodel.Row;
 import be.artesis.timelog.gui.UserInterface;
 import be.artesis.timelog.view.DataInputException;
 import be.artesis.timelog.view.Project;
-
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
 
 public class Excel {
 
@@ -144,7 +141,7 @@ public class Excel {
 		// begin rij
 		row = sheet.getRow(14);
 		Cell basisCell = row.getCell(0);
-		CellStyle style = basisCell.getCellStyle();
+		// CellStyle style = basisCell.getCellStyle();
 		basisCell = row.getCell(5);
 		CellStyle styleeuro = basisCell.getCellStyle();
 		

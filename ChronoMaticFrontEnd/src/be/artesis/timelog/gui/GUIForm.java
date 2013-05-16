@@ -47,6 +47,7 @@ import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 import javax.swing.border.BevelBorder;
+import javax.swing.border.SoftBevelBorder;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -60,6 +61,7 @@ import net.fortuna.ical4j.model.ValidationException;
 import org.json.JSONException;
 
 import be.artesis.timelog.clock.Clock;
+import be.artesis.timelog.controle.DataControle;
 import be.artesis.timelog.excel.Excel;
 import be.artesis.timelog.ics.IcsExporteren;
 import be.artesis.timelog.ics.IcsImporteren;
@@ -82,8 +84,6 @@ import com.jgoodies.forms.layout.RowSpec;
 import com.toedter.calendar.JDateChooser;
 
 import eu.floraresearch.lablib.gui.checkboxtree.CheckboxTree;
-import javax.swing.border.SoftBevelBorder;
-import javax.swing.Box;
 
 /**
  * @author Gilliam
@@ -906,12 +906,12 @@ public class GUIForm extends JFrame {
 		companyNameJTextField.setColumns(10);
 		companyNameJTextField.setBounds(430, 53, 171, 20);
 		userSettingsJPanel.add(companyNameJTextField);
-		
+
 		LocationJTextField = new JTextField();
 		LocationJTextField.setColumns(10);
 		LocationJTextField.setBounds(115, 240, 152, 20);
 		userSettingsJPanel.add(LocationJTextField);
-		
+
 		locationJTextField = new JLabel("Location");
 		locationJTextField.setForeground(Color.WHITE);
 		locationJTextField.setBounds(36, 243, 69, 14);
@@ -978,6 +978,12 @@ public class GUIForm extends JFrame {
 		logoLabel.setForeground(new java.awt.Color(255, 255, 255));
 
 		errorJLabel = new JLabel();
+		errorJLabel.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseEntered(MouseEvent arg0) {
+				errorJLabel.setToolTipText(errorJLabel.getText());
+			}
+		});
 		errorJLabel.setOpaque(true);
 		errorJLabel.setName("");
 		errorJLabel.setHorizontalAlignment(SwingConstants.CENTER);
@@ -1476,10 +1482,10 @@ public class GUIForm extends JFrame {
 			LocalDatabaseSynch lds = new LocalDatabaseSynch(Validator.getInstance());
 			lds.synch();
 			UserInterface.reloadUserData();
-			refreshProjectsList(homeProjectsJList,projectsJList);
-			refreshTasksList(UserInterface.getCurrentProject(), homeTasksJList,tasksJList);
-			refreshClientsList(clientsJList);			
-			
+			refreshProjectsList(homeProjectsJList, projectsJList);
+			refreshTasksList(UserInterface.getCurrentProject(), homeTasksJList, tasksJList);
+			refreshClientsList(clientsJList);
+
 		} catch (JSONException | IOException | WebserviceException | DataInputException | GUIException e) {
 			e.printStackTrace();
 			showGUIMessage(e.getMessage(), true);
@@ -1704,7 +1710,7 @@ public class GUIForm extends JFrame {
 			fileChooser.setDialogTitle("Export project to excel");
 			fileChooser.showSaveDialog(this);
 			if (fileChooser.getSelectedFile() != null) {
-				Excel excel = new Excel(p, fileChooser.getSelectedFile().toPath().toString());
+				Excel excel = new Excel(p, DataControle.xlsPathCorrect(fileChooser.getSelectedFile().toPath().toString()));
 				try {
 					excel.makeFile();
 				} catch (IOException | DataInputException e) {
@@ -1773,10 +1779,13 @@ public class GUIForm extends JFrame {
 				}
 			}
 		}
-		Taak[] saveArray = new Taak[toSave.size()];
 		if (!toSave.isEmpty()) {
-			// FIXME, wordt momenteel enkel lokaal opgeslagen, UserInterface moet functie createTasks hebben
-			((Project) projectsJComboBox.getSelectedItem()).addTaken(toSave.toArray(saveArray));
+			try {
+				UserInterface.createTasks(toSave, ((Project) projectsJComboBox.getSelectedItem()));
+			} catch (DataInputException | ParseException | GUIException | IOException | WebserviceException | JSONException e) {
+				e.printStackTrace();
+				showGUIMessage(e.getMessage(), true);
+			}
 		}
 	}
 
