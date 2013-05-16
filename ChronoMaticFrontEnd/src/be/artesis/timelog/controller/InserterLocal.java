@@ -12,8 +12,7 @@ import org.json.*;
 
 import be.artesis.timelog.converter.*;
 
-public class InserterLocal {
-	//ID's genereren????
+public class InserterLocal {		
 	
 	private static int projectId = 0;
 	private static int opdrachtgeverId = 0;
