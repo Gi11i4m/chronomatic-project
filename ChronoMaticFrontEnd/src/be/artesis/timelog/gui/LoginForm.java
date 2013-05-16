@@ -153,7 +153,7 @@ public class LoginForm extends javax.swing.JFrame implements ActionListener {
 			WinRegistry.createKey(WinRegistry.HKEY_CURRENT_USER, "SOFTWARE\\ChronoMatic");
             
             if (validator.login(username, password)) {
-            	loadUserData();
+            	UserInterface.loadUserData();
             	
             	//paswoord opslaan
             	if(autoLoginInternCheckBox.isSelected()) {
@@ -204,7 +204,7 @@ public class LoginForm extends javax.swing.JFrame implements ActionListener {
 			}
 
 			if (validator.loginExtern(email)) {
-				loadUserData();
+				UserInterface.loadUserData();
 				
 				if(autoLoginExternCheckBox.isSelected()) {
             		WinRegistry.writeStringValue(WinRegistry.HKEY_CURRENT_USER, "SOFTWARE\\ChronoMatic", "autologin", "extern");
@@ -222,30 +222,7 @@ public class LoginForm extends javax.swing.JFrame implements ActionListener {
 		}
 	}
 
-	public void loadUserData() {
-		try {
-			UserInterface.setUser(CreatorFromJSON.createGebruiker(validator.getSessionKey()));
-			UserInterface.getUser().setProjects(CreatorFromJSON.createProjecten(validator.getSessionKey()));
-			
-			if(UserInterface.getUser().getProject(0) != null) {
-				UserInterface.getUser().setOpdrachtgevers(CreatorFromJSON.createOpdrachtgevers(validator.getSessionKey()));
-				
-				for (int i = 0; i < UserInterface.getUser().getProjects().size(); i++) {
-					UserInterface.getUser().getProject(i).addTaken(CreatorFromJSON.createTaken(validator.getSessionKey(), UserInterface.getUser().getProject(i).getId()));
-				}
-	
-				for (int i = 0; i < UserInterface.getUser().getProjects().size(); i++) {
-					for (int j = 0; j < UserInterface.getUser().getProject(i).getTaken().size(); j++) {
-						UserInterface.getUser().getProject(i).getTaak(j).addTotaleTijd(CreatorFromJSON.createTijdspannes(validator.getSessionKey(), UserInterface.getUser().getProject(i).getTaak(j).getID(), false));
-						UserInterface.getUser().getProject(i).getTaak(j).addTotaleTijd(CreatorFromJSON.createTijdspannes(validator.getSessionKey(), UserInterface.getUser().getProject(i).getTaak(j).getID(), true));
-						UserInterface.getUser().getProject(i).getTaak(j).getGewerkteTijd();
-					}
-				}
-			}
-		} catch (JSONException | IOException e) {
-			e.printStackTrace();
-		}
-	}
+
 
 	private void initComponents() {
 

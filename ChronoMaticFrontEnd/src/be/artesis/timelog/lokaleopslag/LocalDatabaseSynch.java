@@ -110,6 +110,7 @@ public class LocalDatabaseSynch {
 		for(int i = 0 ; i < jarr.length();i++){				
 			
 			JSONObject jObj =  jarr.getJSONObject(i);
+			
 			delete(jVeld, jObj.getInt("id"));
 		}
 	}

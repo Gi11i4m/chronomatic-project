@@ -1407,7 +1407,8 @@ public class GUIForm extends javax.swing.JFrame {
 		try {
 			LocalDatabaseSynch lds = new LocalDatabaseSynch(Validator.getInstance());
 			lds.synch();
-			LoginForm.loadUserData();
+			UserInterface.reloadUserData();
+			
 		} catch (JSONException | IOException | WebserviceException | DataInputException e) {
 			e.printStackTrace();
 			showGUIMessage(e.getMessage(), true);
