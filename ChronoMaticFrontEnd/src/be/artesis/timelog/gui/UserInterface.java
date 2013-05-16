@@ -10,6 +10,7 @@ import org.json.JSONException;
 import be.artesis.timelog.controller.DeleterLocal;
 import be.artesis.timelog.controller.InserterLocal;
 import be.artesis.timelog.controller.UpdaterLocal;
+import be.artesis.timelog.model.CreatorFromJSON;
 import be.artesis.timelog.model.Validator;
 import be.artesis.timelog.model.WebserviceException;
 import be.artesis.timelog.view.*;
@@ -126,7 +127,7 @@ public class UserInterface {
     // Create + update methods
     //================================================================================
     
-    public static void updateUser(String firstName, String lastName, String email)
+    public static void updateUser(String firstName, String lastName, String email, String telephonenr, String street, String location, String companyName, String VAT, String IBAN, String BIC)
     		throws DataInputException, MalformedURLException, IOException, WebserviceException{
     	Gebruiker u = (Gebruiker) getUser().clone();
     	u.setVoornaam(firstName);
@@ -216,6 +217,12 @@ public class UserInterface {
 		return t;
 	}
 	
+	public static void createTasks(ArrayList<Taak> taken, int pId) throws DataInputException, ParseException, GUIException, IOException, WebserviceException, JSONException{
+		for (Taak taak : taken) {
+			createTask(taak.getNaam(), taak.getBegindatum(), taak.getGeschatteEinddatum(), taak.getCommentaar(), taak.getCompleted(), pId);
+		}
+	}
+	
 	public static void updateTask(int index, String name, long startdate, long enddate, String comment, boolean completed,int pId)
 			throws GUIException, DataInputException, ParseException, MalformedURLException, IOException, WebserviceException, JSONException{	
 		Taak t = (Taak) getCurrentTasks().get(index).clone();
@@ -289,8 +296,34 @@ public class UserInterface {
 		t.getGewerkteTijd().remove(ts);
 	}
 	
+	public static void loadUserData() {
+		try {
+			setUser(CreatorFromJSON.createGebruiker(validator.getSessionKey()));
+			getUser().setProjects(CreatorFromJSON.createProjecten(validator.getSessionKey()));
+			
+			if(getUser().getProject(0) != null) {
+				getUser().setOpdrachtgevers(CreatorFromJSON.createOpdrachtgevers(validator.getSessionKey()));
+				
+				for (int i = 0; i < getUser().getProjects().size(); i++) {
+					getUser().getProject(i).addTaken(CreatorFromJSON.createTaken(validator.getSessionKey(), UserInterface.getUser().getProject(i).getId()));
+				}
 	
-	
+				for (int i = 0; i < getUser().getProjects().size(); i++) {
+					for (int j = 0; j < getUser().getProject(i).getTaken().size(); j++) {
+						getUser().getProject(i).getTaak(j).addTotaleTijd(CreatorFromJSON.createTijdspannes(validator.getSessionKey(), UserInterface.getUser().getProject(i).getTaak(j).getID(), false));
+						getUser().getProject(i).getTaak(j).addTotaleTijd(CreatorFromJSON.createTijdspannes(validator.getSessionKey(), UserInterface.getUser().getProject(i).getTaak(j).getID(), true));
+						getUser().getProject(i).getTaak(j).getGewerkteTijd();
+					}
+				}
+			}
+		} catch (JSONException | IOException e) {
+			e.printStackTrace();
+		}
+	}
+	public static void reloadUserData(){
+		setUser(null);		
+		loadUserData();
+	}
 	
 	
 	

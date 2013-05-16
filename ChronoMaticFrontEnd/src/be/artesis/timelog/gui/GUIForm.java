@@ -82,6 +82,8 @@ import com.jgoodies.forms.layout.RowSpec;
 import com.toedter.calendar.JDateChooser;
 
 import eu.floraresearch.lablib.gui.checkboxtree.CheckboxTree;
+import javax.swing.border.SoftBevelBorder;
+import javax.swing.Box;
 
 /**
  * @author Gilliam
@@ -138,7 +140,6 @@ public class GUIForm extends JFrame {
 		removeTaskJButton.setBounds(10, 411, 200, 29);
 		optionsJPanel = new javax.swing.JPanel();
 		headerJPanel = new javax.swing.JPanel();
-		logoLabel = new javax.swing.JLabel();
 		ingelogdJLabel = new javax.swing.JLabel();
 		currentProjectJLabel = new javax.swing.JLabel();
 
@@ -175,7 +176,7 @@ public class GUIForm extends JFrame {
 		homeJLabel.setText("Home");
 
 		workJButton.setBackground(Color.DARK_GRAY);
-		workJButton.setBorder(new BevelBorder(BevelBorder.RAISED));
+		workJButton.setBorder(new BevelBorder(BevelBorder.RAISED, new Color(0, 102, 204), null, new Color(0, 0, 255), null));
 		workJButton.setFont(new java.awt.Font("Tahoma", 1, 18));
 		workJButton.setForeground(new java.awt.Color(204, 204, 204));
 		workJButton.setText("Start working");
@@ -595,8 +596,8 @@ public class GUIForm extends JFrame {
 		clientFieldsJPanel.setBackground(Color.DARK_GRAY);
 
 		javax.swing.GroupLayout clientsJPanelLayout = new javax.swing.GroupLayout(clientsJPanel);
-		clientsJPanelLayout.setHorizontalGroup(clientsJPanelLayout.createParallelGroup(Alignment.LEADING).addGroup(clientsJPanelLayout.createSequentialGroup().addContainerGap().addGroup(clientsJPanelLayout.createParallelGroup(Alignment.LEADING).addComponent(clientsJLabel).addGroup(clientsJPanelLayout.createSequentialGroup().addGroup(clientsJPanelLayout.createParallelGroup(Alignment.TRAILING, false).addComponent(removeClientJButton, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE).addComponent(jScrollPane5, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 245, Short.MAX_VALUE)).addPreferredGap(ComponentPlacement.RELATED, 106, Short.MAX_VALUE).addComponent(clientFieldsJPanel, GroupLayout.PREFERRED_SIZE, 324, GroupLayout.PREFERRED_SIZE))).addContainerGap()));
-		clientsJPanelLayout.setVerticalGroup(clientsJPanelLayout.createParallelGroup(Alignment.TRAILING).addGroup(clientsJPanelLayout.createSequentialGroup().addGroup(clientsJPanelLayout.createParallelGroup(Alignment.LEADING).addGroup(clientsJPanelLayout.createSequentialGroup().addContainerGap().addComponent(clientsJLabel).addPreferredGap(ComponentPlacement.RELATED).addComponent(jScrollPane5, GroupLayout.DEFAULT_SIZE, 378, Short.MAX_VALUE).addPreferredGap(ComponentPlacement.RELATED).addComponent(removeClientJButton, GroupLayout.PREFERRED_SIZE, 23, GroupLayout.PREFERRED_SIZE)).addGroup(clientsJPanelLayout.createSequentialGroup().addGap(33).addComponent(clientFieldsJPanel, GroupLayout.PREFERRED_SIZE, 233, GroupLayout.PREFERRED_SIZE))).addContainerGap()));
+		clientsJPanelLayout.setHorizontalGroup(clientsJPanelLayout.createParallelGroup(Alignment.LEADING).addGroup(clientsJPanelLayout.createSequentialGroup().addContainerGap().addGroup(clientsJPanelLayout.createParallelGroup(Alignment.LEADING).addComponent(clientsJLabel).addGroup(clientsJPanelLayout.createParallelGroup(Alignment.TRAILING, false).addComponent(removeClientJButton, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE).addComponent(jScrollPane5, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 245, Short.MAX_VALUE))).addPreferredGap(ComponentPlacement.RELATED, 106, Short.MAX_VALUE).addComponent(clientFieldsJPanel, GroupLayout.PREFERRED_SIZE, 324, GroupLayout.PREFERRED_SIZE).addContainerGap()));
+		clientsJPanelLayout.setVerticalGroup(clientsJPanelLayout.createParallelGroup(Alignment.TRAILING).addGroup(Alignment.LEADING, clientsJPanelLayout.createSequentialGroup().addContainerGap().addGroup(clientsJPanelLayout.createParallelGroup(Alignment.LEADING).addComponent(clientFieldsJPanel, GroupLayout.PREFERRED_SIZE, 233, GroupLayout.PREFERRED_SIZE).addGroup(clientsJPanelLayout.createSequentialGroup().addComponent(clientsJLabel).addPreferredGap(ComponentPlacement.RELATED).addComponent(jScrollPane5, GroupLayout.DEFAULT_SIZE, 378, Short.MAX_VALUE).addPreferredGap(ComponentPlacement.RELATED).addComponent(removeClientJButton, GroupLayout.PREFERRED_SIZE, 23, GroupLayout.PREFERRED_SIZE))).addContainerGap()));
 
 		clientsJList = new JList();
 		clientsJList.setSelectedIndex(0);
@@ -872,7 +873,14 @@ public class GUIForm extends JFrame {
 				String firstName = firstNameJTextField.getText();
 				String lastName = lastNameJTextField.getText();
 				String email = emailJTextField.getText();
-				updateUser(firstName, lastName, email);
+				String telephonenr = telephoneJTextField.getText();
+				String street = streetJTextField.getText();
+				String location = LocationJTextField.getText();
+				String companyName = companyNameJTextField.getText();
+				String VAT = vatJTextField.getText();
+				String IBAN = ibanJTextField.getText();
+				String BIC = bicJTextField.getText();
+				updateUser(firstName, lastName, email, telephonenr, street, location, companyName, VAT, IBAN, BIC);
 			}
 		});
 		updateUserJButton.setBounds(115, 332, 116, 23);
@@ -913,13 +921,9 @@ public class GUIForm extends JFrame {
 		contentJTabbedPane.addTab("", new javax.swing.ImageIcon(getClass().getResource("/be/artesis/timelog/gui/icons/SettingsNeonIcon.png")), optionsJPanel, "Settings");
 
 		headerJPanel.setBackground(new Color(70, 130, 180));
-
-		logoLabel.setFont(new java.awt.Font("Tempus Sans ITC", 1, 18));
 		ImageIcon ii = new ImageIcon(GUIForm.class.getResource("/be/artesis/timelog/gui/icons/logo.png"));
 		Image image = ii.getImage().getScaledInstance(170, 80, Image.SCALE_SMOOTH);
 		ImageIcon icon = new ImageIcon(image);
-		logoLabel.setIcon(icon);
-		logoLabel.setForeground(new java.awt.Color(255, 255, 255));
 
 		ingelogdJLabel.setBackground(new java.awt.Color(255, 255, 255));
 		ingelogdJLabel.setFont(new java.awt.Font("Tahoma", 1, 11));
@@ -967,6 +971,11 @@ public class GUIForm extends JFrame {
 				}
 			}
 		});
+		logoLabel = new javax.swing.JLabel();
+
+		logoLabel.setFont(new java.awt.Font("Tempus Sans ITC", 1, 18));
+		logoLabel.setIcon(icon);
+		logoLabel.setForeground(new java.awt.Color(255, 255, 255));
 
 		errorJLabel = new JLabel();
 		errorJLabel.setOpaque(true);
@@ -974,13 +983,13 @@ public class GUIForm extends JFrame {
 		errorJLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		errorJLabel.setForeground(new Color(0, 204, 204));
 		errorJLabel.setFont(new Font("Tahoma", Font.BOLD, 11));
-		errorJLabel.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.LOWERED));
+		errorJLabel.setBorder(new SoftBevelBorder(BevelBorder.RAISED, null, null, null, null));
 		errorJLabel.setBackground(Color.WHITE);
 		errorJLabel.setVisible(false);
 
 		javax.swing.GroupLayout headerJPanelLayout = new javax.swing.GroupLayout(headerJPanel);
-		headerJPanelLayout.setHorizontalGroup(headerJPanelLayout.createParallelGroup(Alignment.TRAILING).addGroup(headerJPanelLayout.createSequentialGroup().addContainerGap().addGroup(headerJPanelLayout.createParallelGroup(Alignment.LEADING, false).addComponent(currentProjectJLabel, GroupLayout.DEFAULT_SIZE, 201, Short.MAX_VALUE).addComponent(ingelogdJLabel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)).addPreferredGap(ComponentPlacement.RELATED).addGroup(headerJPanelLayout.createParallelGroup(Alignment.LEADING).addGroup(headerJPanelLayout.createSequentialGroup().addComponent(logoutJButton).addPreferredGap(ComponentPlacement.RELATED, 215, Short.MAX_VALUE).addComponent(syncButton, GroupLayout.PREFERRED_SIZE, 68, GroupLayout.PREFERRED_SIZE)).addComponent(errorJLabel, GroupLayout.DEFAULT_SIZE, 348, Short.MAX_VALUE)).addGap(27).addComponent(logoLabel).addContainerGap()));
-		headerJPanelLayout.setVerticalGroup(headerJPanelLayout.createParallelGroup(Alignment.LEADING).addGroup(headerJPanelLayout.createSequentialGroup().addContainerGap().addGroup(headerJPanelLayout.createParallelGroup(Alignment.LEADING).addComponent(logoLabel, GroupLayout.PREFERRED_SIZE, 52, Short.MAX_VALUE).addGroup(headerJPanelLayout.createSequentialGroup().addGroup(headerJPanelLayout.createParallelGroup(Alignment.BASELINE).addComponent(ingelogdJLabel).addComponent(logoutJButton, GroupLayout.PREFERRED_SIZE, 22, GroupLayout.PREFERRED_SIZE).addComponent(syncButton)).addPreferredGap(ComponentPlacement.UNRELATED).addGroup(headerJPanelLayout.createParallelGroup(Alignment.LEADING).addComponent(errorJLabel, GroupLayout.PREFERRED_SIZE, 20, GroupLayout.PREFERRED_SIZE).addComponent(currentProjectJLabel)))).addContainerGap()));
+		headerJPanelLayout.setHorizontalGroup(headerJPanelLayout.createParallelGroup(Alignment.LEADING).addGroup(headerJPanelLayout.createSequentialGroup().addContainerGap().addGroup(headerJPanelLayout.createParallelGroup(Alignment.LEADING, false).addComponent(currentProjectJLabel, GroupLayout.DEFAULT_SIZE, 201, Short.MAX_VALUE).addComponent(ingelogdJLabel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)).addPreferredGap(ComponentPlacement.RELATED, 49, Short.MAX_VALUE).addComponent(errorJLabel, GroupLayout.PREFERRED_SIZE, 201, GroupLayout.PREFERRED_SIZE).addGap(31).addComponent(logoLabel, GroupLayout.PREFERRED_SIZE, 170, GroupLayout.PREFERRED_SIZE).addPreferredGap(ComponentPlacement.RELATED).addGroup(headerJPanelLayout.createParallelGroup(Alignment.LEADING, false).addComponent(syncButton, GroupLayout.PREFERRED_SIZE, 94, GroupLayout.PREFERRED_SIZE).addComponent(logoutJButton, GroupLayout.PREFERRED_SIZE, 94, GroupLayout.PREFERRED_SIZE)).addContainerGap()));
+		headerJPanelLayout.setVerticalGroup(headerJPanelLayout.createParallelGroup(Alignment.LEADING).addGroup(headerJPanelLayout.createSequentialGroup().addContainerGap().addGroup(headerJPanelLayout.createParallelGroup(Alignment.LEADING).addGroup(headerJPanelLayout.createParallelGroup(Alignment.LEADING).addComponent(logoLabel, GroupLayout.PREFERRED_SIZE, 69, Short.MAX_VALUE).addGroup(headerJPanelLayout.createSequentialGroup().addComponent(logoutJButton, GroupLayout.PREFERRED_SIZE, 22, Short.MAX_VALUE).addPreferredGap(ComponentPlacement.RELATED).addComponent(syncButton, GroupLayout.DEFAULT_SIZE, 41, Short.MAX_VALUE)).addGroup(headerJPanelLayout.createSequentialGroup().addGap(1).addComponent(ingelogdJLabel).addPreferredGap(ComponentPlacement.RELATED, 17, Short.MAX_VALUE).addComponent(currentProjectJLabel).addGap(11))).addGroup(Alignment.TRAILING, headerJPanelLayout.createSequentialGroup().addComponent(errorJLabel, GroupLayout.PREFERRED_SIZE, 21, GroupLayout.PREFERRED_SIZE).addGap(26)))));
 		headerJPanel.setLayout(headerJPanelLayout);
 
 		javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -1011,9 +1020,9 @@ public class GUIForm extends JFrame {
 	 */
 
 	//TODO resterende info updaten
-	private void updateUser(String firstName, String lastName, String email) {
+	private void updateUser(String firstName, String lastName, String email, String telephonenr, String street, String location, String companyName, String VAT, String IBAN, String BIC) {
 		try {
-			UserInterface.updateUser(firstName, lastName, email);
+			UserInterface.updateUser(firstName, lastName, email, telephonenr, street, location, companyName, VAT, IBAN, BIC);
 			showGUIMessage("User information updated!", false);
 			loadUserInfo();
 		} catch (DataInputException | IOException | WebserviceException e) {
@@ -1218,7 +1227,7 @@ public class GUIForm extends JFrame {
 			}
 		}
 	}
-	
+
 	/**
 	 * Remove a CLIENT
 	 * @param 	client	the client that's going to be removed
@@ -1466,8 +1475,12 @@ public class GUIForm extends JFrame {
 		try {
 			LocalDatabaseSynch lds = new LocalDatabaseSynch(Validator.getInstance());
 			lds.synch();
-			// LoginForm.loadUserData();
-		} catch (JSONException | IOException | WebserviceException | DataInputException e) {
+			UserInterface.reloadUserData();
+			refreshProjectsList(homeProjectsJList,projectsJList);
+			refreshTasksList(UserInterface.getCurrentProject(), homeTasksJList,tasksJList);
+			refreshClientsList(clientsJList);			
+			
+		} catch (JSONException | IOException | WebserviceException | DataInputException | GUIException e) {
 			e.printStackTrace();
 			showGUIMessage(e.getMessage(), true);
 		}
