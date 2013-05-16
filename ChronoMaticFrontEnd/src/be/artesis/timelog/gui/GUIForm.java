@@ -972,6 +972,7 @@ public class GUIForm extends JFrame {
 		errorJLabel.setFont(new Font("Tahoma", Font.BOLD, 11));
 		errorJLabel.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.LOWERED));
 		errorJLabel.setBackground(Color.WHITE);
+		errorJLabel.setVisible(false);
 
 		javax.swing.GroupLayout headerJPanelLayout = new javax.swing.GroupLayout(headerJPanel);
 		headerJPanelLayout.setHorizontalGroup(headerJPanelLayout.createParallelGroup(Alignment.TRAILING).addGroup(headerJPanelLayout.createSequentialGroup().addContainerGap().addGroup(headerJPanelLayout.createParallelGroup(Alignment.LEADING, false).addComponent(currentProjectJLabel, GroupLayout.DEFAULT_SIZE, 201, Short.MAX_VALUE).addComponent(ingelogdJLabel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)).addPreferredGap(ComponentPlacement.RELATED).addGroup(headerJPanelLayout.createParallelGroup(Alignment.LEADING).addGroup(headerJPanelLayout.createSequentialGroup().addComponent(logoutJButton).addPreferredGap(ComponentPlacement.RELATED, 215, Short.MAX_VALUE).addComponent(syncButton, GroupLayout.PREFERRED_SIZE, 68, GroupLayout.PREFERRED_SIZE)).addComponent(errorJLabel, GroupLayout.DEFAULT_SIZE, 348, Short.MAX_VALUE)).addPreferredGap(ComponentPlacement.UNRELATED).addComponent(logoLabel, GroupLayout.PREFERRED_SIZE, 187, GroupLayout.PREFERRED_SIZE).addContainerGap()));
