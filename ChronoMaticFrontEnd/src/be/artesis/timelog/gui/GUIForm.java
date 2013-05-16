@@ -551,7 +551,7 @@ public class GUIForm extends JFrame {
 		});
 		addTimeJButton.setBounds(258, 108, 118, 23);
 		taskStatusFieldsJPanel.add(addTimeJButton);
-		
+
 		removeTimeButton = new JButton("Remove time");
 		removeTimeButton.setEnabled(false);
 		removeTimeButton.addActionListener(new ActionListener() {
@@ -874,12 +874,12 @@ public class GUIForm extends JFrame {
 		usernameJLabel.setForeground(Color.WHITE);
 		usernameJLabel.setBounds(36, 53, 69, 14);
 		userSettingsJPanel.add(usernameJLabel);
-		
+
 		companyNameJLabel = new JLabel("Company name");
 		companyNameJLabel.setForeground(Color.WHITE);
 		companyNameJLabel.setBounds(330, 56, 91, 14);
 		userSettingsJPanel.add(companyNameJLabel);
-		
+
 		companyNameJTextField = new JTextField();
 		companyNameJTextField.setColumns(10);
 		companyNameJTextField.setBounds(420, 53, 171, 20);
@@ -929,16 +929,16 @@ public class GUIForm extends JFrame {
 		syncButton = new JButton("Sync");
 		syncButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				File file = new File( LocalDatabaseWriter.URL);
-				if(file.isDirectory()){
-					if(file.list().length == 0){
+				File file = new File(LocalDatabaseWriter.URL);
+				if (file.isDirectory()) {
+					if (file.list().length == 0) {
 						showGUIMessage("There is no new localdata te synchronise", false);
-					}else{
+					} else {
 						sync();
 						showGUIMessage("Synchronisation succesfull", false);
 					}
-					
-				}else{
+
+				} else {
 					showGUIMessage("the hardcoded url in the class localdatabasewriter is(no longer) a directory, contact the developer", true);
 					//geen directory (wat niet zou mogen kunnen)
 				}
@@ -956,13 +956,8 @@ public class GUIForm extends JFrame {
 		errorJLabel.setVisible(false);
 
 		javax.swing.GroupLayout headerJPanelLayout = new javax.swing.GroupLayout(headerJPanel);
-<<<<<<< HEAD
 		headerJPanelLayout.setHorizontalGroup(headerJPanelLayout.createParallelGroup(Alignment.TRAILING).addGroup(headerJPanelLayout.createSequentialGroup().addContainerGap().addGroup(headerJPanelLayout.createParallelGroup(Alignment.LEADING, false).addComponent(currentProjectJLabel, GroupLayout.DEFAULT_SIZE, 201, Short.MAX_VALUE).addComponent(ingelogdJLabel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)).addPreferredGap(ComponentPlacement.RELATED).addComponent(logoutJButton).addPreferredGap(ComponentPlacement.RELATED, 215, Short.MAX_VALUE).addComponent(syncButton, GroupLayout.PREFERRED_SIZE, 68, GroupLayout.PREFERRED_SIZE).addPreferredGap(ComponentPlacement.UNRELATED).addComponent(logoLabel, GroupLayout.PREFERRED_SIZE, 187, GroupLayout.PREFERRED_SIZE).addContainerGap()));
 		headerJPanelLayout.setVerticalGroup(headerJPanelLayout.createParallelGroup(Alignment.LEADING).addGroup(headerJPanelLayout.createSequentialGroup().addContainerGap().addGroup(headerJPanelLayout.createParallelGroup(Alignment.LEADING).addComponent(logoLabel, GroupLayout.DEFAULT_SIZE, 64, Short.MAX_VALUE).addGroup(headerJPanelLayout.createSequentialGroup().addGroup(headerJPanelLayout.createParallelGroup(Alignment.BASELINE).addComponent(ingelogdJLabel).addComponent(logoutJButton, GroupLayout.PREFERRED_SIZE, 22, GroupLayout.PREFERRED_SIZE).addComponent(syncButton)).addPreferredGap(ComponentPlacement.UNRELATED).addComponent(currentProjectJLabel))).addContainerGap()));
-=======
-		headerJPanelLayout.setHorizontalGroup(headerJPanelLayout.createParallelGroup(Alignment.TRAILING).addGroup(headerJPanelLayout.createSequentialGroup().addContainerGap().addGroup(headerJPanelLayout.createParallelGroup(Alignment.LEADING, false).addComponent(currentProjectJLabel, GroupLayout.DEFAULT_SIZE, 201, Short.MAX_VALUE).addComponent(ingelogdJLabel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)).addPreferredGap(ComponentPlacement.RELATED).addGroup(headerJPanelLayout.createParallelGroup(Alignment.LEADING).addGroup(headerJPanelLayout.createSequentialGroup().addComponent(logoutJButton).addPreferredGap(ComponentPlacement.RELATED, 215, Short.MAX_VALUE).addComponent(syncButton, GroupLayout.PREFERRED_SIZE, 68, GroupLayout.PREFERRED_SIZE)).addComponent(errorJLabel, GroupLayout.DEFAULT_SIZE, 348, Short.MAX_VALUE)).addPreferredGap(ComponentPlacement.UNRELATED).addComponent(titleLabel).addGap(18).addComponent(clockJLabel).addGap(6)));
-		headerJPanelLayout.setVerticalGroup(headerJPanelLayout.createParallelGroup(Alignment.TRAILING).addGroup(headerJPanelLayout.createSequentialGroup().addContainerGap().addGroup(headerJPanelLayout.createParallelGroup(Alignment.LEADING).addComponent(titleLabel, GroupLayout.DEFAULT_SIZE, 64, Short.MAX_VALUE).addComponent(clockJLabel).addGroup(headerJPanelLayout.createSequentialGroup().addGroup(headerJPanelLayout.createParallelGroup(Alignment.BASELINE).addComponent(ingelogdJLabel).addComponent(logoutJButton, GroupLayout.PREFERRED_SIZE, 22, GroupLayout.PREFERRED_SIZE).addComponent(syncButton)).addPreferredGap(ComponentPlacement.UNRELATED).addGroup(headerJPanelLayout.createParallelGroup(Alignment.BASELINE).addComponent(currentProjectJLabel).addComponent(errorJLabel, GroupLayout.PREFERRED_SIZE, 20, GroupLayout.PREFERRED_SIZE)))).addContainerGap()));
->>>>>>> b863fed7468cc756849d9054fc7412f4786f10d1
 		headerJPanel.setLayout(headerJPanelLayout);
 
 		javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -991,7 +986,7 @@ public class GUIForm extends JFrame {
 	 * @param	lastName	last name of the user to be updated
 	 * @param	email		email of the user to be updated
 	 */
-	
+
 	//FIXME resterende info updaten
 	private void updateUser(String firstName, String lastName, String email) {
 		try {
@@ -1200,13 +1195,13 @@ public class GUIForm extends JFrame {
 			}
 		}
 	}
-	
-	private void deleteTimeSpan(){
-		Taak t = (Taak)tasksJList.getSelectedValue();
+
+	private void deleteTimeSpan() {
+		Taak t = (Taak) tasksJList.getSelectedValue();
 		int result = JOptionPane.showConfirmDialog(this, "Are you sure?", "Removing timespan", JOptionPane.YES_NO_OPTION);
 		if (result == JOptionPane.YES_OPTION) {
 			try {
-				UserInterface.deleteTimespan((Tijdspanne)workedTimeJList.getSelectedValue(), t);
+				UserInterface.deleteTimespan((Tijdspanne) workedTimeJList.getSelectedValue(), t);
 				refreshWorkedTime(t, workedTimeJList);
 				showGUIMessage("Timespan removed", false);
 			} catch (IOException | WebserviceException | JSONException e) {
@@ -1355,8 +1350,8 @@ public class GUIForm extends JFrame {
 		DefaultTreeModel treeModel = new DefaultTreeModel(root);
 		tree.setModel(treeModel);
 	}
-	
-	private void refreshWorkedTime(Taak t, JList ... lists){
+
+	private void refreshWorkedTime(Taak t, JList... lists) {
 		for (JList list : lists) {
 			DefaultListModel listmodel = new DefaultListModel();
 			for (Iterator<Tijdspanne> it = t.getTotaleTijd().iterator(); it.hasNext();) {
@@ -1415,7 +1410,7 @@ public class GUIForm extends JFrame {
 		taskCompletedJCheckBox.setSelected(t.getCompleted());
 
 		refreshWorkedTime(t, workedTimeJList);
-		
+
 		taskTotalWorkedJTextField.setText(Clock.longTimeToString(t.getTotaleWerktijd(), false));
 		taskTotalPauseJTextField.setText(Clock.longTimeToString(t.getTotalePauze(), false));
 	}
@@ -1589,7 +1584,6 @@ public class GUIForm extends JFrame {
 	}
 
 	// ================================================================================
-<<<<<<< HEAD
 	// Import & Export methods
 	// ================================================================================
 
@@ -1651,9 +1645,6 @@ public class GUIForm extends JFrame {
 
 	// ================================================================================
 	// Event handlers, FIXME afsplitsen!
-=======
-	// Event handlers
->>>>>>> b863fed7468cc756849d9054fc7412f4786f10d1
 	// ================================================================================
 
 	/**
@@ -1795,7 +1786,7 @@ public class GUIForm extends JFrame {
 			showGUIMessage(e.getMessage(), true);
 		}
 	}
-	
+
 	private void workedTimeJListValueChange(ListSelectionEvent arg0) {
 		if (workedTimeJList.getSelectedIndex() != -1) {
 			removeTimeButton.setEnabled(true);
@@ -1813,8 +1804,6 @@ public class GUIForm extends JFrame {
 		}
 	}
 
-<<<<<<< HEAD
-=======
 	/**
 	 * Export selected tasks to selected location when exportButton is pressed
 	 * @param arg0
@@ -1889,7 +1878,6 @@ public class GUIForm extends JFrame {
 	/**
 	 * Save or update client (dependent on selected value in clientsJList)
 	 */
->>>>>>> b863fed7468cc756849d9054fc7412f4786f10d1
 	private void saveClientButtonClicked() {
 		String naam = clientNameJTextField.getText();
 		String voornaam = clientFirstNameJTextField.getText();
