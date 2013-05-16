@@ -1114,7 +1114,7 @@ public class GUIForm extends JFrame {
 	 */
 	private void updateClient(String naam, String voornaam, String bedrijfsnaam, String email, String telefoonnummer) {
 		try {
-			UserInterface.updateClient(((Opdrachtgever) clientsJList.getSelectedValue()).getID(), voornaam, voornaam, bedrijfsnaam, email, telefoonnummer);
+			UserInterface.updateClient(((Opdrachtgever) clientsJList.getSelectedValue()).getID(), naam, voornaam, bedrijfsnaam, email, telefoonnummer);
 			showGUIMessage("Client edited!", false);
 			refreshClientsList(clientsJList);
 		} catch (DataInputException | IOException | WebserviceException | JSONException e) {
@@ -1164,7 +1164,7 @@ public class GUIForm extends JFrame {
 		if (result == JOptionPane.YES_OPTION) {
 			try {
 				UserInterface.deleteTask(task);
-				refreshTasksList(UserInterface.getCurrentProject(), tasksJList);
+				refreshTasksList(UserInterface.getCurrentProject(), tasksJList, projectTasksJList, homeTasksJList);
 				selectNewItem(tasksJList);
 				showGUIMessage("Task removed!", false);
 			} catch (GUIException | IOException | WebserviceException | JSONException ex) {
@@ -1435,7 +1435,7 @@ public class GUIForm extends JFrame {
 		try {
 			LocalDatabaseSynch lds = new LocalDatabaseSynch(Validator.getInstance());
 			lds.synch();
-			LoginForm.loadUserData();
+			//LoginForm.loadUserData();
 		} catch (JSONException | IOException | WebserviceException | DataInputException e) {
 			e.printStackTrace();
 			showGUIMessage(e.getMessage(), true);
