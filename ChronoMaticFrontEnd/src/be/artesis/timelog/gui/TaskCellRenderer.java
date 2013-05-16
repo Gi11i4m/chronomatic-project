@@ -27,8 +27,6 @@ class TaskCellRenderer extends JLabel implements ListCellRenderer {
 	public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
 		JLabel renderer = (JLabel) defaultRenderer.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
 		Font f = list.getFont();
-		// TODO JList -> JTabel + icons
-		//ImageIcon warning = new ImageIcon(Toolkit.getDefaultToolkit().getImage(getClass().getResource("/be/artesis/timelog/gui/icons/Warning-icon.png")).getScaledInstance(20, 20, java.awt.Image.SCALE_DEFAULT));
 		if (value.getClass().equals(String.class)) {
 			renderer.setFont(new Font(f.getName(), f.getStyle() | Font.ITALIC, f.getSize()));
 		} else {
