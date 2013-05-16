@@ -21,7 +21,6 @@ import net.fortuna.ical4j.model.property.Version;
 
 public class IcsExporteren {
 	//Het exporteren van een array van taken naar een ICS bestand
-	//FIXME er worden nu enkel allday events gemaakt er is dus iets mis met of de opslag van de uren of er word een flag geset
 	private static Calendar cal;
 	
 	public static void export(Taak[] taken, String url) throws IOException, ValidationException{		

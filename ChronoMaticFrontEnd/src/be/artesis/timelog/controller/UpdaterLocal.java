@@ -23,7 +23,6 @@ import org.json.JSONObject;
 
 public class UpdaterLocal {	
 
-	// FIXME klopt niet! 
 	public static void updateGebruiker(String sessionKey, Gebruiker gebruiker) throws MalformedURLException, IOException, WebserviceException{
 		Connection.execute("gebruiker/update/" + sessionKey + "/" + gebruiker.getNaam() + "/" + gebruiker.getVoornaam() + "/" + gebruiker.getGebruikersnaam() + "/" +gebruiker.getEmail());
 	}

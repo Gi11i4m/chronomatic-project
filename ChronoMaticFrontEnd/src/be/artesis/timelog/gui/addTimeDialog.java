@@ -174,7 +174,7 @@ public class addTimeDialog extends JDialog {
 		this.dispose();
 	}
 	
-	//FIXME optie om pauze toe te voegen nodig?
+	//TODO optie om pauze toe te voegen
 	public void okPressed(){
 		Date d1 = beginDateChooser.getDate();
 		Date d2 = endDateChooser.getDate();

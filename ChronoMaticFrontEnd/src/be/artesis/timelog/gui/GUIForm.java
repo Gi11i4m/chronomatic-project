@@ -278,6 +278,7 @@ public class GUIForm extends JFrame {
 		jScrollPane1.setViewportView(projectsJList);
 		projectsJList.addMouseListener(new MouseAdapter() {
 			@Override
+			//Functionaliteit voor double-click en enter in homelists
 			public void mouseClicked(MouseEvent arg0) {
 				JList list = (JList) arg0.getSource();
 				if (arg0.getClickCount() == 2) {
@@ -556,7 +557,7 @@ public class GUIForm extends JFrame {
 		removeTimeButton.setEnabled(false);
 		removeTimeButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				deleteTimeSpan();
+				deleteTimeSpan((Tijdspanne) workedTimeJList.getSelectedValue(), (Taak) tasksJList.getSelectedValue());
 			}
 		});
 		removeTimeButton.setBounds(258, 138, 118, 23);
@@ -890,7 +891,6 @@ public class GUIForm extends JFrame {
 
 		headerJPanel.setBackground(new Color(70, 130, 180));
 
-		// FIXME zorg dat icon effectief gedisplayed wordt
 		logoLabel.setFont(new java.awt.Font("Tempus Sans ITC", 1, 18));
 		ImageIcon ii = new ImageIcon("/be/artesis/timelog/gui/icons/logo.png");
 		Image image = ii.getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH);
@@ -987,7 +987,7 @@ public class GUIForm extends JFrame {
 	 * @param	email		email of the user to be updated
 	 */
 
-	//FIXME resterende info updaten
+	//TODO resterende info updaten
 	private void updateUser(String firstName, String lastName, String email) {
 		try {
 			UserInterface.updateUser(firstName, lastName, email);
@@ -1195,13 +1195,16 @@ public class GUIForm extends JFrame {
 			}
 		}
 	}
-
-	private void deleteTimeSpan() {
-		Taak t = (Taak) tasksJList.getSelectedValue();
+	
+	/**
+	 * Remove a CLIENT
+	 * @param 	client	the client that's going to be removed
+	 */
+	private void deleteTimeSpan(Tijdspanne ts, Taak t) {
 		int result = JOptionPane.showConfirmDialog(this, "Are you sure?", "Removing timespan", JOptionPane.YES_NO_OPTION);
 		if (result == JOptionPane.YES_OPTION) {
 			try {
-				UserInterface.deleteTimespan((Tijdspanne) workedTimeJList.getSelectedValue(), t);
+				UserInterface.deleteTimespan(ts, t);
 				refreshWorkedTime(t, workedTimeJList);
 				showGUIMessage("Timespan removed", false);
 			} catch (IOException | WebserviceException | JSONException e) {
@@ -1351,6 +1354,11 @@ public class GUIForm extends JFrame {
 		tree.setModel(treeModel);
 	}
 
+	/**
+	 * Refresh workedTime comboboxes
+	 * @param 	boxes	the workedTime comboboxes that will be reloaded
+	 * @param	t		the task from which the info is taken
+	 */
 	private void refreshWorkedTime(Taak t, JList... lists) {
 		for (JList list : lists) {
 			DefaultListModel listmodel = new DefaultListModel();
@@ -1466,6 +1474,9 @@ public class GUIForm extends JFrame {
 		}
 	}
 
+	/**
+	 * Open a new dialog to manually add time to a task
+	 */
 	private void openAddTimeDialog() {
 		addTimeDialog addTime = new addTimeDialog(this, true, (Taak) tasksJList.getSelectedValue());
 		addTime.setLocationRelativeTo(this);
@@ -1527,6 +1538,9 @@ public class GUIForm extends JFrame {
 		}
 	}
 
+	/**
+	 * Sets the selected index of the projectslists to the current project
+	 */
 	private void selectCurrentProject() {
 		try {
 			Project currProj = UserInterface.getCurrentProject();
@@ -1644,7 +1658,7 @@ public class GUIForm extends JFrame {
 	}
 
 	// ================================================================================
-	// Event handlers, FIXME afsplitsen!
+	// Event handlers
 	// ================================================================================
 
 	/**
@@ -1787,6 +1801,10 @@ public class GUIForm extends JFrame {
 		}
 	}
 
+	/**
+	 * Sets the removebutton to enabled when a worked time is selected
+	 * @param arg0
+	 */
 	private void workedTimeJListValueChange(ListSelectionEvent arg0) {
 		if (workedTimeJList.getSelectedIndex() != -1) {
 			removeTimeButton.setEnabled(true);
