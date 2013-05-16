@@ -62,32 +62,32 @@ public class Excel {
 		//Firma straat
 		row = sheet.createRow(1);
 		cell = row.createCell(0);
-		cell.setCellValue("Bouwmeestersstraat 3"); // No entry in database
+		cell.setCellValue(UserInterface.getUser().getStraat()); // No entry in database
 				
 		//Firma plaats
 		row = sheet.createRow(2);
 		cell = row.createCell(0);
-		cell.setCellValue("2000 Antwerpen"); // No entry in database
+		cell.setCellValue(UserInterface.getUser().getPlaats()); // No entry in database
 		
 		//Firma telefoon
 		row = sheet.createRow(4);
 		cell = row.createCell(0);
-		cell.setCellValue("036647440"); // Geen get methode in userinterface
+		cell.setCellValue(UserInterface.getUser().getTelefoonnummer()); // Geen get methode in userinterface
 		
 		//Firma IBAN
 		row = sheet.createRow(5);
 		cell = row.createCell(0);
-		cell.setCellValue("BE65 456 5644567 45"); // bestaat gewoon Niet
+		cell.setCellValue(UserInterface.getUser().getIBAN());
 		
 		//Firma BIC
 		row = sheet.createRow(6);
 		cell = row.createCell(0);
-		cell.setCellValue("GEBABEBB"); // bestaat gewoon Niet
+		cell.setCellValue(UserInterface.getUser().getBIC());
 		
 		//Firma BTW
 		row = sheet.createRow(7);
 		cell = row.createCell(0);
-		cell.setCellValue("Be 654.456.123"); // bestaat gewoon Niet
+		cell.setCellValue(UserInterface.getUser().getVAT());
 				
 		// Gegevens opdrachtgever
 		
@@ -113,26 +113,27 @@ public class Excel {
 		
 		//// Gegevens op FACTUUR lijn
 		Date date = new Date();
-		System.out.println(date);
 		//datum
-		row = sheet.createRow(6);
-		cell = row.createCell(5);
-		cell.setCellValue("");
+		row = sheet.createRow(12);
+		cell = row.createCell(0);
+		cell.setCellValue(date.getDate());
 				
 		//nummer
-		row = sheet.createRow(6);
-		cell = row.createCell(5);
-		cell.setCellValue("plaats");
+		row = sheet.createRow(12);
+		cell = row.createCell(1);
+		cell.setCellValue("1002");
 		
 		//vervalsdag
-		row = sheet.createRow(6);
-		cell = row.createCell(5);
-		cell.setCellValue("plaats");
+		long addDays = date.getTime() / 1000 + 604800;
+		Date newDate = new Date(addDays);
+		row = sheet.createRow(12);
+		cell = row.createCell(2);
+		cell.setCellValue(newDate);
 		
 		// opdrachtgever BTW
-		row = sheet.createRow(6);
-		cell = row.createCell(5);
-		cell.setCellValue("plaats");
+		row = sheet.createRow(12);
+		cell = row.createCell(3);
+		cell.setCellValue("BE 123.654.789");
 		
 		/*
 		 *  Vul alle taken in
@@ -171,8 +172,9 @@ public class Excel {
 			cell.setCellValue("");
 			cell.setCellStyle(style);*/
 			//Uren cell
+			double uren = project.getTaken().get(i).getTotaleWerktijd()/3600;
 			cell = row.createCell(3);
-			cell.setCellValue(project.getTaken().get(i).getTotaleWerktijd()/3600);
+			cell.setCellValue(uren);
 			cell.setCellStyle(styleUren);
 			
 			// Bedrag EP cell
@@ -237,7 +239,6 @@ public class Excel {
 		//
 		
 		file.close();
-	    //
 		
 		//
 	    FileOutputStream outFile = new FileOutputStream(new File(fileSavePath));

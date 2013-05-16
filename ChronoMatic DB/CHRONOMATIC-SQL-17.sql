@@ -204,11 +204,11 @@ COMMIT;
 -- -----------------------------------------------------
 START TRANSACTION;
 USE `chrono_matic`;
-INSERT INTO `chrono_matic`.`tijdspanne` (`ID`, `begin_uur`, `eind_uur`, `pauze`, `taken_ID`) VALUES (1, 1349881200, 1349909100, false, 2);
-INSERT INTO `chrono_matic`.`tijdspanne` (`ID`, `begin_uur`, `eind_uur`, `pauze`, `taken_ID`) VALUES (2, 1349888400, 1349892000, true, 2);
-INSERT INTO `chrono_matic`.`tijdspanne` (`ID`, `begin_uur`, `eind_uur`, `pauze`, `taken_ID`) VALUES (3, 1349730000, 1349744400, false, 3);
-INSERT INTO `chrono_matic`.`tijdspanne` (`ID`, `begin_uur`, `eind_uur`, `pauze`, `taken_ID`) VALUES (4, 1355173200, 1355187600, false, 4);
-INSERT INTO `chrono_matic`.`tijdspanne` (`ID`, `begin_uur`, `eind_uur`, `pauze`, `taken_ID`) VALUES (5, 1355175060, 1355175960, true, 4);
-INSERT INTO `chrono_matic`.`tijdspanne` (`ID`, `begin_uur`, `eind_uur`, `pauze`, `taken_ID`) VALUES (6, 1355184612, 1355185855, true, 4);
+INSERT INTO `chrono_matic`.`tijdspanne` (`ID`, `begin_uur`, `eind_uur`, `pauze`, `taken_ID`) VALUES (101, 1349881200, 1349909100, false, 102);
+INSERT INTO `chrono_matic`.`tijdspanne` (`ID`, `begin_uur`, `eind_uur`, `pauze`, `taken_ID`) VALUES (102, 1349888400, 1349892000, true, 102);
+INSERT INTO `chrono_matic`.`tijdspanne` (`ID`, `begin_uur`, `eind_uur`, `pauze`, `taken_ID`) VALUES (103, 1349730000, 1349744400, false, 103);
+INSERT INTO `chrono_matic`.`tijdspanne` (`ID`, `begin_uur`, `eind_uur`, `pauze`, `taken_ID`) VALUES (104, 1355173200, 1355187600, false, 104);
+INSERT INTO `chrono_matic`.`tijdspanne` (`ID`, `begin_uur`, `eind_uur`, `pauze`, `taken_ID`) VALUES (105, 1355175060, 1355175960, true, 104);
+INSERT INTO `chrono_matic`.`tijdspanne` (`ID`, `begin_uur`, `eind_uur`, `pauze`, `taken_ID`) VALUES (106, 1355184612, 1355185855, true, 104);
 
 COMMIT;
