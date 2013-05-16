@@ -203,12 +203,12 @@ public class Gebruiker {
 	}
 	
 	@GET
-	@Path("checkExists/{username}")
+	@Path("checkExists/{username}/{email}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public static String checkExists(@PathParam("username") String username) {
+	public static String checkExists(@PathParam("username") String username,@PathParam("email") String email) {
 		Connection con = DatabaseContainer.getConnection();
 
-		String query =  "SELECT Count(1) FROM gebruikers WHERE gebruikersnaam = '" + username + "'";
+		String query =  "SELECT Count(1) FROM gebruikers WHERE gebruikersnaam = '" + username + "' OR email = '" + email + "' ";
 
 		try{
 			ResultSet rs = Database.executeQuery(con, query); 

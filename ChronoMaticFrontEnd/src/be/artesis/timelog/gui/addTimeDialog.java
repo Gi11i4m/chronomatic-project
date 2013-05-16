@@ -50,7 +50,7 @@ public class addTimeDialog extends JDialog {
 	private JSpinner endTimeSpinner;
 	private JLabel timeJLabel;
 	private final int MAX_LENGTH = 5;
-	private final Date date = new Date();
+	private final Date now = new Date();
 	private Date today;
 	private JLabel dateJLabel;
 	private JDateChooser beginDateChooser;
@@ -70,7 +70,7 @@ public class addTimeDialog extends JDialog {
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
 		contentPanel.setLayout(null);
 
-		today = new Date(date.getYear(), date.getMonth(), date.getDate(), 0, 0, 0);
+		today = new Date(now.getYear(), now.getMonth(), now.getDate(), 0, 0, 0);
 		
 		beginJLabel = new JLabel("Begin");
 		beginJLabel.setFont(new Font("Tahoma", Font.BOLD, 13));
@@ -87,14 +87,14 @@ public class addTimeDialog extends JDialog {
 		beginTimeSpinner = new JSpinner(new SpinnerDateModel());
 		JSpinner.DateEditor timeEditor = new JSpinner.DateEditor(beginTimeSpinner, "HH:mm");
 		beginTimeSpinner.setEditor(timeEditor);
-		beginTimeSpinner.setValue(today);
+		beginTimeSpinner.setValue(now);
 		beginTimeSpinner.setBounds(141, 86, 75, 20);
 		contentPanel.add(beginTimeSpinner);
 
 		endTimeSpinner = new JSpinner(new SpinnerDateModel());
 		JSpinner.DateEditor timeEditor2 = new JSpinner.DateEditor(endTimeSpinner, "HH:mm");
 		endTimeSpinner.setEditor(timeEditor2);
-		endTimeSpinner.setValue(today);
+		endTimeSpinner.setValue(now);
 		endTimeSpinner.setBounds(327, 86, 61, 20);
 		contentPanel.add(endTimeSpinner);
 
@@ -174,6 +174,7 @@ public class addTimeDialog extends JDialog {
 		this.dispose();
 	}
 	
+	//FIXME optie om pauze toe te voegen nodig?
 	public void okPressed(){
 		Date d1 = beginDateChooser.getDate();
 		Date d2 = endDateChooser.getDate();
@@ -186,7 +187,7 @@ public class addTimeDialog extends JDialog {
 		
 		try {
 			UserInterface.createTimespan(l1, l2, t, false);
-			
+			this.dispose();
 		} catch (DataInputException | IOException | WebserviceException | JSONException e) {
 			JOptionPane.showMessageDialog(this, e.getMessage());
 		}
